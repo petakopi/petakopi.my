@@ -254,7 +254,6 @@ DEPENDENCIES
   standard
   stimulus-rails
   turbo-rails
-  tzinfo-data
   web-console
   webdrivers
 
