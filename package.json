@@ -4,13 +4,14 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.0.1",
     "@hotwired/turbo-rails": "^7.1.1",
+    "@tabler/core": "^1.0.0-beta6",
     "autoprefixer": "^10.4.2",
     "esbuild": "^0.14.13",
     "postcss": "^8.4.5",
-    "tailwindcss": "^3.0.15"
+    "sass": "^1.49.0"
   },
   "scripts": {
-    "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css",
+    "build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules",
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds"
   }
 }
