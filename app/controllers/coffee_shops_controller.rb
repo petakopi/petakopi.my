@@ -66,6 +66,18 @@ class CoffeeShopsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def coffee_shop_params
-    params.require(:coffee_shop).permit(:name, :district, :state, :urls, :status)
+    params
+      .require(:coffee_shop)
+      .permit(
+        :name,
+        :district,
+        :state,
+        :google_map,
+        :waze,
+        :instagram,
+        :facebook,
+        :twitter,
+        :status
+      )
   end
 end
