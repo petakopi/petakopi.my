@@ -4,8 +4,5 @@
 
 import { application } from "./application"
 
-import ControllerNameController from "./controller_name_controller.js"
-application.register("controller-name", ControllerNameController)
-
 import SelectController from "./select_controller.js"
 application.register("select", SelectController)
