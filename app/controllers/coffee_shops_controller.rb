@@ -1,5 +1,5 @@
 class CoffeeShopsController < ApplicationController
-  before_action :set_coffee_shop, only: %i[ show edit update destroy ]
+  before_action :set_coffee_shop, only: %i[show edit update destroy]
 
   # GET /coffee_shops or /coffee_shops.json
   def index
@@ -58,13 +58,14 @@ class CoffeeShopsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_coffee_shop
-      @coffee_shop = CoffeeShop.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def coffee_shop_params
-      params.require(:coffee_shop).permit(:name, :district, :state, :urls, :status)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_coffee_shop
+    @coffee_shop = CoffeeShop.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def coffee_shop_params
+    params.require(:coffee_shop).permit(:name, :district, :state, :urls, :status)
+  end
 end
