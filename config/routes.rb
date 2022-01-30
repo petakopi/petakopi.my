@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
-  resources :coffee_shops
   devise_for :users
+
+  resources :coffee_shops
+  resources :locations do
+    collection do
+      get :cities
+    end
+  end
 
   get "home/index"
 

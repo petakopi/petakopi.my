@@ -2,8 +2,20 @@
   <%= f.error_notification %>
 
   <%= f.input :name %>
-  <%= f.input :district, collection: [] %>
-  <%= f.input :state, collection: [] %>
+
+  <div
+    data-controller="select"
+    data-select-url-value="<%= cities_locations_path %>"
+    data-select-param-value="state"
+  >
+    <%= f.input :state,
+      collection: Location.states.map { |x| [x, x] },
+      prompt: "Select state",
+      input_html: { class: "form-select", data: { action: "change->select#change" } }
+    %>
+
+    <%= f.input :district, collection: [], input_html: { id: nil, data: { select_target: "select" } } %>
+  </div>
 
   <%= f.input :google_map %>
   <%= f.input :waze %>
