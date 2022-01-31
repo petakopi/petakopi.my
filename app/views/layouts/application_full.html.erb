@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full bg-gray-50">
   <head>
     <title>Petakopi</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -10,11 +10,7 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
-  <body>
-    <%= render "layouts/header" %>
-
-    <div class="max-w-2xl mx-auto bg-white py-16 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-      <%= yield %>
-    </div>
+  <body class="h-full">
+    <%= yield %>
   </body>
 </html>
