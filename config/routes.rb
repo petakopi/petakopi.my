@@ -8,7 +8,5 @@ Rails.application.routes.draw do
     end
   end
 
-  get "home/index"
-
-  root "home#index"
+  root "coffee_shops#index"
 end
