@@ -24,8 +24,12 @@
           <%= link_to "Submit Coffee Shop", class: "text-base font-medium text-gray-500 hover:text-gray-900" %>
         </nav>
         <div class="flex items-center md:ml-12">
-          <%= link_to "Sign in", new_user_session_path, class: "text-base font-medium text-gray-500 hover:text-gray-900" %>
-          <%= link_to "Sign up", new_user_registration_path, class: "ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" %>
+          <% if current_user %>
+            <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-base font-medium text-gray-500 hover:text-gray-900" %>
+          <% else %>
+            <%= link_to "Sign in", new_user_session_path, class: "text-base font-medium text-gray-500 hover:text-gray-900" %>
+            <%= link_to "Sign up", new_user_registration_path, class: "ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" %>
+          <% end %>
         </div>
       </div>
     </div>
