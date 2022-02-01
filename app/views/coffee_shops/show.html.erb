@@ -53,7 +53,12 @@
           Submitted by
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          Anonymous on <%= @coffee_shop.created_at.strftime("%B %-d, %Y") %>
+          <% if @coffee_shop.submitter %>
+            <%= @coffee_shop.submitter.name %>
+          <% else %>
+            Anonymous
+          <% end %>
+          on <%= @coffee_shop.created_at.strftime("%B %-d, %Y") %>
         </dd>
       </div>
 

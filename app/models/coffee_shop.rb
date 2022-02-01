@@ -10,6 +10,8 @@ class CoffeeShop < ApplicationRecord
 
   enum status: {unpublished: 0, published: 1}, _prefix: :status
 
+  belongs_to :submitter, class_name: "User", foreign_key: "submitter_user_id", optional: true
+
   validates :slug, presence: true
   validates :slug, uniqueness: true
   validates :name, uniqueness: true
