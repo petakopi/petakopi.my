@@ -16,6 +16,7 @@ gem "simple_form" # Help with form generation/view
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+gem "image_processing", ">= 1.2" # Image processor
 
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
