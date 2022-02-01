@@ -1,27 +1,177 @@
-<%= simple_form_for(@coffee_shop) do |f| %>
-  <%= f.error_notification %>
+<h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+  New Coffee Shop
+</h2>
+<div class"mt-2 text-center text-sm text-gray-600">
+  <%= render "components/alert", alerts: alert if alert %>
+  <%= render "components/notice", alerts: notice if notice %>
+</div>
 
-  <%= f.input :name %>
-
-  <div
-    data-controller="select"
-    data-select-url-value="<%= cities_locations_path %>"
-    data-select-param-value="state"
-  >
-    <%= f.input :state,
-      collection: Location.states.map { |x| [x, x] },
-      prompt: "Select state",
-      input_html: { class: "form-select", data: { action: "change->select#change" } }
-    %>
-
-    <%= f.input :district, collection: [], input_html: { id: nil, data: { select_target: "select" } } %>
+<% unless current_user %>
+  <div class="rounded-md bg-yellow-50 p-4 mt-8">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <!-- Heroicon name: solid/exclamation -->
+        <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h3 class="text-sm font-medium text-yellow-800">
+          You are not signed in
+        </h3>
+        <div class="mt-2 text-sm text-yellow-700">
+          <p>
+            If you submit this coffee shop without logging in, we won't be able
+            to credit you as the submitter. Please take a moment to sign in at
+            this <%= link_to "page", new_user_session_path, class: "underline" %>.
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <%= f.input :google_map %>
-  <%= f.input :waze %>
-  <%= f.input :instagram %>
-  <%= f.input :facebook %>
-  <%= f.input :twitter %>
-
-  <%= f.button :submit, class: "btn btn-primary" %>
 <% end %>
+
+<div
+  data-controller="select"
+  data-select-url-value="<%= cities_locations_path %>"
+  data-select-param-value="state"
+>
+  <%= form_for coffee_shop, html: { class: "space-y-8 divide-y divide-gray-200" } do |f| %>
+    <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+      <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+        <div>
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Basic Information
+          </h3>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500">
+            As long as it is a place that sells coffee (latte, americano, etc).
+            We don't mind if it is a kiosk, small shop or mobile shop.
+          </p>
+        </div>
+        <div class="space-y-6 sm:space-y-5">
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <%= f.label :name, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Name*
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :name, required: true, class: "max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+            </div>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <%= f.label :state, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              State*
+            <% end %>
+            <div class="mt-1 sm:mt-0 sm:col-span-2">
+              <%= f.collection_select :state,
+                Location.states,
+                :to_s,
+                :to_s,
+                { prompt: true, required: true },
+                data: { action: "change->select#change" },
+                class: "max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+              %>
+            </div>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <%= f.label :state, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              District*
+            <% end %>
+            <div class="mt-1 sm:mt-0 sm:col-span-2">
+              <%= f.collection_select :state,
+                [],
+                nil,
+                nil,
+                { required: true },
+                id: nil,
+                data: { select_target: "select" },
+                class: "max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+              %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+        <div>
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Locations
+          </h3>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500">
+            This is important for us to know where it is and display it for
+            others to see and search.
+          </p>
+        </div>
+        <div class="space-y-6 sm:space-y-5">
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <%= f.label :google_map, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Google Map*
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :google_map, required: true, class: "max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+            </div>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <%= f.label :waze, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Waze
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :waze, class: "max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+        <div>
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Social Media
+          </h3>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500">
+            It will help our fellow friends to see what is on the menu, the
+            beautiful photos, the story or if it is even open right now.
+          </p>
+        </div>
+        <div class="space-y-6 sm:space-y-5">
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <%= f.label :instagram, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Instagram
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :instagram, class: "max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+            </div>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <%= f.label :facebook, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Facebook
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :facebook, class: "max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+            </div>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <%= f.label :twitter, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Twitter
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :twitter, class: "max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-5">
+      <div class="flex justify-end">
+        <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          Submit
+        </button>
+      </div>
+    </div>
+  <% end %>
+</div>

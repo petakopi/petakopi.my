@@ -5,13 +5,16 @@
   <body>
     <%= render "layouts/header" %>
 
-    <div class="max-w-2xl mx-auto bg-white lg:max-w-7xl lg:px-8">
+    <div class="mx-auto bg-white lg:max-w-7xl px-4 lg:px-8">
       <div class"mt-2 text-center text-sm text-gray-600">
         <%= render "components/alert", alerts: alert if alert %>
         <%= render "components/notice", alerts: notice if notice %>
       </div>
 
-      <%= yield %>
+
+      <div class="min-h-full flex flex-col justify-center py-12">
+        <%= yield %>
+      </div>
     </div>
   </body>
 </html>
