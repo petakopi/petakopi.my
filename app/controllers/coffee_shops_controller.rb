@@ -2,7 +2,7 @@ class CoffeeShopsController < ApplicationController
   before_action :set_coffee_shop, only: %i[show edit update destroy]
 
   def index
-    @coffee_shops = CoffeeShop.all
+    @coffee_shops = CoffeeShop.status_published
   end
 
   def show
@@ -20,7 +20,7 @@ class CoffeeShopsController < ApplicationController
 
     respond_to do |format|
       if @coffee_shop.save
-        format.html { redirect_to coffee_shop_url(@coffee_shop), notice: "Coffee shop was successfully created." }
+        format.html { redirect_to coffee_shop_url(@coffee_shop), notice: "Coffee shop was successfully submitted for review." }
         format.json { render :show, status: :created, location: @coffee_shop }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -53,7 +53,7 @@ class CoffeeShopsController < ApplicationController
   private
 
   def set_coffee_shop
-    @coffee_shop = CoffeeShop.find(params[:id])
+    @coffee_shop = CoffeeShop.find_by!(slug: params[:id])
   end
 
   def coffee_shop_params

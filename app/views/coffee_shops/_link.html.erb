@@ -1,5 +1,5 @@
 <% if coffee_shop.public_send(link).present? %>
-  <%= link_to coffee_shop.public_send(link) do %>
+  <%= link_to coffee_shop.public_send(link), target: "_blank" do %>
     <div class="w-5">
       <%= render "components/icons/#{link.to_sym}" %>
     </div>

@@ -38,7 +38,7 @@
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <%= link_to "View", coffee_shop, class: "text-indigo-600 hover:text-indigo-900" %>
+                  <%= link_to "View", coffee_shop_path(id: coffee_shop.slug), class: "text-indigo-600 hover:text-indigo-900" %>
                 </td>
               </tr>
             <% end %>

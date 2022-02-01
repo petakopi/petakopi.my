@@ -1,10 +1,6 @@
 <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
   New Coffee Shop
 </h2>
-<div class"mt-2 text-center text-sm text-gray-600">
-  <%= render "components/alert", alerts: alert if alert %>
-  <%= render "components/notice", alerts: notice if notice %>
-</div>
 
 <% unless current_user %>
   <div class="rounded-md bg-yellow-50 p-4 mt-8">
@@ -30,6 +26,10 @@
     </div>
   </div>
 <% end %>
+
+<div class"mt-2 text-center text-sm text-gray-600">
+  <%= render "components/alert", alerts: coffee_shop.errors.full_messages if coffee_shop.errors.full_messages.count > 0 %>
+</div>
 
 <div
   data-controller="select"
@@ -75,11 +75,11 @@
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-            <%= f.label :state, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+            <%= f.label :district, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
               District*
             <% end %>
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-              <%= f.collection_select :state,
+              <%= f.collection_select :district,
                 [],
                 nil,
                 nil,
