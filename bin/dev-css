@@ -1,2 +1,1 @@
 foreman start -f Procfile.dev css
-foreman start -f Procfile.dev js
