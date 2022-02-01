@@ -2,6 +2,7 @@ class CoffeeShop < ApplicationRecord
   serialize :urls, HashSerializer
   store_accessor :urls,
     :facebook,
+    :google_embed,
     :google_map,
     :instagram,
     :twitter,
