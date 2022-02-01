@@ -1,34 +1,63 @@
-<h2>Sign up</h2>
-
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+<div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow">
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      Sign up
+    </h2>
+    <div class"mt-2 text-center text-sm text-gray-600">
+      <%= render "components/alert", alerts: resource.errors.full_messages if resource.errors.any? %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-6" }) do |f| %>
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium text-gray-700" do %>
+            Email address
+          <% end %>
+          <div class="mt-1">
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", required: true, class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+          </div>
+        </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+        <div>
+          <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" do %>
+            Password
+          <% end %>
+          <div class="mt-1">
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true, class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+          </div>
+        </div>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
+        <div>
+          <%= f.label :password, class: "block text-sm font-medium text-gray-700" do %>
+            Password
+          <% end %>
+          <div class="mt-1">
+            <%= f.password_field :password, autocomplete: "new-password", required: true, class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+          </div>
+        </div>
 
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
+        <div>
+          <%= f.label :name, class: "block text-sm font-medium text-gray-700" do %>
+            Name
+          <% end %>
+          <div class="mt-1">
+            <%= f.text_field :name, required: true, class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+          </div>
+        </div>
 
-<%= render "devise/shared/links" %>
+        <div>
+          <%= f.submit "Submit", class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        </div>
+        <div class="text-sm text-center">
+          <%= link_to "Register new account", new_registration_path(resource_name), class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+        </div>
+        <div class="text-sm text-center">
+          <%= link_to "Cancel", root_path, class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

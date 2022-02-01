@@ -4,4 +4,7 @@ class User < ApplicationRecord
     :registerable,
     :rememberable,
     :validatable
+
+  validates :name, uniqueness: true
+  validates :email, uniqueness: true
 end

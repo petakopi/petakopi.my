@@ -329,6 +329,5 @@ Devise.setup do |config|
   # Ref: https://github.com/heartcombo/devise/wiki/How-To:-Create-custom-layouts
   Rails.application.config.to_prepare do
     Devise::SessionsController.layout "application_full"
-    Devise::RegistrationsController.layout proc{ |controller| user_signed_in? ? "application" : "application_full" }
   end
 end
