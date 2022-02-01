@@ -5,7 +5,12 @@
   <body>
     <%= render "layouts/header" %>
 
-    <div class="max-w-2xl mx-auto bg-white py-16 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div class="max-w-2xl mx-auto bg-white lg:max-w-7xl lg:px-8">
+      <div class"mt-2 text-center text-sm text-gray-600">
+        <%= render "components/alert", alerts: alert if alert %>
+        <%= render "components/notice", alerts: notice if notice %>
+      </div>
+
       <%= yield %>
     </div>
   </body>
