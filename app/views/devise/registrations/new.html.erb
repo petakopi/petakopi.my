@@ -22,15 +22,6 @@
         </div>
 
         <div>
-          <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" do %>
-            Password
-          <% end %>
-          <div class="mt-1">
-            <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true, class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
-          </div>
-        </div>
-
-        <div>
           <%= f.label :password, class: "block text-sm font-medium text-gray-700" do %>
             Password
           <% end %>
@@ -38,6 +29,16 @@
             <%= f.password_field :password, autocomplete: "new-password", required: true, class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
           </div>
         </div>
+
+        <div>
+          <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" do %>
+            Password confirmation
+          <% end %>
+          <div class="mt-1">
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true, class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+          </div>
+        </div>
+
 
         <div>
           <%= f.label :name, class: "block text-sm font-medium text-gray-700" do %>
