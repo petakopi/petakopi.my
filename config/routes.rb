@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   end
 
   get "about" => "pages#about"
+  get "coffee_map" => "pages#coffee_map"
 
   root "coffee_shops#index"
 end
