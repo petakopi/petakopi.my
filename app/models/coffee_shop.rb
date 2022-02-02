@@ -12,6 +12,8 @@ class CoffeeShop < ApplicationRecord
 
   belongs_to :submitter, class_name: "User", foreign_key: "submitter_user_id", optional: true
 
+  has_one_attached :logo
+
   validates :slug, presence: true
   validates :slug, uniqueness: true
   validates :name, uniqueness: true

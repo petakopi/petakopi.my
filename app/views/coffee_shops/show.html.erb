@@ -1,7 +1,14 @@
 
 <!-- This example requires Tailwind CSS v2.0+ -->
 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-  <div class="px-4 py-5 sm:px-6">
+  <div class="px-4 py-5 sm:px-6 flex items-center space-x-3">
+    <% if @coffee_shop.logo.attached? %>
+      <%= image_tag url_for(@coffee_shop.logo), class: "h-10 w-10 rounded-full" %>
+    <% else %>
+      <div class="h-10 w-10 rounded-full">
+        <%= render "components/icons/image" %>
+      </div>
+    <% end %>
     <h3 class="text-lg leading-6 font-medium text-gray-900">
       <%= @coffee_shop.name %>
     </h3>
