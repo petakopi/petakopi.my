@@ -1,5 +1,5 @@
 class CoffeeShopsController < ApplicationController
-  before_action :set_coffee_shop, only: %i[show edit update destroy]
+  before_action :set_coffee_shop, only: %i[show]
 
   def index
     @coffee_shops = CoffeeShop.status_published
@@ -10,9 +10,6 @@ class CoffeeShopsController < ApplicationController
 
   def new
     @coffee_shop = CoffeeShop.new
-  end
-
-  def edit
   end
 
   def create
@@ -27,27 +24,6 @@ class CoffeeShopsController < ApplicationController
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @coffee_shop.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  def update
-    respond_to do |format|
-      if @coffee_shop.update(coffee_shop_params)
-        format.html { redirect_to coffee_shop_url(@coffee_shop), notice: "Coffee shop was successfully updated." }
-        format.json { render :show, status: :ok, location: @coffee_shop }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @coffee_shop.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def destroy
-    @coffee_shop.destroy
-
-    respond_to do |format|
-      format.html { redirect_to coffee_shops_url, notice: "Coffee shop was successfully destroyed." }
-      format.json { head :no_content }
     end
   end
 
@@ -68,8 +44,7 @@ class CoffeeShopsController < ApplicationController
         :waze,
         :instagram,
         :facebook,
-        :twitter,
-        :status
+        :twitter
       )
   end
 end
