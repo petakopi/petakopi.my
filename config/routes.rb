@@ -8,5 +8,7 @@ Rails.application.routes.draw do
     end
   end
 
+  get "about" => "pages#about"
+
   root "coffee_shops#index"
 end
