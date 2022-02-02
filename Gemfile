@@ -6,6 +6,8 @@ ruby "3.1.0"
 gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "cssbundling-rails" # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem "devise" # authentication
+gem "down", "~> 5.0" # utility to download file
+gem "image_processing", ">= 1.2" # Image processor
 gem "jbuilder" # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jsbundling-rails" # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "pg", "~> 1.1" # Use postgresql as the database for Active Record
@@ -16,7 +18,6 @@ gem "simple_form" # Help with form generation/view
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem "image_processing", ">= 1.2" # Image processor
 
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
