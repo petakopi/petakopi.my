@@ -17,6 +17,7 @@ class CoffeeShopsController < ApplicationController
 
   def create
     @coffee_shop = CoffeeShop.new(coffee_shop_params)
+    @coffee_shop.submitter = current_user
 
     respond_to do |format|
       if @coffee_shop.save
