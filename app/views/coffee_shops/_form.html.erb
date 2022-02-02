@@ -1,4 +1,4 @@
-<h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+<h2 class="text-3xl font-extrabold text-gray-900">
   New Coffee Shop
 </h2>
 
@@ -31,147 +31,153 @@
   <%= render "components/alert", alerts: coffee_shop.errors.full_messages if coffee_shop.errors.full_messages.count > 0 %>
 </div>
 
-<div
-  data-controller="select"
-  data-select-url-value="<%= cities_locations_path %>"
-  data-select-param-value="state"
->
-  <%= form_for coffee_shop, html: { class: "space-y-8 divide-y divide-gray-200" } do |f| %>
-    <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-      <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
-        <div>
-          <h3 class="text-lg leading-6 font-medium text-gray-900">
-            Basic Information
-          </h3>
-          <p class="mt-1 max-w-2xl text-sm text-gray-500">
-            As long as it is a place that sells coffee (latte, americano, etc).
-            We don't mind if it is a kiosk, small shop or mobile shop.
-          </p>
+
+<div class="bg-white overflow-hidden shadow rounded-lg mt-8">
+  <div class="px-4 py-5 sm:p-6">
+    <div
+      data-controller="select"
+      data-select-url-value="<%= cities_locations_path %>"
+      data-select-param-value="state"
+      >
+      <%= form_for coffee_shop, html: { class: "space-y-8 divide-y divide-gray-200" } do |f| %>
+        <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+          <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+            <div>
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Basic Information
+              </h3>
+              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                As long as it is a place that sells coffee (latte, americano, etc).
+                We don't mind if it is a kiosk, small shop or mobile shop.
+              </p>
+            </div>
+            <div class="space-y-6 sm:space-y-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :name, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Name*
+                <% end %>
+                <div class="mt-1">
+                  <%= f.text_field :name, required: true, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+              </div>
+
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :state, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  State*
+                <% end %>
+                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                  <%= f.collection_select :state,
+                    Location.states,
+                    :to_s,
+                    :to_s,
+                    { prompt: true, required: true },
+                    data: { action: "change->select#change" },
+                    class: "max-w-lg block focus:ring-brown-500 focus:border-brown-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                  %>
+                </div>
+              </div>
+
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :district, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  District*
+                <% end %>
+                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                  <%= f.collection_select :district,
+                    f.object.state ? Location.districts(state: f.object.state) : [],
+                    :to_s,
+                    :to_s,
+                    { required: true },
+                    id: nil,
+                    data: { select_target: "select" },
+                    class: "max-w-lg block focus:ring-brown-500 focus:border-brown-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                  %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+            <div>
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Locations
+              </h3>
+              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                This is important for us to know where it is and display it for
+                others to see and search.
+              </p>
+            </div>
+            <div class="space-y-6 sm:space-y-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :google_map, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Google Map*
+                <% end %>
+                <div class="mt-1">
+                  <%= f.text_field :google_map, required: true, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+              </div>
+
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :waze, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Waze
+                <% end %>
+                <div class="mt-1">
+                  <%= f.text_field :waze, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+            <div>
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Social Media
+              </h3>
+              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                It will help our fellow friends to see what is on the menu, the
+                beautiful photos, the story or if it is even open right now.
+              </p>
+            </div>
+            <div class="space-y-6 sm:space-y-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :instagram, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Instagram
+                <% end %>
+                <div class="mt-1">
+                  <%= f.text_field :instagram, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+              </div>
+
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :facebook, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Facebook
+                <% end %>
+                <div class="mt-1">
+                  <%= f.text_field :facebook, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+              </div>
+
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :twitter, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Twitter
+                <% end %>
+                <div class="mt-1">
+                  <%= f.text_field :twitter, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
-        <div class="space-y-6 sm:space-y-5">
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-            <%= f.label :name, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Name*
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :name, required: true, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
-          </div>
 
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-            <%= f.label :state, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              State*
-            <% end %>
-            <div class="mt-1 sm:mt-0 sm:col-span-2">
-              <%= f.collection_select :state,
-                Location.states,
-                :to_s,
-                :to_s,
-                { prompt: true, required: true },
-                data: { action: "change->select#change" },
-                class: "max-w-lg block focus:ring-brown-500 focus:border-brown-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              %>
-            </div>
-          </div>
-
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-            <%= f.label :district, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              District*
-            <% end %>
-            <div class="mt-1 sm:mt-0 sm:col-span-2">
-              <%= f.collection_select :district,
-                f.object.state ? Location.districts(state: f.object.state) : [],
-                :to_s,
-                :to_s,
-                { required: true },
-                id: nil,
-                data: { select_target: "select" },
-                class: "max-w-lg block focus:ring-brown-500 focus:border-brown-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              %>
-            </div>
+        <div class="pt-5">
+          <div class="flex justify-end">
+            <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">
+              Submit
+            </button>
           </div>
         </div>
-      </div>
-
-      <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
-        <div>
-          <h3 class="text-lg leading-6 font-medium text-gray-900">
-            Locations
-          </h3>
-          <p class="mt-1 max-w-2xl text-sm text-gray-500">
-            This is important for us to know where it is and display it for
-            others to see and search.
-          </p>
-        </div>
-        <div class="space-y-6 sm:space-y-5">
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-            <%= f.label :google_map, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Google Map*
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :google_map, required: true, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
-          </div>
-
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-            <%= f.label :waze, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Waze
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :waze, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
-        <div>
-          <h3 class="text-lg leading-6 font-medium text-gray-900">
-            Social Media
-          </h3>
-          <p class="mt-1 max-w-2xl text-sm text-gray-500">
-            It will help our fellow friends to see what is on the menu, the
-            beautiful photos, the story or if it is even open right now.
-          </p>
-        </div>
-        <div class="space-y-6 sm:space-y-5">
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-            <%= f.label :instagram, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Instagram
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :instagram, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
-          </div>
-
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-            <%= f.label :facebook, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Facebook
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :facebook, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
-          </div>
-
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-            <%= f.label :twitter, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Twitter
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :twitter, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
-          </div>
-
-        </div>
-      </div>
+      <% end %>
     </div>
 
-    <div class="pt-5">
-      <div class="flex justify-end">
-        <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">
-          Submit
-        </button>
-      </div>
-    </div>
-  <% end %>
+  </div>
 </div>
