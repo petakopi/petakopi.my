@@ -80,9 +80,9 @@
             <% end %>
             <div class="mt-1 sm:mt-0 sm:col-span-2">
               <%= f.collection_select :district,
-                [],
-                nil,
-                nil,
+                f.object.state ? Location.districts(state: f.object.state) : [],
+                :to_s,
+                :to_s,
                 { required: true },
                 id: nil,
                 data: { select_target: "select" },
