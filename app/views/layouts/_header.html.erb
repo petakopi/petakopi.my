@@ -9,7 +9,7 @@
         <% end %>
       </div>
       <div class="-mr-2 -my-2 md:hidden">
-        <button type="button" class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" @click="toggle" @mousedown="if (open) $event.preventDefault()" aria-expanded="true" :aria-expanded="open.toString()">
+        <button type="button" class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brown-500" @click="toggle" @mousedown="if (open) $event.preventDefault()" aria-expanded="true" :aria-expanded="open.toString()">
           <span class="sr-only">Open menu</span>
           <svg class="h-6 w-6" x-description="Heroicon name: outline/menu" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -28,7 +28,7 @@
             <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-base font-medium text-gray-500 hover:text-gray-900" %>
           <% else %>
             <%= link_to "Sign in", new_user_session_path, class: "text-base font-medium text-gray-500 hover:text-gray-900" %>
-            <%= link_to "Sign up", new_user_registration_path, class: "ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" %>
+            <%= link_to "Sign up", new_user_registration_path, class: "ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-brown-600 hover:bg-brown-700" %>
           <% end %>
         </div>
       </div>
@@ -43,7 +43,7 @@
             <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow">
           </div>
           <div class="-mr-2">
-            <button type="button" class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" @click="toggle">
+            <button type="button" class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brown-500" @click="toggle">
               <span class="sr-only">Close menu</span>
               <svg class="h-6 w-6" x-description="Heroicon name: outline/x" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -61,13 +61,13 @@
         </div>
         <div class="mt-6">
           <% if current_user %>
-            <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" %>
+            <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-brown-600 hover:bg-brown-700" %>
           <% else %>
-            <%= link_to "Sign up", new_user_registration_path, class: "w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" %>
+            <%= link_to "Sign up", new_user_registration_path, class: "w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-brown-600 hover:bg-brown-700" %>
             <p class="mt-6 text-center text-base font-medium text-gray-500">
               Existing user?
               <!-- space -->
-              <%= link_to "Sign in", new_user_session_path, class: "text-indigo-600 hover:text-indigo-500" %>
+              <%= link_to "Sign in", new_user_session_path, class: "text-brown-600 hover:text-brown-500" %>
             </p>
           <% end %>
         </div>
