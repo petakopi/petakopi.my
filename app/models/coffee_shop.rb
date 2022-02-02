@@ -39,8 +39,7 @@ class CoffeeShop < ApplicationRecord
   end
 
   def attach_logo
-    # return if logo_url.blank?
-    logo_url = "https://i.imgur.com/EHckMX2.jpeg"
+    return if logo_url.blank?
 
     LogoAttacher.call(coffee_shop: self, logo_url: logo_url)
   end
