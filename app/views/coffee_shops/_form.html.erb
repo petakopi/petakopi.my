@@ -39,9 +39,9 @@
       data-select-url-value="<%= cities_locations_path %>"
       data-select-param-value="state"
       >
-      <%= form_for coffee_shop, html: { class: "space-y-8 divide-y divide-gray-200" } do |f| %>
+      <%= form_for coffee_shop do |f| %>
         <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-          <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+          <div class="space-y-6 sm:space-y-5">
             <div>
               <h3 class="text-lg leading-6 font-medium text-gray-900">
                 Basic Information
@@ -167,17 +167,16 @@
 
             </div>
           </div>
-        </div>
 
-        <div class="pt-5">
-          <div class="flex justify-end">
-            <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">
-              Submit
-            </button>
+          <div class="pt-5">
+            <div class="flex justify-end">
+              <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">
+                Submit
+              </button>
+            </div>
           </div>
         </div>
       <% end %>
     </div>
-
   </div>
 </div>
