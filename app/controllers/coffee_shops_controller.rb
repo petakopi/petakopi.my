@@ -2,7 +2,7 @@ class CoffeeShopsController < ApplicationController
   before_action :set_coffee_shop, only: %i[show]
 
   def index
-    @coffee_shops = CoffeeShop.status_published
+    @coffee_shops = CoffeeShop.order(:name).status_published
   end
 
   def show

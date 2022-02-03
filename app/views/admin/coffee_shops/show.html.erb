@@ -1,0 +1,107 @@
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="px-4 py-5 sm:px-6 flex items-center space-x-3">
+    <% if @coffee_shop.logo.attached? %>
+      <%= image_tag url_for(@coffee_shop.logo), class: "h-10 w-10 rounded-full" %>
+    <% else %>
+      <div class="h-10 w-10 rounded-full">
+        <%= render "components/icons/image" %>
+      </div>
+    <% end %>
+    <h3 class="text-lg leading-6 font-medium text-gray-900">
+      <%= @coffee_shop.name %>
+    </h3>
+  </div>
+  <div class="border-t border-gray-200">
+    <dl>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Name
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @coffee_shop.name %>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Location
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @coffee_shop.district %>, <%= @coffee_shop.state %>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Links
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <div class=" flex space-x-2">
+            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :google_map %>
+            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :waze %>
+            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :instagram %>
+            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :facebook %>
+            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :twitter %>
+          </div>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Tags
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+            Active
+          </span>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Submitted by
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <% if @coffee_shop.submitter %>
+            <%= @coffee_shop.submitter.name %>
+          <% else %>
+            Anonymous
+          <% end %>
+          on <%= @coffee_shop.created_at.strftime("%B %-d, %Y") %>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Created At
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @coffee_shop.created_at.strftime("%Y-%m-%d %I:%M %p") %>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Updated At
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @coffee_shop.updated_at.strftime("%Y-%m-%d %I:%M %p") %>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Status
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @coffee_shop.status == 0 ? "unpublished" : "published" %>
+        </dd>
+      </div>
+      <div class="bg-white-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+        Maps
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <% if @coffee_shop.google_embed %>
+            <iframe src="<%= @coffee_shop.google_embed %>" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          <% else %>
+            No Google Embed
+          <% end %>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>

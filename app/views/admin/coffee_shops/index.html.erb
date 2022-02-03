@@ -3,6 +3,22 @@
     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
       <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
         <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Name
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Location
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Links
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-right">
+                Actions
+              </th>
+            </tr>
+          </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <% @coffee_shops.each do |coffee_shop| %>
               <tr>
@@ -36,15 +52,22 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <div class=" flex space-x-2">
-                    <%= render "link", coffee_shop: coffee_shop, link: :google_map %>
-                    <%= render "link", coffee_shop: coffee_shop, link: :waze %>
-                    <%= render "link", coffee_shop: coffee_shop, link: :instagram %>
-                    <%= render "link", coffee_shop: coffee_shop, link: :facebook %>
-                    <%= render "link", coffee_shop: coffee_shop, link: :twitter %>
+                    <%= render "coffee_shops/link", coffee_shop: coffee_shop, link: :google_map %>
+                    <%= render "coffee_shops/link", coffee_shop: coffee_shop, link: :waze %>
+                    <%= render "coffee_shops/link", coffee_shop: coffee_shop, link: :instagram %>
+                    <%= render "coffee_shops/link", coffee_shop: coffee_shop, link: :facebook %>
+                    <%= render "coffee_shops/link", coffee_shop: coffee_shop, link: :twitter %>
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <%= link_to "View", coffee_shop_path(id: coffee_shop.slug), class: "text-brown-600 hover:text-brown-900" %>
+                  <%= link_to "Edit",
+                    edit_admin_coffee_shop_path(coffee_shop),
+                    class: "text-brown-600 hover:text-brown-900"
+                  %>
+                  <%= link_to "View",
+                    admin_coffee_shop_path(coffee_shop),
+                    class: "ml-5 text-brown-600 hover:text-brown-900"
+                  %>
                 </td>
               </tr>
             <% end %>

@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   def http_authenticate
-    # return true unless Rails.env == "production"
+    return true unless Rails.env == "production"
 
     authenticate_or_request_with_http_basic do |username, password|
       # Congrats, you found the password. Feel free to browse the website ;)
