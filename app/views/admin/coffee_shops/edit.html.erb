@@ -130,6 +130,15 @@
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+            <%= f.label :logo, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Logo
+            <% end %>
+            <div class="mt-1">
+              <%= f.file_field :logo, class: "text-sm text-gray-700" %>
+            </div>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
             <%= f.label :status, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
               Status
             <% end %>
