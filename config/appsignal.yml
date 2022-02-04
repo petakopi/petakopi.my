@@ -39,3 +39,4 @@ development:
 production:
   <<: *defaults
   active: true
+  revision: "<% `tail -1 /var/www/petakopi/revisions.log | cut -d' ' -f5` %>"
