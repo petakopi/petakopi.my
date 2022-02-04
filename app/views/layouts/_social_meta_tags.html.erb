@@ -1,6 +1,6 @@
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://petakopi.my/">
+<meta property="og:url" content="https://petakopi.my<%= request.fullpath  %>">
 <% if content_for?(:page_title) %>
   <meta property="og:title" content="petakopi.my — <%= yield(:page_title) %>">
 <% else %>
@@ -15,7 +15,7 @@
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://petakopi.my/">
+<meta property="twitter:url" content="https://petakopi.my<%= request.fullpath  %>">
 <% if content_for?(:page_title) %>
   <meta property="twitter:title" content="petakopi.my — <%= yield(:page_title) %>">
 <% else %>
