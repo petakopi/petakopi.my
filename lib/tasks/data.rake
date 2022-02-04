@@ -17,4 +17,19 @@ namespace :data do
       puts location.inspect
     end
   end
+
+  desc "Create tags"
+  task create_tags: :environment do
+    Tag.create_or_find_by(
+      name: "Halal Certified",
+      slug: "halal-certified",
+      colour: "green"
+    )
+
+    Tag.create_or_find_by(
+      name: "Muslim Owner",
+      slug: "muslim-owner",
+      colour: "green"
+    )
+  end
 end
