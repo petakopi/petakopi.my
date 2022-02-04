@@ -77,7 +77,7 @@
                     <%= radio_button_tag "coffee_shop[tag_ids][]",
                       tag.id,
                       f.object.tags.include?(tag),
-                      class: "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300",
+                      class: "focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300",
                       id: dom_id(tag)
                     %>
                     <%= label_tag dom_id(tag), tag.name, class: "ml-3 block text-sm font-medium text-gray-700" %>
