@@ -2,7 +2,7 @@ class Admin::CoffeeShopsController < AdminController
   before_action :set_coffee_shop, only: %i[show edit update]
 
   def index
-    @coffee_shops = CoffeeShop.order(created_at: :desc).status_published
+    @coffee_shops = CoffeeShop.order(created_at: :desc)
   end
 
   def edit
