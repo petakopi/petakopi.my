@@ -10,7 +10,7 @@
 <% if content_for?(:page_image) %>
   <meta property="og:image" content="<%= yield(:page_image) %>">
 <% else %>
-  <meta property="og:image" content="<%= image_url "social_logo.svg" %>">
+  <meta property="og:image" content="<%= image_url "social_logo.png" %>">
 <% end %>
 
 <!-- Twitter -->
@@ -25,5 +25,5 @@
 <% if content_for?(:page_image) %>
   <meta property="twitter:image" content="<%= yield(:page_image) %>">
 <% else %>
-  <meta property="twitter:image" content="<%= image_url "social_logo.svg" %>">
+  <meta property="twitter:image" content="<%= image_url "social_logo.png" %>">
 <% end %>
