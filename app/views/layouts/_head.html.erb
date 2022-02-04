@@ -6,4 +6,16 @@
 
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+
+  <% if Rails.env.production? %>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-14JBBQZVQR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("js", new Date());
+
+      gtag("config", "G-14JBBQZVQR");
+    </script>
+  <% end %>
 </head>
