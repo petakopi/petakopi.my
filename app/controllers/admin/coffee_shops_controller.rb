@@ -45,7 +45,8 @@ class Admin::CoffeeShopsController < AdminController
         :status,
         :submitter_user_id,
         :twitter,
-        :waze
+        :waze,
+        tag_ids: []
       )
   end
 end

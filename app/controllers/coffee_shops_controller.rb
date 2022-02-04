@@ -10,6 +10,7 @@ class CoffeeShopsController < ApplicationController
 
   def new
     @coffee_shop = CoffeeShop.new
+    @coffee_shop.coffee_shop_tags.build
   end
 
   def create
@@ -44,7 +45,8 @@ class CoffeeShopsController < ApplicationController
         :waze,
         :instagram,
         :facebook,
-        :twitter
+        :twitter,
+        tag_ids: []
       )
   end
 end

@@ -99,6 +99,42 @@
           <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
             <div>
               <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Info for Muslim
+              </h3>
+              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                This information is very important to Muslim. If you are not
+                the owner, please fill it in only if you are sure about the
+                status. Just leave it blank if you don't know.
+              </p>
+            </div>
+            <div class="space-y-6 sm:space-y-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <div class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Status</div>
+                <div class="mt-1">
+                  <div class="mt-1 sm:mt-0 sm:col-span-2">
+                    <div class="space-y-6 sm:space-y-5">
+                      <% Tag.all.each do |tag| %>
+                        <div class="flex items-center">
+                          <%= radio_button_tag "coffee_shop[tag_ids][]",
+                            tag.id,
+                            f.object.tags.include?(tag),
+                            class: "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300",
+                            id: dom_id(tag)
+                          %>
+                          <%= label_tag dom_id(tag), tag.name, class: "ml-3 block text-sm font-medium text-gray-700" %>
+                        </div>
+
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+            <div>
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
                 Locations
               </h3>
               <p class="mt-1 max-w-2xl text-sm text-gray-500">
