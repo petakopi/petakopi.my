@@ -51,10 +51,14 @@
           Tags
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <% @coffee_shop.tags.each do |tag| %>
-            <span class="px-2 inline-flex text-xs leading-5 rounded-full bg-green-100 text-green-800">
-              <%= tag.name %>
-            </span>
+          <% if @coffee_shop.tags.any? %>
+            <% @coffee_shop.tags.each do |tag| %>
+              <span class="px-2 inline-flex text-xs leading-5 rounded-full bg-green-100 text-green-800">
+                <%= tag.name %>
+              </span>
+            <% end %>
+          <% else %>
+            -
           <% end %>
         </dd>
       </div>

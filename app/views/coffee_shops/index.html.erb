@@ -21,7 +21,7 @@
                     </div>
                     <div class="ml-4">
                       <div class="text-sm font-medium text-gray-900">
-                        <%= coffee_shop.name %>
+                        <%= link_to coffee_shop.name, coffee_shop_path(id: coffee_shop.slug) %>
                       </div>
                     </div>
                   </div>
