@@ -24,7 +24,6 @@ class CoffeeShop < ApplicationRecord
   validate :verify_district_in_state
 
   before_validation :assign_slug
-  before_validation :attach_logo
 
   def assign_slug
     return if name.blank?
@@ -36,11 +35,5 @@ class CoffeeShop < ApplicationRecord
     return if state.nil? || district.nil?
 
     Location.find_by(city: district).state == state
-  end
-
-  def attach_logo
-    return if logo_url.blank?
-
-    LogoAttacher.call(coffee_shop: self, logo_url: logo_url)
   end
 end

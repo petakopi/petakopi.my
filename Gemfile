@@ -7,7 +7,6 @@ gem "aws-sdk-s3", require: false
 gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "cssbundling-rails" # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem "devise" # authentication
-gem "down", "~> 5.0" # utility to download file
 gem "image_processing", ">= 1.2" # Image processor
 gem "jbuilder" # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jsbundling-rails" # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
