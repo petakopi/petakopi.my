@@ -10,7 +10,7 @@ class CoffeeShop < ApplicationRecord
 
   attr_accessor :logo_url
 
-  enum status: {unpublished: 0, published: 1}, _prefix: :status
+  enum status: {unpublished: 0, published: 1, rejected: 2}, _prefix: :status
 
   belongs_to :submitter, class_name: "User", foreign_key: "submitter_user_id", optional: true
   has_many :coffee_shop_tags

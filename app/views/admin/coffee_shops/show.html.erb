@@ -1,4 +1,9 @@
-<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+<div class="flex justify-end">
+  <%= link_to "Coffee Shops", admin_coffee_shops_path, class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500" %>
+  <%= link_to "Edit", edit_admin_coffee_shop_path(@coffee_shop), class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500" %>
+</div>
+
+<div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
   <div class="px-4 py-5 sm:px-6 flex items-center space-x-3">
     <% if @coffee_shop.logo.attached? %>
       <%= image_tag url_for(@coffee_shop.logo), class: "h-10 w-10 rounded-full" %>
@@ -48,10 +53,14 @@
           Tags
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <% @coffee_shop.tags.each do |tag| %>
-            <span class="px-2 inline-flex text-xs leading-5 rounded-full bg-green-100 text-green-800">
-              <%= tag.name %>
-            </span>
+          <% if @coffee_shop.tags.any? %>
+            <% @coffee_shop.tags.each do |tag| %>
+              <span class="px-2 inline-flex text-xs leading-5 rounded-full bg-green-100 text-green-800">
+                <%= tag.name %>
+              </span>
+            <% end %>
+          <% else %>
+            -
           <% end %>
         </dd>
       </div>
@@ -89,7 +98,15 @@
           Status
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <%= @coffee_shop.status == 0 ? "unpublished" : "published" %>
+          <% if @coffee_shop.status == "published" %>
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+              <%= @coffee_shop.status %>
+            </span>
+          <% else %>
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+              <%= @coffee_shop.status %>
+            </span>
+          <% end %>
         </dd>
       </div>
       <div class="bg-white-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
