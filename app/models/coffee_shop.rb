@@ -20,19 +20,29 @@ class CoffeeShop < ApplicationRecord
 
   validates :slug, presence: true
   validates :slug, uniqueness: true
-  validates :name, uniqueness: true
   validates :state, presence: true
   validates :district, presence: true
   validate :verify_district_in_state
 
-  before_validation :assign_slug
+  before_validation :assign_slug, on: :create
 
   accepts_nested_attributes_for :coffee_shop_tags
 
   def assign_slug
     return if name.blank?
+    return if district.blank?
 
-    self.slug = name.parameterize
+    slug = name.parameterize
+
+    if CoffeeShop.where(slug: slug).any?
+      slug = "#{slug}-#{district.parameterize}"
+    end
+
+    if CoffeeShop.where(slug: slug).any?
+      slug = "#{slug}-#{SecureRandom.alphanumeric(5).downcase}"
+    end
+
+    self.slug = slug
   end
 
   def verify_district_in_state
