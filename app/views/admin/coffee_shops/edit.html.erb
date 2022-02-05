@@ -165,7 +165,7 @@
             <% end %>
             <div class="mt-1">
               <%= f.select :status,
-                ["unpublished", "published", "rejected"],
+                CoffeeShop.statuses.keys,
                 {},
                 id: nil,
                 data: { select_target: "select" },
