@@ -3,6 +3,7 @@ class CoffeeShopsController < ApplicationController
 
   def index
     @coffee_shops = CoffeeShop.order(:name).status_published
+    @coffee_shops = @coffee_shops.where(state: params[:state]) if params[:state]
   end
 
   def show
