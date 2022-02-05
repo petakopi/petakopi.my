@@ -1,62 +1,83 @@
 <%= render "state_select" %>
 
-<div class="mt-4 flex flex-col">
-  <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-      <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-        <table class="min-w-full divide-y divide-gray-200">
-          <tbody class="bg-white divide-y divide-gray-200">
-            <% @coffee_shops.each do |coffee_shop| %>
-              <tr>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex items-center">
-                    <div class="flex-shrink-0 h-10 w-10">
-                      <%= link_to coffee_shop_path(id: coffee_shop.slug) do %>
-                        <% if coffee_shop.logo.attached? %>
-                          <%= image_tag url_for(coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown" %>
-                        <% else %>
-                          <div class="h-10 w-10 rounded-full">
-                            <%= render "components/icons/image" %>
-                          </div>
+<% if @coffee_shops.any? %>
+  <div class="mt-4 flex flex-col">
+    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-200">
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @coffee_shops.each do |coffee_shop| %>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="flex-shrink-0 h-10 w-10">
+                        <%= link_to coffee_shop_path(id: coffee_shop.slug) do %>
+                          <% if coffee_shop.logo.attached? %>
+                            <%= image_tag url_for(coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown" %>
+                          <% else %>
+                            <div class="h-10 w-10 rounded-full">
+                              <%= render "components/icons/image" %>
+                            </div>
+                          <% end %>
                         <% end %>
-                      <% end %>
-                    </div>
-                    <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900">
-                        <%= link_to coffee_shop.name, coffee_shop_path(id: coffee_shop.slug) %>
+                      </div>
+                      <div class="ml-4">
+                        <div class="text-sm font-medium text-gray-900">
+                          <%= link_to coffee_shop.name, coffee_shop_path(id: coffee_shop.slug) %>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <% coffee_shop.tags.each do |tag| %>
-                    <span class="px-2 inline-flex text-xs leading-5 rounded-full bg-green-100 text-green-800">
-                      <%= tag.name %>
-                    </span>
-                  <% end %>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">
-                    <%= coffee_shop.district %>, <%= coffee_shop.state %>
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <div class=" flex space-x-2">
-                    <%= render "link", coffee_shop: coffee_shop, link: :google_map %>
-                    <%= render "link", coffee_shop: coffee_shop, link: :waze %>
-                    <%= render "link", coffee_shop: coffee_shop, link: :instagram %>
-                    <%= render "link", coffee_shop: coffee_shop, link: :facebook %>
-                    <%= render "link", coffee_shop: coffee_shop, link: :twitter %>
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <%= link_to "View", coffee_shop_path(id: coffee_shop.slug), class: "text-brown-600 hover:text-brown-900" %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <% coffee_shop.tags.each do |tag| %>
+                      <span class="px-2 inline-flex text-xs leading-5 rounded-full bg-green-100 text-green-800">
+                        <%= tag.name %>
+                      </span>
+                    <% end %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">
+                      <%= coffee_shop.district %>, <%= coffee_shop.state %>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <div class=" flex space-x-2">
+                      <%= render "link", coffee_shop: coffee_shop, link: :google_map %>
+                      <%= render "link", coffee_shop: coffee_shop, link: :waze %>
+                      <%= render "link", coffee_shop: coffee_shop, link: :instagram %>
+                      <%= render "link", coffee_shop: coffee_shop, link: :facebook %>
+                      <%= render "link", coffee_shop: coffee_shop, link: :twitter %>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <%= link_to "View", coffee_shop_path(id: coffee_shop.slug), class: "text-brown-600 hover:text-brown-900" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% else %>
+  <div class="mt-4 bg-white overflow-hidden shadow rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+      <div class="text-center">
+        <%= render "components/icons/store" %>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No coffee shop</h3>
+        <p class="mt-1 text-sm text-gray-500">Be the first one to submit the coffee shop here.</p>
+        <div class="mt-6">
+          <a href="<%= new_coffee_shop_path %>" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">
+            <!-- Heroicon name: solid/plus -->
+            <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            New Coffee Shop
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
