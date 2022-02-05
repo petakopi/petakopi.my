@@ -64,9 +64,12 @@
             About
           <% end %>
           <%= link_to coffee_map_path, class: "rounded-md text-base font-medium text-gray-900 hover:text-gray-700" do %>
-            Coffe Map
+            Coffee Map
           <% end %>
           <%= link_to "Submit Coffee Shop", new_coffee_shop_path, class: "rounded-md text-base font-medium text-gray-900 hover:text-gray-700" %>
+          <% if current_user&.is_admin? %>
+            <%= link_to "Admin", admin_coffee_shops_path, class: "rounded-md text-base font-medium text-red-500 hover:text-red-900" %>
+          <% end %>
         </div>
         <div class="mt-6">
           <% if current_user %>
