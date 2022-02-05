@@ -13,7 +13,9 @@
       </div>
     <% end %>
     <h3 class="text-lg leading-6 font-medium text-gray-900">
-      <%= @coffee_shop.name %>
+      <%= link_to coffee_shop_path(id: @coffee_shop.slug) do %>
+        <%= @coffee_shop.name %>
+      <% end %>
     </h3>
   </div>
   <div class="border-t border-gray-200">
