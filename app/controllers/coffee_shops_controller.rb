@@ -39,14 +39,15 @@ class CoffeeShopsController < ApplicationController
     params
       .require(:coffee_shop)
       .permit(
-        :name,
         :district,
-        :state,
-        :google_map,
-        :waze,
-        :instagram,
         :facebook,
+        :google_map,
+        :instagram,
+        :logo,
+        :name,
+        :state,
         :twitter,
+        :waze,
         tag_ids: []
       )
   end
