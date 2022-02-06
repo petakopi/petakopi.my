@@ -2,8 +2,13 @@ class CoffeeShopsController < ApplicationController
   before_action :set_coffee_shop, only: %i[show]
 
   def index
-    @coffee_shops = CoffeeShop.order(:name).status_published
-    @coffee_shops = @coffee_shops.where(state: params[:state]) if params[:state]
+    @coffee_shops = CoffeeShop.status_published
+    @coffee_shops =
+      if params[:state]
+        @coffee_shops.where(state: params[:state]).order(:district, :name)
+      else
+        @coffee_shops.order(:name)
+      end
 
     @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
   end
