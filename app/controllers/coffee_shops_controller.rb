@@ -7,7 +7,7 @@ class CoffeeShopsController < ApplicationController
       if params[:state]
         @coffee_shops.where(state: params[:state]).order(:district, :name)
       else
-        @coffee_shops.order(:name)
+        @coffee_shops.order(:state, :district, :name)
       end
 
     @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
