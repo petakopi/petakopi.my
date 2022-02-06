@@ -112,6 +112,13 @@
             <div class="mt-1">
               <%= f.text_field :instagram, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
             </div>
+            <% if f.object.instagram.present? %>
+              <div class="mt-1 text-sm">
+                <a href="https://www.instagram.com/<%= f.object.instagram %>" target="_blank" class="text-brown-500 hover:text-brown-900">
+                  https://www.instagram.com/<%= f.object.instagram %>
+                </a>
+              </div>
+            <% end %>
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
@@ -121,6 +128,13 @@
             <div class="mt-1">
               <%= f.text_field :facebook, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
             </div>
+            <% if f.object.facebook.present? %>
+              <div class="mt-1 text-sm">
+                <a href="https://www.facebook.com/<%= f.object.facebook %>" target="_blank" class="text-brown-500 hover:text-brown-900">
+                  https://www.facebook.com/<%= f.object.facebook %>
+                </a>
+              </div>
+            <% end %>
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
@@ -130,6 +144,13 @@
             <div class="mt-1">
               <%= f.text_field :twitter, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
             </div>
+            <% if f.object.twitter.present? %>
+              <div class="mt-1 text-sm">
+                <a href="https://www.twitter.com/<%= f.object.twitter %>" target="_blank" class="text-brown-500 hover:text-brown-900">
+                  https://www.twitter.com/<%= f.object.twitter %>
+                </a>
+              </div>
+            <% end %>
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
