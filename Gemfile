@@ -11,6 +11,7 @@ gem "devise" # authentication
 gem "image_processing", ">= 1.2" # Image processor
 gem "jbuilder" # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jsbundling-rails" # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
+gem "paper_trail" # Track changes to the model
 gem "pg", "~> 1.1" # Use postgresql as the database for Active Record
 gem "puma", "~> 5.0" # Use the Puma web server [https://github.com/puma/puma]
 gem "rails", "~> 7.0.1" # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"

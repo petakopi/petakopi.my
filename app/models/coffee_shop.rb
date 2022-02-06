@@ -1,4 +1,6 @@
 class CoffeeShop < ApplicationRecord
+  has_paper_trail
+
   serialize :urls, HashSerializer
   store_accessor :urls,
     :facebook,
