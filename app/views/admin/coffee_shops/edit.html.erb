@@ -1,6 +1,13 @@
-<h2 class="text-3xl font-extrabold text-gray-900">
-  Edit <%= @coffee_shop.name %>
-</h2>
+<div class="flex space-x-5 items-center">
+  <div>
+    <% if @coffee_shop.logo.attached? %>
+      <%= image_tag url_for(@coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown" %>
+    <% end %>
+  </div>
+  <h2 class="text-3xl font-extrabold text-gray-900">
+    Edit <%= @coffee_shop.name %>
+  </h2>
+</div>
 
 <div class"mt-2 text-center text-sm text-gray-600">
   <%= render "components/alert", alerts: @coffee_shop.errors.full_messages if @coffee_shop.errors.full_messages.count > 0 %>
@@ -94,6 +101,14 @@
             <div class="mt-1">
               <%= f.text_field :google_map, required: true, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
             </div>
+
+            <% if @coffee_shop.google_map.present? && @coffee_shop.google_map.starts_with?("https://")%>
+              <div class="mt-1 text-sm">
+                <a href="<%= @coffee_shop.google_map %>" target="_blank" class="text-brown-500 hover:text-brown-900">
+                  <%= @coffee_shop.google_map %>
+                </a>
+              </div>
+            <% end %>
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
@@ -103,6 +118,14 @@
             <div class="mt-1">
               <%= f.text_field :waze, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
             </div>
+
+            <% if @coffee_shop.waze.present? && @coffee_shop.waze.starts_with?("https://")%>
+              <div class="mt-1 text-sm">
+                <a href="<%= @coffee_shop.waze %>" target="_blank" class="text-brown-500 hover:text-brown-900">
+                  <%= @coffee_shop.waze %>
+                </a>
+              </div>
+            <% end %>
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
@@ -112,13 +135,7 @@
             <div class="mt-1">
               <%= f.text_field :instagram, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
             </div>
-            <% if f.object.instagram.present? %>
-              <div class="mt-1 text-sm">
-                <a href="https://www.instagram.com/<%= f.object.instagram %>" target="_blank" class="text-brown-500 hover:text-brown-900">
-                  https://www.instagram.com/<%= f.object.instagram %>
-                </a>
-              </div>
-            <% end %>
+            <%= render partial: "link_preview", locals: { url: f.object.instagram, name: "instagram" } %>
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
@@ -128,13 +145,7 @@
             <div class="mt-1">
               <%= f.text_field :facebook, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
             </div>
-            <% if f.object.facebook.present? %>
-              <div class="mt-1 text-sm">
-                <a href="https://www.facebook.com/<%= f.object.facebook %>" target="_blank" class="text-brown-500 hover:text-brown-900">
-                  https://www.facebook.com/<%= f.object.facebook %>
-                </a>
-              </div>
-            <% end %>
+            <%= render partial: "link_preview", locals: { url: f.object.facebook, name: "facebook" } %>
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
@@ -144,13 +155,7 @@
             <div class="mt-1">
               <%= f.text_field :twitter, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
             </div>
-            <% if f.object.twitter.present? %>
-              <div class="mt-1 text-sm">
-                <a href="https://www.twitter.com/<%= f.object.twitter %>" target="_blank" class="text-brown-500 hover:text-brown-900">
-                  https://www.twitter.com/<%= f.object.twitter %>
-                </a>
-              </div>
-            <% end %>
+            <%= render partial: "link_preview", locals: { url: f.object.twitter, name: "twitter" } %>
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
