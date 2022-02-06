@@ -10,6 +10,12 @@ free to start a
 [discussion](https://github.com/amree/petakopi/discussions) before starting the
 work.
 
+## Moderators
+
+I've created a
+[guide](https://amree.notion.site/Moderator-Guide-bb65c644fea5489aaaf1347477018ec9)
+for moderators on how to verify the data.
+
 ## Development
 
 ## Contacts
