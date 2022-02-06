@@ -1,5 +1,5 @@
 class CoffeeShop < ApplicationRecord
-  has_paper_trail
+  has_paper_trail on: [:update]
 
   serialize :urls, HashSerializer
   store_accessor :urls,
