@@ -10,7 +10,11 @@ class Admin::CoffeeShopsController < AdminController
 
   def update
     respond_to do |format|
-      if @coffee_shop.update(coffee_shop_params)
+      if !current_user.admin? && @coffee_shop.status_published?
+        flash.now[:alert] = "You are not authorized to publish a Coffee Shop"
+
+        format.html { render :edit, status: :unprocessable_entity }
+      elsif @coffee_shop.update(coffee_shop_params)
         format.html { redirect_to admin_coffee_shop_url(@coffee_shop), notice: "Coffee shop was successfully updated." }
         format.json { render :show, status: :ok, location: @coffee_shop }
       else

@@ -17,7 +17,8 @@ class CoffeeShop < ApplicationRecord
       unpublished: 0,
       published: 1,
       rejected: 2,
-      duplicate: 3
+      duplicate: 3,
+      reviewed: 4
     },
     _prefix: :status
   )
