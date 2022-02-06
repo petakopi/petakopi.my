@@ -4,6 +4,8 @@ class CoffeeShopsController < ApplicationController
   def index
     @coffee_shops = CoffeeShop.order(:name).status_published
     @coffee_shops = @coffee_shops.where(state: params[:state]) if params[:state]
+
+    @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
   end
 
   def show

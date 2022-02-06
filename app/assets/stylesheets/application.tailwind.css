@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Pagy */
+/* TODO: Extract this out */
+.pagy-nav {
+  @apply relative z-0 inline-flex rounded-md shadow-sm -space-x-px;
+}
+
+.pagy-nav .page {
+  @apply bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium;
+}
+
+.pagy-nav .page.active {
+  @apply z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium;
+}
+
+.pagy-nav .page {
+  @apply bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium;
+}
+
+.pagy-nav .prev {
+  @apply relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50;
+}
+
+.pagy-nav .next {
+  @apply relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50;
+}
+
+.page.disabled {
+  @apply text-gray-400 hover:bg-white;
+}
