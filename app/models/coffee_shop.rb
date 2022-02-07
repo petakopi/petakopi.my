@@ -36,6 +36,7 @@ class CoffeeShop < ApplicationRecord
   validate :verify_district_in_state
 
   before_validation :assign_slug, on: :create
+  before_validation :convert_google_embed
 
   accepts_nested_attributes_for :coffee_shop_tags
 
@@ -60,5 +61,13 @@ class CoffeeShop < ApplicationRecord
     return if state.nil? || district.nil?
 
     Location.find_by(city: district).state == state
+  end
+
+  def convert_google_embed
+    return if google_embed.blank?
+    return unless google_embed.starts_with?("<iframe")
+
+    self.google_embed =
+      Nokogiri::HTML.parse(google_embed).xpath('//iframe').attr('src').value
   end
 end
