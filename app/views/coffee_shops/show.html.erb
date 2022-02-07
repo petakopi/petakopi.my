@@ -1,5 +1,5 @@
 <%= content_for(:page_title) { @coffee_shop.name } %>
-<%= content_for(:page_image) { Rails.env.production? ? @coffee_shop.logo.url : url_for(@coffee_shop.logo) } if @coffee_shop.logo.attached? %>
+<%= content_for(:page_image) { Rails.env.production? ? rails_blob_url(@coffee_shop.logo) : url_for(@coffee_shop.logo) } if @coffee_shop.logo.attached? %>
 
 <div class="text-left">
   <a href="<%= coffee_shops_path %>">&#8592; Back to the list</a>
