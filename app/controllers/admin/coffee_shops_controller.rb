@@ -6,6 +6,9 @@ class Admin::CoffeeShopsController < AdminController
   end
 
   def edit
+    if @coffee_shop.status_published? && current_user.moderator?
+      redirect_to admin_coffee_shops_path, alert: "Moderator can only access unpublished coffee shop"
+    end
   end
 
   def update
