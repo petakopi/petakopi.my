@@ -54,7 +54,7 @@ class CoffeeShop < ApplicationRecord
       slug = "#{slug}-#{SecureRandom.alphanumeric(5).downcase}"
     end
 
-    self.slug = slug
+    self.slug = slug.downcase
   end
 
   def verify_district_in_state
