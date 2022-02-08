@@ -1,13 +1,5 @@
-<% if url.present? && url.starts_with?("https://")%>
+<% if url.present? %>
   <div class="mt-1 text-sm">
-    <a href="<%= url %>" target="_blank" class="text-brown-500 hover:text-brown-900">
-      <%= url %>
-    </a>
-  </div>
-<% elsif url.present? %>
-  <div class="mt-1 text-sm">
-    <a href="https://www.<%= name %>.com/<%= url %>" target="_blank" class="text-brown-500 hover:text-brown-900">
-      https://www.<%= name %>.com/<%= url %>
-    </a>
+    <%= link_to url, url, target: "_blank", class: "text-brown-500 hover:text-brown-900" %>
   </div>
 <% end %>

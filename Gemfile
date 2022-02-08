@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.1.0"
 
+gem "active_decorator" # Decorator
 gem "appsignal" # error/performance monitoring
 gem "aws-sdk-s3", require: false
 gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb

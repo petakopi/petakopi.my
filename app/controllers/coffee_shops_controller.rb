@@ -14,6 +14,7 @@ class CoffeeShopsController < ApplicationController
   end
 
   def show
+    @coffee_shop = ActiveDecorator::Decorator.instance.decorate(@coffee_shop)
   end
 
   def new
