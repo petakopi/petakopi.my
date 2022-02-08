@@ -156,7 +156,9 @@
               <% @coffee_shop.versions.each do |version| %>
                 <tr class="bg-white">
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <%= User.find(version.whodunnit).name %>
+                    <% if version.whodunnit.present? %>
+                      <%= User.find(version.whodunnit).name %>
+                    <% end %>
                   </td>
                   <td class="px-6 py-4 whitespace-wrap text-sm text-gray-500">
                     <code>
