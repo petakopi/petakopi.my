@@ -72,9 +72,10 @@
                 Basic Information
               </h3>
               <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                We are only accepting coffee places that sells freshly brewed
-                coffee (latte, americano, pour over, mokapot, etc). It can be a
-                shop, kiosk or mobile place, we don't mind.
+                If we can come to the place and ask for a coffee freshly brewed
+                from new coffee beans, then, we want to list it. We don't mind
+                if it is house/kiosk/stall based. As long as it serves the right
+                coffee.
               </p>
               <p class="mt-2 max-w-2xl text-sm text-gray-500">
                 We have the right to <span class="font-bold">reject</span>
@@ -190,7 +191,7 @@
             <div class="space-y-6 sm:space-y-5">
               <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <%= f.label :google_map, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-                  Google Map*
+                  Google Map URL*
                 <% end %>
                 <div class="mt-1">
                   <%= f.text_field :google_map, required: true, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
@@ -199,7 +200,7 @@
 
               <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <%= f.label :waze, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-                  Waze
+                  Waze URL
                 <% end %>
                 <div class="mt-1">
                   <%= f.text_field :waze, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
