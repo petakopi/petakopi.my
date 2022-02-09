@@ -2,7 +2,7 @@ class CoffeeShopsController < ApplicationController
   before_action :set_coffee_shop, only: %i[show]
 
   def index
-    @coffee_shops = CoffeeShop.status_published
+    @coffee_shops = CoffeeShop.includes(:tags, logo_attachment: :blob).status_published
     @coffee_shops =
       if params[:state]
         @coffee_shops.where(state: params[:state]).order(:district, :name)

@@ -2,7 +2,7 @@ class Admin::CoffeeShopsController < AdminController
   before_action :set_coffee_shop, only: %i[show edit update]
 
   def index
-    @coffee_shops = CoffeeShop.order(created_at: :desc)
+    @coffee_shops = CoffeeShop.includes(:submitter, logo_attachment: :blob).order(created_at: :desc)
 
     @pagy, @coffee_shops = pagy(@coffee_shops, items: 100)
   end
