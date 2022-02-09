@@ -13,7 +13,7 @@
 }
 
 .pagy-nav .page.active {
-  @apply z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium;
+  @apply z-10 bg-brown-50 border-brown-500 text-brown-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium;
 }
 
 .pagy-nav .page {
