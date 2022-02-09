@@ -41,9 +41,14 @@
                       <% end %>
                     </div>
                     <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900">
-                        <%= link_to edit_admin_coffee_shop_path(coffee_shop) do %>
+                      <div class="text-sm text-gray-900">
+                        <%= link_to edit_admin_coffee_shop_path(coffee_shop), class: "font-medium" do %>
                           <%= coffee_shop.name %>
+                        <% end %>
+                        <% if coffee_shop.submitter %>
+                          <div class="text-xs text-gray-500">
+                            <%= coffee_shop.submitter.name %>
+                          </div>
                         <% end %>
                       </div>
                     </div>
