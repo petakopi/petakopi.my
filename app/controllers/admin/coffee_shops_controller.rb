@@ -3,6 +3,8 @@ class Admin::CoffeeShopsController < AdminController
 
   def index
     @coffee_shops = CoffeeShop.order(created_at: :desc)
+
+    @pagy, @coffee_shops = pagy(@coffee_shops, items: 100)
   end
 
   def edit
