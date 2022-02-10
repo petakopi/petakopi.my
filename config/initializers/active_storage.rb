@@ -1,2 +1,2 @@
 # https://edgeguides.rubyonrails.org/active_storage_overview.html#proxy-mode
-Rails.application.config.active_storage.resolve_model_to_route = :rails_storage_proxy
+# Rails.application.config.active_storage.resolve_model_to_route = :rails_storage_proxy
