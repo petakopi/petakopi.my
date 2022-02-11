@@ -15,5 +15,13 @@ Rails.application.routes.draw do
   get "about" => "pages#about"
   get "coffee_map" => "pages#coffee_map"
 
+  direct :rails_public_blob do |blob|
+    if Rails.env.development? || Rails.env.test?
+      route_for(:rails_blob, blob)
+    else
+      File.join("https://assets.petakopi.my", blob.key)
+    end
+  end
+
   root "coffee_shops#index"
 end

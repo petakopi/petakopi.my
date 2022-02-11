@@ -13,3 +13,4 @@ digitalocean:
   secret_access_key: <%= Rails.application.credentials.dig(:digitalocean, :secret) %>
   bucket: petakopi
   region: unused
+  public: true

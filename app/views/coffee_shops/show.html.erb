@@ -1,5 +1,5 @@
 <%= content_for(:page_title) { @coffee_shop.name } %>
-<%= content_for(:page_image) { Rails.env.production? ? rails_blob_url(@coffee_shop.logo) : url_for(@coffee_shop.logo) } if @coffee_shop.logo.attached? %>
+<%= content_for(:page_image) { rails_public_blob_url(@coffee_shop.logo) if @coffee_shop.logo.attached? %>
 
 <div class="text-left">
   <a href="<%= coffee_shops_path %>">&#8592; Back to the list</a>
@@ -8,7 +8,7 @@
 <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
   <div class="px-4 py-5 sm:px-6 flex items-center space-x-3">
     <% if @coffee_shop.logo.attached? %>
-      <%= image_tag url_for(@coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown" %>
+      <%= image_tag rails_public_blob_url(@coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown" %>
     <% else %>
       <div class="h-10 w-10 rounded-full">
         <%= render "components/icons/image" %>
