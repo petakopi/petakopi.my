@@ -139,6 +139,14 @@
   </div>
 </div>
 
+<% if @coffee_shop.admin_notes.present? %>
+  <div class="mt-4 bg-white overflow-hidden shadow rounded-lg text-gray-900 text-sm">
+    <div class="px-4 py-5 sm:p-6">
+      <%= @coffee_shop.admin_notes %>
+    </div>
+  </div>
+<% end %>
+
 <div class="mt-4 flex flex-col">
   <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

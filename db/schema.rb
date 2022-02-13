@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_08_204631) do
+ActiveRecord::Schema.define(version: 2022_02_13_070617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 2022_02_08_204631) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "slug", null: false
     t.bigint "submitter_user_id"
+    t.text "admin_notes"
     t.index ["slug"], name: "index_coffee_shops_on_slug", unique: true
     t.index ["status"], name: "index_coffee_shops_on_status"
     t.index ["submitter_user_id"], name: "index_coffee_shops_on_submitter_user_id"
