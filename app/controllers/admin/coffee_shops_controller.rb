@@ -4,7 +4,7 @@ class Admin::CoffeeShopsController < AdminController
   def index
     @coffee_shops = CoffeeShop.includes(:submitter, logo_attachment: :blob).order(created_at: :desc)
 
-    @pagy, @coffee_shops = pagy(@coffee_shops, items: 100)
+    @pagy, @coffee_shops = pagy(@coffee_shops, items: 50)
   end
 
   def edit
