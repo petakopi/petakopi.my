@@ -29,12 +29,12 @@
   <div class="mt-4 flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <div class="shadow border-b border-gray-200 sm:rounded-lg">
           <table class="min-w-full divide-y divide-gray-200">
             <tbody class="bg-white divide-y divide-gray-200">
               <% @coffee_shops.each do |coffee_shop| %>
                 <tr>
-                  <td class="px-6 py-4 whitespace-nowrap">
+                  <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white">
                     <div class="flex items-center">
                       <div class="flex-shrink-0 h-10 w-10">
                         <%= link_to coffee_shop_path(id: coffee_shop.slug) do %>
@@ -81,8 +81,10 @@
   </div>
 
   <% if @pagy.pages > 1 %>
-    <div class="py-3 flex justify-end">
-      <%== pagy_nav(@pagy) %>
+    <div class="overflow-x-auto whitespace-nowrap">
+      <div class="py-3 md:flex md:justify-end">
+        <%== pagy_nav(@pagy) %>
+      </div>
     </div>
   <% end %>
 
