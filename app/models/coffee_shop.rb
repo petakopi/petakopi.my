@@ -78,6 +78,7 @@ class CoffeeShop < ApplicationRecord
     # hack to ensure we only do it if filename is not based on calculated format
     return if logo.filename.to_s.match? /#{id}-[0-9]+/
 
-    ProcessLogoWorker.perform_in(2.minutes, id)
+    # Too costly, use vips-gem
+    # ProcessLogoWorker.perform_in(2.minutes, id)
   end
 end
