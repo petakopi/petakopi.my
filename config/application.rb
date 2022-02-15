@@ -23,5 +23,7 @@ module Petakopi
     #
     config.time_zone = "Asia/Kuala_Lumpur"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.active_job.queue_adapter = :sidekiq
   end
 end
