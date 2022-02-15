@@ -252,6 +252,8 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
+    sidekiq-failures (1.0.1)
+      sidekiq (>= 4.0.0)
     skylight (5.3.0)
       activesupport (>= 5.2.0)
     sprockets (4.0.2)
@@ -323,6 +325,7 @@ DEPENDENCIES
   redis (~> 4.0)
   selenium-webdriver
   sidekiq
+  sidekiq-failures
   skylight
   sprockets-rails
   standard
