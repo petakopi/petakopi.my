@@ -123,6 +123,7 @@ GEM
     ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    httpclient (2.8.3)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.1)
@@ -266,6 +267,8 @@ GEM
     strscan (3.0.1)
     thor (1.2.1)
     timeout (0.2.0)
+    tinify (1.5.1)
+      httpclient (~> 2.6)
     turbo-rails (1.0.1)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
@@ -318,6 +321,7 @@ DEPENDENCIES
   sprockets-rails
   standard
   stimulus-rails
+  tinify
   turbo-rails
   web-console
   webdrivers

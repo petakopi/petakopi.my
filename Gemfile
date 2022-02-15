@@ -22,6 +22,7 @@ gem "redis", "~> 4.0" # Use Redis adapter to run Action Cable in production
 gem "sidekiq" # Background jobs
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem "tinify" # tinypng.com gem for image processing
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 
 group :development, :test do
