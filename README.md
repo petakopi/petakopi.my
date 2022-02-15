@@ -1,5 +1,7 @@
 # README
 
+[![View performance data on Skylight](https://badges.skylight.io/typical/PLhsfZX5VaN3.svg?token=SEtrrK0LQlsgB9CP-lMwKPXY53ZM-CyAOML5DRWRb-g)](https://www.skylight.io/app/applications/PLhsfZX5VaN3)
+
 ## Notes
 
 This is the source code for [petakopi.my](https://petakopi.my).
@@ -20,6 +22,5 @@ for moderators on how to verify the data.
 
 ## Contacts
 
-- [Twitter](https://twitter.com/AmreeZaid)
-- [Telegram](https://t.me/amreezaid)
-- [Email](mailto:mohd.amree@gmail.com)
+[@petakopi.my](https://www.instagram.com/petakopi.my/) or
+[hello@petakopi.my](mailto:hello@petakopi.my)
