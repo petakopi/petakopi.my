@@ -37,6 +37,7 @@ class CoffeeShop < ApplicationRecord
 
   before_validation :assign_slug, on: :create
   before_validation :convert_google_embed
+  after_save :process_logo
 
   accepts_nested_attributes_for :coffee_shop_tags
 
@@ -69,5 +70,14 @@ class CoffeeShop < ApplicationRecord
 
     self.google_embed =
       Nokogiri::HTML.parse(google_embed).xpath('//iframe').attr('src').value
+  end
+
+  def process_logo
+    return unless logo.attached?
+    return unless attachment_changes.dig("logo").present?
+    # hack to ensure we only do it if filename is not based on calculated format
+    return if logo.filename.to_s.match? /#{id}-[0-9]+/
+
+    ProcessLogoWorker.perform_in(2.minutes, id)
   end
 end
