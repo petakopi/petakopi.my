@@ -32,6 +32,8 @@ class LogoProcessor
 
   def cleanup
     File.delete("#{path}#{file_name}")
+
+    coffee_shop.touch # bust the cache if there's any
   end
 
   def file_name
