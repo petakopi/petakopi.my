@@ -6,6 +6,7 @@ plugin "nodenv"
 plugin "puma"
 plugin "rbenv"
 plugin "./plugins/petakopi.rb"
+plugin "sidekiq"
 
 host "deployer@petakopi"
 
@@ -56,6 +57,7 @@ setup do
   run "rails:db_schema_load"
   run "rails:db_seed"
   run "puma:setup_systemd"
+  run "sidekiq:setup_systemd"
 end
 
 deploy do
@@ -68,6 +70,7 @@ deploy do
   run "rails:db_seed"
   run "rails:assets_precompile"
   run "core:symlink_current"
+  run "sidekiq:restart"
   run "puma:restart"
   run "puma:check_active"
   run "core:clean_releases"
