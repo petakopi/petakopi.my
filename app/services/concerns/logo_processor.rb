@@ -6,6 +6,8 @@ class LogoProcessor
   end
 
   def call
+    return unless valid?
+
     compress
     reattach
     cleanup
@@ -14,6 +16,10 @@ class LogoProcessor
   private
 
   attr_reader :coffee_shop
+
+  def valid?
+    coffee_shop.logo.attached?
+  end
 
   def compress
     source = Tinify.from_url(coffee_shop.logo.url)
