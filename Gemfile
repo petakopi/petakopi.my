@@ -25,6 +25,7 @@ gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.h
 gem "tinify" # tinypng.com gem for image processing
 gem "tomo-plugin-sidekiq" # tomo plugin for managing sidekiq via systemd
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+gem "skylight" # Performance monitoring tool
 
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
