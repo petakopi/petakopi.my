@@ -27,8 +27,9 @@ class LogoProcessor
     ImageProcessing::Vips
       .source("#{path}original-#{file_name}")
       .resize_to_limit(512, nil)
-      .saver(compression: :lzw)
       .call(destination: "#{path}#{file_name}")
+
+    ImageOptim.new.optimize_image!("#{path}#{file_name}")
   end
 
   def reattach
