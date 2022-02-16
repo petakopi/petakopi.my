@@ -50,10 +50,18 @@ class LogoProcessor
       begin
         id = coffee_shop.id
         random_chars = Time.current.to_i
-        file_extension = File.extname(coffee_shop.logo.filename.to_s)
 
         "#{id}-#{random_chars}#{file_extension}"
       end
+  end
+
+  def file_extension
+    logo = coffee_shop.logo
+    ext = File.extname(logo.filename.to_s)
+
+    return ext if ext.present?
+
+    ".#{logo.content_type.split("/")[1]}"
   end
 
   def path
