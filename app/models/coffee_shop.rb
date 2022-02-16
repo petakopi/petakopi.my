@@ -75,10 +75,9 @@ class CoffeeShop < ApplicationRecord
   def process_logo
     return unless logo.attached?
     return unless attachment_changes.dig("logo").present?
-    # hack to ensure we only do it if filename is not based on calculated format
+    # hack to ensure we only do it if filename is not based on our custom format
     return if logo.filename.to_s.match? /#{id}-[0-9]+/
 
-    # Too costly, use vips-gem
-    # ProcessLogoWorker.perform_in(2.minutes, id)
+    ProcessLogoWorker.perform_in(2.minutes, id)
   end
 end
