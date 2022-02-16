@@ -54,7 +54,6 @@ class Admin::CoffeeShopsController < AdminController
         :state,
         :status,
         :twitter,
-        :waze,
         tag_ids: []
       )
   end

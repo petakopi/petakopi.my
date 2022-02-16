@@ -55,7 +55,6 @@ class CoffeeShopsController < ApplicationController
         :name,
         :state,
         :twitter,
-        :waze,
         tag_ids: []
       )
   end
