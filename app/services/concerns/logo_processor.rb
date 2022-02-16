@@ -8,7 +8,7 @@ class LogoProcessor
   def call
     return unless valid?
 
-    compress
+    process
     reattach
     cleanup
   end
@@ -21,17 +21,26 @@ class LogoProcessor
     coffee_shop.logo.attached?
   end
 
-  def compress
-    source = Tinify.from_url(coffee_shop.logo.url)
-    source.to_file("#{path}#{file_name}")
+  def process
+    IO.copy_stream(URI.open(coffee_shop.logo.url), "#{path}original-#{file_name}")
+
+    ImageProcessing::Vips
+      .source("#{path}original-#{file_name}")
+      .resize_to_limit(512, nil)
+      .saver(compression: :lzw)
+      .call(destination: "#{path}#{file_name}")
   end
 
   def reattach
-    coffee_shop.logo.attach(io: File.open("#{path}#{file_name}"), filename: "#{file_name}")
+    coffee_shop.logo.attach(
+      io: File.open("#{path}#{file_name}"),
+      filename: "#{file_name}"
+    )
   end
 
   def cleanup
     File.delete("#{path}#{file_name}")
+    File.delete("#{path}original-#{file_name}")
 
     coffee_shop.touch # bust the cache if there's any
   end
@@ -43,7 +52,7 @@ class LogoProcessor
         random_chars = Time.current.to_i
         file_extension = File.extname(coffee_shop.logo.filename.to_s)
 
-        "#{id}-#{random_chars}"
+        "#{id}-#{random_chars}#{file_extension}"
       end
   end
 
