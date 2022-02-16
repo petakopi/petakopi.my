@@ -3,6 +3,8 @@ require "open-uri"
 class LogoProcessor
   include Callable
 
+  ACCEPTABLE_FILE_SIZE = 100_000
+
   def initialize(coffee_shop:)
     @coffee_shop = coffee_shop
   end
@@ -24,14 +26,22 @@ class LogoProcessor
   end
 
   def process
-    IO.copy_stream(URI.open(coffee_shop.logo.url), "#{path}original-#{file_name}")
+    input = "#{path}original-#{file_name}"
+    output = "#{path}#{file_name}"
+
+    IO.copy_stream(URI.open(coffee_shop.logo.url), input)
 
     ImageProcessing::Vips
-      .source("#{path}original-#{file_name}")
+      .source(input)
       .resize_to_limit(512, nil)
-      .call(destination: "#{path}#{file_name}")
+      .call(destination: output)
 
-    ImageOptim.new.optimize_image!("#{path}#{file_name}")
+    ImageOptim.new.optimize_image!(output)
+
+    return if File.size(output) <= ACCEPTABLE_FILE_SIZE
+
+    source = Tinify.from_file(output)
+    source.to_file(output)
   end
 
   def reattach

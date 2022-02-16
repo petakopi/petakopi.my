@@ -26,6 +26,7 @@ gem "sidekiq-failures" # Monitor failures in Sidekiq
 gem "skylight" # Performance monitoring tool
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem "tinify" # tinypng.com gem for image processing
 gem "tomo-plugin-sidekiq" # tomo plugin for managing sidekiq via systemd
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 

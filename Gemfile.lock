@@ -125,6 +125,7 @@ GEM
     fspath (3.1.2)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    httpclient (2.8.3)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     image_optim (0.31.1)
@@ -287,6 +288,8 @@ GEM
     strscan (3.0.1)
     thor (1.2.1)
     timeout (0.2.0)
+    tinify (1.5.1)
+      httpclient (~> 2.6)
     tomo (1.10.0)
     tomo-plugin-sidekiq (1.1.1)
       tomo (~> 1.0)
@@ -346,6 +349,7 @@ DEPENDENCIES
   sprockets-rails
   standard
   stimulus-rails
+  tinify
   tomo-plugin-sidekiq
   turbo-rails
   web-console
