@@ -1,5 +1,32 @@
 <%= render "stats" %>
 
+<%= form_tag admin_coffee_shops_path, method: :get do %>
+  <div
+    class="bg-white overflow-hidden shadow rounded-lg mt-4"
+    data-controller="select"
+    data-select-url-value="<%= cities_locations_path %>"
+    data-select-param-value="state">
+    <div class="px-4 py-5 sm:p-6 flex space-x-2">
+        <div>
+          <input type="text" name="keyword" id="keyword" class="shadow-sm focus:ring-brown-500 focus:border-brown-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Keyword" value="<%= params[:keyword] %>">
+        </div>
+
+        <div>
+          <%= select_tag :status,
+            options_for_select(
+              CoffeeShop.statuses.keys.map { |s| [s.titleize, "status_#{s}"] },
+              params[:status]
+            ),
+            include_blank: true,
+            class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brown-500 focus:border-brown-500 sm:text-sm rounded-md"
+          %>
+        </div>
+
+        <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Filter</button>
+    </div>
+  </div>
+<% end %>
+
 <div class="mt-4 flex flex-col">
   <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

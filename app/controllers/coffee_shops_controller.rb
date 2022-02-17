@@ -2,13 +2,12 @@ class CoffeeShopsController < ApplicationController
   before_action :set_coffee_shop, only: %i[show]
 
   def index
-    @coffee_shops = CoffeeShop.includes(:tags, logo_attachment: :blob).status_published
     @coffee_shops =
-      if params[:state]
-        @coffee_shops.where(state: params[:state]).order(:district, :name)
-      else
-        @coffee_shops.order(:state, :district, :name)
-      end
+      CoffeeShopsListQuery.call(
+        params: params,
+        relation: CoffeeShop.includes(:tags, logo_attachment: :blob)
+      )
+    @coffee_shops = @coffee_shops.status_published
 
     @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
   end
