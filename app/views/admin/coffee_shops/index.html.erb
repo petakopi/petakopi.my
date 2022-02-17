@@ -6,7 +6,7 @@
     data-controller="select"
     data-select-url-value="<%= cities_locations_path %>"
     data-select-param-value="state">
-    <div class="px-4 py-5 sm:p-6 flex space-x-2">
+    <div class="px-4 py-5 sm:p-6 sm:flex sm:space-x-2 space-y-2 sm:space-y-0 items-center">
         <div>
           <input type="text" name="keyword" id="keyword" class="shadow-sm focus:ring-brown-500 focus:border-brown-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Keyword" value="<%= params[:keyword] %>">
         </div>
@@ -23,6 +23,7 @@
         </div>
 
         <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Filter</button>
+        <%= link_to "Reset", admin_coffee_shops_path, class: "pl-2 text-sm text-gray-500 hover:text-gray-900" %>
     </div>
   </div>
 <% end %>
