@@ -5,7 +5,8 @@ export default class extends Controller {
   static targets = ["select"]
   static values = {
     url: String,
-    param: String
+    param: String,
+    includeBlank: Boolean
   }
 
   connect() {
@@ -16,8 +17,13 @@ export default class extends Controller {
 
   change(event) {
     let params = new URLSearchParams()
+
     params.append(this.paramValue, event.target.selectedOptions[0].value)
     params.append("target", this.selectTarget.id)
+
+    if (this.includeBlankValue) {
+      params.append("include_blank", this.includeBlankValue)
+    }
 
     get(`${this.urlValue}?${params}`, {
       responseKind: "turbo-stream"

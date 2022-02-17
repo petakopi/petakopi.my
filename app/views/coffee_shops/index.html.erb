@@ -26,6 +26,7 @@
   <div
     class="bg-white overflow-hidden shadow rounded-lg mt-4"
     data-controller="select"
+    data-select-include-blank-value="true"
     data-select-url-value="<%= cities_locations_path %>"
     data-select-param-value="state">
     <div class="px-4 py-5 sm:p-6 sm:flex sm:space-x-2 space-y-2 sm:space-y-0 items-center">
@@ -48,7 +49,7 @@
       <div>
         <%= collection_select nil,
           :district,
-          params[:state] ? Location.districts(state: params[:state]) : [],
+          params[:state] ? Location.districts(state: params[:state]).prepend("") : [],
           :to_s,
           :to_s,
           { selected: params[:district] },
