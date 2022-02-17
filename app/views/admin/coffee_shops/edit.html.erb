@@ -1,7 +1,7 @@
 <div class="flex space-x-5 items-center">
   <div>
     <% if @coffee_shop.logo.attached? %>
-      <%= image_tag rails_public_blob_url(coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown" %>
+      <%= image_tag rails_public_blob_url(@coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown" %>
     <% end %>
   </div>
   <h2 class="text-3xl font-extrabold text-gray-900">
