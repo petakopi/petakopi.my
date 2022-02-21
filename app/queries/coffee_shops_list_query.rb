@@ -34,7 +34,7 @@ class CoffeeShopsListQuery
   def filter_by_keyword
     return relation if params[:keyword].blank?
 
-    keyword = "%#{params[:keyword]}%"
+    keyword = "%#{params[:keyword].strip}%"
 
     relation.where("name ILIKE ? OR slug ILIKE ?", keyword, keyword)
   end
