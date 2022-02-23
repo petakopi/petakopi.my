@@ -19,7 +19,7 @@ gem "pagy", "~> 5.10" # Pagination
 gem "paper_trail" # Track changes to the model
 gem "pg", "~> 1.1" # Use postgresql as the database for Active Record
 gem "puma", "~> 5.0" # Use the Puma web server [https://github.com/puma/puma]
-gem "rails", "~> 7.0.1" # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+gem "rails"
 gem "redis", "~> 4.0" # Use Redis adapter to run Action Cable in production
 gem "sidekiq" # Background jobs
 gem "sidekiq-failures" # Monitor failures in Sidekiq
