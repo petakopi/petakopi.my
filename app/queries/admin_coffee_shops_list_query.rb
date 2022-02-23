@@ -9,6 +9,7 @@ class AdminCoffeeShopsListQuery
   def call
     @relation = filter_by_status
     @relation = filter_by_keyword
+    @relation = reorder
 
     @relation
   end
@@ -34,5 +35,13 @@ class AdminCoffeeShopsListQuery
     keyword = "%#{params[:keyword]}%"
 
     relation.where("name ILIKE ? OR slug ILIKE ?", keyword, keyword)
+  end
+
+  def reorder
+    if params[:status] == "status_published"
+      relation.order(approved_at: :desc)
+    else
+      relation.order(created_at: :desc)
+    end
   end
 end

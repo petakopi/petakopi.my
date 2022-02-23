@@ -7,7 +7,6 @@ class Admin::CoffeeShopsController < AdminController
         params: params,
         relation: CoffeeShop.includes(:submitter, logo_attachment: :blob)
       )
-    @coffee_shops = @coffee_shops.order(created_at: :desc)
 
     @pagy, @coffee_shops = pagy(@coffee_shops, items: 50)
   end

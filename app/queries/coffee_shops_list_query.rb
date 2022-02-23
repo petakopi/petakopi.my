@@ -40,14 +40,14 @@ class CoffeeShopsListQuery
   end
 
   def reorder
-    if params[:keyword].present?
+    if params[:keyword].present? && params[:state].present?
+      relation.order(:name, :district)
+    elsif params[:keyword].present?
       relation.order(:name)
-    elsif params[:keyword].blank? && params[:state].blank?
-      relation.order(:state, :district, :name)
     elsif params[:keyword].blank? && params[:state].present?
       relation.order(:district, :name)
     else
-      relation
+      relation.order(approved_at: :desc)
     end
   end
 end
