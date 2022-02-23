@@ -37,6 +37,7 @@ class CoffeeShop < ApplicationRecord
 
   before_validation :assign_slug, on: :create
   before_validation :convert_google_embed
+  before_save :update_approved_at
   after_save :process_logo
 
   accepts_nested_attributes_for :coffee_shop_tags
@@ -79,5 +80,11 @@ class CoffeeShop < ApplicationRecord
     return if logo.filename.to_s.match? /#{id}-[0-9]+/
 
     ProcessLogoWorker.perform_in(2.minutes, id)
+  end
+
+  def update_approved_at
+    return unless status_changed? && status_published? && approved_at.blank?
+
+    self.approved_at = Time.current
   end
 end
