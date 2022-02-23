@@ -112,23 +112,6 @@
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-            <%= f.label :waze, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Waze
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :waze, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
-
-            <% if @coffee_shop.waze.present? && @coffee_shop.waze.starts_with?("https://")%>
-              <div class="mt-1 text-sm">
-                <a href="<%= @coffee_shop.waze %>" target="_blank" class="text-brown-500 hover:text-brown-900">
-                  <%= @coffee_shop.waze %>
-                </a>
-              </div>
-            <% end %>
-          </div>
-
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
             <%= f.label :instagram, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
               Instagram
             <% end %>
