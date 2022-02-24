@@ -71,22 +71,21 @@
               <h3 class="text-lg leading-6 font-medium text-gray-900">
                 Basic Information
               </h3>
-              <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                If we can come to the place and ask for a coffee freshly brewed
-                from new coffee beans, then, we want to list it. We don't mind
-                if it is house/kiosk/stall based. As long as it serves the right
-                coffee.
+              <p class="mt-1 text-sm text-gray-500">
+                We want to list if we can come to the place and ask for freshly
+                brewed coffee from new coffee beans. We don't mind if it is
+                house/kiosk/stall based as long as it serves the proper coffee.
               </p>
-              <p class="mt-2 max-w-2xl text-sm text-gray-500">
+              <p class="mt-2 text-sm text-gray-500">
                 We have the right to <span class="font-bold">reject</span>
-                submission that we think is not suitable for petakopi.my
+                a submission that we think is not suitable for petakopi.my
               </p>
             </div>
             <div class="space-y-6 sm:space-y-5">
               <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <%= f.label :name, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
                   Cofee Shop's Name*
-                  <div class="mt-1 max-w-2xl text-sm text-gray-500">
+                  <div class="mt-1 text-sm text-gray-500">
                     Just the name, no location, no tagline
                   </div>
                 <% end %>
@@ -131,7 +130,7 @@
               <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <%= f.label :logo, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
                   Logo
-                  <div class="mt-1 max-w-2xl text-sm text-gray-500">
+                  <div class="mt-1 text-sm text-gray-500">
                     Please upload the logo if you are the owner
                   </div>
                 <% end %>
@@ -147,7 +146,7 @@
               <h3 class="text-lg leading-6 font-medium text-gray-900">
                 Info for Muslim
               </h3>
-              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+              <p class="mt-1 text-sm text-gray-500">
                 This information is very important to Muslim. If you are not
                 the owner, please fill it in only if you are sure about the
                 status. Just leave it blank if you don't know.
@@ -158,16 +157,24 @@
                 <div class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Status</div>
                 <div class="mt-1">
                   <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <div class="space-y-6 sm:space-y-5">
+                    <div class="space-y-5 sm:space-y-4">
                       <% Tag.all.each do |tag| %>
-                        <div class="flex items-center">
+                        <div class="flex items-start sm:items-center">
                           <%= radio_button_tag "coffee_shop[tag_ids][]",
                             tag.id,
                             f.object.tags.include?(tag),
-                            class: "focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300",
+                            class: "focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300 mt-1 sm:mt-0",
                             id: dom_id(tag)
                           %>
-                          <%= label_tag dom_id(tag), tag.name, class: "ml-3 block text-sm font-medium text-gray-700" %>
+                          <%= label_tag dom_id(tag), class: "ml-3 block text-sm " do %>
+                            <span class="font-medium text-gray-700">
+                              <%= tag.name %>
+                            </span>
+                            <div class="text-gray-500 sm:inline">
+                              <span class="hidden sm:inline">-</span>
+                              <%= tag.description %>
+                            </div>
+                          <% end %>
                         </div>
 
                       <% end %>
@@ -183,7 +190,7 @@
               <h3 class="text-lg leading-6 font-medium text-gray-900">
                 Locations
               </h3>
-              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+              <p class="mt-1 text-sm text-gray-500">
                 This is important for us to know where it is and display it for
                 others to see and search.
               </p>
@@ -205,7 +212,7 @@
               <h3 class="text-lg leading-6 font-medium text-gray-900">
                 Social Media
               </h3>
-              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+              <p class="mt-1 text-sm text-gray-500">
                 It will help our fellow friends to see what is on the menu, the
                 beautiful photos, the story or if it is even open right now.
               </p>
