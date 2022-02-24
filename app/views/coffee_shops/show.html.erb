@@ -5,6 +5,16 @@
   <a href="<%= coffee_shops_path %>">&#8592; Back to the list</a>
 </div>
 
+
+<% if @coffee_shop.status_duplicate? || @coffee_shop.status_rejected? %>
+  <div class"mt-2 text-center text-sm text-gray-600">
+    <%=
+      render "components/alert",
+        alerts: "This submission has been marked as #{@coffee_shop.status}. Please message <a href='https://instagram.com/petakopi.my' target='_blank'>@petakopi.my</a> on Instagram for more information."
+      %>
+  </div>
+<% end %>
+
 <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
   <div class="px-4 py-5 sm:px-6 flex items-center space-x-3">
     <% if @coffee_shop.logo.attached? %>

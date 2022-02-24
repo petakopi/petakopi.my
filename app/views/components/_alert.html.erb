@@ -15,14 +15,14 @@
           <ul role="list" class="list-disc pl-5 space-y-1">
             <% alerts.each do |alert| %>
               <li>
-                <%= alert %>
+                <%= alert.html_safe %>
               </li>
             <% end %>
           </ul>
         </div>
       <% else %>
         <h3 class="text-sm font-medium text-red-800">
-          <%= alerts %>
+          <%= alerts.html_safe %>
         </h3>
       <% end %>
     </div>

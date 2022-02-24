@@ -27,7 +27,7 @@ class CoffeeShopsController < ApplicationController
 
     respond_to do |format|
       if @coffee_shop.save
-        format.html { redirect_to coffee_shop_url(@coffee_shop), notice: "Coffee shop was successfully submitted for review." }
+        format.html { redirect_to coffee_shop_url(@coffee_shop), notice: success_message }
         format.json { render :show, status: :created, location: @coffee_shop }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +39,9 @@ class CoffeeShopsController < ApplicationController
   private
 
   def set_coffee_shop
-    @coffee_shop = CoffeeShop.find_by!(slug: params[:id])
+    @coffee_shop =
+      CoffeeShop.find_by(slug: params[:id]) ||
+        CoffeeShop.find(params[:id].to_i)
   end
 
   def coffee_shop_params
@@ -56,5 +58,12 @@ class CoffeeShopsController < ApplicationController
         :twitter,
         tag_ids: []
       )
+  end
+
+  def success_message
+    "Coffee shop was successfully submitted. Please give us some time to review it. "\
+    "You can check the status at this <a href='#{coffee_shop_url(@coffee_shop)}'>#{coffee_shop_url(@coffee_shop)}</a>. "\
+    "Feel free to message us at <a href='https://instagram.com/petakopi.my' target='_blank'>@petakopi.my</a> on Instagram "\
+    "for any question."
   end
 end
