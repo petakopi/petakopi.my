@@ -53,7 +53,7 @@
 <% end %>
 
 <div class"mt-2 text-center text-sm text-gray-600">
-  <%= render "components/alert", alerts: coffee_shop.errors.full_messages.html_safe if coffee_shop.errors.full_messages.count > 0 %>
+  <%= render "components/alert", alerts: coffee_shop.errors.full_messages if coffee_shop.errors.full_messages.count > 0 %>
 </div>
 
 
