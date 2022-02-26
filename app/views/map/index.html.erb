@@ -1,81 +1,62 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+                       integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+                       crossorigin=""/>
+
 <div id="map" style="height: 500px"></div>
 
 <%= content_for :js do %>
-  <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.credentials.dig(:google_api_key, :web) %>&callback=initMap&v=weekly" async></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+          integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+          crossorigin=""></script>
 
-  <script type="text/javascript">
-    let map
+  <script>
+    var map = L.map('map').fitWorld()
 
-    function initMap() {
-      const klcc_pos = { lat: 3.1578064758309883, lng: 101.7121498580279 }
-      const default_pos = klcc_pos
+    var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=<%= Rails.application.credentials.dig(:mapbox_api_key) %>', {
+      maxZoom: 18,
+      attribution: 'Map data &copy <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset: -1
+    }).addTo(map)
 
-      map = new google.maps.Map(document.getElementById("map"), {
-        center: default_pos,
-        zoom: 13,
-      })
+    function onLocationFound(e) {
+      var radius = e.accuracy / 2
+      var redIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
 
-      infoWindow = new google.maps.InfoWindow({
-        content: "",
-        disableAutoPan: true,
-      })
+      var locationMarker = L.marker(e.latlng, {icon: redIcon}).addTo(map)
+        .bindPopup('You are within ' + radius + ' meters from this point')
 
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            }
-
-            new google.maps.Marker({
-              position: pos,
-              icon: "https://maps.google.com/mapfiles/kml/paddle/red-blank.png",
-              map: map,
-            })
-
-            map.setCenter(pos)
-          },
-          () => {
-            handleLocationError(true, infoWindow, map.getCenter())
-          }
-        )
-      } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter())
-      }
+      var locationCircle = L.circle(e.latlng, radius).addTo(map)
     }
+
+    function onLocationError(e) {
+      alert(e.message)
+    }
+
+    map.on('locationfound', onLocationFound)
+    map.on('locationerror', onLocationError)
+
+    map.locate({setView: true, maxZoom: 16})
 
     fetch("<%= api_v1_coffee_shops_path(format: :json) %>")
       .then(response => response.json())
       .then(shops => {
-        const icon = "http://maps.google.com/mapfiles/kml/shapes/coffee.png"
-
-        markers =
           shops.map((shop, i) => {
-            const label = `<strong><a href="${shop.url}" target="_blank">${shop.name} &rarr;</a></strong>`
-            const position = new google.maps.LatLng(shop.lat, shop.lng)
-            const marker = new google.maps.Marker({
-              position: position,
-              icon: icon,
-              map: map,
-            })
+            const popupText = `<strong><a href="${shop.url}" target="_blank">${shop.name} &rarr;</a></strong>`
 
-            marker.addListener("click", () => {
-              infoWindow.setContent(label)
-              infoWindow.open(map, marker)
-            })
-
-            return marker
+            L.marker([shop.lat, shop.lng]).addTo(map).bindPopup(popupText)
           })
-
-        new markerClusterer.MarkerClusterer({ map, markers })
       })
-
-    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      alert("Cannot get your current location")
-    }
   </script>
 <% end %>
+
+
