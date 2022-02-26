@@ -56,15 +56,17 @@ class LatLngExtractor
     uri = URI::parse(next_url)
     params = CGI::parse(uri.query)
 
-    return if params["ftid"].blank?
+    if params["ftid"].present?
+      @cid =
+        params["ftid"]
+        .first
+        .split(":")
+        .last.to_i(16)
 
-    @cid =
-      params["ftid"]
-      .first
-      .split(":")
-      .last.to_i(16)
-
-    convert_cid_to_pos
+      convert_cid_to_pos
+    else
+      params["q"].first.split(",")
+    end
   end
 
   def extract_using_cid
