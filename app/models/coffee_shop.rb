@@ -39,6 +39,7 @@ class CoffeeShop < ApplicationRecord
   before_validation :convert_google_embed
   before_save :update_approved_at
   after_save :process_logo
+  after_save :update_lat_lng
 
   accepts_nested_attributes_for :coffee_shop_tags
 
@@ -86,5 +87,11 @@ class CoffeeShop < ApplicationRecord
     return unless status_changed? && status_published? && approved_at.blank?
 
     self.approved_at = Time.current
+  end
+
+  def update_lat_lng
+    return if lat.present? && lng.present?
+
+    LocationProcessorWorker.perform_async(id)
   end
 end
