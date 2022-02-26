@@ -1,5 +1,7 @@
 class MapController < ApplicationController
-  http_basic_authenticate_with :name => "amree", :password => ENV.fetch("MAP_PASSWORD")
+  if Rails.env.production?
+    http_basic_authenticate_with :name => "petakopi", :password => ENV.fetch("MAP_PASSWORD")
+  end
 
   def index
   end

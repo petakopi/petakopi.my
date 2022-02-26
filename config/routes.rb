@@ -22,6 +22,12 @@ Rails.application.routes.draw do
   get "coffee_map" => "pages#coffee_map"
   get "map" => "map#index"
 
+  namespace :api do
+    namespace :v1 do
+      resources :coffee_shops, only: [:index]
+    end
+  end
+
   direct :rails_public_blob do |blob|
     if  blob.signed_id.nil?
       ""

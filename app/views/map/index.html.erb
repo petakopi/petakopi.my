@@ -48,7 +48,7 @@
       }
     }
 
-    fetch("<%= coffee_shops_path(format: :json) %>")
+    fetch("<%= api_v1_coffee_shops_path(format: :json) %>")
       .then(response => response.json())
       .then(shops => {
         const icon = "http://maps.google.com/mapfiles/kml/shapes/coffee.png"
@@ -70,7 +70,6 @@
 
             return marker
           })
-
 
         new markerClusterer.MarkerClusterer({ map, markers })
       })
