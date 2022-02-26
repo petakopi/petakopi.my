@@ -88,6 +88,7 @@ class LatLngExtractor
         .gsub("?", "")
         .to_i(16)
 
+    convert_cid_to_pos
   end
 
   def convert_cid_to_pos

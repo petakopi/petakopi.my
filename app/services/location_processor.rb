@@ -21,7 +21,7 @@ class LocationProcessor
   end
 
   def process
-    @lat, @lng = output = LatLngExtractor.call(url: coffee_shop.google_map)
+    @lat, @lng = LatLngExtractor.call(url: coffee_shop.google_map)
   end
 
   def save
