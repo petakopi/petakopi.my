@@ -90,6 +90,7 @@ class CoffeeShop < ApplicationRecord
   end
 
   def update_lat_lng
+    return unless status_published?
     return if lat.present? && lng.present?
 
     LocationProcessorWorker.perform_async(id)
