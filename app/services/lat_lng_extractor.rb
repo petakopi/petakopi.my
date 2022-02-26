@@ -100,8 +100,11 @@ class LatLngExtractor
 
     return unless response.is_a?(Net::HTTPOK)
 
-    JSON
-      .parse(response.body)
+    result = JSON.parse(response.body)
+
+    raise result["error_message"] if result["status"] != "OK"
+
+    result
       .dig("result", "geometry", "location")
       .values
       .map(&:to_s)
