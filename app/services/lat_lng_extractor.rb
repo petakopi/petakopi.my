@@ -92,7 +92,11 @@ class LatLngExtractor
         .gsub("?", "")
         .to_i(16)
 
-    convert_cid_to_pos
+    if cid == 0
+      extract_using_regex
+    else
+      convert_cid_to_pos
+    end
   end
 
   def convert_cid_to_pos
