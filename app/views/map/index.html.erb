@@ -1,0 +1,82 @@
+<div id="map" style="height: 500px"></div>
+
+<%= content_for :js do %>
+  <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.credentials.dig(:google_api_key) %>&callback=initMap&v=weekly" async></script>
+
+  <script type="text/javascript">
+    let map
+
+    function initMap() {
+      const klcc_pos = { lat: 3.1578064758309883, lng: 101.7121498580279 }
+      const default_pos = klcc_pos
+
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: default_pos,
+        zoom: 13,
+      })
+
+      infoWindow = new google.maps.InfoWindow({
+        content: "",
+        disableAutoPan: true,
+      })
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            }
+
+            new google.maps.Marker({
+              position: pos,
+              icon: "https://maps.google.com/mapfiles/kml/paddle/red-blank.png",
+              map: map,
+            })
+
+            map.setCenter(pos)
+          },
+          () => {
+            handleLocationError(true, infoWindow, map.getCenter())
+          }
+        )
+      } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter())
+      }
+    }
+
+    fetch("<%= coffee_shops_path(format: :json) %>")
+      .then(response => response.json())
+      .then(shops => {
+        const icon = "http://maps.google.com/mapfiles/kml/shapes/coffee.png"
+
+        markers =
+          shops.map((shop, i) => {
+            const label = `<strong><a href="${shop.url}" target="_blank">${shop.name} &rarr;</a></strong>`
+            const position = new google.maps.LatLng(shop.lat, shop.lng)
+            const marker = new google.maps.Marker({
+              position: position,
+              icon: icon,
+              map: map,
+            })
+
+            marker.addListener("click", () => {
+              infoWindow.setContent(label)
+              infoWindow.open(map, marker)
+            })
+
+            return marker
+          })
+
+
+        new markerClusterer.MarkerClusterer({ map, markers })
+      })
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      alert("Cannot get your current location")
+    }
+  </script>
+<% end %>
