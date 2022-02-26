@@ -1,3 +1,4 @@
+# This should be extracted into different classes, but 🤷
 class LatLngExtractor
   include Callable
 
@@ -11,6 +12,8 @@ class LatLngExtractor
     if url.starts_with?("https://goo.gl/maps/")
       extract_using_regex
     elsif url.starts_with?("https://g.page/")
+      extract_using_cid
+    elsif url.starts_with?("https://maps.app.goo.gl/")
       extract_using_cid
     end
   end
@@ -64,7 +67,6 @@ class LatLngExtractor
     convert_cid_to_pos
   end
 
-  # This should be extracted to different class, but 🤷
   def extract_using_cid
     # E.g: https://g.page/BrewnBread
 
