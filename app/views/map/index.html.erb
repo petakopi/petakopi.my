@@ -9,15 +9,29 @@
 
     const map = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/mapbox/dark-v10?optimize=true",
+      style: "mapbox://styles/mapbox/light-v10?optimize=true",
       center: [101.7121498580279, 3.1578064758309883],
       zoom: 10
     })
 
+    const geolocate =
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        // When active the map will receive updates to the device's location as it changes.
+        trackUserLocation: true,
+        // Draw an arrow next to the location dot to indicate which direction the device is heading.
+        showUserHeading: true
+      })
+
     map.addControl(new mapboxgl.NavigationControl())
     map.addControl(new mapboxgl.FullscreenControl())
+    map.addControl(geolocate)
 
     map.on("load", () => {
+      geolocate.trigger()
+
       // Add a new source from our GeoJSON data and
       // set the "cluster" option to true. GL-JS will
       // add the point_count property to your source data.
@@ -80,7 +94,7 @@
         filter: ["!", ["has", "point_count"]],
         paint: {
           "circle-color": "#11b4da",
-          "circle-radius": 4,
+          "circle-radius": 10,
           "circle-stroke-width": 1,
           "circle-stroke-color": "#fff"
         }
