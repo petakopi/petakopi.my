@@ -129,8 +129,8 @@
         const url = e.features[0].properties.url
         const logo = e.features[0].properties.logo
         const popupText = `
-           <div class="flex items-center font-semibold space-x-4">
-             <img width="48px" src="${logo}">
+           <div class="flex items-center font-semibold space-x-3">
+             <img src="${logo}" class="h-10 w-10 rounded-full border border-brown">
              <a href="${url}" target="_blank">${name} &rarr;</a>
            </div>
         `
