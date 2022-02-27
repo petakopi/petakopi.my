@@ -2,14 +2,15 @@
   <title>petakopi.my — Find nearby coffee places</title>
   <meta name="title" content="petakopi.my — Find nearby coffee places">
   <meta name="description" content="Discover and share new freshly brewed coffee places around you. Built by the community for everyone.">
-
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
+
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= yield(:extra_styles) if content_for?(:extra_styles) %>
 
   <%= render "layouts/social_meta_tags" %>
 

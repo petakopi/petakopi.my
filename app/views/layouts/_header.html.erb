@@ -20,8 +20,8 @@
           <%= link_to about_path, class: "text-base font-medium text-gray-500 hover:text-gray-900 flex items-center" do %>
             About
           <% end %>
-          <%= link_to coffee_map_path, class: "text-base font-medium text-gray-500 hover:text-gray-900 flex items-center" do %>
-            Coffee Map
+          <%= link_to map_path, class: "text-base font-medium text-gray-500 hover:text-gray-900 flex items-center", data: { turbo: false } do %>
+            Map
           <% end %>
           <%= link_to "Submit Coffee Shop", new_coffee_shop_path, class: "text-base font-medium text-gray-500 hover:text-gray-900" %>
           <% if current_user&.staff? %>
@@ -63,8 +63,8 @@
           <%= link_to about_path, class: "rounded-md text-base font-medium text-gray-900 hover:text-gray-700" do %>
             About
           <% end %>
-          <%= link_to coffee_map_path, class: "rounded-md text-base font-medium text-gray-900 hover:text-gray-700" do %>
-            Coffee Map
+          <%= link_to map_path, class: "rounded-md text-base font-medium text-gray-900 hover:text-gray-700", data: { turbo: false } do %>
+            Map
           <% end %>
           <%= link_to "Submit Coffee Shop", new_coffee_shop_path, class: "rounded-md text-base font-medium text-gray-900 hover:text-gray-700" %>
           <% if current_user&.staff? %>
