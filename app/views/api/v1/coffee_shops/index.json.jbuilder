@@ -6,6 +6,7 @@ if params[:type] == "geojson"
       json.properties do
         json.extract! coffee_shop, :name
         json.url coffee_shop_url(coffee_shop)
+        json.logo rails_public_blob_url(coffee_shop.logo)
       end
 
       json.geometry do

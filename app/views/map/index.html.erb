@@ -127,7 +127,13 @@
         const coordinates = e.features[0].geometry.coordinates.slice()
         const name = e.features[0].properties.name
         const url = e.features[0].properties.url
-        const popupText = `<strong><a href="${url}" target="_blank">${name} &rarr;</a></strong>`
+        const logo = e.features[0].properties.logo
+        const popupText = `
+           <div class="flex items-center font-semibold space-x-4">
+             <img width="48px" src="${logo}">
+             <a href="${url}" target="_blank">${name} &rarr;</a>
+           </div>
+        `
 
         // Ensure that if the map is zoomed out such that
         // multiple copies of the feature are visible, the
