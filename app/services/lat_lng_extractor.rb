@@ -10,7 +10,9 @@ class LatLngExtractor
     return unless valid?
 
     if url.starts_with?("https://goo.gl/maps/")
-      extract_using_regex
+      extract_using_redirection
+    elsif url.starts_with?("https://www.google.com/maps/place/")
+      extract_using_redirection
     elsif url.starts_with?("https://g.page/")
       extract_using_cid
     elsif url.starts_with?("https://maps.app.goo.gl/")
@@ -30,14 +32,19 @@ class LatLngExtractor
     Rails.application.credentials.dig(:google_api_key, :api)
   end
 
-  def extract_using_regex
+  def extract_using_redirection
     # E.g: https://goo.gl/maps/HCA7pq73Ze1HwEMW8
 
     response = Net::HTTP.get_response(URI.parse(url))
 
-    return unless response.is_a?(Net::HTTPRedirection)
+    next_url =
+      if response.is_a?(Net::HTTPRedirection)
+        response['location']
+      else
+        next_url = url
+      end
 
-    next_url = response['location']
+    return if next_url.nil?
 
     begin
       output =
@@ -93,7 +100,7 @@ class LatLngExtractor
         .to_i(16)
 
     if cid == 0
-      extract_using_regex
+      extract_using_redirection
     else
       convert_cid_to_pos
     end
