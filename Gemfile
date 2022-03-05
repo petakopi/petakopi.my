@@ -22,8 +22,9 @@ gem "puma", "~> 5.0" # Use the Puma web server [https://github.com/puma/puma]
 gem "rails"
 gem "redis", "~> 4.0" # Use Redis adapter to run Action Cable in production
 gem "sidekiq" # Background jobs
+gem "sidekiq-cron" # Sidekiq + Cron
 gem "sidekiq-failures" # Monitor failures in Sidekiq
-gem "sitemap_generator"
+gem "sitemap_generator" # Generate sitemap for search engines
 gem "skylight" # Performance monitoring tool
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
