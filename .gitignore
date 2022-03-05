@@ -39,3 +39,5 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+/public/sitemap.xml.gz
