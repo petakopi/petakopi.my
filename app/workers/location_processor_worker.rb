@@ -1,6 +1,4 @@
 class LocationProcessorWorker < SidekiqWorker
-  include Callable
-
   sidekiq_options retry: 3
 
   def perform(coffee_shop_id)
