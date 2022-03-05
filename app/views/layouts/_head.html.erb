@@ -1,7 +1,7 @@
 <head>
-  <title>petakopi.my — Find nearby coffee places</title>
-  <meta name="title" content="petakopi.my — Find nearby coffee places">
-  <meta name="description" content="Discover and share new freshly brewed coffee places around you. Built by the community for everyone.">
+  <title>petakopi.my — <%= content_for?(:page_title) ? yield(:page_title) : "Find nearby coffee places" %></title>
+  <meta name="title" content="petakopi.my — <%= content_for?(:page_title) ? yield(:page_title) : "Find nearby coffee places" %>">
+  <meta name="description" content="<%= content_for?(:page_description) ? yield(:page_description) : "Discover and share new freshly brewed coffee places around you. Built by the community for everyone." %>">
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
   <%= csrf_meta_tags %>
