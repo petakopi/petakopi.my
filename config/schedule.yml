@@ -1,0 +1,3 @@
+sitemap_refresh:
+  cron: "0 0 * * *"
+  class: "SitemapRefreshWorker"
