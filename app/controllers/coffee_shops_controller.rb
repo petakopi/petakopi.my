@@ -41,7 +41,7 @@ class CoffeeShopsController < ApplicationController
   def set_coffee_shop
     @coffee_shop =
       CoffeeShop.find_by(slug: params[:id]) ||
-        CoffeeShop.find(params[:id].to_i)
+      CoffeeShop.find(params[:id].to_i)
   end
 
   def coffee_shop_params

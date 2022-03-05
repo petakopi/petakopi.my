@@ -39,9 +39,9 @@ class LatLngExtractor
 
     next_url =
       if response.is_a?(Net::HTTPRedirection)
-        response['location']
+        response["location"]
       else
-        next_url = url
+        url
       end
 
     return if next_url.nil?
@@ -49,26 +49,26 @@ class LatLngExtractor
     begin
       output =
         next_url
-        .match(/!3d\d+\.\d+!4d\d+\.\d+/)
-        .to_s
-        .gsub(/^!3d/, "")
-        .split("!4d")
-    rescue NoMethodError => e
+          .match(/!3d\d+\.\d+!4d\d+\.\d+/)
+          .to_s
+          .gsub(/^!3d/, "")
+          .split("!4d")
+    rescue NoMethodError
     end
 
     return output if output.present?
 
     # E.g: https://maps.google.com?q=KopyJam,+38,+Jalan+Padi,+Bandar+Baru+Uda,+81200+Johor+Bahru,+Johor&ftid=0x31da73d449041aa9:0x3e0b4f6468c9ac4d&hl=en-US&gl=us&entry=gps&lucs=s2se,a1&shorturl=1
 
-    uri = URI::parse(next_url)
-    params = CGI::parse(uri.query)
+    uri = URI.parse(next_url)
+    params = CGI.parse(uri.query)
 
     if params["ftid"].present?
       @cid =
         params["ftid"]
-        .first
-        .split(":")
-        .last.to_i(16)
+          .first
+          .split(":")
+          .last.to_i(16)
 
       convert_cid_to_pos
     else
@@ -88,15 +88,15 @@ class LatLngExtractor
       response = Net::HTTP.get_response(URI.parse(page_url))
       page_url = response["location"] if response["location"].present?
 
-      call_count = call_count + 1
+      call_count += 1
     end while response.is_a?(Net::HTTPRedirection)
 
     @cid =
       page_url
         .match(/:0x.*\?/)
         .to_s
-        .gsub(":", "")
-        .gsub("?", "")
+        .delete(":")
+        .delete("?")
         .to_i(16)
 
     if cid == 0

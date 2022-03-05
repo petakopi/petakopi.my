@@ -71,14 +71,14 @@ class CoffeeShop < ApplicationRecord
     return unless google_embed.starts_with?("<iframe")
 
     self.google_embed =
-      Nokogiri::HTML.parse(google_embed).xpath('//iframe').attr('src').value
+      Nokogiri::HTML.parse(google_embed).xpath("//iframe").attr("src").value
   end
 
   def process_logo
     return unless logo.attached?
     return unless attachment_changes.dig("logo").present?
     # hack to ensure we only do it if filename is not based on our custom format
-    return if logo.filename.to_s.match? /#{id}-[0-9]+/
+    return if logo.filename.to_s.match?(/#{id}-[0-9]+/)
 
     ProcessLogoWorker.perform_in(2.minutes, id)
   end

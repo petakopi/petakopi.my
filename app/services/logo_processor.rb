@@ -29,7 +29,7 @@ class LogoProcessor
     input = "#{path}original-#{file_name}"
     output = "#{path}#{file_name}"
 
-    IO.copy_stream(URI.open(coffee_shop.logo.url), input)
+    IO.copy_stream(URI.parse(coffee_shop.logo.url).open, input)
 
     ImageProcessing::Vips
       .source(input)
@@ -47,7 +47,7 @@ class LogoProcessor
   def reattach
     coffee_shop.logo.attach(
       io: File.open("#{path}#{file_name}"),
-      filename: "#{file_name}"
+      filename: file_name.to_s
     )
   end
 

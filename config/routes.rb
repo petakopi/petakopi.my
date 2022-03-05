@@ -28,7 +28,7 @@ Rails.application.routes.draw do
   end
 
   direct :rails_public_blob do |blob|
-    if  blob.signed_id.nil?
+    if blob.signed_id.nil?
       ""
     elsif Rails.env.development? || Rails.env.test?
       route_for(:rails_blob, blob)
