@@ -23,6 +23,7 @@ gem "rails"
 gem "redis", "~> 4.0" # Use Redis adapter to run Action Cable in production
 gem "sidekiq" # Background jobs
 gem "sidekiq-failures" # Monitor failures in Sidekiq
+gem "sitemap_generator"
 gem "skylight" # Performance monitoring tool
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
