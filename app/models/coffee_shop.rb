@@ -7,8 +7,10 @@ class CoffeeShop < ApplicationRecord
     :google_embed,
     :google_map,
     :instagram,
+    :tiktok,
     :twitter,
-    :waze
+    :waze,
+    :whatsapp
 
   attr_accessor :logo_url
 

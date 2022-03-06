@@ -142,6 +142,26 @@
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+            <%= f.label :tiktok, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              TikTok
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :tiktok, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+            </div>
+            <%= render partial: "link_preview", locals: { url: f.object.tiktok_url, name: "tiktok" } %>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+            <%= f.label :whatsapp, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              WhatsApp
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :whatsapp, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+            </div>
+            <%= render partial: "link_preview", locals: { url: f.object.whatsapp_url, name: "whatsapp" } %>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
             <%= f.label :google_embed, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
               Google Embed
             <% end %>

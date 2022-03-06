@@ -16,4 +16,16 @@ module CoffeeShopDecorator
 
     "https://www.twitter.com/#{twitter}"
   end
+
+  def tiktok_url
+    return if tiktok.blank?
+
+    "https://www.tiktok.com/#{twitter}"
+  end
+
+  def whatsapp_url
+    return if whatsapp.blank?
+
+    "https://wa.me/#{whatsapp}"
+  end
 end

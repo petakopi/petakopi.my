@@ -57,7 +57,9 @@ class Admin::CoffeeShopsController < AdminController
         :slug,
         :state,
         :status,
+        :tiktok,
         :twitter,
+        :whatsapp,
         tag_ids: []
       )
   end

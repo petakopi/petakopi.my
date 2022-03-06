@@ -55,7 +55,9 @@ class CoffeeShopsController < ApplicationController
         :logo,
         :name,
         :state,
+        :tiktok,
         :twitter,
+        :whatsapp,
         tag_ids: []
       )
   end
