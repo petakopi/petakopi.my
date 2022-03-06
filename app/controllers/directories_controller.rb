@@ -1,5 +1,6 @@
 class DirectoriesController < ApplicationController
   before_action :modify_params
+  before_action :set_page_info
 
   def index
     @coffee_shops =
@@ -22,5 +23,11 @@ class DirectoriesController < ApplicationController
     params[:district] = params[:district].titleize if params[:district].present?
 
     params[:state].gsub!("Wp ", "WP ")
+  end
+
+  def set_page_info
+    location = params[:district].present? ? "#{params[:district]}, #{params[:state]}" : params[:state]
+
+    @page_info = "Coffee Shops in #{location}"
   end
 end

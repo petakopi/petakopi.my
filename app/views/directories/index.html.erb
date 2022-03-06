@@ -1,11 +1,7 @@
-<h1 class="text-lg font-medium text-gray-900">
-  Coffee Shops in
-  <% if params[:district] %>
-    <%= params[:district] %>, <%= params[:state] %>
-  <% else params[:district] %>
-    <%= params[:state] %>
-  <% end %>
-</h1>
+<%= content_for(:page_title) { @page_info} %>
+<%= content_for(:page_description) { @page_info } %>
+
+<h1 class="text-lg font-medium text-gray-900"><%= @page_info %></h1>
 
 <% if @coffee_shops.any? %>
   <div class="mt-4 flex flex-col">

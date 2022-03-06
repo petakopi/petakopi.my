@@ -1,5 +1,5 @@
 <div class="relative bg-white" x-data="Components.popover({ open: false, focus: false })" x-init="init()" @keydown.escape="onEscape" @close-popover-group.window="onClosePopoverGroup">
-  <div class="absolute inset-0 shadow z-30 pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute inset-0 shadow z-20 pointer-events-none" aria-hidden="true"></div>
   <div class="relative z-20">
     <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-5 sm:px-6 sm:py-4 lg:px-8 md:justify-start md:space-x-8">
       <div>
@@ -23,6 +23,7 @@
           <%= link_to map_path, class: "text-base font-medium text-gray-500 hover:text-gray-900 flex items-center", data: { turbo: false } do %>
             Map
           <% end %>
+          <%= render "layouts/menu/directories" %>
           <%= link_to "Submit Coffee Shop", new_coffee_shop_path, class: "text-base font-medium text-gray-500 hover:text-gray-900" %>
           <% if current_user&.staff? %>
             <%= link_to "Admin", admin_coffee_shops_path, class: "text-base font-medium text-red-500 hover:text-red-900" %>
@@ -60,13 +61,14 @@
       </div>
       <div class="py-6 px-5">
         <div class="grid grid-cols-1 gap-4">
-          <%= link_to about_path, class: "rounded-md text-base font-medium text-gray-900 hover:text-gray-700" do %>
+          <%= link_to about_path, class: "rounded-md text-base font-medium text-gray-500 hover:text-gray-900" do %>
             About
           <% end %>
-          <%= link_to map_path, class: "rounded-md text-base font-medium text-gray-900 hover:text-gray-700", data: { turbo: false } do %>
+          <%= link_to map_path, class: "rounded-md text-base font-medium text-gray-500 hover:text-gray-900", data: { turbo: false } do %>
             Map
           <% end %>
-          <%= link_to "Submit Coffee Shop", new_coffee_shop_path, class: "rounded-md text-base font-medium text-gray-900 hover:text-gray-700" %>
+          <%= render "layouts/menu/directories" %>
+          <%= link_to "Submit Coffee Shop", new_coffee_shop_path, class: "rounded-md text-base font-medium text-gray-500 hover:text-gray-900" %>
           <% if current_user&.staff? %>
             <%= link_to "Admin", admin_coffee_shops_path, class: "rounded-md text-base font-medium text-red-500 hover:text-red-900" %>
           <% end %>
