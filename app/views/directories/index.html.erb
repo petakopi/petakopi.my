@@ -18,7 +18,7 @@
                         <div class="flex-shrink-0 h-10 w-10">
                           <%= link_to coffee_shop_path(id: coffee_shop.slug) do %>
                             <% if coffee_shop.logo.attached? %>
-                              <%= image_tag rails_public_blob_url(coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown", loading: "lazy" %>
+                              <%= image_tag rails_public_blob_url(coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown", loading: "lazy", alt: coffee_shop.name %>
                             <% else %>
                               <div class="h-10 w-10 rounded-full">
                                 <%= render "components/icons/image" %>

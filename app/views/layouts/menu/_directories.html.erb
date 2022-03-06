@@ -12,7 +12,7 @@
         <% Location.states.each do |state| %>
           <a href="<%= directories_path(state: state.parameterize) %>" class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50 transition ease-in-out duration-150 items-center">
             <div class="flex-shrink-0 flex items-center justify-center h-5 w-5 rounded-md text-white sm:h-12 sm:w-12">
-              <%= image_tag "/images/flags/#{state.parameterize}.png", class: "border border-brown-600" %>
+              <%= image_tag "/images/flags/#{state.parameterize}.png", class: "border border-brown-600", alt: state %>
             </div>
             <div class="ml-4">
               <p class="text-base font-medium text-gray-900">
