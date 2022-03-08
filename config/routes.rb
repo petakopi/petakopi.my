@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   end
 
   get "directories/:state(/:district)" => "directories#index", as: "directories"
+  get "cs/:id" => "coffee_shops#show", as: "cs"
 
   resources :coffee_shops, only: [:index, :show, :new, :create]
   resources :locations do
