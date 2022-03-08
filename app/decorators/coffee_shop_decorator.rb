@@ -28,4 +28,18 @@ module CoffeeShopDecorator
 
     "https://wa.me/#{whatsapp}"
   end
+
+  def location_full_url
+    css_class = "text-brown-600 hover:text-brown-900"
+
+    state_param = state&.parameterize
+    district_param = district&.parameterize
+
+    district_link =
+      link_to district, directories_path(state: state_param, district: district_param), class: css_class
+    state_link =
+      link_to state, directories_path(state: state_param), class: css_class
+
+    raw "#{district_link}, #{state_link}"
+  end
 end
