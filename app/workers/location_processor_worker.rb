@@ -1,6 +1,4 @@
 class LocationProcessorWorker < SidekiqWorker
-  sidekiq_options retry: 3
-
   def perform(coffee_shop_id)
     coffee_shop = CoffeeShop.find(coffee_shop_id)
 
