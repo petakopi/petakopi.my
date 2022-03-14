@@ -67,7 +67,6 @@ deploy do
   run "core:write_release_json"
   run "bundler:install"
   run "rails:db_migrate"
-  run "rails:db_seed"
   run "rails:assets_precompile"
   run "core:symlink_current"
   run "sidekiq:restart"
