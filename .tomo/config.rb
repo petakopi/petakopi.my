@@ -5,8 +5,8 @@ plugin "rails"
 plugin "nodenv"
 plugin "puma"
 plugin "rbenv"
-plugin "./plugins/petakopi.rb"
 plugin "sidekiq"
+plugin "./plugins/petakopi.rb"
 
 host "deployer@petakopi"
 
@@ -76,4 +76,5 @@ deploy do
   run "core:clean_releases"
   run "bundler:clean"
   run "core:log_revision"
+  run "petakopi:refresh_sitemap"
 end
