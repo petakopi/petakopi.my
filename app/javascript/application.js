@@ -1,6 +1,8 @@
 // NPM libraries
 import "@hotwired/turbo-rails"
 import Alpine from "alpinejs"
+import "trix"
+import "@rails/actiontext"
 
 // Locals
 import "./controllers"
