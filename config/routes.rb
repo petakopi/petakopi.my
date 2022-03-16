@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+
   authenticate :user, ->(user) { user.admin? } do
     require "sidekiq/web"
 
     mount Sidekiq::Web => "/sidekiq"
   end
-
-  devise_for :users
 
   namespace :admin do
     resources :coffee_shops

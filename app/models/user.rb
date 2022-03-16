@@ -1,11 +1,13 @@
 class User < ApplicationRecord
   devise :database_authenticatable,
+    :omniauthable,
     :recoverable,
     :registerable,
     :rememberable,
-    :validatable
+    :validatable,
+    omniauth_providers: %i[twitter]
 
-  validates :name, uniqueness: true
+  has_many :auth_providers
 
   def admin?
     role == "admin"
