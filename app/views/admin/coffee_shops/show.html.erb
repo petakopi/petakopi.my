@@ -1,3 +1,4 @@
+<%= @coffee_shop.tiktok_url %>
 <div class="flex justify-end">
   <%= link_to "Coffee Shops", admin_coffee_shops_path, class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500" %>
   <%= link_to "Edit", edit_admin_coffee_shop_path(@coffee_shop), class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500" %>
@@ -49,11 +50,13 @@
           Links
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <div class="flex space-x-2 items-center">
+        <div class="flex space-y-2 flex-col lg:flex-row lg:items-center lg:space-x-2 lg:space-y-0">
             <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :google_map, type: "button" %>
             <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :instagram_url, type: "button" %>
             <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :facebook_url, type: "button" %>
             <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :twitter_url, type: "button" %>
+            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :tiktok_url, type: "button" %>
+            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :whatsapp_url, type: "button" %>
           </div>
         </dd>
       </div>

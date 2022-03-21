@@ -20,7 +20,7 @@ module CoffeeShopDecorator
   def tiktok_url
     return if tiktok.blank?
 
-    "https://www.tiktok.com/#{twitter}"
+    "https://www.tiktok.com/#{tiktok}"
   end
 
   def whatsapp_url
