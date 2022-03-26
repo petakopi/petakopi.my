@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   end
 
   get "directories/:state(/:district)" => "directories#index", as: "directories"
-  get "cs/:id" => "coffee_shops#show", as: "cs"
 
   resources :locations do
     collection do
@@ -40,6 +39,9 @@ Rails.application.routes.draw do
   end
 
   resources :coffee_shops, only: [:new, :create]
+
+  get "/coffee_shops/:id", to: redirect("/%{id}", status: 301)
+  get "/cs/:id", to: redirect("/%{id}", status: 301)
 
   constraints CoffeeShopConstraint.new do
     resources :coffee_shops, path: "", only: [:show]
