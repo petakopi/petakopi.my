@@ -1,7 +1,10 @@
 <%= content_for(:page_title) { @page_info} %>
 <%= content_for(:page_description) { @page_info } %>
 
-<h1 class="text-lg font-medium text-gray-900"><%= @page_info %></h1>
+<h1 class="text-lg font-medium text-gray-900">
+  <a href="<%= root_path %>" class="mr-2">&#8592;</a>
+  <%= @page_info %>
+</h1>
 
 <% if @coffee_shops.any? %>
   <%= render "coffee_shops/live_map_bar" %>

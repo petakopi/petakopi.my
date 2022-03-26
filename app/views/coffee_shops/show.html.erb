@@ -3,7 +3,7 @@
 <%= content_for(:page_description) { "#{@coffee_shop.name} in #{@coffee_shop.district}, #{@coffee_shop.state}" } %>
 
 <div class="text-left">
-  <a href="<%= coffee_shops_path %>">&#8592; Back to the list</a>
+  <a href="<%= root_path %>">&#8592; Back to the list</a>
 </div>
 
 <% if @coffee_shop.status_duplicate? || @coffee_shop.status_rejected? %>

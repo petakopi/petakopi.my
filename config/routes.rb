@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
-  devise_for :users
-
   authenticate :user, ->(user) { user.admin? } do
     require "sidekiq/web"
 
     mount Sidekiq::Web => "/sidekiq"
   end
+
+  devise_for :users
 
   namespace :admin do
     resources :coffee_shops
@@ -14,7 +14,6 @@ Rails.application.routes.draw do
   get "directories/:state(/:district)" => "directories#index", as: "directories"
   get "cs/:id" => "coffee_shops#show", as: "cs"
 
-  resources :coffee_shops, only: [:index, :show, :new, :create]
   resources :locations do
     collection do
       get :cities
@@ -38,6 +37,12 @@ Rails.application.routes.draw do
     else
       File.join("https://assets.petakopi.my", blob.key)
     end
+  end
+
+  resources :coffee_shops, only: [:new, :create]
+
+  constraints CoffeeShopConstraint.new do
+    resources :coffee_shops, path: "", only: [:show]
   end
 
   root "coffee_shops#index"

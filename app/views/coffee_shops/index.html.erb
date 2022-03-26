@@ -22,7 +22,7 @@
   </div>
 </div>
 
-<%= form_tag coffee_shops_path, method: :get do %>
+<%= form_tag root_path, method: :get do %>
   <div
     class="bg-white overflow-hidden shadow rounded-lg mt-4"
     data-controller="select"
@@ -60,7 +60,7 @@
       </div>
 
       <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">Filter</button>
-      <%= link_to "Reset", coffee_shops_path, class: "pl-2 text-sm text-gray-500 hover:text-gray-900" %>
+      <%= link_to "Reset", root_path, class: "pl-2 text-sm text-gray-500 hover:text-gray-900" %>
     </div>
   </div>
 <% end %>
