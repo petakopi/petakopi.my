@@ -6,11 +6,8 @@
 
 This is the source code for [petakopi.my](https://petakopi.my).
 
-If you would like to contribute, you can check what is needed right now at this
-[page](https://amree.notion.site/TODO-ad7ef3788bfe47f5b10e88b7b55260a3). Feel
-free to start a
-[discussion](https://github.com/amree/petakopi/discussions) before starting the
-work.
+Feel free to start a [discussion](https://github.com/amree/petakopi/discussions)
+before starting the work.
 
 ## Moderators
 
@@ -20,7 +17,10 @@ for moderators on how to verify the data.
 
 ## Development
 
+## DISCLAIMER
+
+This is not how usually code, just saying 😛
+
 ## Contacts
 
-[@petakopi.my](https://www.instagram.com/petakopi.my/) or
-[hello@petakopi.my](mailto:hello@petakopi.my)
+[@petakopi.my](https://www.instagram.com/petakopi.my/)
