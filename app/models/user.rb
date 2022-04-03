@@ -9,6 +9,10 @@ class User < ApplicationRecord
 
   has_many :auth_providers
 
+  validates :username, uniqueness: true
+  validates :username, presence: true
+  validates :username, format: { with: /\A[a-z0-9]+\z/, message: "'%{value}' should only contain alphabets and numbers" }
+
   def admin?
     role == "admin"
   end
