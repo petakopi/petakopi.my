@@ -19,7 +19,15 @@ for moderators on how to verify the data.
 
 ## DISCLAIMER
 
-This is not how usually code, just saying 😛
+This is not how I usually code, just saying 😛
+
+## Sponsors
+
+[<img src="https://i.imgur.com/ZISNSTt.png" width="20%" />](https://bugsnag.com)
+
+[<img src="https://i.imgur.com/WYVGZ6Z.png" width="20%" />](https://skylight.io)
+
+[<img src="https://i.imgur.com/3CJ96rE.png" width="20%" />](https://appsignal.com)
 
 ## Contacts
 
