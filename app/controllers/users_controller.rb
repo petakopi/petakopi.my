@@ -1,6 +1,12 @@
 class UsersController < ApplicationController
   def show
     @user = User.find_by(username: params[:id])
+    @submitted_coffee_shops =
+      @user
+      .submitted_coffee_shops
+      .status_published
+      .includes(logo_attachment: :blob)
+      .order(approved_at: :desc)
   end
 
   def edit
