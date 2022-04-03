@@ -3,7 +3,7 @@
 <%= content_for(:page_description) { "#{@coffee_shop.name} in #{@coffee_shop.district}, #{@coffee_shop.state}" } %>
 
 <div class="text-left">
-  <% if request.referrer.split("/").last == "map" %>
+  <% if request.referrer&.split("/").last == "map" %>
     <a href="<%= map_path %>">&#8592; Back to the Map</a>
   <% else %>
     <a href="<%= root_path %>">&#8592; Back to the list</a>
