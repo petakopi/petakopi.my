@@ -18,11 +18,12 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
       redirect_to(
         new_user_registration_path,
-        alert: "Failed to login with #{provider}. Please proceed with normal registration or try again."
+        alert: @user.errors.full_messages.join("\n")
       )
     end
   end
 
   alias_method :facebook, :omniauth
   alias_method :twitter, :omniauth
+  alias_method :google_oauth2, :omniauth
 end
