@@ -88,7 +88,7 @@
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
           <% if @coffee_shop.submitter %>
-            <%= @coffee_shop.submitter.name %>
+            <%= link_to @coffee_shop.submitter.name, user_path(@coffee_shop.submitter.username), class: "text-brown-600 hover:text-brown-900" %>
           <% else %>
             Anonymous
           <% end %>

@@ -1,0 +1,52 @@
+<div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
+  <aside class="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
+    <nav class="space-y-1">
+      <a href="#" class="bg-gray-50 text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" aria-current="page">
+        <svg class="text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span class="truncate">Account</span>
+      </a>
+    </nav>
+  </aside>
+
+  <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
+    <div class"mt-2 text-center text-sm text-gray-600">
+      <%= render "components/alert", alerts: @user.errors.full_messages if @user.errors.full_messages.count > 0 %>
+    </div>
+
+    <%= form_for @user do |f| %>
+      <div class="shadow sm:rounded-md sm:overflow-hidden">
+        <div class="bg-white py-6 px-4 space-y-6 sm:p-6">
+          <div>
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Profile</h3>
+            <p class="mt-1 text-sm text-gray-500">This information will be displayed publicly.</p>
+          </div>
+
+          <div class="grid grid-cols-3 gap-6">
+            <div class="col-span-3 sm:col-span-2">
+              <%= f.label "Username", class: "block text-sm font-medium text-gray-700"%>
+
+              <div class="mt-1 rounded-md shadow-sm flex">
+                <span class="bg-gray-50 border border-r-0 border-gray-300 rounded-l-md px-3 inline-flex items-center text-gray-500 sm:text-sm">petakopi.my/u/</span>
+                <%= f.text_field :username, required: true, class: "focus:ring-brown-500 focus:border-brown-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300" %>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="grid grid-cols-6 gap-6">
+            <div class="col-span-6 sm:col-span-4">
+              <%= f.label "Name", class: "block text-sm font-medium text-gray-700" %>
+              <%= f.text_field :name, required: true, class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+          <%= f.submit "Save", class: "bg-brown-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
