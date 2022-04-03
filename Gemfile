@@ -21,6 +21,7 @@ gem "pg", "~> 1.1" # Use postgresql as the database for Active Record
 gem "puma", "~> 5.0" # Use the Puma web server [https://github.com/puma/puma]
 gem "omniauth" # multi-provider authentication
 gem "omniauth-twitter" # login using Twitter
+gem 'omniauth-facebook' # login using Facebook
 gem "omniauth-rails_csrf_protection" # Migitate against CSRF in OmniAuth gem
 gem "rails"
 gem "redis", "~> 4.0" # Use Redis adapter to run Action Cable in production

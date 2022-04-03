@@ -5,7 +5,7 @@ class User < ApplicationRecord
     :registerable,
     :rememberable,
     :validatable,
-    omniauth_providers: %i[twitter]
+    omniauth_providers: %i[facebook twitter]
 
   has_many :auth_providers
 
