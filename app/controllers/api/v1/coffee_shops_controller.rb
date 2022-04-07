@@ -7,7 +7,5 @@ class Api::V1::CoffeeShopsController < ApplicationController
         .where
         .not(lat: nil, lng: nil)
         .select(:id, :name, :slug, :lat, :lng)
-
-    headers["Cache-Control"] = "max-age=#{5.minute.to_i}, public"
   end
 end
