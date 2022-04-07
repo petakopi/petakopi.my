@@ -33,8 +33,6 @@ class CoffeeShop < ApplicationRecord
 
   validates :slug, presence: true
   validates :slug, uniqueness: true
-  validates :state, presence: true
-  validates :district, presence: true
   validate :verify_district_in_state
 
   before_validation :assign_slug, on: :create
@@ -46,7 +44,12 @@ class CoffeeShop < ApplicationRecord
   accepts_nested_attributes_for :coffee_shop_tags
 
   def assign_slug
-    return if name.blank?
+    if name.blank?
+      self.slug = SecureRandom.alphanumeric(5).downcase
+
+      return
+    end
+
     return if district.blank?
 
     slug = name.parameterize
