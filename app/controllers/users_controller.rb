@@ -30,7 +30,8 @@ class UsersController < ApplicationController
       .require(:user)
       .permit(
         :name,
-        :username
+        :username,
+        :avatar
       )
   end
 end

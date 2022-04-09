@@ -34,12 +34,15 @@
           <div x-data="Components.menu({ open: false })" x-init="init()" @keydown.escape.stop="open = false; focusButton()" @click.away="onClickAway($event)" class="ml-3 relative">
             <div>
               <button type="button" class="flex text-sm rounded-full focus:outline-none" id="user-menu-button" x-ref="button" @click="onButtonClick()" @keyup.space.prevent="onButtonEnter()" @keydown.enter.prevent="onButtonEnter()" aria-expanded="false" aria-haspopup="true" x-bind:aria-expanded="open.toString()" @keydown.arrow-up.prevent="onArrowUp()" @keydown.arrow-down.prevent="onArrowDown()">
-                <span class="sr-only">Open user menu</span>
-                <span class="h-8 w-8 rounded-full">
-                  <svg class="text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </span>
+                  <% if current_user.avatar.attached? %>
+                    <%= image_tag rails_public_blob_url(current_user.avatar), class: "h-10 w-10 rounded-full border border-brown" %>
+                  <% else %>
+                    <span class="h-8 w-8 rounded-full">
+                      <svg class="text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </span>
+                  <% end %>
               </button>
             </div>
 
