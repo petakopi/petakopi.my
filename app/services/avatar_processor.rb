@@ -65,7 +65,7 @@ class AvatarProcessor
         id = user.id
         random_chars = Time.current.to_i
 
-        "#{id}-avatar-#{random_chars}#{file_extension}"
+        "#{id}-#{random_chars}#{file_extension}"
       end
   end
 

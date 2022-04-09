@@ -34,7 +34,7 @@ class User < ApplicationRecord
     return unless avatar.attached?
     return unless attachment_changes.dig("avatar").present?
     # hack to ensure we only do it if filename is not based on our custom format
-    return if avatar.filename.to_s.match?(/#{id}-avatar-[0-9]+/)
+    return if avatar.filename.to_s.match?(/#{id}-[0-9]+/)
 
     ProcessAvatarWorker.perform_in(2.minutes, id)
   end
