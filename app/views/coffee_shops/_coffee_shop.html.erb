@@ -26,12 +26,12 @@
   </td>
   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
     <div class="flex space-x-2 items-center">
-      <%= render "link", coffee_shop: coffee_shop, link: :google_map %>
-      <%= render "link", coffee_shop: coffee_shop, link: :instagram_url %>
-      <%= render "link", coffee_shop: coffee_shop, link: :facebook_url %>
-      <%= render "link", coffee_shop: coffee_shop, link: :twitter_url %>
-      <%= render "link", coffee_shop: coffee_shop, link: :tiktok_url %>
-      <%= render "link", coffee_shop: coffee_shop, link: :whatsapp_url %>
+      <%=
+        render partial: "coffee_shops/link",
+          collection: [:google_map, :instagram_url, :facebook_url, :twitter_url, :tiktok_url, :whatsapp_url],
+          as: :link,
+          locals: { coffee_shop: coffee_shop }
+      %>
     </div>
   </td>
   <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
