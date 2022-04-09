@@ -40,29 +40,27 @@
     </div>
   </div>
 
-  <div class="mt-8 max-w-3xl mx-auto grid grid-cols-1 gap-6 lg:max-w-7xl lg:grid-flow-col-dense">
-    <div class="space-y-6 lg:col-start-1 lg:col-span-2">
-      <section aria-labelledby="applicant-information-title">
-        <div class="bg-white shadow sm:rounded-lg">
-          <div class="px-4 py-5 sm:px-6">
-            <h2 id="applicant-information-title" class="text-lg leading-6 font-medium text-gray-900">
-              Submitted Coffee Shops
-            </h2>
-            <p class="mt-1 max-w-2xl text-sm text-gray-500">
-              List of all approved coffee shops.
-            </p>
+  <% if @submitted_coffee_shops.size > 0 && @user.role.blank? %>
+    <div class="mt-8 max-w-3xl mx-auto grid grid-cols-1 gap-6 lg:max-w-7xl lg:grid-flow-col-dense">
+      <div class="space-y-6 lg:col-start-1 lg:col-span-2">
+        <section aria-labelledby="applicant-information-title">
+          <div class="bg-white shadow sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+              <h2 id="applicant-information-title" class="text-lg leading-6 font-medium text-gray-900">
+                Submitted Coffee Shops
+              </h2>
+              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                List of all approved coffee shops.
+              </p>
+            </div>
+            <div class="border-t border-gray-200 px-4 py-5 sm:px-6 flex flex-wrap">
+                <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+                  <%= render partial: "users/coffee_shop", collection: @submitted_coffee_shops %>
+                </div>
+            </div>
           </div>
-          <div class="border-t border-gray-200 px-4 py-5 sm:px-6 flex flex-wrap">
-            <% if @submitted_coffee_shops.size > 0 %>
-              <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-                <%= render partial: "users/coffee_shop", collection: @submitted_coffee_shops %>
-              </div>
-            <% else %>
-              No coffee shop has been published.
-            <% end %>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
-  </div>
+  <% end %>
 </main>
