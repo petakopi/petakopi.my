@@ -1,0 +1,18 @@
+<div class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-brown-500">
+  <div class="flex-shrink-0">
+    <% if coffee_shop.logo.attached? %>
+      <%= image_tag rails_public_blob_url(coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown", loading: "lazy", title: coffee_shop.name %>
+    <% else %>
+      <div class="h-10 w-10 rounded-full inline-block">
+        <%= render "components/icons/image" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="flex-1 min-w-0">
+    <a href="<%= coffee_shop_path(id: coffee_shop.slug) %>" class="focus:outline-none">
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      <p class="text-sm font-medium text-gray-900"><%= coffee_shop.name %></p>
+      <p class="text-sm text-gray-500 truncate"><%= coffee_shop.location_full_url %></p>
+    </a>
+  </div>
+</div>

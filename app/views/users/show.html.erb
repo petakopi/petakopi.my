@@ -17,7 +17,26 @@
     </div>
   </div>
 
-  <div class="mt-8 max-w-3xl mx-auto grid grid-cols-1 gap-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
+  <div class="mt-8 max-w-3xl mx-auto grid grid-cols-1 gap-6 lg:max-w-7xl lg:grid-flow-col-dense">
+    <div class="space-y-6 lg:col-start-1 lg:col-span-2">
+      <section aria-labelledby="applicant-information-title">
+        <div class="bg-white shadow sm:rounded-lg">
+          <div class="px-4 py-5 sm:px-6">
+            <h2 id="applicant-information-title" class="text-lg leading-6 font-medium text-gray-900">
+              Favourites
+            </h2>
+          </div>
+          <div class="border-t border-gray-200 px-4 py-5 sm:px-6 flex flex-wrap">
+            <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+              <%= render partial: "users/coffee_shop", collection: @favourites %>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="mt-8 max-w-3xl mx-auto grid grid-cols-1 gap-6 lg:max-w-7xl lg:grid-flow-col-dense">
     <div class="space-y-6 lg:col-start-1 lg:col-span-2">
       <section aria-labelledby="applicant-information-title">
         <div class="bg-white shadow sm:rounded-lg">
@@ -30,19 +49,9 @@
             </p>
           </div>
           <div class="border-t border-gray-200 px-4 py-5 sm:px-6 flex flex-wrap">
-            <% @submitted_coffee_shops.each do |coffee_shop| %>
-              <div class="mr-2 mb-2">
-                <%= link_to coffee_shop_path(id: coffee_shop.slug), target: "_blank" do %>
-                  <% if coffee_shop.logo.attached? %>
-                    <%= image_tag rails_public_blob_url(coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown", loading: "lazy", alt: coffee_shop.name %>
-                  <% else %>
-                    <div class="h-10 w-10 rounded-full inline-block">
-                      <%= render "components/icons/image" %>
-                    </div>
-                  <% end %>
-                <% end %>
-              </div>
-            <% end %>
+            <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+              <%= render partial: "users/coffee_shop", collection: @submitted_coffee_shops %>
+            </div>
           </div>
         </div>
       </section>

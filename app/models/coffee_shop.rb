@@ -30,6 +30,8 @@ class CoffeeShop < ApplicationRecord
   has_many :tags, through: :coffee_shop_tags
 
   has_one_attached :logo
+  has_many :favourites
+  has_many :favourite_users, through: :favourites, source: :user
 
   validates :slug, presence: true
   validates :slug, uniqueness: true

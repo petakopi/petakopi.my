@@ -9,6 +9,8 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
   has_many :auth_providers
+  has_many :favourites
+  has_many :favourite_coffee_shops, through: :favourites, source: :coffee_shop
   has_many :submitted_coffee_shops, class_name: "CoffeeShop", foreign_key: "submitter_user_id"
 
   validates :username, uniqueness: true
