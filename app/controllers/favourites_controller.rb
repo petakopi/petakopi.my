@@ -2,9 +2,11 @@ class FavouritesController < ApplicationController
   before_action :set_coffee_shop
 
   def create
-    @coffee_shop
-      .favourites
-      .create!(user: current_user)
+    if current_user
+      @coffee_shop
+        .favourites
+        .create!(user: current_user)
+    end
 
     respond_to do |format|
       format.turbo_stream do

@@ -12,7 +12,7 @@
       </div>
     <% end %>
   <% else %>
-    <%= button_to coffee_shop_favourites_path(coffee_shop_id: coffee_shop.slug), class: "inline-flex items-center px-3 py-2 border border-orange-300 shadow-sm text-sm leading-4 font-medium rounded-md text-orange-700 bg-white hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500", title: "Add to your favourites list", data: { turbo_frame: "_top" } do %>
+    <%= button_to current_user ? coffee_shop_favourites_path(coffee_shop_id: coffee_shop.slug) : new_user_session_path, class: "inline-flex items-center px-3 py-2 border border-orange-300 shadow-sm text-sm leading-4 font-medium rounded-md text-orange-700 bg-white hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500", title: "Add to your favourites list", data: { turbo_frame: "_top" } do %>
       <div class="flex grid grid-cols-2 items-center">
         <div class="w-5 h-5 ml-2">
           <% if current_user && current_user.favourites.where(coffee_shop: coffee_shop).exists? %>
