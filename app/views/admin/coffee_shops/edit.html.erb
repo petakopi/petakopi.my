@@ -36,7 +36,7 @@
               Name
             <% end %>
             <div class="mt-1">
-              <%= f.text_field :name, required: true, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+              <%= f.text_field :name, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
             </div>
           </div>
 
@@ -99,7 +99,7 @@
               Google Map
             <% end %>
             <div class="mt-1">
-              <%= f.text_field :google_map, required: true, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+              <%= f.text_field :google_map, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
             </div>
 
             <% if @coffee_shop.google_map.present? && @coffee_shop.google_map.starts_with?("https://")%>
