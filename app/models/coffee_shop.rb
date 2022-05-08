@@ -47,6 +47,8 @@ class CoffeeShop < ApplicationRecord
 
   accepts_nested_attributes_for :coffee_shop_tags
 
+  has_rich_text :description
+
   def assign_slug
     if name.blank?
       self.slug = SecureRandom.alphanumeric(5).downcase

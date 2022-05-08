@@ -81,6 +81,7 @@ class CoffeeShopsController < ApplicationController
     params
       .require(:coffee_shop)
       .permit(
+        :description,
         :facebook,
         :instagram,
         :logo,

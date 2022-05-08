@@ -24,6 +24,17 @@
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-6">
                   <label for="photo" class="block text-sm font-medium text-gray-700">
+                    Description
+                  </label>
+                  <div class="mt-2">
+                    <%= f.rich_text_area :description %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <div class="sm:col-span-6">
+                  <label for="photo" class="block text-sm font-medium text-gray-700">
                     Logo
                   </label>
                   <div class="mt-2 flex items-center">

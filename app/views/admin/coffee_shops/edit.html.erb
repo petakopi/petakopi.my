@@ -41,6 +41,15 @@
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+            <%= f.label :description, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Description
+            <% end %>
+            <div class="mt-1 sm:col-span-2">
+              <%= f.rich_text_area :description %>
+            </div>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
             <%= f.label :state, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
               State
             <% end %>

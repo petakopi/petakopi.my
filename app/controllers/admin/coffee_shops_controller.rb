@@ -47,6 +47,7 @@ class Admin::CoffeeShopsController < AdminController
       .require(:coffee_shop)
       .permit(
         :admin_notes,
+        :description,
         :district,
         :facebook,
         :google_embed,
