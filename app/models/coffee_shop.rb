@@ -28,6 +28,8 @@ class CoffeeShop < ApplicationRecord
   belongs_to :submitter, class_name: "User", foreign_key: "submitter_user_id", optional: true
   has_many :coffee_shop_tags
   has_many :tags, through: :coffee_shop_tags
+  has_many :coffee_shop_owners
+  has_many :owners, through: :coffee_shop_owners, source: :user
 
   has_one_attached :logo
   has_many :favourites
