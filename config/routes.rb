@@ -50,5 +50,5 @@ Rails.application.routes.draw do
     resources :coffee_shops, path: "", only: [:show]
   end
 
-  root "coffee_shops#index"
+  root "home#index"
 end

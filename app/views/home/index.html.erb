@@ -1,0 +1,112 @@
+<div class="bg-white shadow sm:rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <div class="sm:flex sm:items-start sm:justify-between">
+      <div>
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+          Still looking for a place to have a great coffee?
+        </h3>
+        <div class="mt-2 max-w-xl text-sm text-gray-500">
+          <p>
+            The community has this covered with <a href="/">petakopi.my</a>.
+            We are listing all freshly brewed coffee in Malaysia. Help us to
+            achieve that by submitting your favourite coffee place now.
+          </p>
+        </div>
+      </div>
+      <div class="mt-5 sm:mt-0 sm:ml-6 sm:flex-shrink-0 sm:flex sm:items-center">
+        <a href="<%= new_coffee_shop_path %>" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500 sm:text-sm">
+          Share My Coffee Place
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= form_tag root_path, method: :get do %>
+  <div
+    class="bg-white overflow-hidden shadow rounded-lg mt-4"
+    data-controller="select"
+    data-select-include-blank-value="true"
+    data-select-url-value="<%= cities_locations_path %>"
+    data-select-param-value="state">
+    <div class="px-4 py-5 sm:p-6 sm:flex sm:space-x-2 space-y-2 sm:space-y-0 items-center">
+      <div>
+        <input type="text" name="keyword" id="keyword" class="shadow-sm focus:ring-brown-500 focus:border-brown-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Keyword" value="<%= params[:keyword] %>">
+      </div>
+
+      <div>
+        <%= collection_select nil,
+          :state,
+          Location.states,
+          :to_s,
+          :to_s,
+          { prompt: true, selected: params[:state] },
+          data: { action: "change->select#change" },
+          class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brown-500 focus:border-brown-500 sm:text-sm rounded-md"
+        %>
+      </div>
+
+      <div>
+        <%= collection_select nil,
+          :district,
+          params[:state] ? Location.districts(state: params[:state]).prepend("") : [],
+          :to_s,
+          :to_s,
+          { selected: params[:district] },
+          id: nil,
+          data: { select_target: "select" },
+          class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brown-500 focus:border-brown-500 sm:text-sm rounded-md"
+        %>
+      </div>
+
+      <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">Filter</button>
+      <%= link_to "Reset", root_path, class: "pl-2 text-sm text-gray-500 hover:text-gray-900" %>
+    </div>
+  </div>
+<% end %>
+
+<% if @coffee_shops.any? %>
+  <%= render "live_map_bar" %>
+
+  <div class="mt-4 flex flex-col">
+    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="shadow border-b border-gray-200 sm:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-200">
+            <tbody class="bg-white divide-y divide-gray-200">
+              <%= render partial: "coffee_shops/coffee_shop", collection: @coffee_shops, cached: true %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if @pagy.pages > 1 %>
+    <div class="overflow-x-auto whitespace-nowrap">
+      <div class="py-3 md:flex md:justify-end">
+        <%== pagy_nav(@pagy) %>
+      </div>
+    </div>
+  <% end %>
+
+<% else %>
+  <div class="mt-4 bg-white overflow-hidden shadow rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+      <div class="text-center">
+        <%= render "components/icons/store" %>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No coffee shop</h3>
+        <p class="mt-1 text-sm text-gray-500">Be the first one to submit the coffee shop here.</p>
+        <div class="mt-6">
+          <a href="<%= new_coffee_shop_path %>" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">
+            <!-- Heroicon name: solid/plus -->
+            <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            New Coffee Shop
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
