@@ -1,5 +1,7 @@
 class CoffeeShopsController < ApplicationController
+  before_action :authenticate_user!, only: [:index]
   before_action :set_coffee_shop, only: %i[show]
+  before_action :set_coffee_shop_by_current_user, only: %i[edit update]
 
   def index
   end
@@ -14,7 +16,7 @@ class CoffeeShopsController < ApplicationController
   end
 
   def create
-    @coffee_shop = CoffeeShop.new(coffee_shop_params)
+    @coffee_shop = CoffeeShop.new(coffee_shop_create_params)
     @coffee_shop.submitter = current_user
 
     respond_to do |format|
@@ -28,6 +30,21 @@ class CoffeeShopsController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    respond_to do |format|
+      if @coffee_shop.update(coffee_shop_update_params)
+        format.html { redirect_to @coffee_shop, notice: "Coffee shop was successfully updated." }
+        format.json { render :show, status: :ok, location: @coffee_shop }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @coffee_shop.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
   def set_coffee_shop
@@ -36,7 +53,13 @@ class CoffeeShopsController < ApplicationController
       CoffeeShop.find(params[:id].to_i)
   end
 
-  def coffee_shop_params
+  def set_coffee_shop_by_current_user
+    @coffee_shop =
+      current_user.coffee_shops.find_by(slug: params[:id]) ||
+      current_user.coffee_shops.find(params[:id].to_i)
+  end
+
+  def coffee_shop_create_params
     params
       .require(:coffee_shop)
       .permit(
@@ -54,9 +77,22 @@ class CoffeeShopsController < ApplicationController
       )
   end
 
+  def coffee_shop_update_params
+    params
+      .require(:coffee_shop)
+      .permit(
+        :facebook,
+        :instagram,
+        :logo,
+        :tiktok,
+        :twitter,
+        :whatsapp,
+        tag_ids: []
+      )
+  end
+
   def success_message
     "Coffee shop was successfully submitted. Please give us some time to review it. "\
-    "You can check the status at this <a href='#{coffee_shop_url(@coffee_shop)}'>#{coffee_shop_url(@coffee_shop)}</a>. "\
     "Feel free to message us at <a href='https://instagram.com/petakopi.my' target='_blank'>@petakopi.my</a> on Instagram "\
     "for any question."
   end

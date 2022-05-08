@@ -1,0 +1,14 @@
+<aside class="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
+  <nav class="space-y-1">
+    <%= link_to edit_user_path(id: current_user.username), class: "bg-gray-50 text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" do %>
+      <svg class="text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span class="truncate">Account</span>
+    <% end %>
+    <%= link_to coffee_shops_path, class: "bg-gray-50 text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" do %>
+      <svg class="text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor"><path d="M495.5 223.2C491.6 223.7 487.6 224 483.4 224C457.4 224 434.2 212.6 418.3 195C402.4 212.6 379.2 224 353.1 224C327 224 303.8 212.6 287.9 195C272 212.6 248.9 224 222.7 224C196.7 224 173.5 212.6 157.6 195C141.7 212.6 118.5 224 92.36 224C88.3 224 84.21 223.7 80.24 223.2C24.92 215.8-1.255 150.6 28.33 103.8L85.66 13.13C90.76 4.979 99.87 0 109.6 0H466.4C476.1 0 485.2 4.978 490.3 13.13L547.6 103.8C577.3 150.7 551 215.8 495.5 223.2H495.5zM499.7 254.9C503.1 254.4 508 253.6 512 252.6V448C512 483.3 483.3 512 448 512H128C92.66 512 64 483.3 64 448V252.6C67.87 253.6 71.86 254.4 75.97 254.9L76.09 254.9C81.35 255.6 86.83 256 92.36 256C104.8 256 116.8 254.1 128 250.6V384H448V250.7C459.2 254.1 471.1 256 483.4 256C489 256 494.4 255.6 499.7 254.9L499.7 254.9z"/></svg>
+      <span class="truncate">Coffee Shops</span>
+    <% end %>
+  </nav>
+</aside>

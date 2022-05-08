@@ -38,7 +38,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :coffee_shops, only: [:new, :create] do
+  resources :coffee_shops, only: [:new, :create, :edit, :update, :index] do
     resources :favourites, only: [:create, :destroy]
   end
   resources :users, path: "u", only: [:show, :edit, :update]
