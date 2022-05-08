@@ -39,7 +39,7 @@
   </div>
   <div class="border-t border-gray-200">
     <dl>
-      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-sm font-medium text-gray-500">
           Name
         </dt>
@@ -55,7 +55,7 @@
           <%= @coffee_shop.location_full_url %>
         </dd>
       </div>
-      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-sm font-medium text-gray-500">
           Links
         </dt>
@@ -70,12 +70,12 @@
         </div>
         </dd>
       </div>
-      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
+      <% if @coffee_shop.tags.any? %>
+        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
           Tags
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <% if @coffee_shop.tags.any? %>
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
             <% @coffee_shop.tags.each do |tag| %>
               <% # TODO: Figure out how to whitelist the dynamic colour classes %>
               <% if tag.slug == "non-halal" %>
@@ -86,12 +86,10 @@
                 <%= tag.name %>
               </span>
             <% end %>
-          <% else %>
-            -
-          <% end %>
-        </dd>
-      </div>
-      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          </dd>
+        </div>
+      <% end %>
+      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-sm font-medium text-gray-500">
           Submitted by
         </dt>
