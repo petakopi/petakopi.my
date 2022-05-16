@@ -1,4 +1,4 @@
-<% unless request.referrer.blank? %>
+<% if (controller_name != "coffee_shops" && action_name != "show") || (controller_name == "coffee_shops" && action_name == "show" && request.referrer.present?) || (controller_name == "coffee_shops" && action_name != "show") %>
   <div class="relative bg-white" x-data="Components.popover({ open: false, focus: false })" x-init="init()" @keydown.escape="onEscape" @close-popover-group.window="onClosePopoverGroup">
     <div class="absolute inset-0 shadow z-20 pointer-events-none" aria-hidden="true"></div>
     <div class="relative z-20">
