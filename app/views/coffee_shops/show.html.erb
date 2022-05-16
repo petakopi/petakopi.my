@@ -2,127 +2,81 @@
 <%= content_for(:page_image) { rails_public_blob_url(@coffee_shop.logo) } if @coffee_shop.logo.attached? %>
 <%= content_for(:page_description) { "#{@coffee_shop.name} in #{@coffee_shop.district}, #{@coffee_shop.state}" } %>
 
-<div class="text-left">
-  <% if request.referrer&.split("/")&.last == "map" %>
-    <a href="<%= map_path %>">&#8592; Back to the Map</a>
-  <% else %>
-    <a href="<%= root_path %>">&#8592; Back to the list</a>
-  <% end %>
-</div>
+<div class="mt-8 grid grid-cols-1 gap-2">
+  <div class="flex space-x-4">
+    <% if @coffee_shop.logo.attached? %>
+      <%= image_tag rails_public_blob_url(@coffee_shop.logo), class: "w-[87px] h-[87px] rounded-full border border-brown" %>
+    <% else %>
+      <div class="w-[87px] h-[87px]">
+        <%= render "components/icons/image" %>
+      </div>
+    <% end %>
 
-<% if @coffee_shop.status_duplicate? || @coffee_shop.status_rejected? %>
-  <div class"mt-2 text-center text-sm text-gray-600">
-    <%=
-      render "components/alert",
-        alerts: "This submission has been marked as #{@coffee_shop.status}. Please message <a href='https://instagram.com/petakopi.my' target='_blank'>@petakopi.my</a> on Instagram for more information."
-      %>
-  </div>
-<% end %>
-
-<div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
-  <div class="px-4 py-5 sm:px-6 flex items-center justify-between">
-    <div class="flex items-center space-x-3">
-      <% if @coffee_shop.logo.attached? %>
-        <%= image_tag rails_public_blob_url(@coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown" %>
-      <% else %>
-        <div class="h-10 w-10 rounded-full">
-          <%= render "components/icons/image" %>
-        </div>
-      <% end %>
-      <h3 class="text-lg leading-6 font-medium text-gray-900 flex items-center">
-        <%= @coffee_shop.name %>
-
+    <div>
+      <h1 class="text-lg font-medium flex items-center space-x-2">
+        <span><%= @coffee_shop.name %></span>
         <% if @coffee_shop.owners.size.positive? %>
-          <span class="ml-1">
+          <span>
             <svg class="w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="green"><path d="M256 0C292.8 0 324.8 20.7 340.9 51.1C373.8 40.1 410.1 48.96 437 74.98C463 101 470.1 138.2 460.9 171.1C491.3 187.2 512 219.2 512 256C512 292.8 491.3 324.8 460.9 340.9C471 373.8 463 410.1 437 437C410.1 463 373.8 470.1 340.9 460.9C324.8 491.3 292.8 512 256 512C219.2 512 187.2 491.3 171.1 460.9C138.2 471 101 463 74.98 437C48.96 410.1 41 373.8 51.1 340.9C20.7 324.8 0 292.8 0 256C0 219.2 20.7 187.2 51.1 171.1C40.1 138.2 48.96 101 74.98 74.98C101 48.96 138.2 41 171.1 51.1C187.2 20.7 219.2 0 256 0V0zM352.1 224.1C362.3 215.6 362.3 200.4 352.1 191C343.6 181.7 328.4 181.7 319 191L224 286.1L184.1 247C175.6 237.7 160.4 237.7 151 247C141.7 256.4 141.7 271.6 151 280.1L207 336.1C216.4 346.3 231.6 346.3 240.1 336.1L352.1 224.1z"/></svg>
           </span>
         <% end %>
-      </h3>
-    </div>
-    <div>
-      <%= render partial: "coffee_shops/favourites", locals: { coffee_shop: @coffee_shop, user: current_user } %>
-    </div>
-  </div>
-  <div class="border-t border-gray-200">
-    <dl>
-      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-          Name
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <%= @coffee_shop.name %>
-        </dd>
+      </h1>
+
+      <div class="text-xs">
+        <%= @coffee_shop.location_full_url %>
       </div>
-      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-          Location
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <%= @coffee_shop.location_full_url %>
-        </dd>
-      </div>
-      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-          Links
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-        <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:flex">
-          <%=
-            render partial: "coffee_shops/link",
-              collection: [:google_map, :instagram_url, :facebook_url, :twitter_url, :tiktok_url, :whatsapp_url],
-              as: :link,
-              locals: { coffee_shop: @coffee_shop, type: "button" }
+
+      <div class="mt-2 flex space-x-2">
+        <%= render partial: "coffee_shops/favourites", locals: { coffee_shop: @coffee_shop, user: current_user } %>
+        <%=
+          render partial: "coffee_shops/link_shop",
+            collection: [:google_map, :instagram_url, :facebook_url, :twitter_url, :tiktok_url, :whatsapp_url],
+            as: :link,
+            locals: { coffee_shop: @coffee_shop, type: "button" }
           %>
-        </div>
-        </dd>
-      </div>
-      <% if @coffee_shop.tags.any? %>
-        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">
-          Tags
-          </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <% @coffee_shop.tags.each do |tag| %>
-              <% # TODO: Figure out how to whitelist the dynamic colour classes %>
-              <% if tag.slug == "non-halal" %>
-                <span class="px-2 inline-flex text-xs leading-5 rounded-full bg-yellow-100 text-yellow-800">
-              <% else %>
-                <span class="px-2 inline-flex text-xs leading-5 rounded-full bg-green-100 text-green-800">
-              <% end %>
-                <%= tag.name %>
-              </span>
-            <% end %>
-          </dd>
-        </div>
-      <% end %>
-      <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-          Submitted by
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <% if @coffee_shop.submitter %>
-            <%= link_to @coffee_shop.submitter.name, user_path(@coffee_shop.submitter.username), class: "text-brown-600 hover:text-brown-900" %>
-          <% else %>
-            Anonymous
-          <% end %>
-          on <%= @coffee_shop.created_at.strftime("%B %-d, %Y") %>
-        </dd>
       </div>
 
-      <% if @coffee_shop.google_embed %>
-        <div class="bg-white-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">
-            Maps
-          </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <iframe src="<%= @coffee_shop.google_embed %>" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-          </dd>
-        </div>
-      <% end %>
-    </dl>
+      <div class="mt-4">
+      </div>
+    </div>
   </div>
-</div>
 
-<div class="mt-4 text-right">
-  <a href="https://instagram.com/petakopi.my">Let us know if you have new information &#8594;</a>
+  <div class="bg-white overflow-hidden shadow rounded-lg">
+    <% if @coffee_shop.description.present? %>
+      <div class="px-4 pt-5 sm:p-6">
+        <%= @coffee_shop.description %>
+      </div>
+    <% end %>
+
+    <% if @coffee_shop.tags.any? %>
+      <div class="px-4 py-5 sm:p-6">
+          <% @coffee_shop.tags.each do |tag| %>
+            <% # TODO: Figure out how to whitelist the dynamic colour classes %>
+            <% if tag.slug == "non-halal" %>
+              <span class="px-2 inline-flex text-xs leading-5 rounded-full bg-yellow-100 text-yellow-800">
+            <% else %>
+              <span class="px-2 inline-flex text-xs leading-5 rounded-full bg-green-100 text-green-800">
+            <% end %>
+              <%= tag.name %>
+            </span>
+          <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @coffee_shop.google_embed %>
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+      <div class="px-4 py-5 sm:p-6">
+      <iframe src="<%= @coffee_shop.google_embed %>" class="w-full h-[250px] border-0" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="text-left text-sm">
+    <% if request.referrer&.split("/")&.last == "map" %>
+      <a href="<%= map_path %>" data-turbo="false">&#8592; Back to the Map</a>
+    <% else %>
+      <a href="<%= root_path %>">&#8592; Discover more coffee shops</a>
+    <% end %>
+  </div>
 </div>
