@@ -29,3 +29,7 @@
   padding: 0 !important;
   max-width: 100% !important;
 }
+
+.trix-content a {
+  @apply underline text-brown-600 hover:text-brown-800 visited:text-brown-600
+}
