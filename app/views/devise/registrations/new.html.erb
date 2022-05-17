@@ -9,7 +9,7 @@
       <%= link_to "sign in into your account", new_user_session_path, class: "font-medium text-brown-600 hover:text-brown-500" %>
     </p>
     <div class"mt-2 text-center text-sm text-gray-600">
-      <%= render "components/alert", alerts: resource.errors.full_messages if resource.errors.full_messages %>
+      <%= render "components/alert", alerts: resource.errors.full_messages if resource.errors.full_messages.present? %>
     </div>
   </div>
 
