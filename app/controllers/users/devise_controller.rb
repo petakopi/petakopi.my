@@ -1,4 +1,6 @@
 class Users::DeviseController < ApplicationController
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
   class Responder < ActionController::Responder
     def to_turbo_stream
       controller.render(options.merge(formats: :html))
@@ -15,4 +17,11 @@ class Users::DeviseController < ApplicationController
 
   self.responder = Responder
   respond_to :html, :turbo_stream
+
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :username])
+  end
 end
