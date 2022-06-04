@@ -8,6 +8,8 @@ class CoffeeShopsController < ApplicationController
 
   def show
     @coffee_shop = ActiveDecorator::Decorator.instance.decorate(@coffee_shop)
+
+    ahoy.track "View Coffee Shop", id: @coffee_shop.id, name: @coffee_shop.name
   end
 
   def new

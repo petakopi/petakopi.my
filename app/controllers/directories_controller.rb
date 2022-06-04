@@ -10,6 +10,8 @@ class DirectoriesController < ApplicationController
       )
     @coffee_shops = @coffee_shops.status_published
 
+    ahoy.track "View Directory", district: params[:district], state: params[:state]
+
     @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
   end
 

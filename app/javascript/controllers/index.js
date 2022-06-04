@@ -5,4 +5,7 @@
 import { application } from "./application"
 
 import SelectController from "./select_controller.js"
+import TrackerController from "./tracker_controller.js"
+
 application.register("select", SelectController)
+application.register("tracker", TrackerController)

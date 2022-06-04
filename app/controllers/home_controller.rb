@@ -7,6 +7,10 @@ class HomeController < ApplicationController
       )
     @coffee_shops = @coffee_shops.status_published
 
+    if params[:keyword].present? || params[:state].present? || params[:district].present?
+      ahoy.track "Search", keyword: params[:keyword], state: params[:state], district: params[:district]
+    end
+
     @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
   end
 end
