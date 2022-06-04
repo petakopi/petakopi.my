@@ -22,7 +22,7 @@ gem "nokogiri" # Parse HTML
 gem "pagy", "~> 5.10" # Pagination
 gem "paper_trail" # Track changes to the model
 gem "pg", "~> 1.1" # Use postgresql as the database for Active Record
-gem "puma", "~> 5.0" # Use the Puma web server [https://github.com/puma/puma]
+gem "puma", "~> 5.6" # Use the Puma web server [https://github.com/puma/puma]
 gem "omniauth" # multi-provider authentication
 gem "omniauth-facebook" # login using Facebook
 gem "omniauth-google-oauth2" # login using Google
