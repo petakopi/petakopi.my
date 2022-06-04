@@ -33,3 +33,7 @@
 .trix-content a {
   @apply underline text-brown-600 hover:text-brown-800 visited:text-brown-600
 }
+
+.trix-content ul {
+  @apply list-disc
+}
