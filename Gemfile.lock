@@ -70,6 +70,10 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    ahoy_matey (4.0.3)
+      activesupport (>= 5.2)
+      device_detector
+      safely_block (>= 0.2.1)
     appsignal (3.0.23)
       rack
     ast (2.4.2)
@@ -110,6 +114,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.1.0)
       railties (>= 6.0.0)
+    device_detector (1.0.7)
     devise (4.8.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -117,6 +122,7 @@ GEM
       responders
       warden (~> 1.2.3)
     digest (3.1.0)
+    errbase (0.2.2)
     erubi (1.10.0)
     et-orbi (1.2.6)
       tzinfo
@@ -130,6 +136,7 @@ GEM
     fugit (1.5.2)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
+    geocoder (1.8.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashie (5.0.0)
@@ -305,6 +312,8 @@ GEM
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    safely_block (0.3.0)
+      errbase (>= 0.1.1)
     selenium-webdriver (4.1.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -372,6 +381,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_decorator
+  ahoy_matey
   appsignal
   aws-sdk-s3
   bootsnap
@@ -379,6 +389,7 @@ DEPENDENCIES
   connection_pool
   cssbundling-rails
   devise
+  geocoder
   hiredis
   image_optim
   image_optim_pack

@@ -4,6 +4,9 @@ import Alpine from "alpinejs"
 import "trix"
 import "@rails/actiontext"
 
+// importmap
+import "ahoy.js"
+
 // Locals
 import "./controllers"
 import "./tailwind.alpine"
