@@ -5,9 +5,10 @@ export default class extends Controller {
   static values = {
     url: String,
     type: String,
+    id: Number,
   }
 
   track(event) {
-    ahoy.track("Click Link", {type: this.typeValue, url: this.urlValue})
+    ahoy.track("Click Link", {id: idValue, type: this.typeValue, url: this.urlValue})
   }
 }
