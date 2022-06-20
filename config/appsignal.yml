@@ -1,7 +1,6 @@
 default: &defaults
   # Your push api key, it is possible to set this dynamically using ERB:
   # push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
-  push_api_key: "bec71f96-58a5-4a90-b2dc-e4b7c40cc91e"
   push_api_key: <%= Rails.application.credentials.dig(:appsignal) %>
 
   # Your app's name
