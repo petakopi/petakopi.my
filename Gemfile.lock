@@ -165,7 +165,7 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jmespath (1.6.1)
-    jsbundling-rails (1.0.2)
+    jsbundling-rails (1.0.3)
       railties (>= 6.0.0)
     jwt (2.3.0)
     loofah (2.18.0)
