@@ -10,7 +10,7 @@
     "@tailwindcss/typography": "^0.5.1",
     "ahoy.js": "^0.4.0",
     "alpinejs": "^3.8.1",
-    "autoprefixer": "^10.4.2",
+    "autoprefixer": "^10.4.7",
     "esbuild": "^0.14.13",
     "postcss": "^8.4.5",
     "postcss-import": "^14.0.2",
