@@ -11,6 +11,8 @@
     "ahoy.js": "^0.4.0",
     "alpinejs": "^3.8.1",
     "autoprefixer": "^10.4.7",
+    "chart.js": "^3.8.0",
+    "chartkick": "^4.2.0",
     "esbuild": "^0.14.13",
     "postcss": "^8.4.5",
     "postcss-import": "^14.0.2",

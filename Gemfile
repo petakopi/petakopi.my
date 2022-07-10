@@ -10,8 +10,10 @@ gem "aws-sdk-s3", require: false
 gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "connection_pool" # redis connection pooling
 gem "cssbundling-rails" # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
+gem "chartkick" # create js charts
 gem "devise" # authentication
 gem "geocoder" # geocoding for ahoy
+gem "groupdate" # active record helper to group by date/time
 gem "hiredis" # redis adapter
 gem "image_optim" # Image optimization
 gem "image_optim_pack" # Image optimization

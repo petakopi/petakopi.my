@@ -1,7 +1,7 @@
 class CoffeeShopsController < ApplicationController
   before_action :authenticate_user!, only: [:index]
   before_action :set_coffee_shop, only: %i[show]
-  before_action :set_coffee_shop_by_current_user, only: %i[edit update]
+  before_action :set_coffee_shop_by_current_user, only: %i[edit update stats]
 
   def index
   end
@@ -45,6 +45,16 @@ class CoffeeShopsController < ApplicationController
         format.json { render json: @coffee_shop.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def stats
+    @visits =
+      Ahoy::Event.where_event(
+        "View Coffee Shop",
+        id: @coffee_shop.id
+      ).where(time: 90.days.ago..).group_by_day(:time).count
+
+    @outbound_links = @coffee_shop.urls.select { |k, v| v.present? }.keys
   end
 
   private

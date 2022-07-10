@@ -3,9 +3,8 @@ import "@hotwired/turbo-rails"
 import Alpine from "alpinejs"
 import "trix"
 import "@rails/actiontext"
-
-// importmap
 import "ahoy.js"
+import "chartkick/chart.js"
 
 // Locals
 import "./controllers"

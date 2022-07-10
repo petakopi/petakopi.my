@@ -39,6 +39,10 @@ Rails.application.routes.draw do
   end
 
   resources :coffee_shops, only: [:new, :create, :edit, :update, :index] do
+    member do
+      get "stats"
+    end
+
     resources :favourites, only: [:create, :destroy]
   end
   resources :users, path: "u", only: [:show, :edit, :update]
