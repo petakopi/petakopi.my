@@ -327,7 +327,7 @@ GEM
     sidekiq-cron (1.6.0)
       fugit (~> 1)
       sidekiq (>= 4.2.1)
-    sidekiq-failures (1.0.1)
+    sidekiq-failures (1.0.2)
       sidekiq (>= 4.0.0)
     sitemap_generator (6.2.1)
       builder (~> 3.0)
