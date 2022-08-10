@@ -15,7 +15,7 @@ set deploy_to: "/var/www/%{application}"
 set rbenv_ruby_version: "3.1.0"
 set nodenv_node_version: "16.13.2"
 set nodenv_install_yarn: true
-set git_url: "git@github.com:amree/petakopi.git"
+set git_url: "git@github.com:petakopi/petakopi.my.git"
 set git_branch: "main"
 set git_exclusions: %w[
   .tomo/
