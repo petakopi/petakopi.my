@@ -88,6 +88,9 @@
                   However, we will only list the place if it serves freshly
                   brewed coffee. Thanks ❤️
                 </p>
+                <p class="mt-1 text-sm text-gray-500">
+                  p/s: Please use "Advanced Form" to help us fill in the details faster if you have more information about this place.
+                </p>
               </div>
               <div class="space-y-6 sm:space-y-5">
                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -163,7 +166,7 @@
                         Location.states,
                         :to_s,
                         :to_s,
-                        { prompt: true, required: true },
+                        { prompt: "Select state", required: true },
                         data: { action: "change->select#change" },
                         class: "max-w-lg block focus:ring-brown-500 focus:border-brown-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                       %>
