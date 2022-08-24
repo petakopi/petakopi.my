@@ -9,6 +9,7 @@ class CoffeeShopsListQuery
   def call
     @relation = filter_by_locations
     @relation = filter_by_keyword
+    @relation = filter_by_tags
     @relation = reorder
 
     @relation
@@ -37,6 +38,14 @@ class CoffeeShopsListQuery
     keyword = "%#{params[:keyword].strip}%"
 
     relation.where("name ILIKE ? OR slug ILIKE ?", keyword, keyword)
+  end
+
+  def filter_by_tags
+    return relation if params[:tags].blank?
+
+    slugs = params[:tags].split(",")
+
+    relation.joins(:tags).where(tags: { slug: slugs })
   end
 
   def reorder
