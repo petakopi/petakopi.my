@@ -1,0 +1,27 @@
+<div class="flex items-start sm:items-center">
+  <% if multiple_selections %>
+    <%= check_box_tag "coffee_shop[tag_ids][]",
+      tag.id,
+      f.object.tags.include?(tag),
+      class: "focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300 mt-1 sm:mt-0",
+      id: dom_id(tag)
+    %>
+  <% else %>
+    <%= radio_button_tag "coffee_shop[tag_ids][]",
+      tag.id,
+      f.object.tags.include?(tag),
+      class: "focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300 mt-1 sm:mt-0",
+      id: dom_id(tag)
+    %>
+  <% end %>
+
+  <%= label_tag dom_id(tag), class: "ml-3 block text-sm " do %>
+    <span class="font-medium text-gray-700">
+      <%= tag.name %>
+    </span>
+    <div class="text-gray-500 sm:inline">
+      <span class="hidden sm:inline">-</span>
+      <%= tag.description %>
+    </div>
+  <% end %>
+</div>

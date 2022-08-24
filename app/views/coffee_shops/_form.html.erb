@@ -218,25 +218,34 @@
                     <div class="mt-1">
                       <div class="mt-1 sm:mt-0 sm:col-span-2">
                         <div class="space-y-5 sm:space-y-4">
-                          <% Tag.all.each do |tag| %>
-                            <div class="flex items-start sm:items-center">
-                              <%= radio_button_tag "coffee_shop[tag_ids][]",
-                                tag.id,
-                                f.object.tags.include?(tag),
-                                class: "focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300 mt-1 sm:mt-0",
-                                id: dom_id(tag)
-                              %>
-                              <%= label_tag dom_id(tag), class: "ml-3 block text-sm " do %>
-                                <span class="font-medium text-gray-700">
-                                  <%= tag.name %>
-                                </span>
-                                <div class="text-gray-500 sm:inline">
-                                  <span class="hidden sm:inline">-</span>
-                                  <%= tag.description %>
-                                </div>
-                              <% end %>
-                            </div>
+                          <% Tag.where(group: "halal").order(:name).each do |tag| %>
+                            <%= render "form_tag", f: f, tag: tag, multiple_selections: false %>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
+              <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+                <div>
+                  <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Other Tags
+                  </h3>
+                  <p class="mt-1 text-sm text-gray-500">
+                    With more information, we can help our coffee lovers to
+                    find the right place for their coffee
+                  </p>
+                </div>
+                <div class="space-y-6 sm:space-y-5">
+                  <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                    <div class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"></div>
+                    <div class="mt-1">
+                      <div class="mt-1 sm:mt-0 sm:col-span-2">
+                        <div class="space-y-5 sm:space-y-4">
+                          <% Tag.where(group: nil).order(:name).each do |tag| %>
+                            <%= render "form_tag", f: f, tag: tag, multiple_selections: true %>
                           <% end %>
                         </div>
                       </div>

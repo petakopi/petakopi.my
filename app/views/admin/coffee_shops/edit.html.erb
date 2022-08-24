@@ -84,20 +84,25 @@
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
             <%= f.label :district, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Tags
+              Halal Tags
             <% end %>
             <div class="mt-1 sm:mt-0 sm:col-span-2">
               <div class="space-y-6 sm:space-y-5">
-                <% Tag.all.each do |tag| %>
-                  <div class="flex items-center">
-                    <%= radio_button_tag "coffee_shop[tag_ids][]",
-                      tag.id,
-                      f.object.tags.include?(tag),
-                      class: "focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300",
-                      id: dom_id(tag)
-                    %>
-                    <%= label_tag dom_id(tag), tag.name, class: "ml-3 block text-sm font-medium text-gray-700" %>
-                  </div>
+                <% Tag.where(group: "halal").each do |tag| %>
+                  <%= render "form_tag", f: f, tag: tag, multiple_selections: false %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+            <%= f.label :district, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Other Tags
+            <% end %>
+            <div class="mt-1 sm:mt-0 sm:col-span-2">
+              <div class="space-y-6 sm:space-y-5">
+                <% Tag.where(group: nil).each do |tag| %>
+                  <%= render "form_tag", f: f, tag: tag, multiple_selections: true %>
                 <% end %>
               </div>
             </div>
