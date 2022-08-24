@@ -63,7 +63,7 @@
   }
 </script>
 
-<%= select_tag nil, options_from_collection_for_select(Tag.order(name: :asc).all, :slug, :name), id: "tags", "x-cloak" => "", class: "hidden" %>
+<%= select_tag nil, options_from_collection_for_select(Tag.order(:position).all, :slug, :name), id: "tags", "x-cloak" => "", class: "hidden" %>
 
 <div x-data="dropdown()" x-init="loadOptions()">
   <input name="tags" type="hidden" x-bind:value="selectedValues()">
