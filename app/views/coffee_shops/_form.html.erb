@@ -96,10 +96,7 @@
                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <div class="max-w-lg flex rounded-md shadow-sm">
-                      <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
-                        instagram.com/
-                      </span>
-                      <%= f.text_field :instagram, required: true, class: "flex-1 block w-full focus:ring-brown-500 focus:border-brown-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300" %>
+                      <%= f.text_field :instagram, placeholder: "https://www.instagram.com/ig.name/", required: true, class: "flex-1 block w-full focus:ring-brown-500 focus:border-brown-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300" %>
                     </div>
                   </div>
                 </div>

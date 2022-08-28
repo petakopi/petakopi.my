@@ -39,6 +39,7 @@ class CoffeeShop < ApplicationRecord
   validates :slug, uniqueness: true
   validate :verify_district_in_state
 
+  before_validation :clean_urls, on: :create
   before_validation :assign_slug, on: :create
   before_validation :convert_google_embed
   before_save :update_approved_at
@@ -48,6 +49,13 @@ class CoffeeShop < ApplicationRecord
   accepts_nested_attributes_for :coffee_shop_tags
 
   has_rich_text :description
+
+  def clean_urls
+    begin
+      self.instagram = instagram.split("/")[3].split("?")[0]
+    rescue NoMethodError
+    end
+  end
 
   def assign_slug
     if name.blank?
