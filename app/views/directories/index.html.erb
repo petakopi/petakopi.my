@@ -23,7 +23,7 @@
                     <td class="px-6 py-4 sticky sm:static left-0 bg-white z-0 min-w-[220px]">
                       <div class="flex items-center">
                         <div class="flex-shrink-0 h-10 w-10">
-                          <%= link_to coffee_shop_path(id: coffee_shop.slug) do %>
+                          <%= link_to main_coffee_shop_path(id: coffee_shop.slug) do %>
                             <% if coffee_shop.logo.attached? %>
                               <%= image_tag rails_public_blob_url(coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown", loading: "lazy", alt: coffee_shop.name %>
                             <% else %>
@@ -35,7 +35,7 @@
                         </div>
                         <div class="ml-4">
                           <div class="text-sm font-medium text-gray-900">
-                            <%= link_to coffee_shop.name, coffee_shop_path(id: coffee_shop.slug) %>
+                            <%= link_to coffee_shop.name, main_coffee_shop_path(id: coffee_shop.slug) %>
                           </div>
                         </div>
                       </div>
@@ -56,7 +56,7 @@
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <%= link_to "View", coffee_shop_path(id: coffee_shop.slug), class: "text-brown-600 hover:text-brown-900" %>
+                      <%= link_to "View", main_coffee_shop_path(id: coffee_shop.slug), class: "text-brown-600 hover:text-brown-900" %>
                     </td>
                   </tr>
                 <% end %>
