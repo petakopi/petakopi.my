@@ -143,10 +143,10 @@ ahoy.js@^0.4.0:
   resolved "https://registry.yarnpkg.com/ahoy.js/-/ahoy.js-0.4.0.tgz#92c0247866b167015e1fdd0bc9cda8b3a61fadbe"
   integrity sha512-jq4aidHv8QWvZzN7YYnkQ1JgO6RyDBNrobcimJRtlfKiIP8B9ZaeMOIP4qieVrNawgI6JXpxvYMllfRb+sWZew==
 
-alpinejs@^3.8.1:
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/alpinejs/-/alpinejs-3.8.1.tgz#8474606961b4d8886b9ba6e17e9ed3e344e79bfe"
-  integrity sha512-IZ82+7C2PlzfvgvA6yfyiCzEn9CZGWwpBqqiHBTABOXs8WS6f1a30Va7yOemTgSzW6QGT/iEWRXG/XEbat/X7A==
+alpinejs@^3.10.4:
+  version "3.10.4"
+  resolved "https://registry.yarnpkg.com/alpinejs/-/alpinejs-3.10.4.tgz#61bbadb2275796f545c4f53743f0bcbefa4661d0"
+  integrity sha512-AC6Xchlb/xURO7F93OSMItooClpzGNZRM5+rDa6/3Y20mPxQs1TQ/wfiwiH4mtcVt8yTxdkOW5dOl8CBCK095A==
   dependencies:
     "@vue/reactivity" "~3.1.1"
 
