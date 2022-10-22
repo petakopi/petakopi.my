@@ -4,7 +4,6 @@ import Alpine from "alpinejs"
 import "trix"
 import "@rails/actiontext"
 import "ahoy.js"
-import "chartkick/chart.js"
 
 // Locals
 import "./controllers"

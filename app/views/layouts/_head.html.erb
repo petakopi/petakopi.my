@@ -11,6 +11,7 @@
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   <%= yield(:extra_styles) if content_for?(:extra_styles) %>
+  <%= yield(:extra_js) if content_for?(:extra_js) %>
 
   <%= render "layouts/social_meta_tags" %>
 
