@@ -62,7 +62,7 @@
   <% if @coffee_shop.google_embed %>
     <div class="bg-white overflow-hidden shadow rounded-lg">
       <div class="px-4 py-5 sm:p-6">
-      <iframe src="<%= @coffee_shop.google_embed %>" class="w-full h-[250px] border-0" allowfullscreen="" loading="lazy"></iframe>
+      <iframe id="map" data-src="<%= @coffee_shop.google_embed %>" class="w-full h-[250px] border-0" loading="lazy"></iframe>
       </div>
     </div>
   <% end %>
@@ -75,3 +75,12 @@
     <% end %>
   </div>
 </div>
+
+<%= content_for :js do %>
+  <script>
+    setTimeout(() => {
+      const map = document.getElementById("map")
+      map.src = map.dataset.src
+    }, "250")
+  </script>
+<% end %>
