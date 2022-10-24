@@ -37,7 +37,7 @@ class CoffeeShopsListQuery
 
     keyword = "%#{params[:keyword].strip}%"
 
-    relation.where("name ILIKE ? OR slug ILIKE ?", keyword, keyword)
+    relation.where("coffee_shops.name ILIKE ? OR coffee_shops.slug ILIKE ?", keyword, keyword)
   end
 
   def filter_by_tags
