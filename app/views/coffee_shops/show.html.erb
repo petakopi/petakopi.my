@@ -5,7 +5,11 @@
 <div class="mt-8 grid grid-cols-1 gap-2">
   <div class="flex space-x-4">
     <% if @coffee_shop.logo.attached? %>
-      <%= image_tag rails_public_blob_url(@coffee_shop.logo), class: "w-[87px] h-[87px] rounded-full border border-brown" %>
+      <%=
+        image_tag rails_public_blob_url(@coffee_shop.logo),
+          class: "w-[87px] h-[87px] rounded-full border border-brown",
+          alt: "#{@coffee_shop.name} logo"
+      %>
     <% else %>
       <div class="w-[87px] h-[87px]">
         <%= render "components/icons/image" %>
@@ -62,7 +66,7 @@
   <% if @coffee_shop.google_embed %>
     <div class="bg-white overflow-hidden shadow rounded-lg">
       <div class="px-4 py-5 sm:p-6">
-      <iframe id="map" data-src="<%= @coffee_shop.google_embed %>" class="w-full h-[250px] border-0" loading="lazy"></iframe>
+        <iframe id="map" title="Google Map for <%= @coffee_shop.name %>" data-src="<%= @coffee_shop.google_embed %>" class="w-full h-[250px] border-0" loading="lazy"></iframe>
       </div>
     </div>
   <% end %>
