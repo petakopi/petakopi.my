@@ -5,4 +5,8 @@
 @import "actiontext";
 @import "custom";
 
-
+@layer base {
+  @font-face {
+    font-display: swap;
+  }
+}
