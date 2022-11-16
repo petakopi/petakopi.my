@@ -11,6 +11,6 @@ class HomeController < ApplicationController
       ahoy.track "Search", keyword: params[:keyword], state: params[:state], district: params[:district]
     end
 
-    @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
+    @pagy, @coffee_shops = pagy(@coffee_shops, items: 50)
   end
 end
