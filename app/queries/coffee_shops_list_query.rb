@@ -58,8 +58,8 @@ class CoffeeShopsListQuery
         Arel.sql(
           <<-SQL.squish
           CASE
-            WHEN tags.slug = 'pru-15' THEN '1'
-            ELSE '2'
+            WHEN tags.slug = 'pru-15' THEN FLOOR(RANDOM() * 100 + 1)::INT
+            ELSE '200'
           END
           SQL
         )
