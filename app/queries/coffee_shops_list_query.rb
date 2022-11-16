@@ -10,9 +10,10 @@ class CoffeeShopsListQuery
     @relation = filter_by_locations
     @relation = filter_by_keyword
     @relation = filter_by_tags
-    @relation = reorder
+    @relation = force_pru_15_order
 
-    @relation
+    # Disable temporarily for pru-15 tag as this will create duplicates (?)
+    # @relation = reorder
   end
 
   private
@@ -46,6 +47,22 @@ class CoffeeShopsListQuery
     slugs = params[:tags].split(",")
 
     relation.joins(:tags).where(tags: { slug: slugs })
+  end
+
+  def force_pru_15_order
+    relation
+      .left_outer_joins(:tags)
+      .order(
+        Arel.sql(
+          <<-SQL.squish
+          CASE
+            WHEN tags.slug = 'pru-15' THEN '1'
+            ELSE '2'
+          END
+          SQL
+        )
+      )
+        .group("coffee_shops.id, tags.id")
   end
 
   def reorder
