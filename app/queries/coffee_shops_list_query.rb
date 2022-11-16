@@ -50,6 +50,8 @@ class CoffeeShopsListQuery
   end
 
   def force_pru_15_order
+    return @relation if params[:tags]&.split(",")&.include?("pru-15")
+
     relation
       .left_outer_joins(:tags)
       .order(
