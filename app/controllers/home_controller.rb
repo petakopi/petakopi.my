@@ -11,6 +11,12 @@ class HomeController < ApplicationController
       ahoy.track "Search", keyword: params[:keyword], state: params[:state], district: params[:district]
     end
 
-    @pagy, @coffee_shops = pagy(@coffee_shops, items: 50)
+    @pru_15_coffee_shops =
+      CoffeeShop
+        .joins(:tags)
+        .includes(:tags, :owners, logo_attachment: :blob)
+        .where(tags: { slug: "pru-15" })
+
+    @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
   end
 end

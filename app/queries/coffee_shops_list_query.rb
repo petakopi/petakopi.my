@@ -10,10 +10,8 @@ class CoffeeShopsListQuery
     @relation = filter_by_locations
     @relation = filter_by_keyword
     @relation = filter_by_tags
-    @relation = force_pru_15_order
 
-    # Disable temporarily for pru-15 tag as this will create duplicates (?)
-    # @relation = reorder
+    @relation = reorder
   end
 
   private
@@ -47,24 +45,6 @@ class CoffeeShopsListQuery
     slugs = params[:tags].split(",")
 
     relation.joins(:tags).where(tags: { slug: slugs })
-  end
-
-  def force_pru_15_order
-    return @relation if params[:tags]&.split(",")&.include?("pru-15")
-
-    relation
-      .left_outer_joins(:tags)
-      .order(
-        Arel.sql(
-          <<-SQL.squish
-          CASE
-            WHEN tags.slug = 'pru-15' THEN FLOOR(RANDOM() * 100 + 1)::INT
-            ELSE '200'
-          END
-          SQL
-        )
-      )
-        .group("coffee_shops.id, tags.id")
   end
 
   def reorder
