@@ -12,10 +12,16 @@ class HomeController < ApplicationController
     end
 
     @pru_15_coffee_shops =
-      CoffeeShop
-        .joins(:tags)
-        .includes(:tags, :owners, logo_attachment: :blob)
-        .where(tags: { slug: "pru-15" })
+      CoffeeShopsListQuery
+        .call(
+          params: params,
+          relation:
+            CoffeeShop
+              .joins(:tags)
+              .includes(:tags, :owners, logo_attachment: :blob)
+              .where(tags: { slug: "pru-15" })
+        )
+        .shuffle
 
     @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
   end
