@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/serprex/sidekiq-cron.git
+  revision: ddfb04a786124604a6dd8471c5c7677c27096f0e
+  branch: master
+  specs:
+    sidekiq-cron (1.8.0)
+      fugit (~> 1)
+      sidekiq (>= 4.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -327,9 +336,6 @@ GEM
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
       redis-client (>= 0.9.0)
-    sidekiq-cron (1.8.0)
-      fugit (~> 1)
-      sidekiq (>= 4.2.1)
     sidekiq-failures (1.0.2)
       sidekiq (>= 4.0.0)
     sitemap_generator (6.2.1)
@@ -420,7 +426,7 @@ DEPENDENCIES
   redis (~> 4.0)
   selenium-webdriver
   sidekiq
-  sidekiq-cron
+  sidekiq-cron!
   sidekiq-failures
   sitemap_generator
   skylight
