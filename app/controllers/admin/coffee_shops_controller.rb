@@ -53,6 +53,8 @@ class Admin::CoffeeShopsController < AdminController
         :google_embed,
         :google_map,
         :instagram,
+        :lat,
+        :lng,
         :logo,
         :name,
         :slug,
