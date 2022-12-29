@@ -20,6 +20,8 @@ Rails.application.routes.draw do
   end
 
   get "about" => "pages#about"
+  get "privacy" => "pages#privacy"
+  get "terms" => "pages#terms"
   get "map" => "map#index"
 
   namespace :api do
