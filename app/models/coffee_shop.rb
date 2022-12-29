@@ -108,7 +108,7 @@ class CoffeeShop < ApplicationRecord
 
   def update_lat_lng
     return unless status_published?
-    return if lat.present? && lng.present? && !google_map_changed?
+    return if lat.present? && lng.present?
 
     LocationProcessorWorker.perform_async(id)
   end
