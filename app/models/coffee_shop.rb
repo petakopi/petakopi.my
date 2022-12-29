@@ -51,10 +51,8 @@ class CoffeeShop < ApplicationRecord
   has_rich_text :description
 
   def clean_urls
-    begin
-      self.instagram = instagram.split("/")[3].split("?")[0]
-    rescue NoMethodError
-    end
+    self.instagram = instagram.split("/")[3].split("?")[0]
+  rescue NoMethodError
   end
 
   def assign_slug

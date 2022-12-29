@@ -13,7 +13,7 @@ class FavouritesController < ApplicationController
         render turbo_stream: turbo_stream.replace(
           "#{helpers.dom_id(@coffee_shop)}_favourites",
           partial: "coffee_shops/favourites",
-          locals: { coffee_shop: @coffee_shop }
+          locals: {coffee_shop: @coffee_shop}
         )
       end
     end
@@ -30,7 +30,7 @@ class FavouritesController < ApplicationController
         render turbo_stream: turbo_stream.replace(
           "#{helpers.dom_id(@coffee_shop)}_favourites",
           partial: "coffee_shops/favourites",
-          locals: { coffee_shop: @coffee_shop }
+          locals: {coffee_shop: @coffee_shop}
         )
       end
     end

@@ -44,7 +44,7 @@ class CoffeeShopsListQuery
 
     slugs = params[:tags].split(",")
 
-    relation.joins(:tags).where(tags: { slug: slugs })
+    relation.joins(:tags).where(tags: {slug: slugs})
   end
 
   def reorder

@@ -18,7 +18,6 @@ class Users::DeviseController < ApplicationController
   self.responder = Responder
   respond_to :html, :turbo_stream
 
-
   protected
 
   def configure_permitted_parameters

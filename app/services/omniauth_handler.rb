@@ -48,7 +48,7 @@ class OmniauthHandler
   def set_omniauth
     user
       .auth_providers
-      .where(auth_providers: { provider: provider })
+      .where(auth_providers: {provider: provider})
       .first_or_create do |auth_provider|
         auth_provider.provider = provider
         auth_provider.uid = uid

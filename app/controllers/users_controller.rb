@@ -11,10 +11,10 @@ class UsersController < ApplicationController
 
     @submitted_coffee_shops =
       @user
-      .submitted_coffee_shops
-      .status_published
-      .includes(logo_attachment: :blob)
-      .order(approved_at: :desc)
+        .submitted_coffee_shops
+        .status_published
+        .includes(logo_attachment: :blob)
+        .order(approved_at: :desc)
   end
 
   def edit
