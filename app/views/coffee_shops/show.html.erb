@@ -64,9 +64,38 @@
   </div>
 
   <% if @coffee_shop.google_embed %>
-    <div class="bg-white overflow-hidden shadow rounded-lg">
-      <div class="px-4 py-5 sm:p-6">
-        <iframe id="map" title="Google Map for <%= @coffee_shop.name %>" data-src="<%= @coffee_shop.google_embed %>" class="w-full h-[250px] border-0" loading="lazy"></iframe>
+    <div
+      data-controller="map-loader"
+      data-map-loader-src-value="<%= @coffee_shop.google_embed %>"
+      data-map-loader-gmap-value="<%= @coffee_shop.google_map %>"
+      class="bg-white overflow-hidden shadow rounded-lg"
+    >
+      <div class="px-4 py-5 sm:p-6 h-[300px]">
+        <div
+          data-map-loader-target="buttonGroup"
+          class="flex space-x-2"
+        >
+          <button
+            data-action="click->map-loader#load"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500"
+          >
+            📍 Load Map
+          </button>
+
+          <button
+            data-action="click->map-loader#openMap"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500"
+          >
+            <%= render partial: "components/icons/google_map" %> Open Google Map
+          </button>
+        </div>
+
+        <iframe
+          title="Google Map for <%= @coffee_shop.name %>"
+          class="w-full h-[250px] border-0 hidden"
+          loading="lazy"
+          data-map-loader-target="iframe"
+        ></iframe>
       </div>
     </div>
   <% end %>
@@ -80,11 +109,3 @@
   </div>
 </div>
 
-<%= content_for :js do %>
-  <script>
-    setTimeout(() => {
-      const map = document.getElementById("map")
-      map.src = map.dataset.src
-    }, "250")
-  </script>
-<% end %>
