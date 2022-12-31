@@ -70,8 +70,8 @@
 
   <% if @pagy.pages > 1 %>
     <div class="overflow-x-auto whitespace-nowrap">
-      <div class="py-3 md:flex md:justify-end">
-        <%== pagy_nav(@pagy) %>
+      <div class="py-3 flex justify-end">
+        <%= render partial: "pagy/nav", locals: {pagy: @pagy} %>
       </div>
     </div>
   <% end %>

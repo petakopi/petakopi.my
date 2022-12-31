@@ -1,0 +1,10 @@
+<%# Source: https://github.com/ddnexus/pagy/blob/b13d55d1f474bea4e9de3b0dfc6b0e0b6af2154c/lib/templates/nav.html.erb %>
+<% link = pagy_link_proc(pagy) -%>
+<%#                            -%><nav class="pagy-nav pagination" role="navigation">
+<% if pagy.prev                -%>  <span class="page prev"><%== link.call(pagy.prev, pagy_t('pagy.nav.prev'), 'aria-label="previous"') %></span>
+<% else                        -%>  <span class="page prev disabled"><%== pagy_t('pagy.nav.prev') %></span>
+<% end                         -%>
+<% if pagy.next                -%>  <span class="page next"><%== link.call(pagy.next, pagy_t('pagy.nav.next'), 'aria-label="next"') %></span>
+<% else                        -%>  <span class="page next disabled"><%== pagy_t('pagy.nav.next') %></span>
+<% end                         -%>
+<%#                            -%></nav>
