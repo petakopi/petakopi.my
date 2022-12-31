@@ -114,8 +114,8 @@
         </div>
       </div>
       <div class="w-full px-4">
-        <div x-show.transition.origin.top="isOpen()" class="absolute shadow top-100 bg-white z-40 w-full left-0 rounded max-h-select" x-on:click.away="close">
-          <div class="flex flex-col w-full overflow-y-auto h-64 hidden">
+        <div x-show.transition.origin.top="isOpen()" class="absolute shadow top-100 bg-white z-40 w-full left-0 rounded max-h-select" x-on:click.away="close" style="display: none">
+          <div class="flex flex-col w-full overflow-y-auto h-64">
             <template x-for="(option,index) in options" :key="option.value" class="overflow-auto">
               <div class="cursor-pointer w-full border-gray-100 rounded-t border-b sm:text-sm hover:bg-gray-100" @click="select(index,$event)">
                 <div class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative">
