@@ -11,58 +11,23 @@
 <% if @coffee_shops.any? %>
   <%= render "home/live_map_bar" %>
 
-  <div class="mt-4 flex flex-col">
-    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-        <div class="shadow border-b border-gray-200 sm:rounded-lg">
-          <table class="min-w-full divide-y divide-gray-200">
-            <tbody class="bg-white divide-y divide-gray-200">
-              <% @coffee_shops.each do |coffee_shop| %>
-                <% cache coffee_shop do %>
-                  <tr>
-                    <td class="px-6 py-4 sticky sm:static left-0 bg-white z-0 min-w-[220px]">
-                      <div class="flex items-center">
-                        <div class="flex-shrink-0 h-10 w-10">
-                          <%= link_to main_coffee_shop_path(id: coffee_shop.slug) do %>
-                            <% if coffee_shop.logo.attached? %>
-                              <%= image_tag rails_public_blob_url(coffee_shop.logo), class: "h-10 w-10 rounded-full border border-brown", loading: "lazy", alt: coffee_shop.name %>
-                            <% else %>
-                              <div class="h-10 w-10 rounded-full">
-                                <%= render "components/icons/image" %>
-                              </div>
-                            <% end %>
-                          <% end %>
-                        </div>
-                        <div class="ml-4">
-                          <div class="text-sm font-medium text-gray-900">
-                            <%= link_to coffee_shop.name, main_coffee_shop_path(id: coffee_shop.slug) %>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-900">
-                        <%= coffee_shop.location_full_url %>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <div class="flex space-x-2 items-center">
-                        <%= render "coffee_shops/link", coffee_shop: coffee_shop, link: :google_map %>
-                        <%= render "coffee_shops/link", coffee_shop: coffee_shop, link: :instagram_url %>
-                        <%= render "coffee_shops/link", coffee_shop: coffee_shop, link: :facebook_url %>
-                        <%= render "coffee_shops/link", coffee_shop: coffee_shop, link: :twitter_url %>
-                        <%= render "coffee_shops/link", coffee_shop: coffee_shop, link: :tiktok_url %>
-                        <%= render "coffee_shops/link", coffee_shop: coffee_shop, link: :whatsapp_url %>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <%= link_to "View", main_coffee_shop_path(id: coffee_shop.slug), class: "text-brown-600 hover:text-brown-900" %>
-                    </td>
-                  </tr>
-                <% end %>
-              <% end %>
-            </tbody>
-          </table>
+  <div class="mt-4 overflow-hidden bg-white shadow sm:rounded-md sm:hidden">
+    <ul role="list" class="divide-y divide-gray-200">
+      <%= render partial: "coffee_shops/coffee_shop_list", collection: @coffee_shops, cached: true, as: :coffee_shop %>
+    </ul>
+  </div>
+
+  <div class="hidden sm:block">
+    <div class="mt-4 flex flex-col">
+      <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+          <div class="shadow border-b border-gray-200 sm:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-200">
+              <tbody class="bg-white divide-y divide-gray-200">
+                <%= render partial: "coffee_shops/coffee_shop", collection: @coffee_shops, cached: true %>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
