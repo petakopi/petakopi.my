@@ -57,7 +57,9 @@
     <% if @coffee_shop.tags.any? %>
       <div class="px-4 py-5 sm:p-6">
           <% @coffee_shop.tags.each do |tag| %>
-            <%= render partial: "shared/tags/#{tag.slug.underscore}", locals: { name: tag.name } %>
+            <%= link_to "/?tags=#{tag.slug}" do %>
+              <%= render partial: "shared/tags/#{tag.slug.underscore}", locals: { name: tag.name } %>
+            <% end %>
           <% end %>
       </div>
     <% end %>
