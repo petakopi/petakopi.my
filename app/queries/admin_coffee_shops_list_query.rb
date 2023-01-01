@@ -22,8 +22,15 @@ class AdminCoffeeShopsListQuery
   )
 
   def filter_by_status
-    if params[:status].present?
-      relation.public_send(params[:status])
+    # High priority since it's submitted by a non admin and has the name
+    if params[:status].present? && params[:status] == "status_must_review"
+      relation
+        .status_unpublished
+        .where.not(name: nil)
+        .where(users: { role: nil })
+    elsif params[:status].present?
+      relation
+        .public_send(params[:status])
     else
       relation
     end

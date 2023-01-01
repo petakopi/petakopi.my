@@ -7,6 +7,12 @@ class Admin::CoffeeShopsController < AdminController
         params: params,
         relation: CoffeeShop.includes(:submitter, logo_attachment: :blob)
       )
+    @coffee_shop_statuses =
+      CoffeeShop
+        .statuses
+        .keys
+        .concat(["must_review"])
+        .map { |s| [s.titleize, "status_#{s}"] }
 
     @pagy, @coffee_shops = pagy(@coffee_shops, items: 50)
   end
