@@ -38,8 +38,6 @@
       remove(index, option) {
         this.options[option].selected = false;
         this.selected.splice(index, 1);
-
-
       },
       loadOptions() {
         const options = document.getElementById('tags').options;
@@ -50,9 +48,12 @@
             text: options[i].innerText,
             selected: options[i].getAttribute('selected') != null ? options[i].getAttribute('selected') : false
           });
+
+          if (this.options[i].selected) {
+            this.options[i].selected = true;
+            this.selected.push(i);
+          }
         }
-
-
       },
       selectedValues(){
         return this.selected.map((option)=>{
@@ -63,7 +64,17 @@
   }
 </script>
 
-<%= select_tag nil, options_from_collection_for_select(Tag.order(:position).all, :slug, :name), id: "tags", "x-cloak" => "", class: "hidden" %>
+<%= select_tag nil,
+  options_from_collection_for_select(
+    Tag.order(:position).all,
+    :slug,
+    :name,
+    params[:tags]&.split(",")
+  ),
+  id: "tags",
+  "x-cloak" => "",
+  class: "hidden"
+%>
 
 <div x-data="dropdown()" x-init="loadOptions()">
   <input name="tags" type="hidden" x-bind:value="selectedValues()">
