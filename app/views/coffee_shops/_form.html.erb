@@ -1,4 +1,4 @@
-<% selected_tab = params[:tab] == "advanced" ? 1 : 0 %>
+<% selected_tab = params[:tab] == "advanced" ? 0 : 1 %>
 
 <h2 class="text-3xl font-extrabold text-gray-900">
   New Coffee Shop
@@ -16,17 +16,12 @@
         <h3 class="text-sm font-medium text-red-800">
           There are <%= CoffeeShop.where(status: "unpublished").count  %> coffee shops waiting to be reviewed.
         </h3>
-        <div class="mt-2 text-sm text-red-700">
-          We are receiving high new coffee shop submissions from hundreds of
-          coffee lovers. It may take a while before yours are processed, but we
-          will process your form.
-        </div>
       </div>
     </div>
   </div>
 <% end %>
 
-<% unless current_user %>
+<% unless current_user&.role.present? %>
   <div class="rounded-md bg-yellow-50 p-4 mt-8">
     <div class="flex">
       <div class="flex-shrink-0">
@@ -41,12 +36,8 @@
         </h3>
         <div class="mt-2 text-sm text-yellow-700">
           <p>
-            If you submit this coffee shop without logging in, we won't be able
-            to credit you as the submitter. Please take a moment to sign in on
-            this <%= link_to "page", new_user_session_path, class: "underline" %>.
-          </p>
-          <p class="mt-2">
-            I promise it won't take more than one minute 😉
+            Please sign in <%= link_to "here", new_user_session_path, class: "underline" %>
+            to ensure we can credit you as the submitter.
           </p>
         </div>
       </div>
@@ -59,19 +50,21 @@
 </div>
 
 <div class="mt-3" x-data="Components.tabs()" @tab-click.window="onTabClick">
-  <div class="block">
-    <nav class="relative z-0 rounded-lg shadow flex divide-x divide-gray-200" aria-label="Tabs">
-      <a href="#" :class="{'text-gray-900' : selected, 'text-gray-500 hover:text-gray-700': !selected}" class="rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10" aria-current="page" @click.prevent="onClick" x-data="Components.tab(<%= selected_tab %>)" @tab-select.window="onTabSelect">
-        <span>Quick Form</span>
-        <span :class="{'bg-brown-500': selected, 'bg-transparent': !selected}" class="absolute inset-x-0 bottom-0 h-0.5"></span>
-      </a>
+  <% if current_user %>
+    <div class="block">
+      <nav class="relative z-0 rounded-lg shadow flex divide-x divide-gray-200" aria-label="Tabs">
+        <a href="#" :class="{'text-gray-900' : selected, 'text-gray-500 hover:text-gray-700': !selected}" class="rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10" aria-current="page" @click.prevent="onClick" x-data="Components.tab(<%= selected_tab %>)" @tab-select.window="onTabSelect">
+          <span>Quick Form</span>
+          <span :class="{'bg-brown-500': selected, 'bg-transparent': !selected}" class="absolute inset-x-0 bottom-0 h-0.5"></span>
+        </a>
 
-      <a href="on" :class="{'text-gray-900' : selected, 'text-gray-500 hover:text-gray-700': !selected}"  class="text-gray-500 hover:text-gray-700 group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10" @click.prevent="onClick" x-data="Components.tab(<%= selected_tab %>)" @tab-select.window="onTabSelect">
-        <span>Advanced Form <%=  %></span>
-        <span :class="{'bg-brown-500': selected, 'bg-transparent': !selected}" class="absolute inset-x-0 bottom-0 h-0.5"></span>
-      </a>
-    </nav>
-  </div>
+        <a href="on" :class="{'text-gray-900' : selected, 'text-gray-500 hover:text-gray-700': !selected}"  class="text-gray-500 hover:text-gray-700 group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10" @click.prevent="onClick" x-data="Components.tab(<%= selected_tab %>)" @tab-select.window="onTabSelect">
+          <span>Advanced Form <%=  %></span>
+          <span :class="{'bg-brown-500': selected, 'bg-transparent': !selected}" class="absolute inset-x-0 bottom-0 h-0.5"></span>
+        </a>
+      </nav>
+    </div>
+  <% end %>
 
   <div x-data="Components.tabPanel(<%= selected_tab %>)" x-init="init()" @tab-select.window="onTabSelect" x-show="selected">
     <div class="bg-white overflow-hidden shadow rounded-lg mt-2">
