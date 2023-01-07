@@ -1,28 +1,4 @@
 <% unless turbo_native_app? %>
-  <div class="bg-white shadow sm:rounded-lg">
-    <div class="px-4 py-5 sm:p-6">
-      <div class="sm:flex sm:items-start sm:justify-between">
-        <div>
-          <h3 class="text-lg leading-6 font-medium text-gray-900">
-            Still looking for a place to have a great coffee?
-          </h3>
-          <div class="mt-2 max-w-xl text-sm text-gray-500">
-            <p>
-              The community has this covered with <a href="/">petakopi.my</a>.
-              We are listing all freshly brewed coffee in Malaysia. Help us to
-              achieve that by submitting your favourite coffee place now.
-            </p>
-          </div>
-        </div>
-        <div class="mt-5 sm:mt-0 sm:ml-6 sm:flex-shrink-0 sm:flex sm:items-center">
-          <a href="<%= new_coffee_shop_path %>" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500 sm:text-sm">
-            Share My Coffee Place
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <%= render partial: "shared/ads" %>
 <% end %>
 
