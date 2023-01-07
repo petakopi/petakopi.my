@@ -4,5 +4,7 @@
 
   <body class="h-full bg-brown-100 bg-opacity-5">
     <%= yield %>
+
+    <%= yield(:js) if content_for?(:js) %>
   </body>
 </html>

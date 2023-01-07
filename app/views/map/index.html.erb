@@ -4,7 +4,7 @@
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet" />
 <% end %>
 
-<div id="map" style="height: 500px" class="mt-4"></div>
+<div id="map" style="<%= turbo_native_app? ? "position: absolute; top: 0; bottom: 0; width: 100%" : "height: 500px" %>"></div>
 
 <%= content_for :js do %>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
@@ -158,6 +158,9 @@
       map.on("mouseleave", "clusters", () => {
         map.getCanvas().style.cursor = ""
       })
+
+
+      setTimeout(() => this.map.resize(), 0);
     })
   </script>
 
