@@ -50,7 +50,7 @@
         </div>
       </div>
 
-      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }, data: { turbo: false }) do |f| %>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |f| %>
         <div>
           <%= f.label :email, class: "block text-sm font-medium text-gray-700" do %>
             Email address
