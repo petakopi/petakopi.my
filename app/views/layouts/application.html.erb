@@ -3,7 +3,7 @@
   <%= render "layouts/head" %>
 
   <body class="bg-brown-100 bg-opacity-5">
-    <%= render "layouts/header" %>
+    <%= render "layouts/header" unless turbo_native_app? %>
 
     <div class="mx-auto lg:max-w-7xl px-4 lg:px-8">
       <div class"mt-2 text-center text-sm text-gray-600">
