@@ -8,7 +8,11 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :coffee_shops
+    resources :coffee_shops do
+      member do
+        post "duplicate"
+      end
+    end
   end
 
   get "directories/:state(/:district)" => "directories#index", as: "directories"

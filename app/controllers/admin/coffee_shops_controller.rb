@@ -1,5 +1,5 @@
 class Admin::CoffeeShopsController < AdminController
-  before_action :set_coffee_shop, only: %i[show edit update]
+  before_action :set_coffee_shop, only: %i[show edit update duplicate]
 
   def index
     @coffee_shops =
@@ -42,10 +42,16 @@ class Admin::CoffeeShopsController < AdminController
   def show
   end
 
+  def duplicate
+    dup = DuplicateCoffeeShop.call(coffee_shop: @coffee_shop)
+
+    redirect_to edit_admin_coffee_shop_path(dup)
+  end
+
   private
 
   def set_coffee_shop
-    @coffee_shop = CoffeeShop.find(params[:id])
+    @coffee_shop = CoffeeShop.includes(:tags).find(params[:id])
   end
 
   def coffee_shop_params
