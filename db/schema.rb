@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_24_065748) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_12_024343) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pageinspect"
   enable_extension "plpgsql"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
@@ -101,6 +102,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_24_065748) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_auth_providers_on_user_id"
+  end
+
+  create_table "check_ins", force: :cascade do |t|
+    t.bigint "coffee_shop_id", null: false
+    t.bigint "user_id", null: false
+    t.decimal "lat"
+    t.decimal "lng"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coffee_shop_id"], name: "index_check_ins_on_coffee_shop_id"
+    t.index ["user_id"], name: "index_check_ins_on_user_id"
   end
 
   create_table "coffee_shop_owners", force: :cascade do |t|
@@ -200,6 +212,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_24_065748) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "auth_providers", "users"
+  add_foreign_key "check_ins", "coffee_shops"
+  add_foreign_key "check_ins", "users"
   add_foreign_key "coffee_shop_owners", "coffee_shops"
   add_foreign_key "coffee_shop_owners", "users"
   add_foreign_key "coffee_shop_tags", "coffee_shops"

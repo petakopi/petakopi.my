@@ -30,6 +30,7 @@ class CoffeeShop < ApplicationRecord
   has_many :tags, through: :coffee_shop_tags
   has_many :coffee_shop_owners
   has_many :owners, through: :coffee_shop_owners, source: :user
+  has_many :check_ins, dependent: :destroy
 
   has_one_attached :logo
   has_many :favourites
