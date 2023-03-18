@@ -1,0 +1,24 @@
+<% if current_user && current_user.checked_in?(coffee_shop) %>
+  <div class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500 lg:w-fit whitespace-nowrap">
+    Checked In
+  </div>
+<% else %>
+  <%= turbo_frame_tag "#{dom_id(coffee_shop)}_check_in" do %>
+    <%= form_with scope: :check_in, url: coffee_shop_check_ins_path(coffee_shop), data: { controller: "check-in" } do |form| %>
+      <%= form.hidden_field :lat, data: { "check-in-target": "lat" } %>
+      <%= form.hidden_field :lng, data: { "check-in-target": "lng" } %>
+      <%= form.button nil,
+        type: "button",
+        class: "inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500 lg:w-fit whitespace-nowrap",
+        data: { action: "click->check-in#submit" } do
+      %>
+        <svg data-check-in-target="loadingIcon" class="hidden -ml-1 mr-2 h-4 w-4 text-brown-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span data-check-in-target="loadingText">Check In</span>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+

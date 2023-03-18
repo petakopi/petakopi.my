@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     end
 
     resources :favourites, only: [:create, :destroy]
+    resources :check_ins, only: [:create]
   end
   resources :users, path: "u", only: [:show, :edit, :update]
 

@@ -7,7 +7,9 @@ import { application } from "./application"
 import SelectController from "./select_controller.js"
 import TrackerController from "./tracker_controller.js"
 import MapLoaderController from "./map_loader_controller.js"
+import CheckInController from "./check_in_controller.js"
 
 application.register("select", SelectController)
 application.register("tracker", TrackerController)
 application.register("map-loader", MapLoaderController)
+application.register("check-in", CheckInController)
