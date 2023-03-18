@@ -23,8 +23,6 @@ class CheckIn < ApplicationRecord
   def check_in_once_per_day
     return unless user.checked_in?(coffee_shop)
 
-    require 'pry'; binding.pry
-
     errors.add(:base, "You have already checked in today")
   end
 end
