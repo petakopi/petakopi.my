@@ -10,7 +10,7 @@
       <%= form.button nil,
         type: "button",
         class: "inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500 lg:w-fit whitespace-nowrap",
-        data: { action: "click->check-in#submit" } do
+        data: { action: "click->check-in#submit", "check-in-target": "submitBtn" } do
       %>
         <svg data-check-in-target="loadingIcon" class="hidden -ml-1 mr-2 h-4 w-4 text-brown-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

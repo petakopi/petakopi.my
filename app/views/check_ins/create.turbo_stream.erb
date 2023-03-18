@@ -1,0 +1,31 @@
+<%=
+  turbo_stream.replace(
+    "#{dom_id(@coffee_shop)}_check_in",
+    partial: "coffee_shops/check_in",
+    locals: {coffee_shop: @coffee_shop}
+  )
+%>
+
+<% if @check_in.persisted? %>
+  <%=
+    turbo_stream.replace(
+      "toast",
+      partial: "shared/toast",
+      locals: {
+        type: "success",
+        message: "You just checked in for today!"
+      }
+    )
+  %>
+<% else %>
+  <%=
+    turbo_stream.replace(
+      "toast",
+      partial: "shared/toast",
+      locals: {
+        type: "error",
+        message: @check_in.errors.full_messages.first
+      }
+    )
+  %>
+<% end %>

@@ -2,6 +2,8 @@
 <%= content_for(:page_image) { rails_public_blob_url(@coffee_shop.logo) } if @coffee_shop.logo.attached? %>
 <%= content_for(:page_description) { "#{@coffee_shop.name} in #{@coffee_shop.district}, #{@coffee_shop.state}" } %>
 
+<div id="toast"></div>
+
 <div class="mt-8 grid grid-cols-1 gap-2">
   <div class="flex space-x-4">
     <% if @coffee_shop.logo.attached? %>

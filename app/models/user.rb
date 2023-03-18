@@ -46,7 +46,10 @@ class User < ApplicationRecord
 
   def checked_in?(coffee_shop)
     check_ins
-      .where(coffee_shop: coffee_shop, created_at: Time.current.beginning_of_day..Time.current.end_of_day)
+      .where(
+        coffee_shop: coffee_shop,
+        created_at: Time.current.beginning_of_day..Time.current.end_of_day
+      )
       .exists?
   end
 end

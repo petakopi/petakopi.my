@@ -6,13 +6,14 @@ export default class extends Controller {
     "lng",
     "loadingIcon",
     "loadingText",
+    "submitBtn",
   ]
 
   submit(_e) {
     this.loadingIconTarget.classList.remove("hidden")
     this.loadingIconTarget.classList.add("animate-spin")
     this.loadingTextTarget.innerText = "Checking..."
-    this.element.disable = true
+    this.submitBtnTarget.disabled = true
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -26,7 +27,7 @@ export default class extends Controller {
           this.loadingIconTarget.classList.add("hidden")
           this.loadingIconTarget.classList.remove("animate-spin")
           this.loadingTextTarget.innerText = "Check In"
-          this.element.disable = false
+          this.submitBtnTarget.disabled = false
 
           switch (error.code) {
             case error.PERMISSION_DENIED:
