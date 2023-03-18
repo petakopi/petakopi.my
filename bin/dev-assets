@@ -1,0 +1,1 @@
+foreman start -f Procfile.dev -m "css=1,js=1"
