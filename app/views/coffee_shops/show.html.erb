@@ -2,7 +2,11 @@
 <%= content_for(:page_image) { rails_public_blob_url(@coffee_shop.logo) } if @coffee_shop.logo.attached? %>
 <%= content_for(:page_description) { "#{@coffee_shop.name} in #{@coffee_shop.district}, #{@coffee_shop.state}" } %>
 
-<div id="toast"></div>
+<div id="toast"><!-- Will be replaced with alert from Turbo Stream --></div>
+
+<% if current_user&.id == 1 %>
+  <%= render partial: "float_bar", locals: { coffee_shop: @coffee_shop, current_user: current_user } %>
+<% end %>
 
 <div class="mt-8 grid grid-cols-1 gap-2">
   <div class="flex space-x-4">
@@ -31,12 +35,6 @@
       <div class="text-xs">
         <%= @coffee_shop.location_full_url %>
       </div>
-
-      <% if current_user&.id == 1 %>
-        <div class="mt-2">
-          <%= render partial: "coffee_shops/check_in", locals: { coffee_shop: @coffee_shop, user: current_user } %>
-        </div>
-      <% end %>
 
       <div class="mt-2 grid grid-cols-5 md:grid-cols-none md:flex gap-2">
         <%= render partial: "coffee_shops/favourites", locals: { coffee_shop: @coffee_shop, user: current_user } %>
@@ -113,4 +111,3 @@
     <% end %>
   </div>
 </div>
-

@@ -1,5 +1,5 @@
 <% if current_user && current_user.checked_in?(coffee_shop) %>
-  <div class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500 lg:w-fit whitespace-nowrap">
+  <div class="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-300 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 rounded-r-full">
     Checked In
   </div>
 <% else %>
@@ -9,7 +9,7 @@
       <%= form.hidden_field :lng, data: { "check-in-target": "lng" } %>
       <%= form.button nil,
         type: "button",
-        class: "inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500 lg:w-fit whitespace-nowrap",
+        class: "relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 rounded-r-full",
         data: { action: "click->check-in#submit", "check-in-target": "submitBtn" } do
       %>
         <svg data-check-in-target="loadingIcon" class="hidden -ml-1 mr-2 h-4 w-4 text-brown-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -21,4 +21,3 @@
     <% end %>
   <% end %>
 <% end %>
-
