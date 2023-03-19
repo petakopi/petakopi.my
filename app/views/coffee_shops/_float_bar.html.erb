@@ -1,6 +1,6 @@
 <div class="inset-x-0 bottom-0 fixed mb-10 flex justify-center">
   <div class="isolate inline-flex rounded-full shadow-md shadow-brown-100">
-    <button type="button" class="relative inline-flex items-center rounded-l-full bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">Fav</button>
+    <%= render partial: "coffee_shops/favourites", locals: { coffee_shop: coffee_shop } %>
     <%= render partial: "coffee_shops/check_in", locals: { coffee_shop: coffee_shop } %>
   </div>
 </div>
