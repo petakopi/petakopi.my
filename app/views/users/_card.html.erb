@@ -2,16 +2,18 @@
   <div class="space-y-6 lg:col-start-1 lg:col-span-2">
     <section aria-labelledby="applicant-information-title">
       <div class="bg-white shadow sm:rounded-lg">
-        <div class="px-4 py-5 sm:px-6">
-          <h2 id="applicant-information-title" class="text-lg leading-6 font-medium text-gray-900">
-            <%= title %>
-          </h2>
-          <% if local_assigns[:description] %>
-            <p class="mt-1 max-w-2xl text-sm text-gray-500">
-              <%= description %>
-            </p>
-          <% end %>
-        </div>
+        <% if local_assigns[:title] %>
+          <div class="px-4 py-5 sm:px-6">
+            <h2 id="applicant-information-title" class="text-lg leading-6 font-medium text-gray-900">
+              <%= title %>
+            </h2>
+            <% if local_assigns[:description] %>
+              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                <%= description %>
+              </p>
+            <% end %>
+          </div>
+        <% end %>
         <div class="border-t border-gray-200 px-4 py-5 sm:px-6 md:flex md:flex-wrap">
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <%= yield %>

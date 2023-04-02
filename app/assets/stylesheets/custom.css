@@ -6,7 +6,6 @@ trix-editor {
 }
 
 /* Article - https://bitsofco.de/github-contribution-graph-css-grid/ */
-
 /* Grid-related CSS */
 
 :root {
@@ -53,20 +52,6 @@ trix-editor {
 .squares {
   grid-auto-flow: column;
   grid-auto-columns: var(--square-size);
-}
-
-
-/* Other styling */
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 12px;
-}
-
-.graph {
-  padding: 20px;
-  border: 1px #e1e4e8 solid;
-  margin: 20px;
 }
 
 .days li:nth-child(odd) {

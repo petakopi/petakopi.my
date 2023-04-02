@@ -15,6 +15,15 @@ class UsersController < ApplicationController
         .status_published
         .includes(logo_attachment: :blob)
         .order(approved_at: :desc)
+
+    check_in_range = (1.year.ago + 1.day).to_date..Date.today
+    @check_ins =
+      CheckIn
+        .where(user: @user)
+        .group_by_day(:created_at, range: check_in_range, format: "%e %b %y")
+        .count
+
+    @check_in_months = check_in_range.map{ |date| date.strftime("%B") }.uniq
   end
 
   def edit
