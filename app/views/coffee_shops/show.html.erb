@@ -4,9 +4,7 @@
 
 <div id="toast"><!-- Will be replaced with alert from Turbo Stream --></div>
 
-<% if current_user&.id == 1 %>
-  <%= render partial: "float_bar", locals: { coffee_shop: @coffee_shop, current_user: current_user } %>
-<% end %>
+<%= render partial: "float_bar", locals: { coffee_shop: @coffee_shop, current_user: current_user } %>
 
 <div class="mt-8 grid grid-cols-1 gap-2">
   <div class="flex space-x-4">
