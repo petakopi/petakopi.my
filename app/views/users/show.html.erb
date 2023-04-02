@@ -21,10 +21,10 @@
     <div class="graph text-xs overflow-x-auto overflow-y-hidden md:overflow-visible">
       <ul class="months">
         <% @check_in_months.each do |month| %>
-          <li><%= month %></li>
+          <li class="text-gray-700"><%= month %></li>
         <% end %>
       </ul>
-      <ul class="days">
+      <ul class="days text-gray-700">
         <li>Sun</li>
         <li>Mon</li>
         <li>Tue</li>
@@ -33,21 +33,14 @@
         <li>Fri</li>
         <li>Sat</li>
       </ul>
-      <ul x-data="{tooltip: null}" class="squares">
+      <ul class="squares">
         <% @check_ins.each do |date, count| %>
-          <% key = date.to_date.iso8601 %>
           <li
+            x-data="{tooltip: '<%= "#{count.positive? ? count : "No"} check ins on #{date}" %>'}"
+            x-tooltip="tooltip"
             class="cursor-pointer"
-            @click="tooltip = '<%= key %>'"
             data-level="<%= count %>"
           >
-            <div
-              x-show="tooltip === '<%= key %>'"
-              style="display: none"
-              class="absolute text-white bg-blue-400 rounded-lg p-2 transform -translate-y-8 translate-x-8"
-            >
-              <%= "#{count} on #{date}" %>
-            </div>
           </li>
         <% end %>
       </ul>
