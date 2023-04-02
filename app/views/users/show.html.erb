@@ -36,7 +36,7 @@
       <ul class="squares">
         <% @check_ins.each do |date, count| %>
           <li
-            x-data="{tooltip: '<%= "#{count.positive? ? count : "No"} check ins on #{date}" %>'}"
+            x-data="{tooltip: '<%= "#{count.positive? ? count : "No"} check #{"in".pluralize(count)} on #{date}" %>'}"
             x-tooltip="tooltip"
             class="cursor-pointer"
             data-level="<%= count %>"
