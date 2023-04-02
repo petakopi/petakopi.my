@@ -9,6 +9,12 @@ class CoffeeShopsController < ApplicationController
   def show
     @coffee_shop = ActiveDecorator::Decorator.instance.decorate(@coffee_shop)
 
+    last_7_days_check_ins = CheckIn.includes(:user).where(created_at: 7.days.ago.., coffee_shop: @coffee_shop)
+    @check_ins = {
+      count: last_7_days_check_ins.count,
+      users: last_7_days_check_ins.order(created_at: :desc).limit(4).map(&:user)
+    }
+
     ahoy.track "View Coffee Shop", id: @coffee_shop.id, name: @coffee_shop.name
   end
 
