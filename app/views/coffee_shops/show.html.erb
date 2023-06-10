@@ -34,18 +34,18 @@
         <%= @coffee_shop.location_full_url %>
       </div>
 
-      <% if @check_ins[:count].positive? %>
+      <% if @coffee_shop.check_ins[:count].positive? %>
         <div class="mt-2 flex">
           <div class="flex -space-x-1.5">
-            <% @check_ins[:users].each do |user| %>
+            <% @coffee_shop.check_ins[:users].each do |user| %>
               <% next unless user.avatar.attached? %>
               <%= image_tag rails_public_blob_url(user.avatar), class: "rounded-full ring-brown ring-1 w-5 h-5" %>
             <% end %>
-            <% if @check_ins[:count] >= 5 %>
+            <% if @coffee_shop.check_ins[:count] >= 5 %>
               <div
                 class="flex items-center justify-center rounded-full ring-1 ring-brown-400 w-5 h-5 bg-gray-300 font-semibold text-white text-xs"
               >
-                +<%=@check_ins[:count] -4 %>
+                +<%=@coffee_shop.check_ins[:count] -4 %>
               </div>
             <% end %>
           </div>
