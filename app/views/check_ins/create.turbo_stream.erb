@@ -6,6 +6,14 @@
   )
 %>
 
+<%=
+  turbo_stream.replace(
+    "#{dom_id(@coffee_shop)}_check_in_info",
+    partial: "coffee_shops/check_in_info",
+    locals: {coffee_shop: @coffee_shop}
+  )
+%>
+
 <% if @check_in.persisted? %>
   <%=
     turbo_stream.replace(

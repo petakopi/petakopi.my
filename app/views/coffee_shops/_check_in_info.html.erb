@@ -1,0 +1,20 @@
+<%= turbo_frame_tag "#{dom_id(coffee_shop)}_check_in_info" do %>
+  <% if coffee_shop.check_ins[:count].positive? %>
+    <div class="mt-2 flex">
+      <div class="flex -space-x-1.5">
+        <% coffee_shop.check_ins[:users].each do |user| %>
+          <% next unless user.avatar.attached? %>
+          <%= image_tag rails_public_blob_url(user.avatar), class: "rounded-full ring-brown ring-1 w-5 h-5" %>
+        <% end %>
+        <% if coffee_shop.check_ins[:count] >= 5 %>
+          <div
+              class="flex items-center justify-center rounded-full ring-1 ring-brown-400 w-5 h-5 bg-gray-300 font-semibold text-white text-xs"
+              >
+              +<%=coffee_shop.check_ins[:count] -4 %>
+          </div>
+        <% end %>
+      </div>
+      <span class="ml-2 text-xs flex items-center text-gray-700">has checked in here</span>
+    </div>
+  <% end %>
+<% end %>
