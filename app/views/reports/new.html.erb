@@ -1,0 +1,68 @@
+<%= turbo_frame_tag "report" do %>
+  <div id="report" x-data="{show: true}" x-show="show">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-[100]"></div>
+    <div class="pointer-events-none fixed inset-x-0 top-0 flex items-end px-4 py-6 sm:items-start sm:p-6 z-[100]">
+      <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+        <div
+          x-show="show"
+          x-transition:enter="transform ease-out duration-300 transition"
+          x-transition:enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+          x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
+          x-transition:leave="transition ease-in duration-100"
+          x-transition:leave-start="opacity-100"
+          x-transition:leave-end="opacity-0"
+          class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+          <div class="p-4 bg-white opacity-90">
+            <div class="flex items-start">
+              <div class="ml-3 w-0 flex-1 pt-0.5">
+                <p class="text-md font-medium text-gray-900">Create New Report</p>
+                <p class="mt-1 text-sm text-gray-500">
+
+            <%= form_for :report, url: coffee_shop_reports_path(coffee_shop_id: @coffee_shop) do |f| %>
+                <div class="space-y-6 sm:space-y-5">
+                  <div>
+                    <p class="mt-2 text-sm text-gray-500">
+                      Found problems with the data? Let us know! It will help us to
+                      improve the data quality.
+                    </p>
+                  </div>
+
+                  <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                    <div class="sm:col-span-2">
+                      <label for="email" class="block text-sm font-semibold leading-6 text-gray-900">Email</label>
+                      <div class="mt-2.5">
+                        <input type="email" name="email" id="email" autocomplete="email" value="<%= current_user&.email %>" placeholder="Your email so that we can thank you" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brown-600 text-sm sm:leading-6">
+                      </div>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                      <label for="message" class="block text-sm font-semibold leading-6 text-gray-900">Message</label>
+                      <div class="mt-2.5">
+                        <textarea name="message" id="message" rows="8" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brown-600 text-sm sm:leading-6"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-10">
+                    <button type="submit" class="block w-full rounded-md bg-brown-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-brown-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brown-600">Submit Report</button>
+                  </div>
+                </div>
+
+            <% end %>
+
+                </p>
+              </div>
+
+              <div class="ml-4 flex flex-shrink-0">
+                <button @click="show = false" type="button" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brown-500 focus:ring-offset-2">
+                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

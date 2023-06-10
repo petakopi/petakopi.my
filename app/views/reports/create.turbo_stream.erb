@@ -1,0 +1,12 @@
+<%= turbo_stream.update "report", "" %>
+
+<%=
+  turbo_stream.replace(
+    "toast",
+    partial: "shared/toast",
+    locals: {
+      type: "success",
+      message: "We sincerely appreciate your report. Your input is invaluable to us, and we can't fully express our gratitude in words.<br><br>Rest assured, we will promptly review your report and take necessary actions. Thank you once again for your contribution."
+    }
+  )
+%>

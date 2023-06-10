@@ -51,6 +51,7 @@ Rails.application.routes.draw do
 
     resources :favourites, only: [:create, :destroy]
     resources :check_ins, only: [:create]
+    resources :reports, only: [:new, :create]
   end
   resources :users, path: "u", only: [:show, :edit, :update]
 

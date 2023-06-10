@@ -132,6 +132,25 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    dry-core (1.0.0)
+      concurrent-ruby (~> 1.0)
+      zeitwerk (~> 2.6)
+    dry-inflector (1.0.0)
+    dry-logic (1.5.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.0, < 2)
+      zeitwerk (~> 2.6)
+    dry-struct (1.6.0)
+      dry-core (~> 1.0, < 2)
+      dry-types (>= 1.7, < 2)
+      ice_nine (~> 0.11)
+      zeitwerk (~> 2.6)
+    dry-types (1.7.1)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.0)
+      dry-inflector (~> 1.0)
+      dry-logic (~> 1.4)
+      zeitwerk (~> 2.6)
     errbase (0.2.2)
     erubi (1.12.0)
     et-orbi (1.2.7)
@@ -140,6 +159,8 @@ GEM
     faraday (2.2.0)
       faraday-net_http (~> 2.0)
       ruby2_keywords (>= 0.0.4)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
     faraday-net_http (2.0.1)
     ffi (1.15.5)
     fspath (3.1.2)
@@ -156,6 +177,7 @@ GEM
     httpclient (2.8.3)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
+    ice_nine (0.11.2)
     image_optim (0.31.1)
       exifr (~> 1.2, >= 1.2.2)
       fspath (~> 3.0)
@@ -197,6 +219,7 @@ GEM
     msgpack (1.5.4)
     multi_json (1.15.0)
     multi_xml (0.6.0)
+    multipart-post (2.3.0)
     net-imap (0.3.4)
       date
       net-protocol
@@ -352,6 +375,11 @@ GEM
       rubocop-performance (= 1.13.3)
     stimulus-rails (1.0.4)
       railties (>= 6.0.0)
+    telegram-bot-ruby (1.0.0)
+      dry-struct (~> 1.6)
+      faraday (~> 2.0)
+      faraday-multipart (~> 1.0)
+      zeitwerk (~> 2.6)
     thor (1.2.1)
     timeout (0.3.2)
     tinify (1.5.1)
@@ -430,6 +458,7 @@ DEPENDENCIES
   sprockets-rails
   standard
   stimulus-rails
+  telegram-bot-ruby
   tinify
   tomo-plugin-sidekiq
   turbo-rails
