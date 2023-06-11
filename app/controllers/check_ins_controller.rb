@@ -8,8 +8,8 @@ class CheckInsController < ApplicationController
       CheckIn.create(
         check_in_params.merge(
           user: current_user,
-          coffee_shop: @coffee_shop,
-          )
+          coffee_shop: @coffee_shop
+        )
       )
   end
 

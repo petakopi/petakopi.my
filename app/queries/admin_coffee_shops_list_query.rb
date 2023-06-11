@@ -27,7 +27,7 @@ class AdminCoffeeShopsListQuery
       relation
         .status_unpublished
         .where.not(name: nil)
-        .where(users: { role: nil })
+        .where(users: {role: nil})
     elsif params[:status].present?
       relation
         .public_send(params[:status])

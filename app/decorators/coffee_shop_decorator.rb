@@ -52,10 +52,10 @@ module CoffeeShopDecorator
         last_7_days_check_ins.count,
       users:
         last_7_days_check_ins
-        .order(created_at: :desc)
-        .limit(4)
-        .map(&:user)
-        .uniq { |u| u.id }
+          .order(created_at: :desc)
+          .limit(4)
+          .map(&:user)
+          .uniq { |u| u.id }
     }
   end
 end

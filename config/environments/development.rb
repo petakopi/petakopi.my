@@ -62,7 +62,7 @@ Rails.application.configure do
   config.assets.quiet = true
 
   config.action_mailer.delivery_method = :postmark
-  config.action_mailer.default_url_options = { host: "kopi.localhost", port: 3000 }
+  config.action_mailer.default_url_options = {host: "kopi.localhost", port: 3000}
   config.action_mailer.perform_deliveries = true
   config.action_mailer.postmark_settings = {
     api_token: Rails.application.credentials.postmark_api_token

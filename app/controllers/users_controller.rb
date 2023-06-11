@@ -23,7 +23,7 @@ class UsersController < ApplicationController
         .group_by_day(:created_at, range: check_in_range, format: "%A, %B %e, %Y")
         .count
 
-    @check_in_months = check_in_range.map{ |date| date.strftime("%B") }.uniq
+    @check_in_months = check_in_range.map { |date| date.strftime("%B") }.uniq
   end
 
   def edit

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+  devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks"}
 
   authenticate :user, ->(user) { user.admin? } do
     require "sidekiq/web"
@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get "directories/:state(/:district)" => "directories#index", as: "directories"
+  get "directories/:state(/:district)" => "directories#index", :as => "directories"
 
   resources :locations do
     collection do
