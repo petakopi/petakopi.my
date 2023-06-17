@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_12_024343) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_17_130031) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pageinspect"
   enable_extension "plpgsql"
@@ -147,6 +147,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_024343) do
     t.datetime "approved_at"
     t.string "lat"
     t.string "lng"
+    t.string "google_place_id"
     t.index ["slug"], name: "index_coffee_shops_on_slug", unique: true
     t.index ["status"], name: "index_coffee_shops_on_status"
     t.index ["submitter_user_id"], name: "index_coffee_shops_on_submitter_user_id"
