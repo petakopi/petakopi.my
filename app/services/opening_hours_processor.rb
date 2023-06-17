@@ -9,6 +9,8 @@ class OpeningHoursProcessor
     CoffeeShop.transaction do
       OpeningHour.where(coffee_shop: @coffee_shop).delete_all
 
+      return if hours.blank?
+
       hours.each do |hour|
         @coffee_shop.opening_hours.create!(
           open_day: hour["open"]["day"],
