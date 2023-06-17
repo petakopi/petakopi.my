@@ -132,6 +132,8 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    domain_name (0.5.20190701)
+      unf (>= 0.0.5, < 1.0.0)
     dry-core (1.0.0)
       concurrent-ruby (~> 1.0)
       zeitwerk (~> 2.6)
@@ -163,6 +165,9 @@ GEM
       multipart-post (~> 2)
     faraday-net_http (2.0.1)
     ffi (1.15.5)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
     fspath (3.1.2)
     fugit (1.7.2)
       et-orbi (~> 1, >= 1.2.7)
@@ -174,6 +179,14 @@ GEM
       activesupport (>= 5.2)
     hashie (5.0.0)
     hiredis (0.6.3)
+    http (5.1.1)
+      addressable (~> 2.8)
+      http-cookie (~> 1.0)
+      http-form_data (~> 2.2)
+      llhttp-ffi (~> 0.4.0)
+    http-cookie (1.0.5)
+      domain_name (~> 0.5)
+    http-form_data (2.3.0)
     httpclient (2.8.3)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
@@ -203,6 +216,9 @@ GEM
       railties (>= 6.0.0)
     json (2.6.3)
     jwt (2.3.0)
+    llhttp-ffi (0.4.0)
+      ffi-compiler (~> 1.0)
+      rake (~> 13.0)
     loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -399,6 +415,9 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.8.2)
     unicode-display_width (2.1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -437,6 +456,7 @@ DEPENDENCIES
   geocoder
   groupdate
   hiredis
+  http
   image_optim
   image_optim_pack
   image_processing (>= 1.2)

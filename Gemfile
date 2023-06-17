@@ -15,6 +15,7 @@ gem "devise" # authentication
 gem "geocoder" # geocoding for ahoy
 gem "groupdate" # active record helper to group by date/time
 gem "hiredis" # redis adapter
+gem "http" # http client
 gem "image_optim" # Image optimization
 gem "image_optim_pack" # Image optimization
 gem "image_processing", ">= 1.2" # Image processor
