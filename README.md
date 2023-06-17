@@ -17,6 +17,31 @@ for moderators on how to verify the data.
 
 ## Development
 
+
+## Reports
+
+Use [metabase.com](https://metabase.com)
+
+```
+# Pull for the first time
+docker pull metabase/metabase:latest
+
+# Run on port 12345
+docker run -d -p 12345:3000 --name metabase metabase/metabase
+
+# See the logs
+docker logs -f metabase
+
+# Setup SSH Tunnel
+ssh -N -L 5454:localhost:5432 deployer@petakopi
+
+# Add database
+psql -U petakopi -h localhost -p 5454 -d petakopi
+
+# Get the password
+tomo env:show
+````
+
 ## DISCLAIMER
 
 This is not how I usually code, just saying 😛
