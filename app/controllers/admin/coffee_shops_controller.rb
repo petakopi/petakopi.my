@@ -49,6 +49,10 @@ class Admin::CoffeeShopsController < AdminController
   end
 
   def sync_opening_hours
+    if coffee_shop.google_place_id.blank?
+      GooglePlaceIdProcessor.call(coffee_shop: coffee_shop)
+    end
+
     OpeningHoursProcessor.call(coffee_shop: @coffee_shop)
 
     redirect_to admin_coffee_shop_url(@coffee_shop),
