@@ -60,9 +60,11 @@ class CoffeeShopsController < ApplicationController
   private
 
   def set_coffee_shop
+    coffee_shop = CoffeeShop.includes(:opening_hours)
+
     @coffee_shop =
-      CoffeeShop.find_by(slug: params[:id]) ||
-      CoffeeShop.find(params[:id].to_i)
+      coffee_shop.find_by(slug: params[:id]) ||
+      coffee_shop.find(params[:id].to_i)
   end
 
   def set_coffee_shop_by_current_user

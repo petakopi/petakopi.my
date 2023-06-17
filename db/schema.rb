@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_17_130031) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_17_140917) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pageinspect"
   enable_extension "plpgsql"
@@ -171,6 +171,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_17_130031) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "opening_hours", force: :cascade do |t|
+    t.bigint "coffee_shop_id", null: false
+    t.integer "open_day", null: false
+    t.string "open_time", null: false
+    t.integer "close_day", null: false
+    t.string "close_time", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coffee_shop_id"], name: "index_opening_hours_on_coffee_shop_id"
+  end
+
   create_table "tags", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -222,4 +233,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_17_130031) do
   add_foreign_key "coffee_shops", "users", column: "submitter_user_id"
   add_foreign_key "favourites", "coffee_shops"
   add_foreign_key "favourites", "users"
+  add_foreign_key "opening_hours", "coffee_shops"
 end

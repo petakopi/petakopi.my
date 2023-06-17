@@ -69,12 +69,59 @@
     <% end %>
   </div>
 
+  <% if @coffee_shop.opening_hours.exists? %>
+    <div class="mt-2 bg-white overflow-hidden shadow rounded-lg">
+      <div class="p-4 pt-5 sm:p-6">
+        <div class="sm:flex sm:items-center">
+          <div class="sm:flex-auto">
+            <h1 class="text-base font-semibold leading-6 text-gray-900">
+              Opening Hours
+            </h1>
+          </div>
+        </div>
+        <div class="mt-2 flow-root">
+          <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+              <table class="min-w-full divide-y divide-gray-300">
+                <thead>
+                  <tr class="divide-x divide-gray-200">
+                    <th scope="col" class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-0">Day</th>
+                    <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Open</th>
+                    <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Close</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                  <% @coffee_shop.opening_hours.each_with_index do |open_hour, i| %>
+                    <tr class="divide-x divide-gray-200">
+                      <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">
+                        <% if @coffee_shop.opening_hours[i-1]&.open_day_text != open_hour.open_day_text %>
+                          <%= open_hour.open_day_text %>
+                        <% end %>
+                      </td>
+                      <td class="whitespace-nowrap p-4 text-sm text-gray-500">
+                        <%= open_hour.open_time_text %>
+                      </td>
+                      <td class="whitespace-nowrap p-4 text-sm text-gray-500">
+                        <%= open_hour.close_time_text %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+
   <% if @coffee_shop.google_embed %>
     <div
       data-controller="map-loader"
       data-map-loader-src-value="<%= @coffee_shop.google_embed %>"
       data-map-loader-gmap-value="<%= @coffee_shop.google_map %>"
-      class="bg-white overflow-hidden shadow rounded-lg"
+      class="mt-2 bg-white overflow-hidden shadow rounded-lg"
     >
       <div class="px-4 py-5 sm:p-6 h-[300px]">
         <div

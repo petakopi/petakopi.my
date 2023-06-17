@@ -33,6 +33,7 @@ class CoffeeShop < ApplicationRecord
   has_many :check_ins, dependent: :destroy
   has_many :favourites
   has_many :favourite_users, through: :favourites, source: :user
+  has_many :opening_hours
 
   has_one_attached :logo
 
