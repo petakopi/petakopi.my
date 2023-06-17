@@ -2,7 +2,7 @@ class SyncsController < ApplicationController
   before_action :set_coffee_shop
 
   def opening_hours
-    if @coffee_shop.opening_hours.order(updated_at: :desc).first&.updated_at&.to_date == Date.today
+    if @coffee_shop.opening_hours.order(updated_at: :desc).first&.updated_at&.to_date == Time.current.to_date
       redirect_to @coffee_shop, alert: "You are allowed to sync only once a day"
     end
 
