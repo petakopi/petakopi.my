@@ -58,13 +58,13 @@
           Links
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-        <div class="flex space-y-2 flex-col lg:flex-row lg:items-center lg:space-x-2 lg:space-y-0">
-            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :google_map, type: "button" %>
-            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :instagram_url, type: "button" %>
-            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :facebook_url, type: "button" %>
-            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :twitter_url, type: "button" %>
-            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :tiktok_url, type: "button" %>
-            <%= render "coffee_shops/link", coffee_shop: @coffee_shop, link: :whatsapp_url, type: "button" %>
+          <div class="flex space-y-2 flex-col lg:flex-row lg:items-center lg:space-x-2 lg:space-y-0">
+            <%=
+              render partial: "coffee_shops/link",
+                collection: [:google_map, :instagram_url, :facebook_url, :twitter_url, :tiktok_url, :whatsapp_url],
+                as: :link,
+                locals: { coffee_shop: @coffee_shop }
+            %>
           </div>
         </dd>
       </div>
