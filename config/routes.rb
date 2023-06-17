@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :coffee_shops do
       member do
         post "duplicate"
+        post "sync_opening_hours"
       end
     end
   end
@@ -52,6 +53,11 @@ Rails.application.routes.draw do
     resources :favourites, only: [:create, :destroy]
     resources :check_ins, only: [:create]
     resources :reports, only: [:new, :create]
+    resources :syncs, only: [] do
+      collection do
+        post "opening_hours"
+      end
+    end
   end
   resources :users, path: "u", only: [:show, :edit, :update]
 

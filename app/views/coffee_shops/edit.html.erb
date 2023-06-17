@@ -6,6 +6,8 @@
       <%= render "components/alert", alerts: @coffee_shop.errors.full_messages if @coffee_shop.errors.full_messages.count > 0 %>
     </div>
 
+    <%= render partial: "coffee_shops/syncs", locals: { coffee_shop: @coffee_shop } %>
+
     <%= form_for @coffee_shop do |f| %>
       <div class="shadow sm:rounded-md sm:overflow-hidden">
         <div class="bg-white py-6 px-4 space-y-6 sm:p-6">

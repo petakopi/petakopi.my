@@ -48,10 +48,20 @@ class Admin::CoffeeShopsController < AdminController
     redirect_to edit_admin_coffee_shop_path(dup)
   end
 
+  def sync_opening_hours
+    OpeningHoursProcessor.call(coffee_shop: @coffee_shop)
+
+    redirect_to admin_coffee_shop_url(@coffee_shop),
+      notice: "Coffee shop opening hours were successfully synced."
+  end
+
   private
 
   def set_coffee_shop
-    @coffee_shop = CoffeeShop.includes(:tags).find(params[:id])
+    @coffee_shop =
+      CoffeeShop
+        .includes(:tags, :opening_hours)
+        .find(params[:id])
   end
 
   def coffee_shop_params

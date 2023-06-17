@@ -1,7 +1,7 @@
 <div class="flex justify-end">
-  <%= link_to "Coffee Shops", admin_coffee_shops_path, class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500" %>
   <%= link_to "Edit", edit_admin_coffee_shop_path(@coffee_shop), class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500" %>
   <%= button_to "Duplicate", {action: "duplicate"}, {class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500"} %>
+  <%= button_to "Sync Opening Hours", {action: "sync_opening_hours"}, {class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500"} %>
 </div>
 
 <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
@@ -68,6 +68,7 @@
           </div>
         </dd>
       </div>
+
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-sm font-medium text-gray-500">
           Tags
@@ -82,6 +83,49 @@
           <% end %>
         </dd>
       </div>
+
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Opening hours
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <% if @coffee_shop.opening_hours.exists? %>
+            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <table class="min-w-full divide-y divide-gray-300">
+                  <thead>
+                    <tr class="divide-x divide-gray-200">
+                      <th scope="col" class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-0">Day</th>
+                      <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Open</th>
+                      <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Close</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200 bg-white">
+                    <% @coffee_shop.opening_hours.each_with_index do |open_hour, i| %>
+                      <tr class="divide-x divide-gray-200">
+                        <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">
+                          <% if @coffee_shop.opening_hours[i-1]&.open_day_text != open_hour.open_day_text %>
+                            <%= open_hour.open_day_text %>
+                          <% end %>
+                        </td>
+                        <td class="whitespace-nowrap p-4 text-sm text-gray-500">
+                          <%= open_hour.open_time_text %>
+                        </td>
+                        <td class="whitespace-nowrap p-4 text-sm text-gray-500">
+                          <%= open_hour.close_time_text %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          <% else %>
+            -
+          <% end %>
+        </dd>
+      </div>
+
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-sm font-medium text-gray-500">
           Submitted by
