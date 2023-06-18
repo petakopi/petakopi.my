@@ -34,7 +34,7 @@ class GooglePlaceIdProcessor
       doc
         .search("script")
         .find do |elem|
-          elem.text.match /window.APP_OPTIONS/
+          elem.text.match(/window.APP_OPTIONS/)
         end
   end
 
@@ -44,10 +44,10 @@ class GooglePlaceIdProcessor
         .text
         .scan(/"ChI[^"]*"/)
         .map do |str|
-          str.gsub(/[^a-zA-Z0-9_-]/, '')
+          str.gsub(/[^a-zA-Z0-9_-]/, "")
         end
-          .uniq
-          .first
+        .uniq
+        .first
   end
 
   def save

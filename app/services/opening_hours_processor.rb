@@ -16,7 +16,7 @@ class OpeningHoursProcessor
           open_day: hour["open"]["day"],
           open_time: hour["open"]["time"],
           close_day: hour["close"]["day"],
-          close_time: hour["close"]["time"],
+          close_time: hour["close"]["time"]
         )
       end
     end
