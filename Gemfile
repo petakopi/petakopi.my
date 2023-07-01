@@ -21,6 +21,7 @@ gem "image_optim_pack" # Image optimization
 gem "image_processing", ">= 1.2" # Image processor
 gem "jbuilder" # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jsbundling-rails" # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
+gem "lograge" # Log formatter
 gem "nokogiri" # Parse HTML
 gem "pagy", "~> 5.10" # Pagination
 gem "paper_trail" # Track changes to the model
