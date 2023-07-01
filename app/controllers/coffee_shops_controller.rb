@@ -60,11 +60,19 @@ class CoffeeShopsController < ApplicationController
   private
 
   def set_coffee_shop
-    coffee_shop = CoffeeShop.includes(:opening_hours)
+    coffee_shop = CoffeeShop.status_published.includes(:opening_hours)
 
     @coffee_shop =
       coffee_shop.find_by(slug: params[:id]) ||
-      coffee_shop.find(params[:id].to_i)
+      coffee_shop.find_by(id: params[:id].to_i)
+
+    # Should only happpen when the coffee shop is rejected since we don't give
+    # the unpublished URL to the user
+    if @coffee_shop.nil?
+      redirect_to root_url,
+        status: :moved_permanently,
+        alert: "You may have requested a coffee shop that does not exist anymore. Contact us if you think this is a mistake."
+    end
   end
 
   def set_coffee_shop_by_current_user
