@@ -920,9 +920,9 @@ to-regex-range@^5.0.1:
     is-number "^7.0.0"
 
 trix@^2.0.0-alpha.1:
-  version "2.0.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/trix/-/trix-2.0.0-alpha.1.tgz#ac6bb38b68354371bd7bb9ade2eddf7fb9e28a16"
-  integrity sha512-/b6dnpNFfSJwqa9tlYu7vB1NN7KaUrlCkPanz9Esflw3nuT8BuBYF2TGNJLyKfj00Rr0YlDBESRihkJA7riBSw==
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/trix/-/trix-2.0.5.tgz#f54880ab38e24d47829a04e04afaf03a8607f772"
+  integrity sha512-OiCbDf17F7JahEwhyL1MvK9DxAAT1vkaW5sn+zpwfemZAcc4RfQB4ku18/1mKP58LRwBhjcy+6TBho7ciXz52Q==
 
 update-browserslist-db@^1.0.5:
   version "1.0.5"
