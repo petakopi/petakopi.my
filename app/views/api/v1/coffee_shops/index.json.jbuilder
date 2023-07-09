@@ -23,7 +23,7 @@ else
   json.cache! ["coffee_shops", "json"], expires_in: 1.hour do
     json.array!(@coffee_shops) do |coffee_shop|
       json.extract! coffee_shop, :id, :name, :lat, :lng
-      json.url coffee_shop_url(coffee_shop)
+      json.url main_coffee_shop_url(id: coffee_shop.slug)
     end
   end
 end
