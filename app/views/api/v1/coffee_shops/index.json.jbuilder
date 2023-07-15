@@ -22,7 +22,14 @@ if params[:type] == "geojson"
 else
   json.cache! ["coffee_shops", "json"], expires_in: 1.hour do
     json.array!(@coffee_shops) do |coffee_shop|
-      json.extract! coffee_shop, :id, :name, :lat, :lng
+      json.extract!(
+          coffee_shop,
+          :id,
+          :slug,
+          :name,
+          :lat,
+          :lng,
+      )
       json.url main_coffee_shop_url(id: coffee_shop.slug)
     end
   end
