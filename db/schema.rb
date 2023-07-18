@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_17_140917) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_18_223908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pageinspect"
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
@@ -148,6 +149,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_17_140917) do
     t.string "lat"
     t.string "lng"
     t.string "google_place_id"
+    t.string "uuid"
     t.index ["slug"], name: "index_coffee_shops_on_slug", unique: true
     t.index ["status"], name: "index_coffee_shops_on_status"
     t.index ["submitter_user_id"], name: "index_coffee_shops_on_submitter_user_id"

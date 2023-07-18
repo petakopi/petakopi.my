@@ -44,6 +44,7 @@ class CoffeeShop < ApplicationRecord
   before_validation :clean_urls, on: :create
   before_validation :assign_slug, on: :create
   before_validation :convert_google_embed
+  before_validation :set_uuid
 
   before_save :update_approved_at
 
@@ -80,6 +81,10 @@ class CoffeeShop < ApplicationRecord
     end
 
     self.slug = slug.downcase
+  end
+
+  def set_uuid
+    self.uuid = SecureRandom.uuid
   end
 
   def verify_district_in_state
