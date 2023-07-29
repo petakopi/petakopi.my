@@ -22,7 +22,7 @@ class GooglePlaceIdProcessor
   end
 
   def html
-    @html ||= URI.open(@coffee_shop.google_map)
+    @html ||= URI.parse(@coffee_shop.google_map).open
   end
 
   def doc

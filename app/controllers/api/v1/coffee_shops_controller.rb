@@ -11,7 +11,7 @@ class Api::V1::CoffeeShopsController < ApplicationController
           :name,
           :slug,
           :lat,
-          :lng,
+          :lng
         )
   end
 
@@ -29,7 +29,7 @@ class Api::V1::CoffeeShopsController < ApplicationController
       {"Instagram" => @coffee_shop.instagram_url},
       {"Twitter" => @coffee_shop.twitter_url},
       {"TikTok" => @coffee_shop.tiktok_url},
-      {"WhatsApp" => @coffee_shop.whatsapp_url},
+      {"WhatsApp" => @coffee_shop.whatsapp_url}
     ]
       .map(&:compact)
       .reject(&:empty?)
