@@ -14,7 +14,7 @@ class Api::V1::CoffeeShopsController < ApplicationController
           :lng
         )
 
-    expires_in 2.hour, public: true
+    expires_in 6.hours, public: true
   end
 
   def show
