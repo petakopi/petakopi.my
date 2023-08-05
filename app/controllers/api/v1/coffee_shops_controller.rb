@@ -13,8 +13,6 @@ class Api::V1::CoffeeShopsController < ApplicationController
           :lat,
           :lng
         )
-
-    expires_in 6.hours, public: true
   end
 
   def show
