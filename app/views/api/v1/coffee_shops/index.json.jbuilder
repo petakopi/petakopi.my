@@ -1,5 +1,5 @@
 if params[:type] == "geojson"
-  json.cache! ["v1", "coffee_shops", params[:type]], expires_in: 6.hour, skip_digest: true do
+  json.cache! @cache_key, expires_in: 6.hour, skip_digest: true do
     json.type "FeatureCollection"
     json.features do
       json.array!(@coffee_shops) do |coffee_shop|
@@ -20,7 +20,7 @@ if params[:type] == "geojson"
     end
   end
 else
-  json.cache! ["v1", "coffee_shops", params[:type]], expires_in: 1.hour, skip_digest: true do
+  json.cache! @cache_key, expires_in: 1.hour, skip_digest: true do
     json.array!(@coffee_shops) do |coffee_shop|
       json.extract!(
         coffee_shop,

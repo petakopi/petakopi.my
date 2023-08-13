@@ -19,6 +19,8 @@ class Api::V1::CoffeeShopsController < ApplicationController
         params: params,
         relation: coffee_shops
       )
+
+    @cache_key = ["v1", "coffee_shops", params[:type], params[:tags]]
   end
 
   def show
