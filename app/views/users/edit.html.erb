@@ -28,13 +28,6 @@
 
           <div class="grid grid-cols-6 gap-6">
             <div class="col-span-6 sm:col-span-4">
-              <%= f.label "Name", class: "block text-sm font-medium text-gray-700" %>
-              <%= f.text_field :name, required: true, class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brown-500 focus:border-brown-500 sm:text-sm" %>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-6 gap-6">
-            <div class="col-span-6 sm:col-span-4">
               <%= f.label "Avatar", class: "block text-sm font-medium text-gray-700" %>
               <div class="mt-1">
                 <%= f.file_field :avatar, class: "text-sm text-gray-700", accept: "image/*" %>

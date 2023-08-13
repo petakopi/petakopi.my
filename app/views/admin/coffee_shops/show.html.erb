@@ -132,7 +132,7 @@
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
           <% if @coffee_shop.submitter %>
-            <%= @coffee_shop.submitter.name %>
+            <%= @coffee_shop.submitter.username %>
           <% else %>
             Anonymous
           <% end %>
@@ -217,7 +217,7 @@
                 <tr class="bg-white">
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <% if version.whodunnit.present? %>
-                      <%= User.find(version.whodunnit).name %>
+                      <%= User.find(version.whodunnit)&.username %>
                     <% end %>
                   </td>
                   <td class="px-6 py-4 whitespace-wrap text-sm text-gray-500">

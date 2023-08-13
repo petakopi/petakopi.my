@@ -17,6 +17,12 @@ for moderators on how to verify the data.
 
 ## Development
 
+Pre-seed DB:
+
+```
+rails data:import_locations
+```
+
 
 ## Reports
 
