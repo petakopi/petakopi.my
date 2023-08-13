@@ -41,7 +41,7 @@ namespace :seeder do
       },
       {
         name: "Non Halal",
-        slug: "non-hala",
+        slug: "non-halal",
         group: "halal",
         description: "Has or serves pork/alcohol/non-halal ingredients"
       },

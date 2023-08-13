@@ -1,6 +1,6 @@
 class Api::V1::CoffeeShopsController < ApplicationController
   def index
-    @coffee_shops =
+    coffee_shops =
       CoffeeShop
         .includes(logo_attachment: :blob)
         .status_published
@@ -13,6 +13,12 @@ class Api::V1::CoffeeShopsController < ApplicationController
           :lat,
           :lng
         )
+
+    @coffee_shops =
+      CoffeeShopsListQuery.call(
+        params: params,
+        relation: coffee_shops
+      )
   end
 
   def show

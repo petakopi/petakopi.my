@@ -4,6 +4,14 @@
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet" />
 <% end %>
 
+<div class="pr-4 py-5 sm:py-6 sm:pr-6">
+  <% Tag.all.order(:position).each do |tag| %>
+    <%= link_to map_path(tags: tag.slug), data: { turbo: false } do %>
+      <%= render partial: "shared/tags/#{tag.slug.underscore}", locals: { name: tag.name } %>
+    <% end %>
+  <% end %>
+</div>
+
 <div id="map" style="<%= turbo_native_app? ? "position: absolute; top: 0; bottom: 0; width: 100%" : "height: 500px" %>"></div>
 
 <%= content_for :js do %>
@@ -41,7 +49,7 @@
       // add the point_count property to your source data.
       map.addSource("coffee_shops", {
         type: "geojson",
-        data: "<%= api_v1_coffee_shops_path(format: :json, type: 'geojson') %>",
+        data: "<%= api_v1_coffee_shops_path(type: 'geojson', tags: params[:tags]).html_safe %>",
         cluster: true,
         clusterMaxZoom: 14, // Max zoom to cluster points on
         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
