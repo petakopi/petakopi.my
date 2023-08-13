@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_13_003627) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_13_040557) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pageinspect"
   enable_extension "pgcrypto"
@@ -192,6 +192,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_13_003627) do
     t.string "description"
     t.string "group"
     t.integer "position"
+    t.boolean "is_public", default: true
     t.index ["name"], name: "index_tags_on_name", unique: true
     t.index ["slug"], name: "index_tags_on_slug", unique: true
   end

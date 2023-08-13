@@ -211,7 +211,7 @@
                     <div class="mt-1">
                       <div class="mt-1 sm:mt-0 sm:col-span-2">
                         <div class="space-y-5 sm:space-y-4">
-                          <% Tag.where(group: "halal").order(:name).each do |tag| %>
+                          <% Tag.is_public.where(group: "halal").order(:name).each do |tag| %>
                             <%= render "form_tag", f: f, tag: tag, multiple_selections: false %>
                           <% end %>
                         </div>
@@ -237,7 +237,7 @@
                     <div class="mt-1">
                       <div class="mt-1 sm:mt-0 sm:col-span-2">
                         <div class="space-y-5 sm:space-y-4">
-                          <% Tag.where(group: nil).order(:name).each do |tag| %>
+                          <% Tag.is_public.where(group: nil).order(:name).each do |tag| %>
                             <%= render "form_tag", f: f, tag: tag, multiple_selections: true %>
                           <% end %>
                         </div>

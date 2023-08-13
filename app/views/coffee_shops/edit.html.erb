@@ -71,7 +71,7 @@
                 <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                   <div class="sm:col-span-6">
                     <div class="space-y-5 sm:space-y-4">
-                      <% Tag.where(group: "halal").order(:name).each do |tag| %>
+                      <% Tag.is_public.where(group: "halal").order(:name).each do |tag| %>
                         <%= render "form_tag", f: f, tag: tag, multiple_selections: false %>
                       <% end %>
                     </div>
@@ -95,7 +95,7 @@
                 <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                   <div class="sm:col-span-6">
                     <div class="space-y-5 sm:space-y-4">
-                      <% Tag.where(group: nil).order(:name).each do |tag| %>
+                      <% Tag.is_public.where(group: nil).order(:name).each do |tag| %>
                         <%= render "form_tag", f: f, tag: tag, multiple_selections: true %>
                       <% end %>
                     </div>

@@ -20,7 +20,8 @@ for moderators on how to verify the data.
 Pre-seed DB:
 
 ```
-rails data:import_locations
+rails seeder:locations
+rails seeder:tags
 ```
 
 
@@ -53,8 +54,6 @@ tomo env:show
 This is not how I usually code, just saying 😛
 
 ## Sponsors
-
-[<img src="https://i.imgur.com/ZISNSTt.png" width="20%" />](https://bugsnag.com)
 
 [<img src="https://i.imgur.com/WYVGZ6Z.png" width="20%" />](https://skylight.io)
 
