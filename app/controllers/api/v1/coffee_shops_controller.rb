@@ -20,6 +20,8 @@ class Api::V1::CoffeeShopsController < ApplicationController
         relation: coffee_shops
       )
 
+    ahoy.track "Map Filter", tags: params[:tags] if params[:tags].present?
+
     @cache_key = ["v1", "coffee_shops", params[:type], params[:tags]]
   end
 
