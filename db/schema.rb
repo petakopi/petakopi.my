@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_13_040557) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_18_102922) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pageinspect"
   enable_extension "pgcrypto"
@@ -182,6 +182,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_13_040557) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["coffee_shop_id"], name: "index_opening_hours_on_coffee_shop_id"
+  end
+
+  create_table "sync_logs", force: :cascade do |t|
+    t.string "syncable_type", null: false
+    t.bigint "syncable_id", null: false
+    t.string "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["syncable_type", "syncable_id"], name: "index_sync_logs_on_syncable"
   end
 
   create_table "tags", force: :cascade do |t|

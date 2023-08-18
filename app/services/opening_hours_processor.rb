@@ -7,6 +7,7 @@ class OpeningHoursProcessor
 
   def call
     CoffeeShop.transaction do
+      # TODO: Do real sync instead of deleting and creating data
       OpeningHour.where(coffee_shop: @coffee_shop).delete_all
 
       return if hours.blank?
