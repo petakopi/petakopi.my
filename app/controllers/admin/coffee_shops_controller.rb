@@ -1,5 +1,5 @@
 class Admin::CoffeeShopsController < AdminController
-  before_action :set_coffee_shop, only: %i[show edit update duplicate]
+  before_action :set_coffee_shop, only: %i[show edit update duplicate sync_opening_hours]
 
   def index
     @coffee_shops =
