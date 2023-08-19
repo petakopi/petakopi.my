@@ -7,18 +7,27 @@ class OpeningHoursProcessor
 
   def call
     CoffeeShop.transaction do
-      # TODO: Do real sync instead of deleting and creating data
-      OpeningHour.where(coffee_shop: @coffee_shop).delete_all
-
       return if hours.blank?
 
       hours.each do |hour|
-        @coffee_shop.opening_hours.create!(
+        # Find the opening hour based on coffee_shop_id and open_day
+        existing_hour = OpeningHour.find_by(coffee_shop: @coffee_shop, open_day: hour["open"]["day"])
+
+        # Attributes for creation or updating
+        attributes = {
           open_day: hour["open"]["day"],
           open_time: hour["open"]["time"],
           close_day: hour["close"]["day"],
           close_time: hour["close"]["time"]
-        )
+        }
+
+        if existing_hour
+          # Update only if the attributes have changed
+          existing_hour.update(attributes) unless existing_hour.attributes.slice(*attributes.keys.map(&:to_s)) == attributes
+        else
+          # Create a new row if not found
+          @coffee_shop.opening_hours.create!(attributes)
+        end
       end
     end
   end
