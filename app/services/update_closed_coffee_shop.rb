@@ -19,6 +19,7 @@ class UpdateClosedCoffeeShop
       cell_link(@coffee_shop.slug, main_coffee_shop_path(id: @coffee_shop.slug)),
       place_id,
       business_status,
+      Rails.env,
       Time.current.iso8601
     ]
 

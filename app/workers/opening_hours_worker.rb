@@ -11,6 +11,7 @@ class OpeningHoursWorker < SidekiqWorker
     end
 
     OpeningHoursProcessor.call(coffee_shop: coffee_shop)
+
     SyncLog.create(
       syncable: coffee_shop,
       message: OpeningHoursSyncThrottler::MESSAGE
