@@ -1,7 +1,7 @@
 module OpeningHourStatus
   def opening_hour_status
-    current_day = Time.now.wday
-    current_time = Time.now.strftime("%H%M").to_i
+    current_day = Time.current.wday
+    current_time = Time.current.strftime("%H%M").to_i
 
     today_schedule = opening_hours.find { |oh| oh.open_day == current_day }
 
