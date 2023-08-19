@@ -18,7 +18,7 @@ class UpdateClosedCoffeeShop
     row = [
       @coffee_shop.id,
       cell_link(@coffee_shop.name, admin_coffee_shop_path(@coffee_shop)),
-      cell_link(@coffee_shop.slug, main_coffee_shop_path(id: @coffee_shop.slug)),
+      cell_link(@coffee_shop.name, main_coffee_shop_path(id: @coffee_shop.slug)),
       place_id,
       business_status,
       Rails.env,
