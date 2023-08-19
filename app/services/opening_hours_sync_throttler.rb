@@ -1,5 +1,6 @@
 class OpeningHoursSyncThrottler
   MESSAGE = "Opening hours"
+  TIME_LIMIT = 1.day.ago
 
   def initialize(coffee_shop:)
     @coffee_shop = coffee_shop
@@ -17,7 +18,7 @@ class OpeningHoursSyncThrottler
         .first
 
     return true if last_synced.nil?
-    return true if last_synced.created_at < 1.day.ago
+    return true if last_synced.created_at < TIME_LIMIT
 
     false
   end
