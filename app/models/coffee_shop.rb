@@ -87,6 +87,8 @@ class CoffeeShop < ApplicationRecord
   end
 
   def set_uuid
+    return if uuid.present?
+
     self.uuid = SecureRandom.uuid
   end
 
