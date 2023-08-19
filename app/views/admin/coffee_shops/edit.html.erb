@@ -109,6 +109,15 @@
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+            <%= f.label :google_place_id, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Google Place ID
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :google_place_id, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+            </div>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
             <%= f.label :google_map, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
               Google Map
             <% end %>

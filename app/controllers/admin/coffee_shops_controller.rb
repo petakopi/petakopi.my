@@ -78,6 +78,7 @@ class Admin::CoffeeShopsController < AdminController
         :facebook,
         :google_embed,
         :google_map,
+        :google_place_id,
         :instagram,
         :lat,
         :lng,
