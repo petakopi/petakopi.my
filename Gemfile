@@ -13,6 +13,7 @@ gem "cssbundling-rails" # Bundle and process CSS [https://github.com/rails/cssbu
 gem "chartkick" # create js charts
 gem "devise" # authentication
 gem "geocoder" # geocoding for ahoy
+gem "google-apis-sheets_v4", require: false # Google API client for Sheets
 gem "groupdate" # active record helper to group by date/time
 gem "hiredis" # redis adapter
 gem "http" # http client
