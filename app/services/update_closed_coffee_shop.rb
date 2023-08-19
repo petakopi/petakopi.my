@@ -13,6 +13,8 @@ class UpdateClosedCoffeeShop
   def call
     body = Google::Apis::SheetsV4::ValueRange.new
 
+    return if place_id.blank?
+
     row = [
       @coffee_shop.id,
       cell_link(@coffee_shop.name, admin_coffee_shop_path(@coffee_shop)),
