@@ -28,13 +28,23 @@ namespace :report do
       service.batch_update_spreadsheet(spreadsheet_id, batch_update_request)
     end
 
-    CoffeeShop
-      .status_published
-      .where.not(id: SyncLog.where("created_at > ?", ClosedCoffeeShopThrottler::TIME_LIMIT)
-      .where(message: ClosedCoffeeShopThrottler::MESSAGE)
-      .pluck(:id))
-      .each do |coffee_shop_id|
-        ReportClosedCoffeeShopWorker.perform_async(coffee_shop_id)
-      end
+    synced_coffe_shop_ids =
+      SyncLog
+        .where("created_at > ?", ClosedCoffeeShopThrottler::TIME_LIMIT)
+        .where(message: ClosedCoffeeShopThrottler::MESSAGE)
+        .pluck(:syncable_id)
+
+    unsynced_coffee_shop_ids =
+      CoffeeShop
+        .status_published
+        .where.not(google_place_id: nil)
+        .where.not(id: synced_coffe_shop_ids)
+        .pluck(:id)
+
+    puts "We will process #{unsynced_coffee_shop_ids.count} coffee shops"
+
+    unsynced_coffee_shop_ids.each do |coffee_shop_id|
+      ReportClosedCoffeeShopWorker.perform_async(coffee_shop_id)
+    end
   end
 end
