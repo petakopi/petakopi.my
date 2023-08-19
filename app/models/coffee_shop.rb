@@ -21,7 +21,8 @@ class CoffeeShop < ApplicationRecord
       rejected: 2,
       duplicate: 3,
       reviewed: 4,
-      closed: 5
+      closed: 5,
+      temporarily_closed: 6
     },
     _prefix: :status
   )

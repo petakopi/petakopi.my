@@ -1,6 +1,6 @@
 require "google/apis/sheets_v4"
 
-class UpdateClosedCoffeeShop
+class UpdateCoffeeShopOperationStatus
   include Callable
   include Rails.application.routes.url_helpers
 
