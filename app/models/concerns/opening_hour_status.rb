@@ -11,6 +11,8 @@ module OpeningHourStatus
     opening_time = today_schedule.open_time.to_i
     closing_time = today_schedule.close_time.to_i
 
+    closing_time = 2400 if closing_time == 0
+
     if current_time < opening_time && (opening_time - current_time) <= 30
       "Opening soon"
     elsif current_time < opening_time
