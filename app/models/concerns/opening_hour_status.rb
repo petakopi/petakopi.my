@@ -13,16 +13,30 @@ module OpeningHourStatus
 
     closing_time = 2400 if closing_time == 0
 
-    if current_time < opening_time && (opening_time - current_time) <= 30
-      "Opening soon"
-    elsif current_time < opening_time
-      "Closed"
+    if current_time < opening_time
+      if time_difference_in_minutes(opening_time, current_time).abs <= 30
+        "Opens soon"
+      else
+        "Closed"
+      end
     elsif current_time > closing_time
       "Closed"
-    elsif (closing_time - current_time) <= 30
+    elsif time_difference_in_minutes(closing_time, current_time).abs <= 30
       "Closing soon"
     else
       "Open"
     end
   end
+
+  def time_difference_in_minutes(start_time, end_time)
+    # Convert HHMM to Time objects
+    start_time_obj = Time.parse(start_time.to_s.insert(2, ':'))
+    end_time_obj = Time.parse(end_time.to_s.insert(2, ':'))
+
+    # Calculate the difference in minutes
+    difference = (end_time_obj - start_time_obj) / 60
+
+    difference.to_i
+  end
 end
+
