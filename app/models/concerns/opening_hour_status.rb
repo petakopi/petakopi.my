@@ -1,7 +1,7 @@
 module OpeningHourStatus
   def opening_hour_status
     current_day = Time.current.wday
-    current_time = Time.current.strftime("%H%M").to_i
+    current_time = Time.current.strftime("%H%M")
 
     today_schedule = opening_hours.find { |oh| oh.open_day == current_day }
 
@@ -13,13 +13,13 @@ module OpeningHourStatus
 
     closing_time = 2400 if closing_time == 0
 
-    if current_time < opening_time
+    if current_time.to_i < opening_time
       if time_difference_in_minutes(opening_time, current_time).abs <= 30
         "Opens soon"
       else
         "Closed"
       end
-    elsif current_time > closing_time
+    elsif current_time.to_i > closing_time
       "Closed"
     elsif time_difference_in_minutes(closing_time, current_time).abs <= 30
       "Closing soon"
