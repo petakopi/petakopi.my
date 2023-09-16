@@ -1,6 +1,7 @@
-<li class="px-4 py-4 sm:px-6 bg-yellow-100">
-  <div class="text-gray-800 text-xs">
-    Put your coffee shop at the top of the list. Read
-    <a class="underline" href="https://amree.notion.site/Advertise-with-petakopi-my-33d9066cd0e446c7881ff79eb42540ca?pvs=4" target="_blank">here</a> for more info or contact us at <a class="underline" href="https://instagram.com/petakopi.my">@petakopi.my</a>
-  </div>
-</li>
+<% if coffee_shop.present? %>
+  <%= render partial: "coffee_shops/coffee_shop_list", locals: { coffee_shop: coffee_shop, is_ad: true } %>
+<% else %>
+  <li class="px-4 py-4 sm:px-6 bg-yellow-100">
+    <%= render partial: "coffee_shops/ads_placeholder" %>
+  </li>
+<% end %>

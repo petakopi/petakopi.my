@@ -1,5 +1,5 @@
-<tr>
-  <td class="px-6 py-4 sticky sm:static left-0 bg-white z-0 min-w-[220px]">
+<tr class="<%= local_assigns[:is_ad] ? "bg-yellow-100" : "bg-white" %>">
+  <td class="px-6 py-4 sticky sm:static left-0 z-0 min-w-[220px]">
     <div class="flex items-center">
       <div class="flex-shrink-0 h-10 w-10">
         <%= link_to main_coffee_shop_path(id: coffee_shop.slug) do %>

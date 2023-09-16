@@ -3,6 +3,8 @@ class DirectoriesController < ApplicationController
   before_action :set_page_info
 
   def index
+    set_silver_shop
+
     @coffee_shops =
       CoffeeShopsListQuery.call(
         params: params,
@@ -31,5 +33,12 @@ class DirectoriesController < ApplicationController
     location = params[:district].present? ? "#{params[:district]}, #{params[:state]}" : params[:state]
 
     @page_info = "Coffee Shops in #{location}"
+  end
+
+  def set_silver_shop
+    parameterized_state = params[:state]&.parameterize
+    silver_shop_slug = Rails.cache.fetch("ads/silver/#{parameterized_state}")
+
+    @silver_shop = CoffeeShop.find_by(slug: silver_shop_slug)
   end
 end

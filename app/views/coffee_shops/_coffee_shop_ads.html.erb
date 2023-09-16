@@ -1,8 +1,9 @@
-<tr>
-  <td class="px-6 py-4 sticky sm:static left-0 bg-yellow-100 z-0 min-w-[220px]" colspan="4">
-    <div class="text-gray-800 text-xs">
-      Put your coffee shop at the top of the list. Read
-        <a class="underline" href="https://bit.ly/advertise-with-petakopi" target="_blank">here</a> for more info or contact us at <a class="underline" href="https://instagram.com/petakopi.my">@petakopi.my</a>
-    </div>
-  </td>
-</tr>
+<% if coffee_shop.present? %>
+  <%= render partial: "coffee_shops/coffee_shop", locals: { coffee_shop: coffee_shop, is_ad: true }, cached: true %>
+<% else %>
+  <tr>
+    <td class="px-6 py-4 sticky sm:static left-0 z-0 min-w-[220px] bg-yellow-100" colspan="4">
+      <%= render partial: "coffee_shops/ads_placeholder" %>
+    </td>
+  </tr>
+<% end %>
