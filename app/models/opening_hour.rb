@@ -13,7 +13,7 @@ class OpeningHour < ApplicationRecord
 
   # This should have been in the Decorator
   def readable_time
-    str_time = time.to_s
+    str_time = time.to_s.rjust(4, "0")
 
     hour = str_time[0..1].to_i
     minutes = str_time[2..3]
