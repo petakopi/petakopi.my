@@ -6,15 +6,13 @@ class OpeningHoursWorker < SidekiqWorker
 
     return unless OpeningHoursSyncThrottler.allowed?(coffee_shop: coffee_shop)
 
-    if coffee_shop.google_place_id.blank?
-      GooglePlaceIdProcessor.call(coffee_shop: coffee_shop)
-    end
-
-    OpeningHoursProcessor.call(coffee_shop: coffee_shop)
-
-    SyncLog.create(
-      syncable: coffee_shop,
-      message: OpeningHoursSyncThrottler::MESSAGE
-    )
+    GoogleApis::OpeningHours::Sync
+      .call(coffee_shop: coffee_shop)
+      .on_success do |result|
+        SyncLog.create(
+          syncable: coffee_shop,
+          message: OpeningHoursSyncThrottler::MESSAGE
+        )
+      end
   end
 end
