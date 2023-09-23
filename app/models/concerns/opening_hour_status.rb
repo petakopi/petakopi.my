@@ -1,42 +1,38 @@
 module OpeningHourStatus
   def opening_hour_status
     current_day = Time.current.wday
-    current_time = Time.current.strftime("%H%M")
+    current_time = Time.current.strftime("%H%M").to_i
 
-    today_schedule = opening_hours.find { |oh| oh.open_day == current_day }
+    schedules =
+      opening_hours.order(:day, :time).select { |oh| oh.day == current_day }
 
-    # If there's no schedule for today
-    return "Closed for today" unless today_schedule
+    return "Closed for today" unless schedules.present?
 
-    opening_time = today_schedule.open_time.to_i
-    closing_time = today_schedule.close_time.to_i
+    openings = schedules.select { |x| x.kind == "open" }.pluck(:time)
+    closings = schedules.select { |x| x.kind == "close" }.pluck(:time)
 
-    closing_time = 2400 if closing_time == 0
+    openings_with_now = (openings + [current_time]).sort
+    closings_with_now = (closings + [current_time]).sort
 
-    if current_time.to_i < opening_time
-      if time_difference_in_minutes(opening_time, current_time).abs <= 30
-        "Opens soon"
-      else
-        "Closed"
-      end
-    elsif current_time.to_i > closing_time
+    position_in_open = openings_with_now.index(current_time)
+    position_in_close = closings_with_now.index(current_time)
+
+    # m [x x] [x x]
+    if current_time < openings_with_now.first
       "Closed"
-    elsif time_difference_in_minutes(closing_time, current_time).abs <= 30
-      "Closing soon"
-    else
+    # [x x] [x x] m
+    elsif current_time > closings_with_now.last
+      "Closed"
+    # [x x] [x m x]
+    elsif (position_in_open != openings_with_now.last) && (position_in_close != closings_with_now.last)
       "Open"
+    # [x x] m [x x]
+    elsif ((position_in_open != openings_with_now.first) || (position_in_open != openings_with_now.last)) &&
+        ((position_in_close != closings_with_now.first) || (position_in_close != closings_with_now.last))
+      "Open"
+    else
+      "Unknown"
     end
-  end
-
-  def time_difference_in_minutes(start_time, end_time)
-    # Convert HHMM to Time objects
-    start_time_obj = Time.parse(start_time.to_s.insert(2, ':'))
-    end_time_obj = Time.parse(end_time.to_s.insert(2, ':'))
-
-    # Calculate the difference in minutes
-    difference = (end_time_obj - start_time_obj) / 60
-
-    difference.to_i
   end
 end
 
