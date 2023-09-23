@@ -235,6 +235,7 @@ GEM
       railties (>= 6.0.0)
     json (2.6.3)
     jwt (2.3.0)
+    kind (5.10.0)
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
@@ -453,6 +454,11 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    u-attributes (2.8.0)
+      kind (>= 4.0, < 6.0)
+    u-case (4.5.2)
+      kind (>= 5.6, < 6.0)
+      u-attributes (>= 2.7, < 3.0)
     uber (0.1.0)
     unf (0.1.4)
       unf_ext
@@ -531,6 +537,7 @@ DEPENDENCIES
   tinify
   tomo-plugin-sidekiq
   turbo-rails
+  u-case
   web-console
   webdrivers
 

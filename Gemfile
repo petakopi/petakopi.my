@@ -47,6 +47,7 @@ gem "telegram-bot-ruby" # Interact with Telegram
 gem "tinify" # tinypng.com gem for image processing
 gem "tomo-plugin-sidekiq" # tomo plugin for managing sidekiq via systemd
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+gem "u-case" # Use case pattern
 
 group :development, :test do
   gem "pry" # Debugging tool

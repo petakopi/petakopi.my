@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_18_102922) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_23_073059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pageinspect"
   enable_extension "pgcrypto"
@@ -175,12 +175,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_18_102922) do
 
   create_table "opening_hours", force: :cascade do |t|
     t.bigint "coffee_shop_id", null: false
-    t.integer "open_day", null: false
-    t.string "open_time", null: false
-    t.integer "close_day", null: false
-    t.string "close_time", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "kind"
+    t.integer "day"
+    t.integer "time"
     t.index ["coffee_shop_id"], name: "index_opening_hours_on_coffee_shop_id"
   end
 

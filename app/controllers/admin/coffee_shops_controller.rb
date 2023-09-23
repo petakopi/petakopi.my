@@ -49,14 +49,16 @@ class Admin::CoffeeShopsController < AdminController
   end
 
   def sync_opening_hours
-    if @coffee_shop.google_place_id.blank?
-      GooglePlaceIdProcessor.call(coffee_shop: coffee_shop)
-    end
-
-    OpeningHoursProcessor.call(coffee_shop: @coffee_shop)
-
-    redirect_to admin_coffee_shop_url(@coffee_shop),
-      notice: "Coffee shop opening hours were successfully synced."
+    GoogleApis::OpeningHours::Sync
+      .call(coffee_shop: @coffee_shop)
+      .on_success do |result|
+        redirect_to admin_coffee_shop_url(result[:coffee_shop]),
+          notice: "Coffee shop opening hours were successfully synced."
+      end
+      .on_failure do |result|
+        redirect_to admin_coffee_shop_url(result[:coffee_shop]),
+          alert: result[:msg]
+      end
   end
 
   private
