@@ -18,10 +18,10 @@ module OpeningHourStatus
     position_in_close = closings_with_now.index(current_time)
 
     # m [x x] [x x]
-    if current_time < openings_with_now.first
+    if current_time < openings.first
       "Closed"
     # [x x] [x x] m
-    elsif current_time > closings_with_now.last
+    elsif current_time > closings.last
       "Closed"
     # [x x] [x m x]
     elsif (position_in_open != openings_with_now.last) && (position_in_close != closings_with_now.last)
