@@ -1,5 +1,7 @@
 module OpeningHourStatus
   def opening_hour_status
+    return ""
+
     current_day = Time.current.wday
     current_time = Time.current.strftime("%H%M").to_i
 

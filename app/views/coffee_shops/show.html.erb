@@ -82,31 +82,8 @@
         <div class="mt-2 flow-root">
           <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <table class="min-w-full divide-y divide-gray-300">
-                <thead>
-                  <tr class="divide-x divide-gray-200">
-                    <th scope="col" class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-0">Day</th>
-                    <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Open</th>
-                    <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Close</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200 bg-white">
-                  <% @opening_hours.each_with_index do |days, day| %>
-                    <% days.each_with_index do |hours, count| %>
-                      <tr class="divide-x divide-gray-200">
-                        <td class="whitespace-nowrap p-4 text-sm text-gray-500">
-                          <%= OpeningHour::DAYS[day] unless count > 0%>
-                        </td>
-                        <% hours.each do |hour| %>
-                          <td class="whitespace-nowrap p-4 text-sm text-gray-500">
-                            <%= hour.readable_time %>
-                          </td>
-                        <% end %>
-                      </tr>
-                    <% end %>
-                  <% end %>
-                </tbody>
-              </table>
+              <%= render partial: "coffee_shops/opening_hours",
+                locals: { opening_hours: @opening_hours } %>
             </div>
           </div>
         </div>
