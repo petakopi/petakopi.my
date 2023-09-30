@@ -5,6 +5,6 @@ import { NetworkOnly } from 'workbox-strategies'
 
 setDefaultHandler(new NetworkOnly())
 
-offlineFallback()
+// offlineFallback()
 
 precacheAndRoute(self.__WB_MANIFEST || [])
