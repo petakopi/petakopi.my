@@ -37,7 +37,7 @@ gem "postmark-rails" # Send emails via Postmark
 gem "rails"
 gem "redis", "~> 4.0" # Use Redis adapter to run Action Cable in production
 gem "sidekiq" # Background jobs
-gem "sidekiq-cron", github: "serprex/sidekiq-cron", branch: "master" # Sidekiq + Cron
+gem "sidekiq-cron" # Sidekiq + Cron
 gem "sidekiq-failures" # Monitor failures in Sidekiq
 gem "sitemap_generator" # Generate sitemap for search engines
 gem "skylight" # Performance monitoring tool
