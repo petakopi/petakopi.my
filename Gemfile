@@ -24,7 +24,7 @@ gem "jbuilder" # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jsbundling-rails" # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "lograge" # Log formatter
 gem "nokogiri" # Parse HTML
-gem "pagy", "~> 5.10" # Pagination
+gem "pagy", "~> 6.1" # Pagination
 gem "paper_trail" # Track changes to the model
 gem "pg", "~> 1.1" # Use postgresql as the database for Active Record
 gem "puma", "~> 6.0" # Use the Puma web server [https://github.com/puma/puma]

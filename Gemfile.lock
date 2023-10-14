@@ -319,8 +319,7 @@ GEM
       rack
     orm_adapter (0.5.0)
     os (1.1.4)
-    pagy (5.10.1)
-      activesupport
+    pagy (6.1.0)
     paper_trail (15.0.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
@@ -548,7 +547,7 @@ DEPENDENCIES
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   omniauth-twitter
-  pagy (~> 5.10)
+  pagy (~> 6.1)
   paper_trail
   pg (~> 1.1)
   postmark-rails
