@@ -34,7 +34,7 @@ gem "omniauth-google-oauth2" # login using Google
 gem "omniauth-twitter" # login using Twitter
 gem "omniauth-rails_csrf_protection" # Migitate against CSRF in OmniAuth gem
 gem "postmark-rails" # Send emails via Postmark
-gem "rails"
+gem "rails", "~> 7.1"
 gem "redis", "~> 4.0" # Use Redis adapter to run Action Cable in production
 gem "sidekiq", "< 7" # Background jobs
 gem "sidekiq-cron" # Sidekiq + Cron
