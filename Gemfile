@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.0"
+ruby "3.2.2"
 
 gem "active_decorator" # Decorator
 gem "ahoy_matey" # analytics
@@ -12,6 +12,7 @@ gem "connection_pool" # redis connection pooling
 gem "cssbundling-rails" # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem "chartkick" # create js charts
 gem "devise" # authentication
+gem "foreman" # process manager
 gem "geocoder" # geocoding for ahoy
 gem "google-apis-sheets_v4", require: false # Google API client for Sheets
 gem "groupdate" # active record helper to group by date/time

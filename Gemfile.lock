@@ -173,6 +173,7 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
+    foreman (0.87.2)
     fspath (3.1.2)
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
@@ -518,6 +519,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-darwin-22
   x86_64-linux
 
 DEPENDENCIES
@@ -531,6 +533,7 @@ DEPENDENCIES
   connection_pool
   cssbundling-rails
   devise
+  foreman
   geocoder
   google-apis-sheets_v4
   groupdate
@@ -574,7 +577,7 @@ DEPENDENCIES
   webdrivers
 
 RUBY VERSION
-   ruby 3.1.0p0
+   ruby 3.2.2p53
 
 BUNDLED WITH
-   2.3.3
+   2.4.20
