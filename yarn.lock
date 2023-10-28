@@ -3843,9 +3843,9 @@ trim-newlines@^3.0.0:
   integrity sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==
 
 trix@^2.0.0-alpha.1:
-  version "2.0.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/trix/-/trix-2.0.0-alpha.1.tgz#ac6bb38b68354371bd7bb9ade2eddf7fb9e28a16"
-  integrity sha512-/b6dnpNFfSJwqa9tlYu7vB1NN7KaUrlCkPanz9Esflw3nuT8BuBYF2TGNJLyKfj00Rr0YlDBESRihkJA7riBSw==
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/trix/-/trix-2.0.7.tgz#21cd94616864f908ec802fe029e69f628a694eca"
+  integrity sha512-qnqElm1BA4XYMgwowEHlF4xE4wfEjFBpmybvdzVUQP4OTzQxRXVEQNP4WSvWT6HzV4wYFP06/HSo14fWoGo6jQ==
 
 tslib@^1.9.0:
   version "1.14.1"
