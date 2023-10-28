@@ -1332,10 +1332,10 @@ acorn@^8.8.2:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.10.0.tgz#8be5b3907a67221a81ab23c7889c4c5526b62ec5"
   integrity sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==
 
-ahoy.js@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/ahoy.js/-/ahoy.js-0.4.0.tgz#92c0247866b167015e1fdd0bc9cda8b3a61fadbe"
-  integrity sha512-jq4aidHv8QWvZzN7YYnkQ1JgO6RyDBNrobcimJRtlfKiIP8B9ZaeMOIP4qieVrNawgI6JXpxvYMllfRb+sWZew==
+ahoy.js@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/ahoy.js/-/ahoy.js-0.4.3.tgz#1b8403fd9415b0a54a9e36a3d67cab8534d2221c"
+  integrity sha512-l1WDqy4N+pK1LWWOjFabIeQpsuKIuKY08Mzgh6FHHJC2Ry1OJzOCFhSkuHUShMdaYeeaXo6CW5pfefj2GCsjkw==
 
 ajv@^8.6.0:
   version "8.12.0"
