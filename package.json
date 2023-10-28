@@ -18,7 +18,7 @@
     "esbuild-rails": "^1.0.7",
     "postcss": "^8.4.31",
     "postcss-import": "^14.1.0",
-    "sass": "^1.49.0",
+    "sass": "^1.69.4",
     "tailwindcss": "^3.3.3",
     "trix": "^2.0.0-alpha.1",
     "workbox-cli": "^7.0.0"
