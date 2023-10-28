@@ -10,7 +10,7 @@
     "@tailwindcss/forms": "^0.4.1",
     "@tailwindcss/typography": "^0.5.10",
     "ahoy.js": "^0.4.0",
-    "alpinejs": "^3.12.2",
+    "alpinejs": "^3.13.2",
     "autoprefixer": "^10.4.16",
     "chart.js": "^3.9.1",
     "chartkick": "^4.2.0",
