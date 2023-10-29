@@ -12,7 +12,7 @@ class CoffeeShop < ApplicationRecord
     :waze,
     :whatsapp
 
-  attr_accessor :logo_url
+  attr_accessor :logo_url, :latitude, :longitude, :google_place_id
 
   enum(
     status: {
@@ -43,22 +43,25 @@ class CoffeeShop < ApplicationRecord
 
   validates :slug, presence: true
   validates :slug, uniqueness: true
-  validate :verify_district_in_state
 
   before_validation :clean_urls, on: :create
   before_validation :assign_slug, on: :create
-  before_validation :convert_google_embed
   before_validation :set_uuid
 
   before_save :update_approved_at
 
   after_save :process_logo
-  after_save :update_lat_lng
-  after_save :update_google_place_id
 
   accepts_nested_attributes_for :coffee_shop_tags
+  accepts_nested_attributes_for :google_location
 
   has_rich_text :description
+
+  def google_map
+    return "#" if google_location.blank?
+
+    google_location.url
+  end
 
   def clean_urls
     self.instagram = instagram.split("/")[3].split("?")[0]
@@ -72,39 +75,16 @@ class CoffeeShop < ApplicationRecord
       return
     end
 
-    return if district.blank?
-
-    slug = name.parameterize
-
-    if CoffeeShop.where(slug: slug).any?
-      slug = "#{slug}-#{district.parameterize}"
-    end
-
-    if CoffeeShop.where(slug: slug).any?
-      slug = "#{slug}-#{SecureRandom.alphanumeric(5).downcase}"
-    end
-
-    self.slug = slug.downcase
+    self.slug = [
+      name.parameterize,
+      SecureRandom.alphanumeric(5).downcase
+    ].join("-")
   end
 
   def set_uuid
     return if uuid.present?
 
     self.uuid = SecureRandom.uuid
-  end
-
-  def verify_district_in_state
-    return if state.nil? || district.nil?
-
-    Location.find_by(city: district).state == state
-  end
-
-  def convert_google_embed
-    return if google_embed.blank?
-    return unless google_embed.starts_with?("<iframe")
-
-    self.google_embed =
-      Nokogiri::HTML.parse(google_embed).xpath("//iframe").attr("src").value
   end
 
   def process_logo
@@ -120,19 +100,5 @@ class CoffeeShop < ApplicationRecord
     return unless status_changed? && status_published? && approved_at.blank?
 
     self.approved_at = Time.current
-  end
-
-  def update_lat_lng
-    return unless status_published?
-    return if lat.present? && lng.present?
-
-    LocationProcessorWorker.perform_async(id)
-  end
-
-  def update_google_place_id
-    return unless status_published?
-    return if google_place_id.present?
-
-    GetGooglePlaceIdWorker.perform_async(id)
   end
 end

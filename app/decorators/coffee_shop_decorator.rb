@@ -32,13 +32,17 @@ module CoffeeShopDecorator
   def location_full_url
     css_class = "text-brown-600 hover:text-brown-900"
 
-    state_param = state&.parameterize
-    district_param = district&.parameterize
+    state_param = google_location.state&.parameterize
+    district_param = google_location.district&.parameterize
+
+    return "" if state_param.blank? || district_param.blank?
 
     district_link =
-      link_to district, directories_path(state: state_param, district: district_param), class: css_class
+      link_to google_location.district,
+        directories_path(state: state_param, district: district_param), class: css_class
     state_link =
-      link_to state, directories_path(state: state_param), class: css_class
+      link_to google_location.state,
+        directories_path(state: state_param),class: css_class
 
     raw "#{district_link}, #{state_link}"
   end

@@ -27,7 +27,7 @@
         <div>
           <%= collection_select nil,
             :state,
-            Location.states,
+            GoogleLocation.distinct.pluck(:administrative_area_level_1).compact.sort,
             :to_s,
             :to_s,
             {
@@ -45,7 +45,7 @@
         <div>
           <%= collection_select nil,
             :district,
-            params[:state] ? Location.districts(state: params[:state]).prepend("") : [],
+            params[:state] ? GoogleLocation.where(administrative_area_level_1: params[:state]).distinct.pluck(:locality).compact.sort.prepend("") : [],
             :to_s,
             :to_s,
             { selected: params[:district] },

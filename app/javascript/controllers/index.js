@@ -21,3 +21,6 @@ application.register("select", SelectController)
 
 import TrackerController from "./tracker_controller.js"
 application.register("tracker", TrackerController)
+
+import MapsController from "./maps_controller.js"
+application.register("maps", MapsController)

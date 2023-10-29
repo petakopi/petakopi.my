@@ -78,22 +78,22 @@ class Admin::CoffeeShopsController < AdminController
       .permit(
         :admin_notes,
         :description,
-        :district,
         :facebook,
-        :google_embed,
-        :google_map,
-        :google_place_id,
         :instagram,
         :lat,
         :lng,
         :logo,
         :name,
         :slug,
-        :state,
         :status,
         :tiktok,
         :twitter,
         :whatsapp,
+        google_location_attributes: [
+          :lat,
+          :lng,
+          :place_id,
+        ],
         tag_ids: []
       )
   end

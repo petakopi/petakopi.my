@@ -1,0 +1,143 @@
+<div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
+  <%= render partial: "coffee_shops/coffee_shop_menu", locals: { coffee_shop: @coffee_shop } %>
+
+  <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
+    <% if @coffee_shop.errors.full_messages.count > 0 %>
+      <div class"mt-2 text-center text-sm text-gray-600">
+        <%= render "components/alert", alerts: @coffee_shop.errors.full_messages  %>
+      </div>
+    <% end %>
+
+    <%= form_with model: @coffee_shop,
+      url: coffee_shop_location_path(coffee_shop_id: @coffee_shop.slug),
+      method: :patch,
+      data: {
+        controller: "maps",
+        action: "google-maps-callback@window->maps#initializeMap",
+        maps_coffee_shop_name_value: @coffee_shop.name,
+        maps_place_id_value: @coffee_shop.google_location.place_id,
+        maps_lat_value: @coffee_shop.google_location.lat,
+        maps_lng_value: @coffee_shop.google_location.lng,
+      } do |f|
+    %>
+      <div class="shadow sm:rounded-md sm:overflow-hidden">
+        <div class="bg-white py-6 px-4 sm:p-6">
+
+            <%= f.fields_for :google_location do |location_form| %>
+              <%= location_form.hidden_field :place_id, data: { maps_target: "googlePlaceId" } %>
+              <%= location_form.hidden_field :lat, data: { maps_target: "latitude" }  %>
+              <%= location_form.hidden_field :lng, data: { maps_target: "longitude" }  %>
+            <% end %>
+
+            <div class="space-y-6 sm:space-y-5">
+              <div>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                  Location
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">
+                  We depends on Google to get most of the information.
+                </p>
+              </div>
+
+              <div class="space-y-6 sm:space-y-5">
+                <div class="sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <div class="mt-1 sm:col-span-2">
+                    <fieldset>
+                      <legend class="sr-only">Plan</legend>
+                      <div class="space-y-5">
+                        <div class="relative flex items-start">
+                          <div class="flex h-6 items-center">
+                            <input
+                              name="location"
+                              type="radio"
+                              class="h-4 w-4 border-gray-300 text-brown-600 focus:ring-brown-600"
+                              data-action="change->maps#toggleLocation"
+                              data-maps-target="placeRadio"
+                              <%= @coffee_shop.google_location.has_place_id? ? "checked" : "" %>
+                            />
+                          </div>
+                          <div class="ml-3 text-sm leading-6">
+                            <label for="small" class="font-medium text-gray-900">
+                              Available on Google Maps
+                            </label>
+                            <p class="text-gray-500">
+                              For business that we can search on Google Maps.
+                            </p>
+                            <p class="text-gray-500 text-sm">
+                              Just search for the business name to submit the
+                              place. Please make sure it's the same business.
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          class="relative ml-7 h-80 <%= @coffee_shop.google_location.has_place_id? ? "" : "hidden" %>"
+                          data-maps-target="placeContainer">
+                          <div style="display: none">
+                            <input
+                              id="maps-place-input"
+                              class="ml-2 mt-2 max-w-lg block w-11/12 shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                              type="text"
+                              placeholder="Enter the name"
+                              data-action="keydown->maps#preventSubmit"
+                              data-maps-target="placeInput"
+                            />
+                          </div>
+                          <div class="h-full" data-maps-target="placeMapContainer"></div>
+                        </div>
+
+                        <div class="relative flex items-start">
+                          <div class="flex h-6 items-center">
+                            <input
+                              name="location"
+                              type="radio"
+                              class="h-4 w-4 border-gray-300 text-brown-600 focus:ring-brown-600"
+                              data-action="change->maps#toggleLocation"
+                              data-maps-target="locationRadio"
+                              <%= @coffee_shop.google_location.has_place_id? ? "" : "checked" %>
+                            />
+                          </div>
+                          <div class="ml-3 text-sm leading-6">
+                            <label for="medium" class="font-medium text-gray-900">
+                              Only coordinate (latitude and longitude)
+                            </label>
+                            <p class="text-gray-500">
+                              For mobile business / not registered with Google.
+                            </p>
+                            <p class="text-gray-500 text-sm">
+                              Search for the nearest place to zoom in
+                              faster and then drag the marker to the exact
+                              location.
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          class="relative ml-7 h-80 <%= @coffee_shop.google_location.has_place_id? ? "hidden" : "" %>"
+                          data-maps-target="locationContainer">
+                          <div style="display: none">
+                            <input
+                              id="maps-location-input"
+                              class="ml-2 mt-2 max-w-lg block w-11/12 shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                              type="text"
+                              placeholder="Enter the name"
+                              data-action="keydown->maps#preventSubmit"
+                              data-maps-target="locationInput"
+                            />
+                          </div>
+                          <div class="h-full" data-maps-target="locationMap"></div>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+        </div>
+
+        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+          <%= f.submit "Save", class: "bg-brown-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

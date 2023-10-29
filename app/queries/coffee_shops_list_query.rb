@@ -23,9 +23,18 @@ class CoffeeShopsListQuery
 
   def filter_by_locations
     if params[:state].present? && params[:district].present?
-      relation.where(state: params[:state], district: params[:district])
+      relation.where(
+        google_locations: {
+          administrative_area_level_1: params[:state],
+          locality: params[:district]
+        }
+      )
     elsif params[:state].present? && params[:district].blank?
-      relation.where(state: params[:state])
+      relation.where(
+        google_locations: {
+          administrative_area_level_1: params[:state]
+        }
+      )
     else
       relation
     end

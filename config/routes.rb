@@ -53,20 +53,21 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :coffee_shops, only: [:new, :create] do
+  resources :coffee_shops, only: [:new, :create, :edit, :update, :index] do
+    resource :location, only: [:edit, :update], module: :coffee_shops
+    resource :opening_hours, only: [:edit, :update], module: :coffee_shops
+    resource :analytics, only: [:show], module: :coffee_shops
+
     resources :favourites, only: [:create, :destroy]
     resources :check_ins, only: [:create]
     resources :reports, only: [:new, :create]
-    resources :syncs, only: [] do
-      collection do
-        post "opening_hours"
-      end
-    end
   end
+  resources :coffee_shops_v2, only: [:new, :create]
   resources :users, path: "u", only: [:show, :edit, :update]
 
   get "/coffee_shops/:id", to: redirect("/%{id}", status: 301)
   get "/cs/:id", to: redirect("/%{id}", status: 301)
+  get "/new", to: "coffee_shops_v2#new", as: "new_coffee_shop_v2"
 
   constraints CoffeeShopConstraint.new do
     resources :coffee_shops, path: "", only: [:show], as: "main_coffee_shop"

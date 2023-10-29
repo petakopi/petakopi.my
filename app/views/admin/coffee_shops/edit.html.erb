@@ -49,38 +49,47 @@
             </div>
           </div>
 
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-            <%= f.label :state, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              State
-            <% end %>
-            <div class="mt-1 sm:mt-0 sm:col-span-2">
-              <%= f.collection_select :state,
-                Location.states,
-                :to_s,
-                :to_s,
-                { prompt: true, required: true },
-                data: { action: "change->select#change" },
-                class: "max-w-lg block focus:ring-brown-500 focus:border-brown-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+          <%= f.fields_for :google_location do |location_form| %>
+            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+              <%= location_form.label :place_id,
+                class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do
               %>
+                Google Place ID
+              <% end %>
+              <div class="mt-1">
+                <%= location_form.text_field :place_id,
+                  class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md",
+                  placeholder: "Place ID"
+                %>
+              </div>
             </div>
-          </div>
 
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-            <%= f.label :district, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              District
-            <% end %>
-            <div class="mt-1 sm:mt-0 sm:col-span-2">
-              <%= f.collection_select :district,
-                f.object.state ? Location.districts(state: f.object.state) : [],
-                :to_s,
-                :to_s,
-                { required: true },
-                id: nil,
-                data: { select_target: "select" },
-                class: "max-w-lg block focus:ring-brown-500 focus:border-brown-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+              <%= location_form.label :lat,
+                class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do
               %>
+                Latitude
+              <% end %>
+              <div class="mt-1">
+                <%= location_form.text_field :lat,
+                  class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md",
+                  placeholder: "Latitude"
+                %>
+              </div>
             </div>
-          </div>
+
+            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+              <%= location_form.label :lng,
+                class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do
+              %>
+                Longitude
+              <% end %>
+              <div class="mt-1">
+                <%= location_form.text_field :lng, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md", placeholder: "Longitude" %>
+              </div>
+            </div>
+
+          <% end %>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
             <%= f.label :district, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
@@ -106,32 +115,6 @@
                 <% end %>
               </div>
             </div>
-          </div>
-
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-            <%= f.label :google_place_id, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Google Place ID
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :google_place_id, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
-          </div>
-
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-            <%= f.label :google_map, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Google Map
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :google_map, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
-
-            <% if @coffee_shop.google_map.present? && @coffee_shop.google_map.starts_with?("https://")%>
-              <div class="mt-1 text-sm">
-                <a href="<%= @coffee_shop.google_map %>" target="_blank" class="text-brown-500 hover:text-brown-900">
-                  <%= @coffee_shop.google_map %>
-                </a>
-              </div>
-            <% end %>
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
@@ -182,33 +165,6 @@
               <%= f.text_field :whatsapp, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
             </div>
             <%= render partial: "link_preview", locals: { url: f.object.whatsapp_url, name: "whatsapp" } %>
-          </div>
-
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-            <%= f.label :lat, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Latitude
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :lat, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
-          </div>
-
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-            <%= f.label :lng, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Longitude
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :lng, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
-          </div>
-
-          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-            <%= f.label :google_embed, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
-              Google Embed
-            <% end %>
-            <div class="mt-1">
-              <%= f.text_field :google_embed, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
-            </div>
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">

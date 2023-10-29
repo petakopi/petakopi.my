@@ -8,11 +8,15 @@ import "ahoy.js"
 import Alpine from "alpinejs"
 import Tooltip from "@ryangjchandler/alpine-tooltip";
 
-
-// The default of 500ms is too long
 import { Turbo } from "@hotwired/turbo-rails"
-
 Turbo.setProgressBarDelay(100)
+
+window.dispatchMapsFormEvent = function (...args) {
+  const event = new Event("google-maps-callback", { bubbles: true, cancelable: true });
+  event.args = args;
+
+  document.dispatchEvent(event);
+};
 
 // Locals
 import "./controllers"

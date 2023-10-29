@@ -1,7 +1,5 @@
 <div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
-  <%= render "coffee_shops/user_menu" %>
-
-  <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
+  <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-12">
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
@@ -30,9 +28,8 @@
                           <%= coffee_shop.name %>
                         </td>
                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                          <%= link_to "Stats", stats_coffee_shop_path(id: coffee_shop.slug), class: "text-brown-600 hover:text-brown-900 mr-4" %>
-                          <%= link_to "View", main_coffee_shop_path(id: coffee_shop.slug), class: "text-brown-600 hover:text-brown-900 mr-4" %>
-                          <%= link_to "Edit", edit_coffee_shop_path(coffee_shop), class: "text-brown-600 hover:text-brown-900" %>
+                          <%= link_to "Manage", edit_coffee_shop_path(id: coffee_shop.slug), class: "text-brown-600 hover:text-brown-900" %>
+                          <%= link_to "View", main_coffee_shop_path(id: coffee_shop.slug), class: "text-brown-600 hover:text-brown-900 ml-4" %>
                         </td>
                       </tr>
                     <% end %>
@@ -44,7 +41,7 @@
         <% else %>
           <div>
             It seems like you don't have any coffee shop assigned to you.
-            Please contact at <a class="underline" href="https://instagram.com/petakopi.my" target="_blank">petakopi.my</a>
+            Please contact us at <a class="underline" href="https://instagram.com/petakopi.my" target="_blank">petakopi.my</a>
             to claim your coffee shop.
           </div>
         <% end %>

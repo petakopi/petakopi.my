@@ -40,7 +40,14 @@
     <div class="flex space-x-2 items-center">
       <%=
         render partial: "coffee_shops/link",
-          collection: [:google_map, :instagram_url, :facebook_url, :twitter_url, :tiktok_url, :whatsapp_url],
+          collection: [
+            :facebook_url,
+            :google_map,
+            :instagram_url,
+            :tiktok_url,
+            :twitter_url,
+            :whatsapp_url
+          ],
           as: :link,
           locals: { coffee_shop: coffee_shop }
       %>

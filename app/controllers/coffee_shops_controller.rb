@@ -1,6 +1,7 @@
 class CoffeeShopsController < ApplicationController
   before_action :authenticate_user!, only: [:index]
   before_action :set_coffee_shop, only: %i[show]
+  before_action :set_coffee_shop_by_current_user, only: %i[edit update]
 
   def index
   end
@@ -27,6 +28,21 @@ class CoffeeShopsController < ApplicationController
         format.json { render :show, status: :created, location: @coffee_shop }
       else
         format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @coffee_shop.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    respond_to do |format|
+      if @coffee_shop.update(coffee_shop_update_params)
+        format.html { redirect_to @coffee_shop, notice: "Coffee shop was successfully updated." }
+        format.json { render :show, status: :ok, location: @coffee_shop }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @coffee_shop.errors, status: :unprocessable_entity }
       end
     end

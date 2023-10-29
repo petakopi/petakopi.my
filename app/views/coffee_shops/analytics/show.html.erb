@@ -1,0 +1,48 @@
+<%= content_for(:extra_js) { javascript_include_tag "chart", "data-turbo-track": "reload", defer: true  } %>
+
+<div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
+  <%= render partial: "coffee_shops/coffee_shop_menu", locals: { coffee_shop: @coffee_shop } %>
+
+  <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
+
+    <div class="shadow sm:rounded-md sm:overflow-hidden">
+      <div class="bg-white py-6 px-4 sm:p-6">
+        <div class="space-y-6 sm:space-y-5">
+          <div>
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+              Opening Hours
+            </h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Analytics for your page for the last 90 days.
+            </p>
+
+
+            <div class="mt-8">
+              <%= area_chart(@visits) %>
+            </div>
+
+            <div>
+              <h4 class="text-md leading-6 font-medium text-gray-900">
+                Clicks on your links
+              </h3>
+              <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+                <% @outbound_links.each do |type, _| %>
+                  <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+                    <dt class="text-sm font-medium text-gray-500 truncate">
+                      <%= type.titleize == "Google Embed" ? "Google Mini Map" : type.titleize %>
+                    </dt>
+                    <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                    <%= Ahoy::Event.where_event("Click Link", id: @coffee_shop.id, type: type).count %>
+                    </dd>
+                  </div>
+                <% end %>
+              </dl>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

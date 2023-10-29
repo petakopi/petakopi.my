@@ -1,0 +1,32 @@
+<aside class="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
+  <nav class="space-y-1">
+    <%= link_to coffee_shops_path, class: "text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" do %>
+      <%= render partial: "components/icons/list", locals: { css_styles: "text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" } %>
+      <span class="truncate">Coffee Shops</span>
+    <% end %>
+
+    <%= link_to edit_coffee_shop_path(id: coffee_shop.slug), class: "text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" do %>
+      <%= render partial: "components/icons/shop", locals: { css_styles: "text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" } %>
+      <span class="truncate">Information</span>
+    <% end %>
+
+    <%= link_to edit_coffee_shop_location_path(coffee_shop_id: coffee_shop.slug),
+      class: "text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" do
+    %>
+    <%= render partial: "components/icons/location", locals: { css_styles: "text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" } %>
+      <span class="truncate">Location</span>
+    <% end %>
+
+    <%= link_to edit_coffee_shop_opening_hours_path(coffee_shop_id: coffee_shop.slug),
+      class: "text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" do
+    %>
+      <%= render partial: "components/icons/clock", locals: { css_styles: "text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" } %>
+      <span class="truncate">Opening Hours</span>
+    <% end %>
+
+    <%= link_to coffee_shop_analytics_path(coffee_shop_id: coffee_shop.slug), class: "text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" do %>
+      <%= render partial: "components/icons/chart", locals: { css_styles: "text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" } %>
+      <span class="truncate">Analytics</span>
+    <% end %>
+  </nav>
+</aside>

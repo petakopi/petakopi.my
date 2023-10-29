@@ -2,16 +2,17 @@ class Api::V1::CoffeeShopsController < ApplicationController
   def index
     coffee_shops =
       CoffeeShop
+        .joins(:google_location)
         .includes(logo_attachment: :blob)
         .status_published
         .where
-        .not(lat: nil, lng: nil)
+        .not(google_locations: { lat: nil, lng: nil })
         .select(
           :id,
           :name,
           :slug,
-          :lat,
-          :lng
+          "google_locations.lat",
+          "google_locations.lng",
         )
 
     @coffee_shops =

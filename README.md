@@ -24,6 +24,10 @@ rails seeder:locations
 rails seeder:tags
 ```
 
+### Google Credentials
+
+Depending on the setup, we may have to allow our IP to use Google API
+[here](https://console.cloud.google.com/google/maps-apis/credentials).
 
 ## Reports
 

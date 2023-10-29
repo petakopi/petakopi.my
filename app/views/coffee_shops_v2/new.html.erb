@@ -1,0 +1,336 @@
+<%= content_for(:extra_js) do %>
+<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google_api_key, :web)}&libraries=places&callback=dispatchMapsFormEvent",
+    async: true,
+    defer: true,
+    "data-turbolinks-eval": false %>
+<% end %>
+
+<h2 class="text-3xl font-bold text-gray-900">
+  New Coffee Shop
+</h2>
+
+<div class"mt-4 text-center text-sm text-gray-600">
+  <%= render "components/alert", alerts: @coffee_shop.errors.full_messages if @coffee_shop.errors.full_messages.count > 0 %>
+</div>
+
+<div class="bg-white overflow-hidden shadow rounded-lg mt-4">
+  <div class="px-4 py-5 sm:p-6">
+    <div>
+      <%= form_with model: @coffee_shop,
+        url: coffee_shops_v2_index_path,
+        data: {
+          controller: "maps",
+          action: "google-maps-callback@window->maps#initializeMap"
+        },
+        method: "post" do |f| %>
+
+        <%= f.fields_for :google_location do |location_form| %>
+          <%= location_form.hidden_field :place_id, data: { maps_target: "googlePlaceId" } %>
+          <%= location_form.hidden_field :lat, data: { maps_target: "latitude" }  %>
+          <%= location_form.hidden_field :lng, data: { maps_target: "longitude" }  %>
+        <% end %>
+
+        <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+          <div class="space-y-6 sm:space-y-5">
+            <div>
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Basic Information
+              </h3>
+              <p class="mt-1 text-sm text-gray-500">
+                Almost all coffee shop that can serve freshly brewed arabica
+                coffee such as hot american is eligible to be listed here.
+              </p>
+              <p class="mt-2 text-sm text-gray-500">
+                <span class="font-bold">We have the right to reject</span>
+                a submission that we think is not suitable for us.
+              </p>
+            </div>
+
+            <div class="space-y-6 sm:space-y-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :name, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Cofee Shop's Name*
+                  <div class="mt-1 text-sm text-gray-500">
+                    Just the name and nothing else
+                  </div>
+                <% end %>
+                <div class="mt-1 sm:self-center flex items-center">
+                  <%= f.text_field :name,
+                    required: true,
+                    class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-6 sm:space-y-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :name, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Location*
+                <% end %>
+                <div class="mt-1 sm:col-span-2">
+                  <fieldset>
+                    <legend class="sr-only">Plan</legend>
+                    <div class="space-y-5">
+                      <div class="relative flex items-start">
+                        <div class="flex h-6 items-center">
+                          <input
+                            name="location"
+                            type="radio"
+                            class="h-4 w-4 border-gray-300 text-brown-600 focus:ring-brown-600"
+                            data-action="change->maps#toggleLocation"
+                            data-maps-target="placeRadio"
+                            checked
+                          />
+                        </div>
+                        <div class="ml-3 text-sm leading-6">
+                          <label for="small" class="font-medium text-gray-900">
+                            Available on Google Maps
+                          </label>
+                          <p class="text-gray-500">
+                            For business that we can search on Google Maps.
+                          </p>
+                          <p class="text-gray-500 text-sm">
+                            Just search for the business name to submit the
+                            place. Please make sure it's the same business.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="relative ml-7 h-80" data-maps-target="placeContainer">
+                        <div style="display: none">
+                          <input
+                            id="maps-place-input"
+                            class="ml-2 mt-2 max-w-lg block w-11/12 shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            type="text"
+                            placeholder="Enter the name"
+                            data-action="keydown->maps#preventSubmit"
+                            data-maps-target="placeInput"
+                          />
+                        </div>
+                        <div class="h-full" data-maps-target="placeMapContainer"></div>
+                      </div>
+
+                      <div class="relative flex items-start">
+                        <div class="flex h-6 items-center">
+                          <input
+                            name="location"
+                            type="radio"
+                            class="h-4 w-4 border-gray-300 text-brown-600 focus:ring-brown-600"
+                            data-action="change->maps#toggleLocation"
+                            data-maps-target="locationRadio"
+                          />
+                        </div>
+                        <div class="ml-3 text-sm leading-6">
+                          <label for="medium" class="font-medium text-gray-900">
+                            Only coordinate (latitude and longitude)
+                          </label>
+                          <p class="text-gray-500">
+                            For mobile business / not registered with Google.
+                          </p>
+                          <p class="text-gray-500 text-sm">
+                            Search for the nearest place to zoom in
+                            faster and then drag the marker to the exact
+                            location.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="relative ml-7 h-80 hidden" data-maps-target="locationContainer">
+                        <div style="display: none">
+                          <input
+                            id="maps-location-input"
+                            class="ml-2 mt-2 max-w-lg block w-11/12 shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                            type="text"
+                            placeholder="Enter the name"
+                            data-action="keydown->maps#preventSubmit"
+                            data-maps-target="locationInput"
+                          />
+                        </div>
+                        <div class="h-full" data-maps-target="locationMap"></div>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-6 sm:space-y-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :logo, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Logo
+                  <div class="mt-1 text-sm text-gray-500">
+                    Please upload the logo if you are the owner
+                  </div>
+                <% end %>
+                <div class="mt-1 sm:self-center flex items-center">
+                  <%= f.file_field :logo, class: "text-sm text-gray-700", accept: "image/*" %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-8 space-y-6 sm:space-y-5">
+            <div>
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Info for Muslim
+              </h3>
+              <p class="mt-1 text-sm text-gray-500">
+              This information is very important to Muslim. If you are not
+              the owner, please fill it in only if you are sure about the
+              status. Just leave it blank if you don't know.
+              </p>
+
+              <p class="mt-2 text-sm text-gray-500 font-bold">
+              If you have halal certification, please contact us through
+              our Instagram so that we can manually tag you.
+              </p>
+            </div>
+            <div class="space-y-6 sm:space-y-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <div class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Status</div>
+                <div class="mt-1">
+                  <div class="mt-1 sm:mt-0 sm:col-span-2">
+                    <div class="space-y-5 sm:space-y-4">
+                      <% Tag.is_public.where(group: "halal").order(:name).each do |tag| %>
+                        <%= render partial: "coffee_shops/form_tag",
+                          locals: {
+                            f: f,
+                            tag: tag,
+                            multiple_selections: false
+                          }
+                        %>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+            <div>
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Other Tags
+              </h3>
+              <p class="mt-1 text-sm text-gray-500">
+              With more information, we can help our coffee lovers to
+              find the right place for their coffee
+              </p>
+            </div>
+            <div class="space-y-6 sm:space-y-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <div class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"></div>
+                <div class="mt-1">
+                  <div class="mt-1 sm:mt-0 sm:col-span-2">
+                    <div class="space-y-5 sm:space-y-4">
+                      <% Tag.is_public.where(group: nil).order(:name).each do |tag| %>
+                        <%= render partial: "coffee_shops/form_tag",
+                          locals: {
+                            f: f,
+                            tag: tag,
+                            multiple_selections: true
+                          }
+                        %>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+            <div>
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Social Media
+              </h3>
+              <p class="mt-1 text-sm text-gray-500">
+              It will help our fellow friends to see what is on the menu, the
+              beautiful photos, the story or if it is even open right now.
+              </p>
+            </div>
+            <div class="space-y-6 sm:space-y-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :instagram, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Instagram
+                <% end %>
+
+                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                  <div class="max-w-lg flex rounded-md shadow-sm">
+                    <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
+                      instagram.com/
+                    </span>
+                    <%= f.text_field :instagram, class: "flex-1 block w-full focus:ring-brown-500 focus:border-brown-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300" %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :facebook, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Facebook
+                <% end %>
+
+                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                  <div class="max-w-lg flex rounded-md shadow-sm">
+                    <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
+                      facebook.com/
+                    </span>
+                    <%= f.text_field :facebook, class: "flex-1 block w-full focus:ring-brown-500 focus:border-brown-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300" %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :twitter, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  Twitter
+                <% end %>
+                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                  <div class="max-w-lg flex rounded-md shadow-sm">
+                    <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
+                      twitter.com/
+                    </span>
+                    <%= f.text_field :twitter, class: "flex-1 block w-full focus:ring-brown-500 focus:border-brown-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300" %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :tiktok, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  TikTok
+                <% end %>
+                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                  <div class="max-w-lg flex rounded-md shadow-sm">
+                    <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
+                      tiktok.com/
+                    </span>
+                    <%= f.text_field :tiktok, class: "flex-1 block w-full focus:ring-brown-500 focus:border-brown-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300" %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= f.label :whatsapp, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                  WhatsApp
+                <% end %>
+                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                  <div class="max-w-lg flex rounded-md shadow-sm">
+                    <%= f.text_field :whatsapp, placeholder: "60123456789", class: "flex-1 block w-full focus:ring-brown-500 focus:border-brown-500 min-w-0 rounded-md sm:text-sm border-gray-300" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="pt-5">
+            <div class="flex justify-end">
+              <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

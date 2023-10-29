@@ -37,22 +37,61 @@
           <%= @coffee_shop.name %>
         </dd>
       </div>
+
+      <% if @coffee_shop.google_location %>
+        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Location
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%=
+              [
+                @coffee_shop.google_location.district,
+                @coffee_shop.google_location.state
+              ].compact.join(", ")
+            %>
+          </dd>
+        </div>
+
+        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Google Place ID
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= @coffee_shop.google_location.place_id %>
+          </dd>
+        </div>
+
+        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Latitude
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= @coffee_shop.google_location.lat %>
+          </dd>
+        </div>
+
+        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Longitude
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= @coffee_shop.google_location.lng %>
+          </dd>
+        </div>
+      <% end %>
+
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-sm font-medium text-gray-500">
-          Location
+          Tags
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <%= @coffee_shop.district %>, <%= @coffee_shop.state %>
+          <div class="flex space-y-2 flex-col lg:flex-row lg:items-center lg:space-x-2 lg:space-y-0">
+            <%= @coffee_shop.tags.map { |tag| tag.name }.join(", ") %>
+          </div>
         </dd>
       </div>
-      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-          Google Place ID
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <%= @coffee_shop.google_place_id %>
-        </dd>
-      </div>
+
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-sm font-medium text-gray-500">
           Links
@@ -133,18 +172,6 @@
             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
               <%= @coffee_shop.status %>
             </span>
-          <% end %>
-        </dd>
-      </div>
-      <div class="bg-white-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-        Maps
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <% if @coffee_shop.google_embed %>
-            <iframe src="<%= @coffee_shop.google_embed %>" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-          <% else %>
-            No Google Embed
           <% end %>
         </dd>
       </div>

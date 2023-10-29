@@ -10,13 +10,15 @@ class OpeningHoursSyncThrottler
     new(coffee_shop: coffee_shop).allowed?
   end
 
-  def allowed?
-    last_synced =
+  def last_synced
+    @last_synced ||=
       SyncLog
         .where(syncable: @coffee_shop, message: MESSAGE)
         .order(created_at: :desc)
         .first
+  end
 
+  def allowed?
     return true if last_synced.nil?
     return true if last_synced.created_at < TIME_LIMIT
 

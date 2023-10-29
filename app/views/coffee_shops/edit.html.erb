@@ -1,3 +1,10 @@
+<%= content_for(:extra_js) do %>
+<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google_api_key, :web)}&libraries=places&callback=dispatchMapsFormEvent",
+    async: true,
+    defer: true,
+    "data-turbolinks-eval": false %>
+<% end %>
+
 <div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
   <%= render partial: "coffee_shops/coffee_shop_menu", locals: { coffee_shop: @coffee_shop } %>
 
@@ -19,7 +26,7 @@
                   Basic Information
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">
-                  Please contact us if you want to change the name.
+                  Please contact us if you want to change the name of you coffee shop.
                 </p>
               </div>
 
@@ -72,13 +79,7 @@
                   <div class="sm:col-span-6">
                     <div class="space-y-5 sm:space-y-4">
                       <% Tag.is_public.where(group: "halal").order(:name).each do |tag| %>
-                        <%= render partial: "coffee_shops/form_tag",
-                          locals: {
-                            f: f,
-                            tag: tag,
-                            multiple_selections: false
-                          }
-                        %>
+                        <%= render "form_tag", f: f, tag: tag, multiple_selections: false %>
                       <% end %>
                     </div>
                   </div>
@@ -102,13 +103,7 @@
                   <div class="sm:col-span-6">
                     <div class="space-y-5 sm:space-y-4">
                       <% Tag.is_public.where(group: nil).order(:name).each do |tag| %>
-                        <%= render partial: "coffee_shops/form_tag",
-                          locals: {
-                            f: f,
-                            tag: tag,
-                            multiple_selections: true
-                          }
-                        %>
+                        <%= render "form_tag", f: f, tag: tag, multiple_selections: true %>
                       <% end %>
                     </div>
                   </div>
@@ -172,6 +167,5 @@
         </div>
       </div>
     <% end %>
-
   </div>
 </div>

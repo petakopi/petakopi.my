@@ -5,6 +5,7 @@ class GoogleApis::OpeningHours::Process < Micro::Case
   def call!
     delete_outdated_opening_hours
     create_new_opening_hours
+    record_opening_hours_sync
 
     Success result: { coffee_shop: coffee_shop }
   end
@@ -67,5 +68,12 @@ class GoogleApis::OpeningHours::Process < Micro::Case
     return if hours.blank?
 
     OpeningHour.insert_all(hours)
+  end
+
+  def record_opening_hours_sync
+    SyncLog.create!(
+      syncable: coffee_shop,
+      message: OpeningHoursSyncThrottler::MESSAGE
+    )
   end
 end
