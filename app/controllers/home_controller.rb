@@ -2,7 +2,6 @@ class HomeController < ApplicationController
   before_action :track_search, only: [:index]
 
   def index
-    @gold_shop = CoffeeShop.find_by(slug: Rails.cache.fetch("ads/gold"))
     @coffee_shops =
       CoffeeShopsListQuery.call(
         params: params,
@@ -11,6 +10,7 @@ class HomeController < ApplicationController
     @coffee_shops = @coffee_shops.status_published
     @filter_counter = calculate_filter_counter
 
+    set_gold_shops
     set_silver_shop
 
     @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
@@ -18,18 +18,8 @@ class HomeController < ApplicationController
 
   private
 
-  def set_silver_shop
-    return if params[:state].blank?
-
-    parameterized_state = params[:state].parameterize
-    silver_shop_slug = Rails.cache.fetch("ads/silver/#{parameterized_state}")
-
-    @silver_shop = CoffeeShop.find_by(slug: silver_shop_slug)
-    @silver_shop = nil if @silver_shop == @gold_shop
-  end
-
   def track_search
-    return if params.blank?
+    return if params.except(:controller, :action).blank?
 
     ahoy.track "Search",
       keyword: params[:keyword],
@@ -48,5 +38,22 @@ class HomeController < ApplicationController
         counter
       end
     end
+  end
+
+  def set_gold_shops
+    @gold_shops =
+      if params.except(:controller, :action).blank?
+        CoffeeShop.where(slug: Rails.cache.fetch("ads/gold")&.split(","))
+      end
+  end
+
+  def set_silver_shop
+    return if params[:state].blank?
+
+    parameterized_state = params[:state].parameterize
+    silver_shop_slug = Rails.cache.fetch("ads/silver/#{parameterized_state}")
+
+    @silver_shop = CoffeeShop.find_by(slug: silver_shop_slug)
+    @silver_shop = nil if @silver_shop == @gold_shop
   end
 end
