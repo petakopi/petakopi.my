@@ -1,49 +1,73 @@
-<%= form_tag root_path, method: :get do %>
-  <div
-    class="bg-white shadow rounded-lg mt-4"
-    data-controller="select"
-    data-select-include-blank-value="true"
-    data-select-url-value="<%= cities_locations_path %>"
-    data-select-param-value="state">
-    <div class="px-4 py-5 sm:p-6 sm:flex sm:space-x-2 space-y-2 sm:space-y-0 items-center">
-      <div>
-        <input type="text" name="keyword" id="keyword" class="shadow-sm focus:ring-brown-500 focus:border-brown-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Keyword" value="<%= params[:keyword] %>">
+<div data-controller="home-filters">
+  <%= render partial: "homepage_actions",
+    locals: { filter_counter: @filter_counter } %>
+
+  <%= form_tag root_path,
+    method: :get,
+    class: @filter_counter > 0 ? "" : "hidden",
+    data: { home_filters_target: "searchBox" } do %>
+    <div
+      class="bg-white shadow rounded-lg mt-4"
+      data-controller="select"
+      data-select-include-blank-value="true"
+      data-select-url-value="<%= cities_locations_path %>"
+      data-select-param-value="state">
+      <div class="px-4 py-5 sm:p-6 sm:flex sm:space-x-2 space-y-2 sm:space-y-0 items-center">
+        <div>
+          <input
+              type="text"
+              name="keyword"
+              id="keyword"
+              class="shadow-sm focus:ring-brown-500 focus:border-brown-500 block w-full sm:text-sm border-gray-300 rounded-md"
+              placeholder="Keyword"
+              value="<%= params[:keyword] %>"
+              data-home-filters-target="keyword">
+        </div>
+
+        <div>
+          <%= collection_select nil,
+            :state,
+            Location.states,
+            :to_s,
+            :to_s,
+            {
+              prompt: "Select state",
+              selected: params[:state]
+            },
+            data: {
+              action: "change->select#change",
+              home_filters_target: "state"
+            },
+            class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brown-500 focus:border-brown-500 sm:text-sm rounded-md"
+          %>
+        </div>
+
+        <div>
+          <%= collection_select nil,
+            :district,
+            params[:state] ? Location.districts(state: params[:state]).prepend("") : [],
+            :to_s,
+            :to_s,
+            {
+              selected: params[:district]
+            },
+            id: nil,
+            data: {
+              select_target: "select",
+              home_filters_target: "district"
+            },
+            class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brown-500 focus:border-brown-500 sm:text-sm rounded-md"
+          %>
+        </div>
+
+        <%= render "tags_selections" %>
+
+        <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">Filter</button>
+        <%= link_to "Reset", root_path, class: "pl-2 text-sm text-gray-500 hover:text-gray-900" %>
       </div>
-
-      <div>
-        <%= collection_select nil,
-          :state,
-          Location.states,
-          :to_s,
-          :to_s,
-          { prompt: "Select state", selected: params[:state] },
-          data: { action: "change->select#change" },
-          class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brown-500 focus:border-brown-500 sm:text-sm rounded-md"
-        %>
-      </div>
-
-      <div>
-        <%= collection_select nil,
-          :district,
-          params[:state] ? Location.districts(state: params[:state]).prepend("") : [],
-          :to_s,
-          :to_s,
-          { selected: params[:district] },
-          id: nil,
-          data: { select_target: "select" },
-          class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brown-500 focus:border-brown-500 sm:text-sm rounded-md"
-        %>
-      </div>
-
-      <%= render "tags_selections" %>
-
-      <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">Filter</button>
-      <%= link_to "Reset", root_path, class: "pl-2 text-sm text-gray-500 hover:text-gray-900" %>
     </div>
-  </div>
-<% end %>
-
-<%= render "live_map_bar" unless turbo_native_app? %>
+  <% end %>
+</div>
 
 <% if @coffee_shops.any? %>
   <div class="mt-4 overflow-hidden bg-white shadow sm:rounded-md sm:hidden">

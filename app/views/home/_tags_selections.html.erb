@@ -77,7 +77,7 @@
 %>
 
 <div x-data="dropdown()" x-init="loadOptions()">
-  <input name="tags" type="hidden" x-bind:value="selectedValues()">
+  <input name="tags" type="hidden" x-bind:value="selectedValues()" data-home-filters-target="tags">
   <div class="inline-block relative w-full">
     <div class="flex flex-col items-center relative">
       <div x-on:click="open" class="w-full">

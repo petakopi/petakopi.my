@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  before_action :track_search, only: [:index]
+
   def index
     @gold_shop = CoffeeShop.find_by(slug: Rails.cache.fetch("ads/gold"))
     @coffee_shops =
@@ -7,10 +9,7 @@ class HomeController < ApplicationController
         relation: CoffeeShop.includes(:tags, :owners, logo_attachment: :blob)
       )
     @coffee_shops = @coffee_shops.status_published
-
-    if params[:keyword].present? || params[:state].present? || params[:district].present?
-      ahoy.track "Search", keyword: params[:keyword], state: params[:state], district: params[:district]
-    end
+    @filter_counter = calculate_filter_counter
 
     set_silver_shop
 
@@ -27,5 +26,27 @@ class HomeController < ApplicationController
 
     @silver_shop = CoffeeShop.find_by(slug: silver_shop_slug)
     @silver_shop = nil if @silver_shop == @gold_shop
+  end
+
+  def track_search
+    return if params.blank?
+
+    ahoy.track "Search",
+      keyword: params[:keyword],
+      state: params[:state],
+      district: params[:district],
+      tags: params[:tags]
+  end
+
+  def calculate_filter_counter
+    fields = %i(keyword state district tags)
+
+    fields.reduce(0) do |counter, field|
+      if params[field].present?
+        counter + 1
+      else
+        counter
+      end
+    end
   end
 end
