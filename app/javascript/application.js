@@ -8,6 +8,12 @@ import "ahoy.js"
 import Alpine from "alpinejs"
 import Tooltip from "@ryangjchandler/alpine-tooltip";
 
+
+// The default of 500ms is too long
+import { Turbo } from "@hotwired/turbo-rails"
+
+Turbo.setProgressBarDelay(100)
+
 // Locals
 import "./controllers"
 import "./tailwind.alpine"
