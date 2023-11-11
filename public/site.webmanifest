@@ -3,7 +3,7 @@
   "name": "petakopi.my",
   "theme_color": "#543626",
   "background_color": "#ffffff",
-  "start_url": "/",
+  "start_url": "/?from=homescreen",
   "display": "standalone",
   "scope": "/",
   "description": "petakopi.my — Discover authentic coffee anywhere",
