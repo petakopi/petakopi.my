@@ -13,6 +13,9 @@ application.register("home-filters", HomeFiltersController)
 import MapLoaderController from "./map_loader_controller.js"
 application.register("map-loader", MapLoaderController)
 
+import PwaInstallController from "./pwa_install_controller.js"
+application.register("pwa-install", PwaInstallController)
+
 import SelectController from "./select_controller.js"
 application.register("select", SelectController)
 
