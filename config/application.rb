@@ -30,5 +30,10 @@ module Petakopi
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.active_job.queue_adapter = :sidekiq
+
+    # Use custom error pages
+    config.exceptions_app = ->(env) {
+      ErrorsController.action(:show).call(env)
+    }
   end
 end
