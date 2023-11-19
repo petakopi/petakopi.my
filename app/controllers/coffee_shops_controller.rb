@@ -1,7 +1,6 @@
 class CoffeeShopsController < ApplicationController
   before_action :authenticate_user!, only: [:index]
   before_action :set_coffee_shop, only: %i[show]
-  before_action :set_coffee_shop_by_current_user, only: %i[edit update stats]
 
   def index
   end

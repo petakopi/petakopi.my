@@ -2,11 +2,17 @@
   <%= link_to edit_business_coffee_shop_path(id: @coffee_shop.slug),
     class: "bg-gray-50 text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" do %>
     <svg class="text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor"><path d="M495.5 223.2C491.6 223.7 487.6 224 483.4 224C457.4 224 434.2 212.6 418.3 195C402.4 212.6 379.2 224 353.1 224C327 224 303.8 212.6 287.9 195C272 212.6 248.9 224 222.7 224C196.7 224 173.5 212.6 157.6 195C141.7 212.6 118.5 224 92.36 224C88.3 224 84.21 223.7 80.24 223.2C24.92 215.8-1.255 150.6 28.33 103.8L85.66 13.13C90.76 4.979 99.87 0 109.6 0H466.4C476.1 0 485.2 4.978 490.3 13.13L547.6 103.8C577.3 150.7 551 215.8 495.5 223.2H495.5zM499.7 254.9C503.1 254.4 508 253.6 512 252.6V448C512 483.3 483.3 512 448 512H128C92.66 512 64 483.3 64 448V252.6C67.87 253.6 71.86 254.4 75.97 254.9L76.09 254.9C81.35 255.6 86.83 256 92.36 256C104.8 256 116.8 254.1 128 250.6V384H448V250.7C459.2 254.1 471.1 256 483.4 256C489 256 494.4 255.6 499.7 254.9L499.7 254.9z"/></svg>
-    <span class="truncate">Coffee Shop</span>
+    <span class="truncate">Basic</span>
   <% end %>
   <%= link_to stats_business_coffee_shop_path(id: @coffee_shop.slug),
     class: "bg-gray-50 text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" do %>
     <svg class="text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512" fill="currentColor"><defs><style>.fa-secondary{opacity:0.4;}</style></defs><path class="fa-primary" d="M368 96c-26.5 0-48 21.5-48 48V432c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V144c0-26.5-21.5-48-48-48H368zM48 224c-26.5 0-48 21.5-48 48V432c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48H48z"/><path class="fa-secondary" d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80z"/></svg>
     <span class="truncate">Stats</span>
+  <% end %>
+  <%= link_to main_coffee_shop_path(id: @coffee_shop.slug),
+    target: "_blank",
+    class: "bg-gray-50 text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" do %>
+    <svg class="text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M328 96c13.3 0 24 10.7 24 24V360c0 13.3-10.7 24-24 24s-24-10.7-24-24V177.9L73 409c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l231-231H88c-13.3 0-24-10.7-24-24s10.7-24 24-24H328z"/></svg>
+    <span class="truncate">View Shop</span>
   <% end %>
 </nav>
