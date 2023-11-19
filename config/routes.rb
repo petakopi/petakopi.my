@@ -16,6 +16,14 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :business do
+    resources :coffee_shops, only: [:index, :edit, :update] do
+      member do
+        get "stats"
+      end
+    end
+  end
+
   get "directories/:state(/:district)" => "directories#index", :as => "directories"
 
   resources :locations do
