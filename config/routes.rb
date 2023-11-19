@@ -53,11 +53,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :coffee_shops, only: [:new, :create, :edit, :update, :index] do
-    member do
-      get "stats"
-    end
-
+  resources :coffee_shops, only: [:new, :create] do
     resources :favourites, only: [:create, :destroy]
     resources :check_ins, only: [:create]
     resources :reports, only: [:new, :create]
