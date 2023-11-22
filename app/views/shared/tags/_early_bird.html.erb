@@ -1,3 +1,3 @@
-<span class="px-2 inline-flex text-xs leading-5 rounded-full bg-amber-100 text-amber-700">
+<span class="inline-flex px-2 text-xs leading-5 rounded-full bg-amber-100 text-amber-700 <%= 'ring ring-offset-2' if current_page?(controller: 'index', tags: name) %>">
   <%= name %>
 </span>
