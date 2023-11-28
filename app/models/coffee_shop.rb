@@ -1,7 +1,7 @@
 class CoffeeShop < ApplicationRecord
   has_paper_trail on: [:update]
 
-  serialize :urls, HashSerializer
+  serialize :urls, coder: HashSerializer
   store_accessor :urls,
     :facebook,
     :google_embed,

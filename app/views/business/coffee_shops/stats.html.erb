@@ -1,7 +1,9 @@
 <%= content_for(:extra_js) { javascript_include_tag "chart", "data-turbo-track": "reload", defer: true  } %>
 
-<div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
-  <%= render "coffee_shops/user_menu" %>
+<div class="lg:grid lg:grid-cols-12 lg:gap-x-5 mt-2">
+  <aside class="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
+    <%= render partial: "business/coffee_shops/side_menu" %>
+  </aside>
 
   <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
     <div>

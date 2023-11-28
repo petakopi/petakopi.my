@@ -4,12 +4,20 @@
 
 import { application } from "./application"
 
-import SelectController from "./select_controller.js"
-import TrackerController from "./tracker_controller.js"
-import MapLoaderController from "./map_loader_controller.js"
 import CheckInController from "./check_in_controller.js"
-
-application.register("select", SelectController)
-application.register("tracker", TrackerController)
-application.register("map-loader", MapLoaderController)
 application.register("check-in", CheckInController)
+
+import HomeFiltersController from "./home_filters_controller.js"
+application.register("home-filters", HomeFiltersController)
+
+import MapLoaderController from "./map_loader_controller.js"
+application.register("map-loader", MapLoaderController)
+
+import PwaInstallController from "./pwa_install_controller.js"
+application.register("pwa-install", PwaInstallController)
+
+import SelectController from "./select_controller.js"
+application.register("select", SelectController)
+
+import TrackerController from "./tracker_controller.js"
+application.register("tracker", TrackerController)

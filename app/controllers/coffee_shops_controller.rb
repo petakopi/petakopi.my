@@ -1,7 +1,6 @@
 class CoffeeShopsController < ApplicationController
   before_action :authenticate_user!, only: [:index]
   before_action :set_coffee_shop, only: %i[show]
-  before_action :set_coffee_shop_by_current_user, only: %i[edit update stats]
 
   def index
   end
@@ -24,38 +23,13 @@ class CoffeeShopsController < ApplicationController
 
     respond_to do |format|
       if @coffee_shop.save
-        format.html { redirect_to coffee_shop_url(@coffee_shop), notice: success_message }
+        format.html { redirect_to new_coffee_shop_path, notice: success_message }
         format.json { render :show, status: :created, location: @coffee_shop }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @coffee_shop.errors, status: :unprocessable_entity }
       end
     end
-  end
-
-  def edit
-  end
-
-  def update
-    respond_to do |format|
-      if @coffee_shop.update(coffee_shop_update_params)
-        format.html { redirect_to @coffee_shop, notice: "Coffee shop was successfully updated." }
-        format.json { render :show, status: :ok, location: @coffee_shop }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @coffee_shop.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def stats
-    @visits =
-      Ahoy::Event.where_event(
-        "View Coffee Shop",
-        id: @coffee_shop.id
-      ).where(time: 90.days.ago..).group_by_day(:time).count
-
-    @outbound_links = @coffee_shop.urls.select { |k, v| v.present? }.keys
   end
 
   private
@@ -93,21 +67,6 @@ class CoffeeShopsController < ApplicationController
         :logo,
         :name,
         :state,
-        :tiktok,
-        :twitter,
-        :whatsapp,
-        tag_ids: []
-      )
-  end
-
-  def coffee_shop_update_params
-    params
-      .require(:coffee_shop)
-      .permit(
-        :description,
-        :facebook,
-        :instagram,
-        :logo,
         :tiktok,
         :twitter,
         :whatsapp,

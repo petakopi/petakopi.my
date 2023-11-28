@@ -29,14 +29,16 @@
     <% end %>
   </div>
 
-  <div class="text-sm text-gray-500 mt-8">
-    <div class="flex space-x-3.5 items-center">
-      <%=
-        render partial: "coffee_shops/link",
-          collection: [:google_map, :instagram_url, :facebook_url, :twitter_url, :tiktok_url, :whatsapp_url],
-          as: :link,
-          locals: { coffee_shop: coffee_shop }
-        %>
+  <% unless local_assigns[:is_ad] %>
+    <div class="text-sm text-gray-500 mt-8">
+      <div class="flex space-x-3.5 items-center">
+        <%=
+          render partial: "coffee_shops/link",
+            collection: [:google_map, :instagram_url, :facebook_url, :twitter_url, :tiktok_url, :whatsapp_url],
+            as: :link,
+            locals: { coffee_shop: coffee_shop }
+          %>
+      </div>
     </div>
-  </div>
+  <% end %>
 </li>

@@ -1,6 +1,6 @@
 <head>
-  <title>petakopi.my — <%= content_for?(:page_title) ? yield(:page_title) : "Get real coffee anywhere" %></title>
-  <meta name="title" content="petakopi.my — <%= content_for?(:page_title) ? yield(:page_title) : "Get real coffee anywhere" %>">
+  <title>petakopi.my — <%= content_for?(:page_title) ? yield(:page_title) : "Discover authentic coffee anywhere" %></title>
+  <meta name="title" content="petakopi.my — <%= content_for?(:page_title) ? yield(:page_title) : "Discover authentic coffee anywhere" %>">
   <meta name="description" content="<%= content_for?(:page_description) ? yield(:page_description) : "Discover and share new freshly brewed coffee places around you. Built by the community for everyone." %>">
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -36,10 +36,32 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-14JBBQZVQR"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
+
       function gtag(){dataLayer.push(arguments);}
+
       gtag("js", new Date());
 
-      gtag("config", "G-14JBBQZVQR");
+      document.addEventListener("turbo:load", function(event) {
+        gtag(
+          "config",
+          "G-14JBBQZVQR",
+          {
+            page_location: event.detail.url,
+            page_path: window.location.pathname,
+            page_title: document.title
+          }
+        );
+
+        if (window.location.search.includes("from=homescreen")) {
+          gtag(
+            "event",
+            "home_screen_launch", {
+              "event_category": "PWA",
+              "event_label": "Home Screen Launch"
+            }
+          );
+        }
+      });
     </script>
   <% end %>
 </head>

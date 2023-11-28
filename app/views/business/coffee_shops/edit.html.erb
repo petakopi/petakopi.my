@@ -1,14 +1,16 @@
-<div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
-  <%= render "coffee_shops/user_menu" %>
+<div class="lg:grid lg:grid-cols-12 lg:gap-x-5 mt-2">
+  <aside class="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
+    <%= render partial: "business/coffee_shops/side_menu" %>
+  </aside>
 
-  <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
+  <div class="sm:px-6 lg:px-0 lg:col-span-9">
     <div class"mt-2 text-center text-sm text-gray-600">
-      <%= render "components/alert", alerts: @coffee_shop.errors.full_messages if @coffee_shop.errors.full_messages.count > 0 %>
+      <% if @coffee_shop.errors.full_messages.count > 0 %>
+        <%= render partial: "components/alert", locals: { alerts: @coffee_shop.errors.full_messages } %>
+      <% end %>
     </div>
 
-    <%= render partial: "coffee_shops/syncs", locals: { coffee_shop: @coffee_shop } %>
-
-    <%= form_for @coffee_shop do |f| %>
+    <%= form_with model: @coffee_shop, url: business_coffee_shop_path do |f| %>
       <div class="shadow sm:rounded-md sm:overflow-hidden">
         <div class="bg-white py-6 px-4 space-y-6 sm:p-6">
 
@@ -19,7 +21,7 @@
                   Basic Information
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">
-                  Please contact us if you want to change the name of you coffee shop.
+                  Please contact us if you want to change the name.
                 </p>
               </div>
 
@@ -72,7 +74,13 @@
                   <div class="sm:col-span-6">
                     <div class="space-y-5 sm:space-y-4">
                       <% Tag.is_public.where(group: "halal").order(:name).each do |tag| %>
-                        <%= render "form_tag", f: f, tag: tag, multiple_selections: false %>
+                        <%= render partial: "coffee_shops/form_tag",
+                          locals: {
+                            f: f,
+                            tag: tag,
+                            multiple_selections: false
+                          }
+                        %>
                       <% end %>
                     </div>
                   </div>
@@ -96,7 +104,13 @@
                   <div class="sm:col-span-6">
                     <div class="space-y-5 sm:space-y-4">
                       <% Tag.is_public.where(group: nil).order(:name).each do |tag| %>
-                        <%= render "form_tag", f: f, tag: tag, multiple_selections: true %>
+                        <%= render partial: "coffee_shops/form_tag",
+                          locals: {
+                            f: f,
+                            tag: tag,
+                            multiple_selections: true
+                          }
+                        %>
                       <% end %>
                     </div>
                   </div>
@@ -173,5 +187,6 @@
         </div>
       </div>
     <% end %>
+
   </div>
 </div>
