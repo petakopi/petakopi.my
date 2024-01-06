@@ -8,6 +8,7 @@ gem "ahoy_matey" # analytics
 gem "appsignal" # error/performance monitoring
 gem "aws-sdk-s3", require: false
 gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
+gem "celluloid" # Actor-based concurrent object framework for Ruby
 gem "connection_pool" # redis connection pooling
 gem "cssbundling-rails" # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem "chartkick" # create js charts
