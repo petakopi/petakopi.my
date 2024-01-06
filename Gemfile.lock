@@ -393,6 +393,8 @@ GEM
       redis-client (>= 0.9.0)
     redis-client (0.17.0)
       connection_pool
+    redis_rate_limiter (0.2.0)
+      redis (>= 4.6.0)
     regexp_parser (2.8.2)
     reline (0.3.9)
       io-console (~> 0.5)
@@ -446,6 +448,10 @@ GEM
       sidekiq (>= 6)
     sidekiq-failures (1.0.4)
       sidekiq (>= 4.0.0)
+    sidekiq-rate-limiter (0.0.1)
+      redis
+      redis_rate_limiter
+      sidekiq
     signet (0.17.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -575,6 +581,7 @@ DEPENDENCIES
   sidekiq (<= 7.1.6)
   sidekiq-cron
   sidekiq-failures
+  sidekiq-rate-limiter
   sitemap_generator
   skylight
   sprockets-rails
