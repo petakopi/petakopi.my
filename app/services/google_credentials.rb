@@ -1,29 +1,21 @@
+require "google/apis/sheets_v4"
+require "googleauth"
+require "googleauth/stores/file_token_store"
+
 class GoogleCredentials
   include Callable
 
-  CLIENT_ID = Rails.application.credentials.dig(:google_oauth, :client_id)
-  CLIENT_SECRET = Rails.application.credentials.dig(:google_oauth, :client_secret)
-  REFRESH_TOKEN = Rails.application.credentials.dig(:google_oauth, :sheets_refresh_token)
-  SCOPES = [
-    "https://www.googleapis.com/auth/spreadsheets",
-  ].freeze
+  def initialize(account:)
+    @account = account
+  end
 
   def call
-    creds = Google::Auth::UserRefreshCredentials.new(credentials_config)
-    creds.refresh_token = REFRESH_TOKEN
-    creds.fetch_access_token!
-    creds
-  end
-
-  private
-
-  def credentials_config
-    {
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      scope: SCOPES,
-      additional_parameters: { "access_type" => "offline" },
-    }
+    Google::Auth::ServiceAccountCredentials.new(
+      token_credential_uri: 'https://oauth2.googleapis.com/token',
+      audience: 'https://oauth2.googleapis.com/token',
+      scope: Google::Apis::SheetsV4::AUTH_SPREADSHEETS,
+      issuer: Rails.application.credentials.dig(:google_service, @account, :email),
+      signing_key: OpenSSL::PKey::RSA.new(Rails.application.credentials.dig(:google_service, @account, :private_key))
+    )
   end
 end
-

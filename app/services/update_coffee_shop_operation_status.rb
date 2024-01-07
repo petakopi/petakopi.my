@@ -4,15 +4,13 @@ class UpdateCoffeeShopOperationStatus
   include Callable
   include Rails.application.routes.url_helpers
 
-  SPREADSHEET_ID = "1j33p1xIKSgFaPyI0bWM4hPPFuzfRA1ZgDfATprV4FcE"
+  SPREADSHEET_ID = "1tdoEZRvUr5-JF9FKNQ-61czzHhcg3Ouv0v16RcAqW1w"
 
   def initialize(coffee_shop:)
     @coffee_shop = coffee_shop
   end
 
   def call
-    body = Google::Apis::SheetsV4::ValueRange.new
-
     return if place_id.blank?
 
     row = [
@@ -25,6 +23,7 @@ class UpdateCoffeeShopOperationStatus
       Time.current.iso8601
     ]
 
+    body = Google::Apis::SheetsV4::ValueRange.new
     body.values = [row]
 
     service
@@ -51,9 +50,9 @@ class UpdateCoffeeShopOperationStatus
   end
 
   def service
-    service = Google::Apis::SheetsV4::SheetsService.new
-    service.authorization = GoogleCredentials.call
-    service
+    @service ||= Google::Apis::SheetsV4::SheetsService.new.tap do |svc|
+      svc.authorization = GoogleCredentials.call(account: :spreadsheet)
+    end
   end
 
   def business_status
