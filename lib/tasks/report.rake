@@ -7,7 +7,7 @@ namespace :report do
     sheet_name = Date.today.iso8601
 
     service = Google::Apis::SheetsV4::SheetsService.new
-    service.authorization = GoogleCredentials.call
+    service.authorization = GoogleCredentials.call(account: :spreadsheet)
 
     spreadsheet = service.get_spreadsheet(spreadsheet_id)
     sheet_is_available =
@@ -56,7 +56,7 @@ namespace :report do
     sheet_name = Date.today.iso8601
 
     service = Google::Apis::SheetsV4::SheetsService.new
-    service.authorization = GoogleCredentials.call
+    service.authorization = GoogleCredentials.call(account: :spreadsheet)
 
     spreadsheet = service.get_spreadsheet(spreadsheet_id)
     sheet_is_available =
