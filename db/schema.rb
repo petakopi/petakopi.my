@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_14_015614) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_11_121237) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pageinspect"
   enable_extension "pgcrypto"
@@ -164,6 +164,21 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_14_015614) do
     t.index ["user_id"], name: "index_favourites_on_user_id"
   end
 
+  create_table "google_locations", force: :cascade do |t|
+    t.bigint "coffee_shop_id", null: false
+    t.string "place_id"
+    t.string "lat"
+    t.string "lng"
+    t.string "locality"
+    t.string "administrative_area_level_1"
+    t.string "administrative_area_level_2"
+    t.string "postal_code"
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coffee_shop_id"], name: "index_google_locations_on_coffee_shop_id"
+  end
+
   create_table "locations", force: :cascade do |t|
     t.string "country"
     t.string "state"
@@ -243,5 +258,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_14_015614) do
   add_foreign_key "coffee_shops", "users", column: "submitter_user_id"
   add_foreign_key "favourites", "coffee_shops"
   add_foreign_key "favourites", "users"
+  add_foreign_key "google_locations", "coffee_shops"
   add_foreign_key "opening_hours", "coffee_shops"
 end

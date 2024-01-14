@@ -13,6 +13,8 @@ gem "connection_pool" # redis connection pooling
 gem "cssbundling-rails" # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem "chartkick" # create js charts
 gem "devise" # authentication
+gem "dry-validation" # validation
+gem "dry-monads" # monads
 gem "foreman" # process manager
 gem "geocoder" # geocoding for ahoy
 gem "google-apis-sheets_v4", require: false # Google API client for Sheets
@@ -51,6 +53,7 @@ gem "tinify" # tinypng.com gem for image processing
 gem "tomo-plugin-sidekiq" # tomo plugin for managing sidekiq via systemd
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "u-case" # Use case pattern
+gem "yaaf" # handles form object
 
 group :development, :test do
   gem "pry" # Debugging tool

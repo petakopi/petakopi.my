@@ -28,16 +28,17 @@ class CoffeeShop < ApplicationRecord
   )
 
   belongs_to :submitter, class_name: "User", foreign_key: "submitter_user_id", optional: true
-  has_many :sync_logs, as: :scynable, dependent: :destroy
-  has_many :coffee_shop_tags
+  has_many :sync_logs, as: :syncable, dependent: :destroy
+  has_many :coffee_shop_tags, dependent: :destroy
   has_many :tags, through: :coffee_shop_tags
   has_many :coffee_shop_owners
-  has_many :owners, through: :coffee_shop_owners, source: :user
+  has_many :owners, through: :coffee_shop_owners, source: :user, dependent: :destroy
   has_many :check_ins, dependent: :destroy
   has_many :favourites
-  has_many :favourite_users, through: :favourites, source: :user
-  has_many :opening_hours
+  has_many :favourite_users, through: :favourites, source: :user, dependent: :destroy
+  has_many :opening_hours, dependent: :destroy
 
+  has_one :google_location, dependent: :destroy
   has_one_attached :logo
 
   validates :slug, presence: true
