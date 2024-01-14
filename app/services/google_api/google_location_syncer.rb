@@ -104,8 +104,6 @@ class GoogleApi::GoogleLocationSyncer
           address.find { |x| x["types"].include?("country") }&.[]("long_name")
       )
 
-      @google_location.address = result["results"][0]["formatted_address"]
-
       Success(nil)
     else
       Failure("Error fetching location from Google using lat/lng")
