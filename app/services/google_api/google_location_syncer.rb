@@ -55,7 +55,7 @@ class GoogleApi::GoogleLocationSyncer
   def fetch_location_from_place_id
     response = HTTP.get("https://maps.googleapis.com/maps/api/geocode/json?place_id=#{@google_location.place_id}&key=#{api_key}")
 
-    if response.status.success?
+    if response.status.success? && response.parse["error_message"].blank?
       address = response.parse.dig("results", 0, "address_components")
 
       @google_location.assign_attributes(
@@ -76,6 +76,8 @@ class GoogleApi::GoogleLocationSyncer
       )
 
       Success(nil)
+    elsif response.status.success? && response.parse["error_message"].present?
+      Failure("Place ID: #{@google_location.place_id} - #{response.parse["error_message"]}")
     else
       Failure("Error fetching location from Google using place_id")
     end
