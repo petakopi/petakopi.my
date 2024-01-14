@@ -1,6 +1,6 @@
 namespace :migration do
   desc "Build GoogleLocation"
-    task build_google_location: :environment do
+  task build_google_location: :environment do
     CoffeeShop
       .status_published
       .where.missing(:google_location)
@@ -12,6 +12,21 @@ namespace :migration do
           place_id: coffee_shop.google_place_id,
           lat: coffee_shop.lat,
           lng: coffee_shop.lng
+        )
+      end
+  end
+
+  desc "Populate GoogleLocation"
+  task populate_google_location: :environment do
+    GoogleLocation
+      .where(locality: nil)
+      .or(GoogleLocation.where(administrative_area_level_1: nil))
+      .find_each do |google_location|
+        puts "#{google_location.id} - #{google_location.place_id}"
+
+        google_location.update(
+          lat: google_location.lat,
+          lng: google_location.lng
         )
       end
   end
