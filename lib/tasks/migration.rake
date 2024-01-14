@@ -24,10 +24,7 @@ namespace :migration do
       .find_each do |google_location|
         puts "#{google_location.id} - #{google_location.place_id}"
 
-        google_location.update(
-          lat: google_location.lat,
-          lng: google_location.lng
-        )
+        GoogleApi::GoogleLocationSyncWorker.perform_async(google_location.id)
       end
   end
 end
