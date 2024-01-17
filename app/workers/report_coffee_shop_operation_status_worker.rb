@@ -1,5 +1,5 @@
 class ReportCoffeeShopOperationStatusWorker < SidekiqWorker
-  sidekiq_options retry: false, throttle: {threshold: 300, period: 1.minute}
+  sidekiq_options retry: false, throttle: {threshold: 200, period: 1.minute}
 
   def perform(coffee_shop_id)
     coffee_shop = CoffeeShop.find(coffee_shop_id)

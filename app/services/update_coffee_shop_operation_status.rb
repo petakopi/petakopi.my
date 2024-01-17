@@ -12,6 +12,7 @@ class UpdateCoffeeShopOperationStatus
 
   def call
     return if place_id.blank?
+    return if bussiness_status == "OPERATIONAL"
 
     row = [
       @coffee_shop.id,
@@ -56,15 +57,17 @@ class UpdateCoffeeShopOperationStatus
   end
 
   def business_status
-    result = HTTP.get("https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&fields=business_status&key=#{api_key}")
+    @business_status ||= do
+      result = HTTP.get("https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&fields=business_status&key=#{api_key}")
 
-    if result.status.code != 200
-      raise result.parse
-    elsif result.status.success? && result.parse.dig("error_message").present?
-      raise result.parse.dig("error_message")
+      if result.status.code != 200
+        raise result.parse
+      elsif result.status.success? && result.parse.dig("error_message").present?
+        raise result.parse.dig("error_message")
+      end
+
+        result.parse.dig("result", "business_status")
     end
-
-    result.parse.dig("result", "business_status")
   end
 
   def cell_link(name, url)
