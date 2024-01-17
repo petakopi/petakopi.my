@@ -57,7 +57,7 @@ class UpdateCoffeeShopOperationStatus
   end
 
   def business_status
-    @business_status ||= do
+    @business_status ||= begin
       result = HTTP.get("https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&fields=business_status&key=#{api_key}")
 
       if result.status.code != 200
@@ -66,7 +66,7 @@ class UpdateCoffeeShopOperationStatus
         raise result.parse.dig("error_message")
       end
 
-        result.parse.dig("result", "business_status")
+      result.parse.dig("result", "business_status")
     end
   end
 
