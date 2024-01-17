@@ -12,7 +12,7 @@ class UpdateCoffeeShopOperationStatus
 
   def call
     return if place_id.blank?
-    return if bussiness_status == "OPERATIONAL"
+    return if business_status == "OPERATIONAL"
 
     row = [
       @coffee_shop.id,
