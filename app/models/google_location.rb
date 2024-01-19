@@ -5,6 +5,16 @@ class GoogleLocation < ApplicationRecord
 
   after_save :sync_with_google
 
+  NORMALIZED_NAMES ={
+    "Federal Territory of Kuala Lumpur" => "Kuala Lumpur",
+    "Labuan Federal Territory" => "Labuan",
+    "Malacca" => "Melaka",
+    "Penang" => "Pulau Pinang",
+    "Wilayah Persekutuan Kuala Lumpur" => "Kuala Lumpur",
+    "Wilayah Persekutuan Labuan" => "Labuan",
+    "Wilayah Persekutuan Putrajaya" => "Putrajaya"
+  }
+
   def state
     administrative_area_level_1
   end

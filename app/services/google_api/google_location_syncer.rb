@@ -58,6 +58,9 @@ class GoogleApi::GoogleLocationSyncer
     if response.status.success? && response.parse["error_message"].blank?
       address = response.parse.dig("results", 0, "address_components")
 
+      administrative_area_level_1 =
+        address.find { |x| x["types"].include?("administrative_area_level_1") }&.[]("long_name")
+
       @google_location.assign_attributes(
         lat:
           response.parse.dig("results", 0, "geometry", "location", "lat"),
@@ -66,7 +69,7 @@ class GoogleApi::GoogleLocationSyncer
         locality:
           address.find { |x| x["types"].include?("locality") }&.[]("long_name"),
         administrative_area_level_1:
-          address.find { |x| x["types"].include?("administrative_area_level_1") }&.[]("long_name"),
+          GoogleLocation::NORMALIZED_NAMES[administrative_area_level_1] || administrative_area_level_1,
         administrative_area_level_2:
           address.find { |x| x["types"].include?("administrative_area_level_2") }&.[]("long_name"),
         postal_code:
@@ -91,11 +94,14 @@ class GoogleApi::GoogleLocationSyncer
     if response.status.success?
       address = response.parse.dig("results", 0, "address_components")
 
+      administrative_area_level_1 =
+        address.find { |x| x["types"].include?("administrative_area_level_1") }&.[]("long_name")
+
       @google_location.assign_attributes(
         locality:
           address.find { |x| x["types"].include?("locality") }&.[]("long_name"),
         administrative_area_level_1:
-          address.find { |x| x["types"].include?("administrative_area_level_1") }&.[]("long_name"),
+          GoogleLocation::NORMALIZED_NAMES[administrative_area_level_1] || administrative_area_level_1,
         administrative_area_level_2:
           address.find { |x| x["types"].include?("administrative_area_level_2") }&.[]("long_name"),
         postal_code:
