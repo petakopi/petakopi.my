@@ -6,6 +6,7 @@ class UsersController < ApplicationController
     @favourites =
       @user
         .favourite_coffee_shops
+        .status_published
         .includes(logo_attachment: :blob)
         .order(created_at: :desc)
 
