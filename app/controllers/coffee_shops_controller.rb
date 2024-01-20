@@ -39,7 +39,10 @@ class CoffeeShopsController < ApplicationController
   def update
     respond_to do |format|
       if @coffee_shop.update(coffee_shop_update_params)
-        format.html { redirect_to @coffee_shop, notice: "Coffee shop was successfully updated." }
+        format.html do
+          redirect_to edit_coffee_shop_path(coffee_shop_id: @coffee_shop.slug),
+            notice: "Coffee shop was successfully updated."
+        end
         format.json { render :show, status: :ok, location: @coffee_shop }
       else
         format.html { render :edit, status: :unprocessable_entity }
