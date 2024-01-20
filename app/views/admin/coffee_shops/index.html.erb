@@ -84,7 +84,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">
-                    <% if coffee_shop.google_location.district.present? %>
+                    <% if coffee_shop&.google_location&.district.present? %>
                       <%= coffee_shop.location_full_url %>
                     <% else %>
                       -
