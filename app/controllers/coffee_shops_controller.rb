@@ -90,6 +90,21 @@ class CoffeeShopsController < ApplicationController
       )
   end
 
+  def coffee_shop_update_params
+    params
+      .require(:coffee_shop)
+      .permit(
+        :description,
+        :instagram,
+        :twitter,
+        :facebook,
+        :tiktok,
+        :whatsapp,
+        :logo,
+        tag_ids: []
+      )
+  end
+
   def success_message
     "Coffee shop was successfully submitted. Please give us some time to review it. "\
     "Feel free to message us at <a href='https://instagram.com/petakopi.my' target='_blank'>@petakopi.my</a> on Instagram "\
