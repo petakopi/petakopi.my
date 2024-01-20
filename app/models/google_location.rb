@@ -25,7 +25,7 @@ class GoogleLocation < ApplicationRecord
 
   def url
     if has_place_id?
-      "https://www.google.com/maps/place/?q=place_id:#{place_id}"
+      "https://www.google.com/maps/search/?api=1&query=#{lat},#{lng}&query_place_id=#{place_id}"
     else
       "https://www.google.com/maps/?q=#{lat},#{lng}"
     end
