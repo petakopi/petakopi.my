@@ -1,5 +1,5 @@
 class GoogleLocation < ApplicationRecord
-  belongs_to :coffee_shop
+  belongs_to :coffee_shop, touch: true
 
   validate :location_is_correct
 
