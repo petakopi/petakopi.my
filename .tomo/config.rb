@@ -8,7 +8,7 @@ plugin "rbenv"
 plugin "sidekiq"
 plugin "./plugins/petakopi.rb"
 
-host "deployer@petakopi"
+host "deployer@ts-prod-petakopi"
 
 set application: "petakopi"
 set deploy_to: "/var/www/%{application}"
