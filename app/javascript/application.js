@@ -7,6 +7,7 @@ import "ahoy.js"
 // Alpine
 import Alpine from "alpinejs"
 import Tooltip from "@ryangjchandler/alpine-tooltip";
+import focus from '@alpinejs/focus'
 
 import { Turbo } from "@hotwired/turbo-rails"
 Turbo.setProgressBarDelay(100)
@@ -29,6 +30,8 @@ import "./tailwind.alpine"
 
 // Others
 Alpine.plugin(Tooltip);
+Alpine.plugin(focus);
+
 window.Alpine = Alpine
 
 Alpine.start()

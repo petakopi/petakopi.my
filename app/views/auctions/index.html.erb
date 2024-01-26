@@ -1,0 +1,85 @@
+<%= content_for(:page_title) { "Ads Auctions" } %>
+
+<div id="toast"><!-- Will be replaced with alert from Turbo Stream --></div>
+
+<div class="flex min-h-full flex-col justify-center px-3 py-6 lg:px-4">
+  <div class="relative z-10">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+      <div class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 flex items-center space-x-2 justify-center">
+        Active Ads
+      </div>
+
+      <div class="flex justify-center mt-4 underline text-gray-700">
+        <a href="https://amree.notion.site/Advertise-with-petakopi-my-33d9066cd0e446c7881ff79eb42540ca" target="_blank">
+          Why should you advertise with us?
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div class="flex flex-col space-y-4">
+        <% if @current_auctions.empty? %>
+          <p class="-md rounded-lg px-3.5 py-4 text-md font-semibold text-gray-700 text-center">
+            No active auctions
+          </p>
+        <% end %>
+
+        <% @current_auctions.each do |auction| %>
+          <%= link_to auction_path(id: auction.slug), class: "-md rounded-lg bg-white px-3.5 py-4 text-md font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 text-center flex flex-col space-y-2" do %>
+            <div class="flex justify-between">
+              <%= auction.title %>
+
+              <span class="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
+                <%= auction.bids.count %> bids
+              </span>
+            </div>
+
+            <div class="flex justify-between items-center">
+              <div class="isolate flex -space-x-1 overflow-hidden">
+                <% auction.bids.order(amount: :desc).uniq.first(5).each do |bid| %>
+                  <% next unless bid.coffee_shop.logo.attached? %>
+
+                  <%= image_tag rails_public_blob_url(bid.coffee_shop.logo),
+                    class: "relative z-30 inline-block h-6 w-6 rounded-full ring-2 ring-white",
+                    loading: "lazy",
+                    title: bid.coffee_shop.name
+                  %>
+                <% end %>
+              </div>
+
+              <div class="text-sm text-gray-500 font-normal text-right">
+                <%= distance_of_time_in_words(Time.current, auction.end_at) %> left
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mt-20 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div class="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-500 flex items-center space-x-2 justify-center">
+        Past Ads
+      </div>
+    </div>
+
+    <div class="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div class="flex flex-col space-y-4">
+        <% if @past_auctions.empty? %>
+          <p class="-md rounded-lg px-3.5 py-4 text-md font-semibold text-gray-500 text-center">
+            No past auctions
+          </p>
+        <% end %>
+
+        <% @past_auctions.each do |auction| %>
+          <%= link_to auction_path(id: auction.slug), class: "-md rounded-lg bg-gray-100 px-3.5 py-4 text-md font-semibold text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 text-center flex justify-between" do %>
+            <%= auction.title %>
+
+            <span class="inline-flex items-center rounded-md bg-gray-300 px-2 py-1 text-xs font-medium text-gray-600">
+              <%= auction.bids.count %> bids
+            </span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

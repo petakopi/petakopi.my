@@ -99,6 +99,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_18_084457) do
   create_table "auctions", force: :cascade do |t|
     t.string "title", null: false
     t.string "slug", null: false
+    t.text "description", null: false
+    t.decimal "minimum_amount", null: false
     t.datetime "start_at", null: false
     t.datetime "end_at", null: false
     t.datetime "created_at", null: false

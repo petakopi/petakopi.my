@@ -46,7 +46,7 @@ class HomeController < ApplicationController
   def set_gold_shops
     @gold_shops =
       if params.except(:controller, :action).blank?
-        CoffeeShop.where(slug: Rails.cache.fetch("ads/gold")&.split(","))&.shuffle
+        CoffeeShop.where(slug: Rails.cache.read("ads/gold")&.split(","))
       end
   end
 

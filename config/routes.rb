@@ -53,6 +53,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :auctions, only: [:index, :show] do
+    resources :bids, only: [:new, :create]
+  end
+
   resources :coffee_shops, only: [:new, :create, :edit, :update, :index] do
     resource :location, only: [:edit, :update], module: :coffee_shops
     resource :opening_hours, only: [:edit, :update], module: :coffee_shops

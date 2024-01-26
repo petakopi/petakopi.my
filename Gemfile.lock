@@ -436,7 +436,7 @@ GEM
       connection_pool
     redis-prescription (2.6.0)
     regexp_parser (2.9.0)
-    reline (0.4.2)
+    reline (0.4.3)
       io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
@@ -556,7 +556,7 @@ GEM
     tomo-plugin-sidekiq (1.3.1)
       tomo (~> 1.0)
     trailblazer-option (0.1.2)
-    turbo-rails (2.0.2)
+    turbo-rails (2.0.4)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)

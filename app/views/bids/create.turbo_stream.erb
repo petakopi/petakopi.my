@@ -1,0 +1,20 @@
+<%= turbo_stream.update "bids" do %>
+  <div class="flex flex-col space-y-4">
+    <%= render @auction.bids.order(amount: :desc) %>
+  </div>
+<% end %>
+
+<%= turbo_stream.update "bid_cta" do %>
+  <%= render partial: "auctions/bid_cta" %>
+<% end %>
+
+<%=
+  turbo_stream.replace(
+    "toast",
+    partial: "shared/toast",
+    locals: {
+      type: "success",
+      message: "Your RM #{@bid.amount} bid was successfully placed!"
+    }
+  )
+%>
