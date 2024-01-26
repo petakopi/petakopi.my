@@ -1,0 +1,28 @@
+<div class="-md rounded-lg bg-white px-3.5 py-4 text-md font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 text-center flex flex-col space-y-2">
+  <div class="flex justify-between">
+    <span class="flex space-x-4">
+      <% if bid.coffee_shop.logo.attached? %>
+        <%= image_tag rails_public_blob_url(bid.coffee_shop.logo), class: "inline-block h-6 w-6 rounded-full", loading: "lazy", title: bid.coffee_shop.name %>
+      <% else %>
+        <div class="inline-block h-6 w-6 rounded-full">
+          <%= render "components/icons/image" %>
+        </div>
+      <% end %>
+
+      <span><%= bid.coffee_shop.name %></span>
+    </span>
+
+    <span class="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
+      RM <%= bid.amount %>
+    </span>
+  </div>
+
+  <div class="flex justify-between text-sm text-gray-500 font-normal">
+    <span>
+      <%= bid.coffee_shop.google_location.district %>
+    </span>
+    <span>
+      <%= time_ago_in_words(bid.created_at) %> ago
+    </span>
+  </div>
+</div>
