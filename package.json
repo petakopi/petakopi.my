@@ -11,7 +11,7 @@
     "@tailwindcss/typography": "^0.5.10",
     "ahoy.js": "^0.4.3",
     "alpinejs": "^3.13.3",
-    "autoprefixer": "^10.4.16",
+    "autoprefixer": "^10.4.17",
     "chart.js": "^3.9.1",
     "chartkick": "^4.2.0",
     "esbuild": "^0.19.11",
