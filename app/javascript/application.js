@@ -11,6 +11,11 @@ import Tooltip from "@ryangjchandler/alpine-tooltip";
 import { Turbo } from "@hotwired/turbo-rails"
 Turbo.setProgressBarDelay(100)
 
+// Animate page transitions for turbo
+import Turn from "@domchristie/turn";
+Turn.config.experimental.viewTransitions = true;
+Turn.start();
+
 window.dispatchMapsFormEvent = function (...args) {
   const event = new Event("google-maps-callback", { bubbles: true, cancelable: true });
   event.args = args;
