@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:edit, :update]
+  before_action :authenticate_user!, only: [:edit, :update, :profile]
 
   def show
     @user = User.find_by!(username: params[:id])
@@ -25,6 +25,10 @@ class UsersController < ApplicationController
         .count
 
     @check_in_months = check_in_range.map { |date| date.strftime("%B") }.uniq
+  end
+
+  def profile
+    @user = current_user
   end
 
   def edit
