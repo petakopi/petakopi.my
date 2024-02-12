@@ -38,12 +38,12 @@ gem "omniauth-google-oauth2" # login using Google
 gem "omniauth-twitter" # login using Twitter
 gem "omniauth-rails_csrf_protection" # Migitate against CSRF in OmniAuth gem
 gem "postmark-rails" # Send emails via Postmark
-gem "sidekiq-rate-limiter" # Throttle jobs in Sidekiq
 gem "rails", "~> 7.1"
 gem "redis", "~> 5.0" # Use Redis adapter to run Action Cable in production
 gem "sidekiq", "<= 7.2.1" # Background jobs
 gem "sidekiq-cron" # Sidekiq + Cron
 gem "sidekiq-failures" # Monitor failures in Sidekiq
+gem "sidekiq-throttled" # Throttle sidekiq jobs
 gem "sitemap_generator" # Generate sitemap for search engines
 gem "skylight" # Performance monitoring tool
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
