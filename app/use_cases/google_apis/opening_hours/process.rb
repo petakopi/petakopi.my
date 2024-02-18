@@ -28,40 +28,19 @@ class GoogleApis::OpeningHours::Process < Micro::Case
         end
   end
 
-  def formatted_opening_hours
-    @formatted_opening_hours =
-      begin
-        tmp = []
-
-        opening_hours.each { |op| op.each { |op_i| tmp << op_i } }
-
-        tmp
-      end
-  end
-
   def delete_outdated_opening_hours
-    outdated_data = (current_opening_hours - formatted_opening_hours)
-
-    outdated_data.each do |op|
-      # Format: ["open", {"day"=>0, "time"=>"2100"}]
-      kind = op.first
-      day = op.second["day"]
-      time = op.second["time"]
-
-      OpeningHour
-        .where(coffee_shop: coffee_shop, kind: kind, day: day, time: time.to_i)
-        .map(&:destroy)
-    end
+    OpeningHour.where(coffee_shop: coffee_shop).delete_all
   end
 
   def create_new_opening_hours
     hours =
-      (formatted_opening_hours - current_opening_hours).map do |x|
+      opening_hours.map do |oh|
         {
           coffee_shop_id: coffee_shop.id,
-          kind: x.first,
-          day: x.second["day"],
-          time: x.second["time"]
+          start_day: oh["open"]["day"],
+          start_time: oh["open"]["time"],
+          close_day: oh["close"]["day"],
+          close_time: oh["close"]["time"]
         }
       end
 

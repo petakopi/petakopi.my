@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_11_121237) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_18_084457) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pageinspect"
   enable_extension "pgcrypto"
@@ -96,6 +96,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_11_121237) do
     t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
   end
 
+  create_table "auctions", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "slug", null: false
+    t.datetime "start_at", null: false
+    t.datetime "end_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_auctions_on_slug", unique: true
+    t.index ["title"], name: "index_auctions_on_title", unique: true
+  end
+
   create_table "auth_providers", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "provider"
@@ -103,6 +114,18 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_11_121237) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_auth_providers_on_user_id"
+  end
+
+  create_table "bids", force: :cascade do |t|
+    t.bigint "auction_id", null: false
+    t.bigint "coffee_shop_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "amount", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["auction_id"], name: "index_bids_on_auction_id"
+    t.index ["coffee_shop_id"], name: "index_bids_on_coffee_shop_id"
+    t.index ["user_id"], name: "index_bids_on_user_id"
   end
 
   create_table "check_ins", force: :cascade do |t|
@@ -192,9 +215,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_11_121237) do
     t.bigint "coffee_shop_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "kind"
-    t.integer "day"
-    t.integer "time"
+    t.integer "start_day"
+    t.integer "start_time"
+    t.integer "close_day"
+    t.integer "close_time"
     t.index ["coffee_shop_id"], name: "index_opening_hours_on_coffee_shop_id"
   end
 
@@ -249,6 +273,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_11_121237) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "auth_providers", "users"
+  add_foreign_key "bids", "auctions"
+  add_foreign_key "bids", "coffee_shops"
+  add_foreign_key "bids", "users"
   add_foreign_key "check_ins", "coffee_shops"
   add_foreign_key "check_ins", "users"
   add_foreign_key "coffee_shop_owners", "coffee_shops"
