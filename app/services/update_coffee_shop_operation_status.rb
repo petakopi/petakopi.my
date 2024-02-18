@@ -43,7 +43,7 @@ class UpdateCoffeeShopOperationStatus
   end
 
   def place_id
-    @coffee_shop.google_place_id
+    @coffee_shop&.google_location&.place_id
   end
 
   def api_key
