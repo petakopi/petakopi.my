@@ -136,6 +136,7 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    diff-lcs (1.5.1)
     domain_name (0.6.20240107)
     drb (2.2.0)
       ruby2_keywords
@@ -185,6 +186,11 @@ GEM
     et-orbi (1.2.7)
       tzinfo
     exifr (1.4.0)
+    factory_bot (6.4.6)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.4.3)
+      factory_bot (~> 6.4)
+      railties (>= 5.0.0)
     faraday (2.9.0)
       faraday-net_http (>= 2.0, < 3.2)
     faraday-multipart (1.0.4)
@@ -440,6 +446,23 @@ GEM
       railties (>= 5.2)
     retriable (3.1.2)
     rexml (3.2.6)
+    rspec-core (3.13.0)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-rails (6.0.4)
+      actionpack (>= 6.1)
+      activesupport (>= 6.1)
+      railties (>= 6.1)
+      rspec-core (~> 3.12)
+      rspec-expectations (~> 3.12)
+      rspec-mocks (~> 3.12)
+      rspec-support (~> 3.12)
+    rspec-support (3.13.0)
     rubocop (1.59.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -586,6 +609,7 @@ DEPENDENCIES
   devise
   dry-monads
   dry-validation
+  factory_bot_rails
   foreman
   geocoder
   google-apis-sheets_v4
@@ -612,6 +636,7 @@ DEPENDENCIES
   puma (~> 6.0)
   rails (~> 7.1)
   redis (~> 5.0)
+  rspec-rails (~> 6.0.0)
   sidekiq (<= 7.2.1)
   sidekiq-cron
   sidekiq-failures
