@@ -1,25 +1,24 @@
 <table class="min-w-full divide-y divide-gray-300">
   <thead>
     <tr class="divide-x divide-gray-200">
-      <th scope="col" class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-0">Day</th>
+      <th scope="col" class="py-3.5 px-4 pr-4 text-left text-sm font-semibold text-gray-900">Day</th>
       <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Open</th>
       <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Close</th>
     </tr>
   </thead>
   <tbody class="divide-y divide-gray-200 bg-white">
-    <% opening_hours.each_with_index do |days, day| %>
-      <% days.each_with_index do |hours, count| %>
-        <tr class="divide-x divide-gray-200 <%= day == Time.current.wday ? "font-bold text-brown-500" : "text-gray-500"  %>">
-          <td class="whitespace-nowrap p-4 text-sm">
-            <%= OpeningHour::DAYS[hours.first.day] if count == 0 %>
-          </td>
-          <% hours.each do |hour| %>
-            <td class="whitespace-nowrap p-4 text-sm">
-              <%= hour.readable_time %>
-            </td>
-          <% end %>
-        </tr>
-      <% end %>
+    <% opening_hours.each_with_index do |opening_hour, i| %>
+      <tr class="divide-x divide-gray-200 <%= opening_hour[:start_day] == Date::DAYNAMES[Date.today.wday] ? "font-bold text-brown-500" : "text-gray-500"  %>">
+        <td class="whitespace-nowrap p-4 text-sm">
+          <%= opening_hour[:display_day] %>
+        </td>
+        <td class="whitespace-nowrap p-4 text-sm">
+          <%= opening_hour[:start_time] %>
+        </td>
+        <td class="whitespace-nowrap p-4 text-sm">
+          <%= opening_hour[:close_time] %>
+        </td>
+      </tr>
     <% end %>
   </tbody>
 </table>

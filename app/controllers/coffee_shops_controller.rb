@@ -8,7 +8,7 @@ class CoffeeShopsController < ApplicationController
 
   def show
     @coffee_shop = @coffee_shop.extend(OpeningHourStatus)
-    @opening_hours = DisplayOpeningHoursQuery.new(relation: @coffee_shop).list
+    @opening_hours = OpeningHoursPresenter.new(@coffee_shop.opening_hours).list
 
     ahoy.track "View Coffee Shop", id: @coffee_shop.id, name: @coffee_shop.name
   end

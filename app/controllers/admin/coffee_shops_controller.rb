@@ -40,8 +40,7 @@ class Admin::CoffeeShopsController < AdminController
   end
 
   def show
-    @opening_hours =
-      DisplayOpeningHoursQuery.new(relation: @coffee_shop).list
+    @opening_hours = OpeningHoursPresenter.new(@coffee_shop.opening_hours).list
   end
 
   def duplicate
