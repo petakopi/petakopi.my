@@ -5,7 +5,7 @@ class CoffeeShops::OpeningHoursController < ApplicationController
       current_user.coffee_shops.find(params[:coffee_shop_id].to_i)
 
     @coffee_shop = @coffee_shop.extend(OpeningHourStatus)
-    @opening_hours = DisplayOpeningHoursQuery.new(relation: @coffee_shop).list
+    @opening_hours = OpeningHoursPresenter.new(@coffee_shop.opening_hours).list
     @last_synced = OpeningHoursSyncThrottler.new(coffee_shop: @coffee_shop).last_synced
   end
 
