@@ -58,7 +58,7 @@ gem "yaaf" # handles form object
 group :development, :test do
   gem "factory_bot_rails" # Fixtures replacement
   gem "pry" # Debugging tool
-  gem "rspec-rails", "~> 6.0.0" # Test framework
+  gem "rspec-rails", "~> 6.1.2" # Test framework
   gem "standard" # ruby code linting
 end
 
