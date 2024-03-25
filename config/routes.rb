@@ -63,7 +63,9 @@ Rails.application.routes.draw do
     resources :reports, only: [:new, :create]
   end
   resources :coffee_shops_v2, only: [:new, :create]
-  resources :users, path: "u", only: [:show, :edit, :update]
+  resources :users, path: "u", only: [:show, :edit, :update] do
+    get "profile", on: :collection
+  end
 
   get "/coffee_shops/:id", to: redirect("/%{id}", status: 301)
   get "/cs/:id", to: redirect("/%{id}", status: 301)

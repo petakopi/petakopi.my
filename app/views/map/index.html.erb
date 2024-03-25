@@ -3,17 +3,14 @@
 <%= content_for :extra_styles do %>
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet" />
 <% end %>
-
-<div class="pr-4 py-5 sm:py-6 sm:pr-6">
+<div class="pr-4 py-5 sm:py-6 sm:pr-6 absolute top-16 z-10">
   <% Tag.all.order(:position).each do |tag| %>
     <%= link_to map_path(tags: tag.slug), data: { turbo: false } do %>
       <%= render partial: "shared/tags/#{tag.slug.underscore}", locals: { name: tag.name } %>
     <% end %>
   <% end %>
 </div>
-
-<div id="map" style="<%= turbo_native_app? ? "position: absolute; top: 0; bottom: 0; width: 100%" : "height: 500px" %>"></div>
-
+<div id="map" style="position: absolute; left: 0; bottom: 0; height: calc(100vh - 4.5rem); width: 100%"></div>
 <%= content_for :js do %>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
   <script>
@@ -171,5 +168,4 @@
       setTimeout(() => this.map.resize(), 0);
     })
   </script>
-
 <% end %>

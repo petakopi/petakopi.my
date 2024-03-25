@@ -7,7 +7,6 @@
         <%= render "components/icons/filter" %>
       </span>
       Filters
-
       <span
         data-home-filters-target="counter"
         class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-brown-200 rounded-full <%= filter_counter > 0 ? "" : "hidden" %>">
@@ -15,7 +14,6 @@
       </span>
     <% end %>
   </span>
-
   <span data-controller="pwa-install" class="relative inline-flex ml-2 standalone:hidden">
     <%= button_tag type: "button",
       data: {
@@ -30,15 +28,13 @@
       Install
     <% end %>
   </span>
-
-  <span class="relative inline-flex ml-2 md:hidden">
+  <span class="relative inline-flex ml-2 md:hidden standalone:hidden">
     <%= link_to map_path, "data-turbo": false, class: "inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500" do %>
       <span class="w-6 mr-2">
         <%= render "components/icons/map" %>
       </span>
       Live Map
     <% end %>
-
     <span class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
       <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
