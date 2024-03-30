@@ -64,6 +64,9 @@ end
 
 group :development do
   gem "web-console" # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem "rack-mini-profiler" # Profiler for your development and production Ruby rack apps
+  gem "memory_profiler" # Memory profiling
+  gem "stackprof" # Stackprof profiling
 end
 
 group :test do
