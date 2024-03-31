@@ -77,6 +77,8 @@
           as: :coffee_shop %>
       <% end %>
 
+      <%= render partial: "coffee_shops/ad_info" %>
+
       <%= render partial: "coffee_shops/coffee_shop_list", collection: @coffee_shops, cached: true, as: :coffee_shop %>
     </ul>
   </div>
@@ -96,6 +98,8 @@
                     },
                     as: :coffee_shop %>
                 <% end %>
+
+                <%= render partial: "coffee_shops/ad_info" %>
 
                 <%= render partial: "coffee_shops/coffee_shop", collection: @coffee_shops, cached: true %>
               </tbody>
