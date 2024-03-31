@@ -11,7 +11,6 @@
 
   <div class="mt-4 overflow-hidden bg-white shadow sm:rounded-md sm:hidden">
     <ul role="list" class="divide-y divide-gray-200">
-      <%= render partial: "coffee_shops/coffee_shop_list_ads", locals: { coffee_shop: @silver_shop }, cached: true, as: :coffee_shop %>
       <%= render partial: "coffee_shops/coffee_shop_list", collection: @coffee_shops, cached: true, as: :coffee_shop %>
     </ul>
   </div>
@@ -23,7 +22,6 @@
           <div class="shadow border-b border-gray-200 sm:rounded-lg">
             <table class="min-w-full divide-y divide-gray-200">
               <tbody class="bg-white divide-y divide-gray-200">
-                <%= render partial: "coffee_shops/coffee_shop_ads", locals: { coffee_shop: @silver_shop }, cached: true %>
                 <%= render partial: "coffee_shops/coffee_shop", collection: @coffee_shops, cached: true %>
               </tbody>
             </table>

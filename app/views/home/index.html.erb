@@ -77,12 +77,6 @@
           as: :coffee_shop %>
       <% end %>
 
-      <% if @silver_shop %>
-        <%= render partial: "coffee_shops/coffee_shop_list_ads",
-          locals: { coffee_shop: @silver_shop },
-          cached: true, as: :coffee_shop %>
-      <% end %>
-
       <%= render partial: "coffee_shops/coffee_shop_list", collection: @coffee_shops, cached: true, as: :coffee_shop %>
     </ul>
   </div>
@@ -101,12 +95,6 @@
                       is_ad: true
                     },
                     as: :coffee_shop %>
-                <% end %>
-
-                <% if @silver_shop %>
-                  <%= render partial: "coffee_shops/coffee_shop_ads",
-                    locals: { coffee_shop: @silver_shop },
-                    cached: true %>
                 <% end %>
 
                 <%= render partial: "coffee_shops/coffee_shop", collection: @coffee_shops, cached: true %>

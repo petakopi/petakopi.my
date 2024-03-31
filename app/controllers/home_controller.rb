@@ -14,7 +14,6 @@ class HomeController < ApplicationController
     @filter_counter = calculate_filter_counter
 
     set_gold_shops
-    set_silver_shop
 
     @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
   end
@@ -48,15 +47,5 @@ class HomeController < ApplicationController
       if params.except(:controller, :action).blank?
         CoffeeShop.where(slug: Rails.cache.read("ads/gold")&.split(","))
       end
-  end
-
-  def set_silver_shop
-    return if params[:state].blank?
-
-    parameterized_state = params[:state].parameterize
-    silver_shop_slug = Rails.cache.fetch("ads/silver/#{parameterized_state}")
-
-    @silver_shop = CoffeeShop.find_by(slug: silver_shop_slug)
-    @silver_shop = nil if @silver_shop == @gold_shop
   end
 end
