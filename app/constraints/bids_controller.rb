@@ -17,6 +17,15 @@ class BidsController < ApplicationController
 
     respond_to do |format|
       if @bid.save
+        message = [
+          "Auction Title: #{@auction.title}",
+          "Bidder: #{@bid.coffee_shop.name}",
+          "Bid Amount: RM#{@bid.amount}",
+          "Bid at: #{@bid.created_at.to_fs(:db)}",
+        ].join("\n")
+
+        TelegramNotifierWorker.perform_async(message)
+
         format.turbo_stream
       else
         format.html { render :new, status: :unprocessable_entity }
