@@ -19,6 +19,12 @@ class AuctionsController < ApplicationController
 
   def show
     @auction = Auction.find_by!(slug: params[:id])
+    @bids =
+      @auction
+        .bids
+        .includes(coffee_shop: [:google_location, logo_attachment: :blob])
+        .order(amount: :desc, created_at: :asc)
+    @top_bids = @bids.first(2)
   end
 
   private

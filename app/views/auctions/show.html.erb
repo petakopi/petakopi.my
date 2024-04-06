@@ -22,36 +22,52 @@
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm flex justify-between items-center">
-    <% if @auction.bids.count > 0 %>
+    <% if @bids.count > 0 %>
       <div class="text-center text-xl font-bold leading-9 tracking-tight text-gray-900 flex items-center space-x-2 justify-center">
         Current Bids
       </div>
     <% end %>
 
-    <% if @auction.end_at > Time.current && @auction.bids.exists? %>
+    <% if @auction.end_at > Time.current && @bids.exists? %>
       <%= render partial: "bid_cta" %>
     <% else %>
       <%= turbo_frame_tag "bid_cta" %>
     <% end %>
+  </div>
 
+  <div class="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
+    <div class="text-gray-700 text-sm">
+      <% if @top_bids.count >= 2 %>
+        It looks like we have <strong>👑 <%= @top_bids.first.coffee_shop.name %></strong>
+        and <strong>👑 <%= @top_bids.second.coffee_shop.name %></strong>
+        as the winners for now. Bid higher than any of them to get into the
+        spot!
+      <% elsif @top_bids.count == 1 %>
+        It looks like we only have <strong>👑 <%= @top_bids.first.coffee_shop.name %></strong>
+        as one of the winners for now. <strong>There is one more spot left!</strong>
+        Tips: You can put the same amount or higher to ensure you get the top spot.
+      <% end %>
+    </div>
   </div>
 
   <div class="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
     <%= turbo_frame_tag "bids" do %>
-      <% if @auction.bids.empty? %>
+      <% if @bids.empty? %>
         <div class="text-center">
           <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
           </svg>
           <h3 class="mt-2 text-sm font-semibold text-gray-900">No bids</h3>
-          <p class="mt-1 text-sm text-gray-500">Be the first to bid for this ads.</p>
+          <p class="mt-2 text-sm text-gray-500">
+            Be the first to bid for this ads. You might be the winner!
+          </p>
           <div class="mt-6">
             <%= render partial: "bid_cta" %>
           </div>
         </div>
       <% else %>
         <div class="flex flex-col space-y-4">
-          <%= render @auction.bids.order(amount: :desc) %>
+          <%= render @bids %>
         </div>
       <% end %>
     <% end %>
