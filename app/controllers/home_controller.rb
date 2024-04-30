@@ -45,7 +45,12 @@ class HomeController < ApplicationController
   def set_gold_shops
     @gold_shops =
       if params.except(:controller, :action).blank?
-        CoffeeShop.where(slug: Rails.cache.read("ads/gold")&.split(","))
+        shops = Rails.cache.read("ads/gold")&.split(",")
+
+        first_shop = CoffeeShop.find_by(slug: shops.first) if shops.first.present?
+        second_shop = CoffeeShop.find_by(slug: shops.second) if shops.second.present?
+
+        [first_shop, second_shop]
       end
   end
 end
