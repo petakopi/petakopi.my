@@ -89,6 +89,7 @@ class Admin::CoffeeShopsController < AdminController
         :twitter,
         :whatsapp,
         google_location_attributes: [
+          :id,
           :lat,
           :lng,
           :place_id,

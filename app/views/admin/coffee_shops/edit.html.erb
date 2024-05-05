@@ -50,6 +50,8 @@
           </div>
 
           <%= f.fields_for :google_location do |location_form| %>
+            <%= location_form.hidden_field :id %>
+
             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
               <%= location_form.label :place_id,
                 class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do
