@@ -47,10 +47,10 @@ class HomeController < ApplicationController
       if params.except(:controller, :action).blank?
         shops = Rails.cache.read("ads/gold")&.split(",")
 
-        first_shop = CoffeeShop.find_by(slug: shops.first) if shops.first.present?
-        second_shop = CoffeeShop.find_by(slug: shops.second) if shops.second.present?
+        first_shop = CoffeeShop.find_by(slug: shops.first) if shops&.first.present?
+        second_shop = CoffeeShop.find_by(slug: shops.second) if shops&.second.present?
 
-        [first_shop, second_shop]
+      [first_shop, second_shop].compact
       end
   end
 end
