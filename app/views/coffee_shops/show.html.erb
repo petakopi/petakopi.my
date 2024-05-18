@@ -4,6 +4,8 @@
 
 <div id="toast"><!-- Will be replaced with alert from Turbo Stream --></div>
 
+<%= turbo_frame_tag "tell_manager" %>
+
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
   <div class="fixed inset-0 z-[-1] bg-no-repeat bg-cover bg-center opacity-25" style="background-image: url(<%= rails_public_blob_url(@coffee_shop.logo) %>); filter: blur(50px);">
   </div>
@@ -77,6 +79,12 @@
           <% end %>
         <% end %>
       </div>
+    </div>
+
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <%= render partial: "coffee_shops/tell_manager",
+        locals: { coffee_shop: @coffee_shop }
+      %>
     </div>
 
     <p class="mt-10 text-center text-sm text-gray-500">

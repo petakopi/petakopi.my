@@ -1,0 +1,57 @@
+<div class="flex flex-col space-y-4" x-data="{show: false}">
+  <% if coffee_shop.owners.exists? %>
+    <%= link_to new_coffee_shop_tell_manager_path(coffee_shop_id: coffee_shop.id),
+      data: { turbo_frame: "tell_manager" },
+      class: "-md rounded-lg bg-white px-3.5 py-4 text-md font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-700 hover:bg-gray-50 text-center" do
+    %>
+      Tell Manager
+    <% end %>
+  <% else %>
+    <button
+      @click="show = true"
+      class="-md rounded-lg bg-white px-3.5 py-4 text-md font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-700 hover:bg-gray-50 text-center"
+    >
+      Tell Manager
+    </button>
+
+    <!-- Container that will be shown/hidden -->
+    <div id="no-tell-manager" x-show="show">
+      <div class="relative z-[100]">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+              <div>
+                <div class="mx-auto flex items-center justify-center">
+                  <svg class="h-12 w-12 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="mt-3 text-center sm:mt-5">
+                  <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">
+                    Unavailable feature
+                  </h3>
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500">
+                      The owner has not claimed the ownership of this coffee
+                      shop. Please let the owner know about petakopi.my so
+                      that we can send the feedback to someone.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 sm:mt-6">
+                <button type="button" @click="show = false" class="inline-flex w-full justify-center rounded-md bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-200">
+                  Cancel
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  <% end %>
+</div>

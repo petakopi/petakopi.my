@@ -58,16 +58,21 @@ Rails.application.routes.draw do
   end
 
   resources :coffee_shops, only: [:new, :create, :edit, :update, :index] do
+    # For business owners
     resource :location, only: [:edit, :update], module: :coffee_shops
     resource :opening_hours, only: [:edit, :update], module: :coffee_shops
     resource :analytics, only: [:show], module: :coffee_shops
+    resources :feedbacks, only: [:index, :show], module: :coffee_shops
 
+    # For users
     resources :favourites, only: [:create, :destroy]
     resources :check_ins, only: [:create]
     resources :reports, only: [:new, :create]
+    resources :tell_managers, only: [:new, :create]
   end
   resources :coffee_shops_v2, only: [:new, :create]
   resources :users, path: "u", only: [:show, :edit, :update]
+  resources :inbox, only: [:index, :show]
 
   get "/coffee_shops/:id", to: redirect("/%{id}", status: 301)
   get "/cs/:id", to: redirect("/%{id}", status: 301)

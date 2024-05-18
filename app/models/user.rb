@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :coffee_shop_owners
   has_many :coffee_shops, through: :coffee_shop_owners
   has_many :check_ins, dependent: :destroy
+  has_many :feedbacks
 
   validates :username, uniqueness: true
   validates :username, presence: true

@@ -37,6 +37,7 @@ class CoffeeShop < ApplicationRecord
   has_many :favourites
   has_many :favourite_users, through: :favourites, source: :user, dependent: :destroy
   has_many :opening_hours, dependent: :destroy
+  has_many :feedbacks
 
   has_one :google_location, dependent: :destroy
   has_one_attached :logo

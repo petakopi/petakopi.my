@@ -77,6 +77,7 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
+  config.active_job.queue_adapter = :sidekiq
   config.action_mailer.delivery_method = :postmark
   config.action_mailer.default_url_options = {host: "petakopi.my"}
   config.action_mailer.perform_deliveries = true

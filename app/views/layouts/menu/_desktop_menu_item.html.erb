@@ -1,0 +1,16 @@
+<a
+  href="<%= path %>"
+  class="block px-4 py-2 text-sm text-gray-700"
+  x-state:on="Active"
+  x-state:off="Not Active"
+  :class="{ 'bg-gray-100': activeIndex === <%= position %> }"
+  role="menuitem"
+  tabindex="-1"
+  id="user-menu-item-1"
+  @mouseenter="activeIndex = <%= position %>"
+  @mouseleave="activeIndex = -1"
+  @click="open = false; focusButton()"
+  data-turbo-method="<%= method %>"
+>
+  <%= name %>
+</a>

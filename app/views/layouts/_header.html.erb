@@ -47,14 +47,42 @@
                 </button>
               </div>
 
-              <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" x-ref="menu-items" x-description="Dropdown menu, show/hide based on menu state." x-bind:aria-activedescendant="activeDescendant" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1" @keydown.arrow-up.prevent="onArrowUp()" @keydown.arrow-down.prevent="onArrowDown()" @keydown.tab="open = false" @keydown.enter.prevent="open = false; focusButton()" @keyup.space.prevent="open = false; focusButton()" style="display: none;">
-                <a href="<%= user_path(id: current_user.username) %>" class="block px-4 py-2 text-sm text-gray-700" x-state:on="Active" x-state:off="Not Active" :class="{ 'bg-gray-100': activeIndex === 0 }" role="menuitem" tabindex="-1" id="user-menu-item-0" @mouseenter="activeIndex = 0" @mouseleave="activeIndex = -1" @click="open = false; focusButton()">Your Profile</a>
-                <a href="<%= edit_user_path(id: current_user.username) %>" class="block px-4 py-2 text-sm text-gray-700" x-state:on="Active" x-state:off="Not Active" :class="{ 'bg-gray-100': activeIndex === 1 }" role="menuitem" tabindex="-1" id="user-menu-item-1" @mouseenter="activeIndex = 1" @mouseleave="activeIndex = -1" @click="open = false; focusButton()">Your Account</a>
-                <a href="<%= coffee_shops_path %>" class="block px-4 py-2 text-sm text-gray-700" :class="{ 'bg-gray-100': activeIndex === 2 }" role="menuitem" tabindex="-1" id="user-menu-item-2" @mouseenter="activeIndex = 2" @mouseleave="activeIndex = -1" @click="open = false; focusButton()">Your Coffee Shops</a>
-                <a href="<%= auctions_path %>" class="block px-4 py-2 text-sm text-gray-700" :class="{ 'bg-gray-100': activeIndex === 3 }" role="menuitem" tabindex="-1" id="user-menu-item-3" @mouseenter="activeIndex = 3" @mouseleave="activeIndex = -1" @click="open = false; focusButton()">Ads Auctions</a>
-                <a href="<%= destroy_user_session_path %>" data-turbo-method="delete" class="block px-4 py-2 text-sm text-gray-700" :class="{ 'bg-gray-100': activeIndex === 4 }" role="menuitem" tabindex="-1" id="user-menu-item-4" @mouseenter="activeIndex = 4" @mouseleave="activeIndex = -1" @click="open = false; focusButton()">Sign out</a>
+              <div
+                x-show="open"
+                x-transition:enter="transition ease-out duration-100"
+                x-transition:enter-start="transform opacity-0 scale-95"
+                x-transition:enter-end="transform opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-75"
+                x-transition:leave-start="transform opacity-100 scale-100"
+                x-transition:leave-end="transform opacity-0 scale-95"
+                x-ref="menu-items"
+                @keydown.arrow-down.prevent="onArrowDown()"
+                @keydown.tab="open = false"
+                @keydown.enter.prevent="open = false; focusButton()"
+                @keyup.space.prevent="open = false; focusButton()" style="display: none;"
+                class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                tabindex="-1" @keydown.arrow-up.prevent="onArrowUp()"
+              >
+                <%
+                  [
+                    { path: user_path(id: current_user.username), name: "Your Profile", position: 0 },
+                    { path: edit_user_path(id: current_user.username), name: "Your Account", position: 1 },
+                    { path: coffee_shops_path, name: "Your Coffee Shops", position: 2 },
+                    { path: inbox_index_path, name: "Inbox", position: 3 },
+                    { path: auctions_path, name: "Ads Auctions", position: 4 },
+                    { path: destroy_user_session_path, name: "Sign out", position: 5, method: "delete"},
+                  ].each_with_index do |item, i|
+                %>
+                  <%= render partial: "layouts/menu/desktop_menu_item",
+                    locals: {
+                      position: i,
+                      path: item[:path],
+                      name: item[:name],
+                    method: item[:method] || "get"
+                    }
+                  %>
+                <% end %>
               </div>
-
             </div>
           <% else %>
             <div class="flex items-center md:ml-12">
@@ -122,6 +150,7 @@
                     <%= link_to "Your Profile", user_path(current_user.username), class: "rounded-md text-base font-medium text-gray-500 hover:text-gray-900" %>
                     <%= link_to "Your Account", edit_user_path(id: current_user.username), class: "rounded-md text-base font-medium text-gray-500 hover:text-gray-900" %>
                     <%= link_to "Your Coffee Shops", coffee_shops_path, class: "rounded-md text-base font-medium text-gray-500 hover:text-gray-900" %>
+                    <%= link_to "Inbox", inbox_index_path, class: "rounded-md text-base font-medium text-gray-500 hover:text-gray-900" %>
                     <%= link_to "Ads Auctions", auctions_path, class: "rounded-md text-base font-medium text-gray-500 hover:text-gray-900" %>
                     <%= link_to "Sign Out", destroy_user_session_path, class: "rounded-md text-base font-medium text-gray-500 hover:text-gray-900", data: { turbo_method: :delete }%>
                   </div>
