@@ -13,7 +13,7 @@
       <% if @coffee_shop.logo.attached? %>
         <%=
           image_tag rails_public_blob_url(@coffee_shop.logo),
-            class: "mx-auto h-[100px] w-auto rounded-full",
+            class: "mx-auto h-16 w-16 rounded-full ring-offset-2 ring-gray-300 ring-2",
             alt: "#{@coffee_shop.name} logo"
         %>
       <% end %>
