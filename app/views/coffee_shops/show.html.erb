@@ -13,11 +13,15 @@
   <div class="relative z-10">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <% if @coffee_shop.logo.attached? %>
-        <%=
-          image_tag rails_public_blob_url(@coffee_shop.logo),
-            class: "mx-auto h-16 w-16 rounded-full ring-offset-2 ring-gray-300 ring-2",
-            alt: "#{@coffee_shop.name} logo"
-        %>
+        <div class="relative mx-auto max-w-md p-5 flex justify-center items-center">
+          <div class="bg-gradient-to-tr from-pink-300 to-blue-300 p-1 rounded-full">
+            <%=
+              image_tag rails_public_blob_url(@coffee_shop.logo),
+                class: "h-16 w-16 rounded-full bg-white p-1",
+                alt: "#{@coffee_shop.name} logo"
+              %>
+          </div>
+        </div>
       <% end %>
       <div class="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 flex items-center space-x-2 justify-center">
         <span><%= @coffee_shop.name %></span>
