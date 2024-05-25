@@ -64,9 +64,18 @@ class Admin::CoffeeShopsController < AdminController
   end
 
   def update_locality
-    GoogleApi::GoogleLocationSyncWorker
-      .new
-      .perform(@coffee_shop.google_location.id)
+    google_location = @coffee_shop.google_location
+
+    result =
+      GoogleApi::GoogleLocationSyncer.call(google_location: google_location)
+
+    if result.success?
+      redirect_to admin_coffee_shop_url(@coffee_shop),
+        notice: "Coffee shop locality was successfully updated."
+    else
+      redirect_to admin_coffee_shop_url(@coffee_shop),
+        alert: result.failure
+    end
   end
 
   private
