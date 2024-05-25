@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       member do
         post "duplicate"
         post "sync_opening_hours"
+        post "update_locality"
       end
     end
   end

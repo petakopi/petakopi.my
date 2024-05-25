@@ -1,5 +1,6 @@
 class Admin::CoffeeShopsController < AdminController
-  before_action :set_coffee_shop, only: %i[show edit update duplicate sync_opening_hours]
+  before_action :set_coffee_shop,
+    only: %i[show edit update duplicate sync_opening_hours update_locality]
 
   def index
     @coffee_shops =
@@ -60,6 +61,12 @@ class Admin::CoffeeShopsController < AdminController
         redirect_to admin_coffee_shop_url(result[:coffee_shop]),
           alert: result[:msg]
       end
+  end
+
+  def update_locality
+    GoogleApi::GoogleLocationSyncWorker
+      .new
+      .perform(@coffee_shop.google_location.id)
   end
 
   private
