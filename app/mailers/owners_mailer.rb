@@ -5,9 +5,7 @@ class OwnersMailer < ApplicationMailer
 
     mail to: @user.email,
       subject: "You have a new feedback for #{@coffee_shop.name}",
-      from: "hello@petakopi.my",
-      track_opens: "true",
-      message_stream: "outbound"
+      from: "hello@petakopi.my"
   end
 
   def outbid_email(auction_id, winners_coffee_shop_ids, user_id)
@@ -18,9 +16,7 @@ class OwnersMailer < ApplicationMailer
 
     mail to: @user.email,
       subject: "Update on Your Ad Auction Bid",
-      from: "hello@petakopi.my",
-      track_opens: "true",
-      message_stream: "outbound"
+      from: "hello@petakopi.my"
   end
 
   def last_day_auction_email(auction_id)
@@ -37,11 +33,10 @@ class OwnersMailer < ApplicationMailer
     @first_winner = CoffeeShop.find(winners.first)
     @second_winner = CoffeeShop.find(winners.last)
 
-    mail bcc: emails,
+    mail to: "amree@petakopi.my",
+      bcc: emails,
       subject: "Last Day to Bid for #{@auction.title}",
-      from: "hello@petakopi.my",
-      track_opens: "true",
-      message_stream: "outbound"
+      from: "hello@petakopi.my"
   end
 end
 

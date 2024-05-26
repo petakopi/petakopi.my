@@ -127,6 +127,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.4.0)
       railties (>= 6.0.0)
+    csv (3.3.0)
     date (3.3.4)
     declarative (0.0.20)
     device_detector (1.1.2)
@@ -241,6 +242,10 @@ GEM
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
+    httparty (0.22.0)
+      csv
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
     httpclient (2.8.3)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
@@ -368,11 +373,6 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.4)
-    postmark (1.25.0)
-      json
-    postmark-rails (0.22.1)
-      actionmailer (>= 3.0.0)
-      postmark (>= 1.21.3, < 2.0)
     progress (3.6.0)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -444,6 +444,8 @@ GEM
       uber (< 0.2.0)
     request_store (1.6.0)
       rack (>= 1.4)
+    resend (0.11.0)
+      httparty (>= 0.21.0)
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
@@ -636,12 +638,12 @@ DEPENDENCIES
   pagy (~> 6.1)
   paper_trail
   pg (~> 1.1)
-  postmark-rails
   pry
   puma (~> 6.0)
   rack-mini-profiler
   rails (~> 7.1)
   redis (~> 5.0)
+  resend
   rspec-rails (~> 6.0.0)
   sidekiq (<= 7.2.1)
   sidekiq-cron

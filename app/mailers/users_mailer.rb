@@ -8,9 +8,7 @@ class UsersMailer < ApplicationMailer
 
     mail to: @user.email,
       subject: "Your feedback for #{@coffee_shop.name} has just been reviewed",
-      from: "hello@petakopi.my",
-      track_opens: "true",
-      message_stream: "outbound"
+      from: "hello@petakopi.my"
   end
 end
 

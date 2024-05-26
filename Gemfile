@@ -21,6 +21,7 @@ gem "google-apis-sheets_v4", require: false # Google API client for Sheets
 gem "groupdate" # active record helper to group by date/time
 gem "hiredis" # redis adapter
 gem "http" # http client
+gem "resend" # resend emails
 gem "image_optim" # Image optimization
 gem "image_optim_pack" # Image optimization
 gem "image_processing", ">= 1.2" # Image processor
@@ -37,7 +38,6 @@ gem "omniauth-facebook" # login using Facebook
 gem "omniauth-google-oauth2" # login using Google
 gem "omniauth-twitter" # login using Twitter
 gem "omniauth-rails_csrf_protection" # Migitate against CSRF in OmniAuth gem
-gem "postmark-rails" # Send emails via Postmark
 gem "rails", "~> 7.1"
 gem "redis", "~> 5.0" # Use Redis adapter to run Action Cable in production
 gem "sidekiq", "<= 7.2.1" # Background jobs
