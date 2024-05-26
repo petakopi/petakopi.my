@@ -22,5 +22,26 @@ class OwnersMailer < ApplicationMailer
       track_opens: "true",
       message_stream: "outbound"
   end
+
+  def last_day_auction_email(auction_id)
+    @auction = Auction.find(auction_id)
+    winners =
+      @auction
+        .ordered_bidders
+        .limit(Auction::MAXIMUM_WINNERS)
+        .pluck(:coffee_shop_id)
+
+    user_ids = @auction.bids.pluck(:user_id)
+    emails = User.where(id: user_ids).pluck(:email).uniq
+
+    @first_winner = CoffeeShop.find(winners.first)
+    @second_winner = CoffeeShop.find(winners.last)
+
+    mail bcc: emails,
+      subject: "Last Day to Bid for #{@auction.title}",
+      from: "hello@petakopi.my",
+      track_opens: "true",
+      message_stream: "outbound"
+  end
 end
 
