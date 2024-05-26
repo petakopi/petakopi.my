@@ -19,7 +19,8 @@ class User < ApplicationRecord
 
   validates :username, uniqueness: true
   validates :username, presence: true
-  validates :username, format: {with: /\A[a-z0-9]+\z/, message: "'%{value}' should only contain alphabets and numbers"}
+  validates :username,
+    format: {with: /\A[a-z0-9]+\z/, message: "'%{value}' should only contain alphabets (lower case) and numbers"}
   validates :username, length: {minimum: 5}
 
   after_save :process_avatar
