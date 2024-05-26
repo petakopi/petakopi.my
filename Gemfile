@@ -28,6 +28,7 @@ gem "image_processing", ">= 1.2" # Image processor
 gem "jbuilder" # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jsbundling-rails" # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "lograge" # Log formatter
+gem "newrelic_rpm" # New Relic monitoring
 gem "nokogiri" # Parse HTML
 gem "pagy", "~> 6.1" # Pagination
 gem "paper_trail" # Track changes to the model
