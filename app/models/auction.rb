@@ -1,4 +1,6 @@
 class Auction < ApplicationRecord
+  MAXIMUM_WINNERS = 2
+
   validates :title, presence: true, uniqueness: true
   validates :slug, presence: true, uniqueness: true
   validates :description, presence: true
@@ -9,5 +11,19 @@ class Auction < ApplicationRecord
 
   def to_param
     slug
+  end
+
+  def ordered_bidders
+    bids
+      .includes(
+        coffee_shop: [
+          :google_location,
+          logo_attachment: :blob,
+        ],
+      )
+      .order(
+        amount: :desc,
+        created_at: :asc,
+      )
   end
 end

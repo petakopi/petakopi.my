@@ -11,6 +11,12 @@ class BidsController < ApplicationController
 
   def create
     @auction = Auction.find_by(slug: params[:auction_id])
+    current_winners =
+      @auction
+        .ordered_bidders
+        .first(Auction::MAXIMUM_WINNERS)
+        .pluck(:coffee_shop_id)
+
     @bid = @auction.bids.new(bid_params)
     @bid.user = current_user
     @frame_id = params[:frame_id]
@@ -25,6 +31,7 @@ class BidsController < ApplicationController
         ].join("\n")
 
         TelegramNotifierWorker.perform_async(message)
+        OutbidNotifierWorker.perform_async(@auction.id, current_winners)
 
         format.turbo_stream
       else
