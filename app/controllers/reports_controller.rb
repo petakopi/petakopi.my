@@ -1,10 +1,10 @@
 class ReportsController < ApplicationController
   def new
-    @coffee_shop = CoffeeShop.find(params[:coffee_shop_id])
+    @coffee_shop = CoffeeShop.find_by(slug: params[:coffee_shop_id])
   end
 
   def create
-    coffee_shop = CoffeeShop.find_by(id: params[:coffee_shop_id])
+    coffee_shop = CoffeeShop.find_by(slug: params[:coffee_shop_id])
 
     message = [
       "Coffee Shop ID: #{coffee_shop&.id}",
