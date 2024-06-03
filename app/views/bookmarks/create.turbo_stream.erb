@@ -1,0 +1,30 @@
+<!-- Reset modal -->
+<%= turbo_stream.update "bookmark", nil %>
+
+<%=
+  turbo_stream.replace(
+    "toast",
+    partial: "shared/toast",
+    locals: {
+      type: "success",
+      message:
+        render(
+          partial: "bookmarks/added_to_bookmark",
+          locals: { bookmark: @bookmark }
+        )
+    }
+  )
+%>
+
+<!-- Refresh "Bookmark" button -->
+<%=
+  turbo_stream.replace(
+    "bookmark_button",
+    partial: "bookmarks/button",
+    locals: {
+      coffee_shop: @coffee_shop,
+      bookmark: @bookmark,
+      bookmark_count: @bookmark_count
+    }
+  )
+%>

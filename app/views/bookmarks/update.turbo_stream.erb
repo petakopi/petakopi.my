@@ -1,0 +1,13 @@
+<!-- Reset modal -->
+<%= turbo_stream.update "bookmark", nil %>
+
+<%=
+  turbo_stream.replace(
+    "toast",
+    partial: "shared/toast",
+    locals: {
+      type: "success",
+      message: "Collections updated."
+    }
+  )
+%>

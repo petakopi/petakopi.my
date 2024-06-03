@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "bookmarks" do %>
+  <%= turbo_frame_tag "bookmarks" do %>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <%= render partial: "users/coffee_shop", collection: @bookmarks.map(&:coffee_shop) %>
+    </div>
+  <% end %>
+<% end %>

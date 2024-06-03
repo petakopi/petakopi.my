@@ -1,0 +1,25 @@
+<div class="text-sm text-gray-500">
+  Coffee shop has been bookmarked.
+</div>
+
+<div class="flex justify-between space-x-8 mt-4 items-cneter text-sm font-semibold">
+  <div class="text-red-800">
+    <%= link_to bookmark_path(id: bookmark),
+      "@click": "show = false",
+      class: "rounded bg-red-50 px-2 py-1 text-xs font-semibold text-red-600 shadow-sm hover:bg-red-100",
+      data: {
+        turbo_method: :delete,
+        turbo_confirm: "Are you sure you want to remove this bookmark?"
+      } do %>
+      Remove
+    <% end %>
+  </div>
+
+  <div class="text-gray-800">
+    <%= link_to edit_bookmark_path(id: bookmark),
+      "@click": "show = false",
+      data: { turbo_frame: "bookmark" } do %>
+      Manage Collections &rarr;
+    <% end %>
+  </div>
+</div>
