@@ -4,6 +4,7 @@
 
 <div id="toast"><!-- Will be replaced with alert from Turbo Stream --></div>
 
+<%= turbo_frame_tag "bookmark" %>
 <%= turbo_frame_tag "report" %>
 <%= turbo_frame_tag "tell_manager" %>
 
@@ -87,6 +88,12 @@
     </div>
 
     <div class="mt-10 flex flex-col space-y-4">
+      <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <%= render partial: "coffee_shops/buttons/bookmark",
+          locals: { coffee_shop: @coffee_shop }
+        %>
+      </div>
+
       <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <%= render partial: "coffee_shops/tell_manager",
           locals: { coffee_shop: @coffee_shop }

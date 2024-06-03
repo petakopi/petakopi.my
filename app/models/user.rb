@@ -8,9 +8,11 @@ class User < ApplicationRecord
     omniauth_providers: %i[facebook twitter google_oauth2]
 
   has_one_attached :avatar
+
   has_many :auth_providers
-  has_many :favourites
-  has_many :favourite_coffee_shops, through: :favourites, source: :coffee_shop
+  has_many :bookmarks
+  has_many :collections
+  has_many :bookmark_coffee_shops, through: :bookmarks, source: :coffee_shop
   has_many :submitted_coffee_shops, class_name: "CoffeeShop", foreign_key: "submitter_user_id"
   has_many :coffee_shop_owners
   has_many :coffee_shops, through: :coffee_shop_owners

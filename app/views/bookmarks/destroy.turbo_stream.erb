@@ -1,0 +1,12 @@
+<!-- Refresh "Bookmark" button -->
+<%=
+  turbo_stream.replace(
+    "bookmark_button",
+    partial: "bookmarks/button",
+    locals: {
+      coffee_shop: @coffee_shop,
+      bookmark: nil,
+      bookmark_count: @bookmark_count
+    }
+  )
+%>

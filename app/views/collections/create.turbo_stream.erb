@@ -1,0 +1,12 @@
+<%= turbo_stream.update "bookmark", "" %>
+
+<%=
+  turbo_stream.replace(
+    "toast",
+    partial: "shared/toast",
+    locals: {
+      type: "success",
+      message: "Bookmark added to #{@collection.name}"
+    }
+  )
+%>

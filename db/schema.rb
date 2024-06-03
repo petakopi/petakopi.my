@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_06_063248) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_21_011541) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pageinspect"
   enable_extension "pgcrypto"
@@ -130,6 +130,24 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_06_063248) do
     t.index ["user_id"], name: "index_bids_on_user_id"
   end
 
+  create_table "bookmark_collections", force: :cascade do |t|
+    t.bigint "bookmark_id", null: false
+    t.bigint "collection_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bookmark_id"], name: "index_bookmark_collections_on_bookmark_id"
+    t.index ["collection_id"], name: "index_bookmark_collections_on_collection_id"
+  end
+
+  create_table "bookmarks", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "coffee_shop_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coffee_shop_id"], name: "index_bookmarks_on_coffee_shop_id"
+    t.index ["user_id"], name: "index_bookmarks_on_user_id"
+  end
+
   create_table "check_ins", force: :cascade do |t|
     t.bigint "coffee_shop_id", null: false
     t.bigint "user_id", null: false
@@ -179,6 +197,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_06_063248) do
     t.index ["status"], name: "index_coffee_shops_on_status"
     t.index ["submitter_user_id"], name: "index_coffee_shops_on_submitter_user_id"
     t.index ["uuid"], name: "index_coffee_shops_on_uuid", unique: true
+  end
+
+  create_table "collections", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug"
+    t.index ["user_id"], name: "index_collections_on_user_id"
   end
 
   create_table "favourites", force: :cascade do |t|
@@ -291,6 +318,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_06_063248) do
   add_foreign_key "bids", "auctions"
   add_foreign_key "bids", "coffee_shops"
   add_foreign_key "bids", "users"
+  add_foreign_key "bookmark_collections", "bookmarks"
+  add_foreign_key "bookmark_collections", "collections"
+  add_foreign_key "bookmarks", "coffee_shops"
+  add_foreign_key "bookmarks", "users"
   add_foreign_key "check_ins", "coffee_shops"
   add_foreign_key "check_ins", "users"
   add_foreign_key "coffee_shop_owners", "coffee_shops"
@@ -298,6 +329,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_06_063248) do
   add_foreign_key "coffee_shop_tags", "coffee_shops"
   add_foreign_key "coffee_shop_tags", "tags"
   add_foreign_key "coffee_shops", "users", column: "submitter_user_id"
+  add_foreign_key "collections", "users"
   add_foreign_key "favourites", "coffee_shops"
   add_foreign_key "favourites", "users"
   add_foreign_key "feedbacks", "coffee_shops"

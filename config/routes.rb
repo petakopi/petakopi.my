@@ -67,13 +67,18 @@ Rails.application.routes.draw do
     resources :feedbacks, only: [:index, :show], module: :coffee_shops
 
     # For users
-    resources :favourites, only: [:create, :destroy]
-    resources :check_ins, only: [:create]
     resources :reports, only: [:new, :create]
     resources :tell_managers, only: [:new, :create]
   end
+  resources :bookmarks, only: [:new, :edit, :update, :create, :destroy]
   resources :coffee_shops_v2, only: [:new, :create]
-  resources :users, path: "u", only: [:show, :edit, :update]
+  resources :collections, only: [:new, :create, :edit, :update, :destroy]
+  resources :users, path: "u", only: [:show, :edit, :update] do
+    resources :bookmarks, only: [:index], controller: "users/bookmarks"
+  end
+  # Declare outside to prevent conflict with /u/:username/[edit|update]
+  get "u/:user_id/:collection_slug", to: "users/collections#show", as: :user_collection
+
   resources :inbox, only: [:index, :show]
 
   get "/coffee_shops/:id", to: redirect("/%{id}", status: 301)

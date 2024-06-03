@@ -1,4 +1,7 @@
-<% unless (controller_path == "coffee_shops" && action_name == "show") %>
+<%
+  unless ((controller_path == "coffee_shops" && action_name == "show") ||
+    (controller_path == "users/collections" && action_name == "show"))
+%>
   <div class="relative bg-white" x-data="Components.popover({ open: false, focus: false })" x-init="init()" @keydown.escape="onEscape" @close-popover-group.window="onClosePopoverGroup">
     <div class="absolute inset-0 shadow z-20 pointer-events-none" aria-hidden="true"></div>
     <div class="relative z-20">

@@ -5,25 +5,21 @@
 import { application } from "./application"
 
 import CheckInController from "./check_in_controller.js"
-application.register("check-in", CheckInController)
-
-import HomeFiltersController from "./home_filters_controller.js"
-application.register("home-filters", HomeFiltersController)
-
-import MapLoaderController from "./map_loader_controller.js"
-application.register("map-loader", MapLoaderController)
-
-import PwaInstallController from "./pwa_install_controller.js"
-application.register("pwa-install", PwaInstallController)
-
-import SelectController from "./select_controller.js"
-application.register("select", SelectController)
-
-import TrackerController from "./tracker_controller.js"
-application.register("tracker", TrackerController)
-
-import MapsController from "./maps_controller.js"
-application.register("maps", MapsController)
-
 import CloudflareTurnstile from "./cloudflare_turnstile_controller.js"
+import CollectionsFilterController from "./collections_filter_controller.js"
+import HomeFiltersController from "./home_filters_controller.js"
+import MapLoaderController from "./map_loader_controller.js"
+import MapsController from "./maps_controller.js"
+import PwaInstallController from "./pwa_install_controller.js"
+import SelectController from "./select_controller.js"
+import TrackerController from "./tracker_controller.js"
+
+application.register("check-in", CheckInController)
 application.register("cloudflare-turnstile", CloudflareTurnstile)
+application.register("collections-filter", CollectionsFilterController)
+application.register("home-filters", HomeFiltersController)
+application.register("map-loader", MapLoaderController)
+application.register("maps", MapsController)
+application.register("pwa-install", PwaInstallController)
+application.register("select", SelectController)
+application.register("tracker", TrackerController)

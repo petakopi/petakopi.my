@@ -1,0 +1,21 @@
+<%=
+  turbo_stream.replace(
+    "toast",
+    partial: "shared/toast",
+    locals: {
+      type: "success",
+      message: "Collection was successfully removed.",
+    }
+  )
+%>
+
+<%=
+  turbo_stream.replace(
+    "collections",
+    partial: "users/collections",
+    locals: {
+      collections: @collections,
+      user: current_user,
+    }
+  )
+%>

@@ -1,3 +1,7 @@
+<div id="toast"><!-- Will be replaced with alert from Turbo Stream --></div>
+
+<%= turbo_frame_tag "collection" %>
+
 <main class="my-6">
   <div class="max-w-3xl mx-auto md:flex md:items-center md:justify-between md:space-x-5 lg:max-w-7xl">
     <div class="flex items-center space-x-5">
@@ -17,47 +21,24 @@
     </div>
   </div>
 
-  <%= render layout: "card" do %>
-    <div class="graph text-xs overflow-x-auto overflow-y-hidden md:overflow-visible">
-      <ul class="months">
-        <% @check_in_months.each do |month| %>
-          <li class="text-gray-700"><%= month %></li>
-        <% end %>
-      </ul>
-      <ul class="days text-gray-700">
-        <li>Sun</li>
-        <li>Mon</li>
-        <li>Tue</li>
-        <li>Wed</li>
-        <li>Thu</li>
-        <li>Fri</li>
-        <li>Sat</li>
-      </ul>
-      <ul class="squares">
-        <% @check_ins.each do |date, count| %>
-          <li
-            x-data="{tooltip: '<%= "#{count.positive? ? count : "No"} check #{"in".pluralize(count)} on #{date}" %>'}"
-            x-tooltip="tooltip"
-            class="cursor-pointer"
-            data-level="<%= count %>"
-          >
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render partial: "users/collections",
+    locals: {
+      collections: @collections,
+      user: @user
+   }
+  %>
 
-  <%= render layout: "card", locals: { title: "Favourites" } do %>
-    <% if @favourites.size > 0 %>
-      <%= render partial: "users/coffee_shop", collection: @favourites %>
-    <% else %>
-      No favourite yet.
-    <% end %>
-  <% end %>
+  <%= render partial: "users/bookmarks",
+    locals: {
+      coffee_shops: @bookmarks.order(created_at: :desc).limit(5).map(&:coffee_shop),
+      user: @user
+   }
+  %>
 
-  <% if @submitted_coffee_shops.size > 0 && @user.role.blank? %>
-    <%= render layout: "card", locals: { title: "Submitted Coffee Shops", description: "List of all approved coffee shops." } do %>
-      <%= render partial: "users/coffee_shop", collection: @submitted_coffee_shops %>
-    <% end %>
-  <% end %>
+  <%= render partial: "users/submitted_coffee_shops",
+    locals: {
+      coffee_shops: @submitted_coffee_shops,
+      user: @user
+   }
+  %>
 </main>
