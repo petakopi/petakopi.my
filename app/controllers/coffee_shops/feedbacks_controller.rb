@@ -1,10 +1,8 @@
 class CoffeeShops::FeedbacksController < ApplicationController
   def index
-    @feedbacks =
-      Feedback
-        .joins(:coffee_shop)
-        .where(coffee_shop: { id: current_user.coffee_shops.pluck(:id) })
-        .order(created_at: :desc)
+    @coffee_shop = current_user.coffee_shops.find_by(slug: params[:coffee_shop_id])
+
+    @feedbacks = @coffee_shop.feedbacks.order(created_at: :desc)
   end
 
   def show
