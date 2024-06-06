@@ -4,7 +4,7 @@ class CoffeeShops::FeedbacksController < ApplicationController
       Feedback
         .joins(:coffee_shop)
         .where(coffee_shop: { id: current_user.coffee_shops.pluck(:id) })
-        .order(created_at: :desc))
+        .order(created_at: :desc)
   end
 
   def show
