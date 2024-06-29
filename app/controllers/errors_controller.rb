@@ -19,6 +19,7 @@ class ErrorsController < ApplicationController
 
   def supported_error_codes
     {
+      403 => "forbidden",
       404 => "not_found",
       500 => "internal_server_error"
     }

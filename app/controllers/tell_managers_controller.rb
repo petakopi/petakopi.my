@@ -1,4 +1,6 @@
 class TellManagersController < ApplicationController
+  before_action :validate_cloudflare_turnstile, only: %i[create]
+
   def new
     @coffee_shop = CoffeeShop.find_by(slug: params[:coffee_shop_id])
     @feedback = Feedback.new

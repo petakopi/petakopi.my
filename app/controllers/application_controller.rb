@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :turbo_native_app?
 
+  rescue_from RailsCloudflareTurnstile::Forbidden, with: :render_forbidden
+
   protected
 
   def configure_permitted_parameters
@@ -29,5 +31,11 @@ class ApplicationController < ActionController::Base
         stored_location_for(resource_or_scope) ||
         super
     end
+  end
+
+  def render_forbidden
+    render "errors/forbidden",
+      layout: "application_full",
+      status: :forbidden
   end
 end

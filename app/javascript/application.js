@@ -43,3 +43,10 @@ window.addEventListener("beforeinstallprompt", (e) => {
   // Stash the event so it can be triggered later.
   window.deferredPrompt = e;
 });
+
+document.addEventListener("turbo:frame-missing", (event) => {
+  const { detail: { response, visit } } = event;
+  event.preventDefault();
+  visit(response);
+})
+

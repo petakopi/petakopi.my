@@ -24,3 +24,6 @@ application.register("tracker", TrackerController)
 
 import MapsController from "./maps_controller.js"
 application.register("maps", MapsController)
+
+import CloudflareTurnstile from "./cloudflare_turnstile_controller.js"
+application.register("cloudflare-turnstile", CloudflareTurnstile)

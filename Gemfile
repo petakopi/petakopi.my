@@ -40,6 +40,7 @@ gem "omniauth-google-oauth2" # login using Google
 gem "omniauth-twitter" # login using Twitter
 gem "omniauth-rails_csrf_protection" # Migitate against CSRF in OmniAuth gem
 gem "rails", "~> 7.1"
+gem "rails_cloudflare_turnstile" # Cloudflare Turnstile (captcha)
 gem "redis", "~> 5.0" # Use Redis adapter to run Action Cable in production
 gem "sidekiq", "<= 7.2.1" # Background jobs
 gem "sidekiq-cron" # Sidekiq + Cron
