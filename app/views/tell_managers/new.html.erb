@@ -63,7 +63,7 @@
                       </div>
 
                       <div data-controller="cloudflare-turnstile">
-                        <%= cloudflare_turnstile %>
+                        <div class="cf-turnstile" data-sitekey="<%= Rails.application.credentials.dig(:cloudflare, :turnstile, :site_key) %>" data-size="normal" data-theme="light"></div>
                       </div>
                     </div>
                   </div>
