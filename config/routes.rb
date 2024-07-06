@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   get "privacy" => "pages#privacy"
   get "terms" => "pages#terms"
   get "map" => "map#index"
+  get "mapbox" => "mapbox#index", defaults: {format: :json}
 
   namespace :api do
     namespace :v1 do

@@ -49,7 +49,7 @@
       // add the point_count property to your source data.
       map.addSource("coffee_shops", {
         type: "geojson",
-        data: "<%= api_v1_coffee_shops_path(type: 'geojson', tags: params[:tags]).html_safe %>",
+        data: "<%= mapbox_path(type: 'geojson', tags: params[:tags]).html_safe %>",
         cluster: true,
         clusterMaxZoom: 14, // Max zoom to cluster points on
         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
