@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_22_073356) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_06_063248) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pageinspect"
   enable_extension "pgcrypto"
@@ -178,6 +178,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_22_073356) do
     t.index ["slug"], name: "index_coffee_shops_on_slug", unique: true
     t.index ["status"], name: "index_coffee_shops_on_status"
     t.index ["submitter_user_id"], name: "index_coffee_shops_on_submitter_user_id"
+    t.index ["uuid"], name: "index_coffee_shops_on_uuid", unique: true
   end
 
   create_table "favourites", force: :cascade do |t|
