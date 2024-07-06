@@ -576,6 +576,8 @@ GEM
     uber (0.1.0)
     unicode-display_width (2.5.0)
     uri (0.13.0)
+    uuid7 (0.2.0)
+      zeitwerk (~> 2.4)
     version_gem (1.1.3)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -666,6 +668,7 @@ DEPENDENCIES
   tomo-plugin-sidekiq
   turbo-rails
   u-case
+  uuid7
   web-console
   webdrivers (~> 5.0)
   yaaf

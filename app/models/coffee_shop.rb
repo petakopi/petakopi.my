@@ -85,7 +85,7 @@ class CoffeeShop < ApplicationRecord
   def set_uuid
     return if uuid.present?
 
-    self.uuid = SecureRandom.uuid
+    self.uuid = UUID7.generate
   end
 
   def process_logo
