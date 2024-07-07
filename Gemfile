@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.2.2"
 
 gem "active_decorator" # Decorator
+gem "activerecord_cursor_paginate" # Cursor pagination
 gem "ahoy_matey" # analytics
 gem "appsignal" # error/performance monitoring
 gem "aws-sdk-s3", require: false
