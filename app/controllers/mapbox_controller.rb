@@ -7,6 +7,7 @@ class MapboxController < ApplicationController
         .status_published
         .where.not(google_locations: { lat: nil, lng: nil })
         .select(
+          "id",
           "name",
           "slug",
           "google_locations.lat",
