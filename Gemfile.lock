@@ -367,6 +367,10 @@ GEM
       rack
     orm_adapter (0.5.0)
     os (1.1.4)
+    oyencov (0.0.16)
+      faraday (>= 1.0, < 3.0)
+      parser (>= 2, < 4.0)
+      thor (>= 1.0, < 2.0)
     pagy (6.4.3)
     paper_trail (15.1.0)
       activerecord (>= 6.1)
@@ -645,6 +649,7 @@ DEPENDENCIES
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   omniauth-twitter
+  oyencov
   pagy (~> 6.1)
   paper_trail
   pg (~> 1.1)

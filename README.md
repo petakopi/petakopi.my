@@ -51,7 +51,15 @@ psql -U petakopi -h localhost -p 5454 -d petakopi
 
 # Get the password
 tomo env:show
-````
+```
+
+## Production
+
+Helpul commands:
+
+```
+tomo env:set FOO=bar
+```
 
 ## DISCLAIMER
 
