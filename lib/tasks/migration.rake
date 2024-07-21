@@ -27,16 +27,4 @@ namespace :migration do
         GoogleApi::GoogleLocationSyncWorker.perform_async(google_location.id)
       end
   end
-
-  desc "Migrate favorites to boomarks"
-  task migrate_favorites_to_bookmarks: :environment do
-    Favorite.find_each do |favorite|
-      puts "#{favorite.id} - #{favorite.user_id} - #{favorite.coffee_shop_id}"
-
-      Bookmark.create!(
-        user_id: favorite.user_id,
-        coffee_shop_id: favorite.coffee_shop_id
-      )
-    end
-  end
 end

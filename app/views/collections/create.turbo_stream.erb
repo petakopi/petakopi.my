@@ -1,12 +1,17 @@
 <%= turbo_stream.update "bookmark", "" %>
 
+<%
+  collection = Collection.first
+  success_message = "Bookmark has been added to <a class='font-semibold leading-6 text-brown-600 hover:text-brown-500' href='#{user_collection_path(user_id: current_user.username, collection_slug: @collection.slug)}'>#{h(@collection.name)}</a>".html_safe
+%>
+
 <%=
   turbo_stream.replace(
     "toast",
     partial: "shared/toast",
     locals: {
       type: "success",
-      message: "Bookmark added to #{@collection.name}"
+      message: success_message
     }
   )
 %>
