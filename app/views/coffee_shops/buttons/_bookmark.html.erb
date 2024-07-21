@@ -2,9 +2,9 @@
   <% if current_user %>
     <%= render partial: "bookmarks/button",
       locals: {
-        coffee_shop: @coffee_shop,
-        bookmark: @bookmark,
-        bookmark_count: @bookmark_count
+        coffee_shop: coffee_shop,
+        bookmark: bookmark,
+        bookmark_count: bookmark_count
       }
     %>
   <% else %>
