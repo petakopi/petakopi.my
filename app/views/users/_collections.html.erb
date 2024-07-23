@@ -41,7 +41,7 @@
                   </div>
                   <div class="min-w-0 flex-grow">
                     <%= link_to collection.name,
-                      user_collection_path(user_id: user.username, collection_slug: collection.slug),
+                      user_collection_path(user_id: user.username, collection_slug: collection),
                       class: "text-brown-600 hover:text-brown-900"
                     %>
                   </div>
@@ -50,7 +50,7 @@
                 <div>
                   <% if current_user %>
                     <%= link_to "Manage",
-                      edit_collection_path(id: collection.slug),
+                      edit_collection_path(collection),
                       data: { turbo_frame: "collection" },
                       class: "text-brown-600 hover:text-brown-900"
                     %>

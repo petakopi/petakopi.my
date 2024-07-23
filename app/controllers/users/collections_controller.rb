@@ -1,7 +1,7 @@
 class Users::CollectionsController < ApplicationController
   def show
     @user = User.find_by!(username: params[:user_id])
-    @collection = @user.collections.find_by!(slug: params[:collection_slug])
+    @collection = @user.collections.find(params[:collection_slug])
     @bookmarks =
       @collection
         .bookmarks

@@ -11,7 +11,7 @@ class Collection < ApplicationRecord
   validates :slug, presence: true, uniqueness: { scope: :user_id }
 
   def to_param
-    slug
+    "#{id}-#{slug}"
   end
 
   def set_slug
