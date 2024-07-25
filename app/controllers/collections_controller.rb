@@ -20,12 +20,12 @@ class CollectionsController < ApplicationController
 
   # Used in user
   def edit
-    @collection = current_user.collections.find(params[:id])
+    @collection = current_user.collections.find_by!(slug: params[:id])
   end
 
   # Used in user
   def update
-    @collection = current_user.collections.find(params[:id])
+    @collection = current_user.collections.find_by!(slug: params[:id])
 
     if @collection.update(collection_edit_params)
       @collections = current_user.collections.order(name: :asc)
