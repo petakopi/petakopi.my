@@ -31,7 +31,7 @@ gem "jsbundling-rails" # Bundle and transpile JavaScript [https://github.com/rai
 gem "lograge" # Log formatter
 gem "newrelic_rpm" # New Relic monitoring
 gem "nokogiri" # Parse HTML
-gem "pagy", "~> 6.1" # Pagination
+gem "pagy", "~> 8.6" # Pagination
 gem "paper_trail" # Track changes to the model
 gem "pg", "~> 1.1" # Use postgresql as the database for Active Record
 gem "puma", "~> 6.0" # Use the Puma web server [https://github.com/puma/puma]
