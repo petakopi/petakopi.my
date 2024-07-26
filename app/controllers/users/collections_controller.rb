@@ -7,5 +7,6 @@ class Users::CollectionsController < ApplicationController
         .bookmarks
         .includes(coffee_shop: [logo_attachment: :blob])
         .with_published_coffee_shop
+        .order("bookmark_collections.created_at DESC")
   end
 end
