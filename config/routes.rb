@@ -39,9 +39,10 @@ Rails.application.routes.draw do
   get "map" => "map#index"
   get "mapbox" => "mapbox#index", defaults: {format: :json}
 
-  namespace :api do
+  namespace :api, defaults: {format: :json} do
     namespace :v1 do
-      resources :coffee_shops, only: [:index, :show], defaults: {format: :json}
+      resources :coffee_shops, only: [:index, :show]
+      resources :maps, only: [:index]
     end
   end
 
