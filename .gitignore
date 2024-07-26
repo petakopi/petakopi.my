@@ -45,3 +45,5 @@
 /public/system/letter_avatars
 /public/service-worker.js
 /public/service-worker.js.map
+
+/coverage

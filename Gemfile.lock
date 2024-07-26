@@ -140,6 +140,7 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.5.1)
+    docile (1.4.0)
     domain_name (0.6.20240107)
     drb (2.2.0)
       ruby2_keywords
@@ -367,10 +368,6 @@ GEM
       rack
     orm_adapter (0.5.0)
     os (1.1.4)
-    oyencov (0.0.16)
-      faraday (>= 1.0, < 3.0)
-      parser (>= 2, < 4.0)
-      thor (>= 1.0, < 2.0)
     pagy (6.4.3)
     paper_trail (15.1.0)
       activerecord (>= 6.1)
@@ -524,6 +521,12 @@ GEM
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.4)
     sitemap_generator (6.3.0)
       builder (~> 3.0)
     skylight (6.0.3)
@@ -649,7 +652,6 @@ DEPENDENCIES
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   omniauth-twitter
-  oyencov
   pagy (~> 6.1)
   paper_trail
   pg (~> 1.1)
@@ -665,6 +667,7 @@ DEPENDENCIES
   sidekiq-cron
   sidekiq-failures
   sidekiq-throttled
+  simplecov
   sitemap_generator
   skylight
   sprockets-rails
