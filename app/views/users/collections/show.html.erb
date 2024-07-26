@@ -12,8 +12,12 @@
       <% end %>
     </div>
     <div>
-      <h1 class="text-2xl font-bold text-gray-900"><%= @collection.name %> by <%= @user.username %></h1>
-      <p class="text-sm font-medium text-gray-500">Last update on <time datetime="<%= @collection.updated_at.strftime("%Y-%m-%d") %>"><%= @user.created_at.strftime("%B %d, %Y") %></time></p>
+      <h1 class="text-2xl font-bold text-gray-900">
+        <%= @collection.name %> by <%= @user.username %>
+      </h1>
+      <p class="text-sm font-medium text-gray-500">
+        Last update on <%= @collection.updated_at.strftime("%B %d, %Y") %>
+      </p>
     </div>
   </div>
 </div>
