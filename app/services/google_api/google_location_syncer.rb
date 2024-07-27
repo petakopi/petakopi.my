@@ -4,8 +4,8 @@ class GoogleApi::GoogleLocationSyncer
 
   ValidationSchema = Dry::Schema.Params do
     optional(:place_id).maybe(:str?)
-    optional(:lat).maybe(:str?)
-    optional(:lng).maybe(:str?)
+    optional(:lat).maybe(:float?)
+    optional(:lng).maybe(:float?)
 
     rules do
       rule(:place_or_coords) do
