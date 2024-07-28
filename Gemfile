@@ -61,6 +61,7 @@ gem "uuid7" # UUID generator
 gem "yaaf" # handles form object
 
 group :development, :test do
+  gem "dotenv-rails" # Load environment variables from .env file
   gem "factory_bot_rails" # Fixtures replacement
   gem "pry" # Debugging tool
   gem "rspec-rails", "~> 6.0.0" # Test framework

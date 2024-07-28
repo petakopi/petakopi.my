@@ -47,3 +47,6 @@
 /public/service-worker.js.map
 
 /coverage
+
+# dotenv
+/.env.*.local
