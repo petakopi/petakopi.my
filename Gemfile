@@ -8,6 +8,7 @@ gem "activerecord_cursor_paginate" # Cursor pagination
 gem "ahoy_matey" # analytics
 gem "appsignal" # error/performance monitoring
 gem "aws-sdk-s3", require: false
+gem "bugsnag" # Error monitoring
 gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "celluloid" # Actor-based concurrent object framework for Ruby
 gem "connection_pool" # redis connection pooling

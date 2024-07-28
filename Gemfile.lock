@@ -110,6 +110,8 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
+    bugsnag (6.27.1)
+      concurrent-ruby (~> 1.0)
     builder (3.2.4)
     capybara (3.40.0)
       addressable
@@ -623,6 +625,7 @@ DEPENDENCIES
   appsignal
   aws-sdk-s3
   bootsnap
+  bugsnag
   capybara
   celluloid
   chartkick
