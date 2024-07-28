@@ -3,6 +3,7 @@ class ReportsController < ApplicationController
 
   def new
     @coffee_shop = CoffeeShop.find_by(slug: params[:coffee_shop_id])
+    @return_path = request.referer
   end
 
   def create
