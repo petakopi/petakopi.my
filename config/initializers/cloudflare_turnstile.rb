@@ -1,16 +1,11 @@
 RailsCloudflareTurnstile.configure do |c|
   # Ref: https://developers.cloudflare.com/turnstile/troubleshooting/testing/
-  if Rails.env.production?
-    c.site_key = Rails.application.credentials.dig(:cloudflare, :turnstile, :site_key)
-    c.secret_key = Rails.application.credentials.dig(:cloudflare, :turnstile, :secret_key)
-  else
-    c.site_key = "1x00000000000000000000AA"
-    c.secret_key = "1x0000000000000000000000000000000AA"
-  end
+  c.site_key = ENV["CLOUDFLARE_TURNSTILE_SITE_KEY"]
+  c.secret_key = ENV["CLOUDFLARE_TURNSTILE_SECRET_KEY"]
 
   c.theme = :light
   c.fail_open = true
-  c.enabled = Rails.application.credentials.dig(:cloudflare, :turnstile, :site_key).present?
+  c.enabled = ENV["CLOUDFLARE_TURNSTILE_SITE_KEY"].present? && ENV["CLOUDFLARE_TURNSTILE_SECRET_KEY"].present?
 end
 
 module RailsCloudflareTurnstileTurboPatch
