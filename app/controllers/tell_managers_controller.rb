@@ -7,7 +7,9 @@ class TellManagersController < ApplicationController
   end
 
   def create
-    @coffee_shop = CoffeeShop.find_by(slug: params[:coffee_shop_id])
+    @coffee_shop =
+      CoffeeShop.find_by(slug: params[:coffee_shop_id]) ||
+      CoffeeShop.find_by(id: params[:coffee_shop_id])
     @feedback = @coffee_shop.feedbacks.new(feedback_params)
     @feedback.user = current_user
 
