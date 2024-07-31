@@ -69,8 +69,6 @@ This is not how I usually code, just saying 😛
 
 [<img src="https://i.imgur.com/WYVGZ6Z.png" width="20%" />](https://skylight.io)
 
-[<img src="https://i.imgur.com/3CJ96rE.png" width="20%" />](https://appsignal.com)
-
 ## Contacts
 
 [@petakopi.my](https://www.instagram.com/petakopi.my/)
