@@ -1,0 +1,45 @@
+name: "petakopi"
+
+services:
+  rails:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+    - ../..:/workspaces:cached
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Uncomment the next line to use a non-root user for all processes.
+    # user: vscode
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    depends_on:
+    - redis
+    - postgres
+
+    environment:
+    - DATABASE_URL=postgres://dev:password@postgres/petakopi_development
+
+  redis:
+    image: redis:7.2
+    restart: unless-stopped
+    volumes:
+    - redis-data:/data
+
+  postgres:
+    image: postgres:12.15
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=petakopi_development
+
+volumes:
+  redis-data:
+  postgres-data:
