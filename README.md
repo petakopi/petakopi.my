@@ -59,6 +59,9 @@ Helpul commands:
 
 ```
 tomo env:set FOO=bar
+tomo run -- puma:log -f
+tomo petakopi:tasks db:migrate:status
+tomo petakopi:tasks report:closed_coffee_shops
 ```
 
 ## DISCLAIMER

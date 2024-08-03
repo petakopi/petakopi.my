@@ -28,23 +28,20 @@ namespace :report do
       service.batch_update_spreadsheet(spreadsheet_id, batch_update_request)
     end
 
-    synced_coffe_shop_ids =
-      SyncLog
-        .where("created_at > ?", ClosedCoffeeShopThrottler::TIME_LIMIT)
-        .where(message: ClosedCoffeeShopThrottler::MESSAGE)
-        .pluck(:syncable_id)
+    synced_coffe_shop_ids = SyncLog .where("created_at > ?", ClosedCoffeeShopThrottler::TIME_LIMIT) .where(message: ClosedCoffeeShopThrottler::MESSAGE) .pluck(:syncable_id)
 
-    unsynced_coffee_shop_ids =
-      CoffeeShop
-        .status_published
-        .where.associated(:google_location)
-        .where.not(id: synced_coffe_shop_ids)
-        .pluck(:id)
+    unsynced_coffee_shop_ids = CoffeeShop .status_published .where.associated(:google_location) .where.not(id: synced_coffe_shop_ids) .pluck(:id)
 
     puts "We will process #{unsynced_coffee_shop_ids.count} coffee shops"
 
     unsynced_coffee_shop_ids.each do |coffee_shop_id|
-      ReportCoffeeShopOperationStatusWorker.perform_async(coffee_shop_id)
+      puts coffee_shop_id
+      begin
+        ReportCoffeeShopOperationStatusWorker.new.perform(coffee_shop_id)
+      rescue StandardError => exception
+        puts "Error: #{exception.message}"
+      end
+      sleep(2)
     end
   end
 
