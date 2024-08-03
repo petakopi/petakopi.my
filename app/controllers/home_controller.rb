@@ -15,7 +15,7 @@ class HomeController < ApplicationController
 
     set_gold_shops
 
-    @pagy, @coffee_shops = pagy(@coffee_shops, items: 20)
+    @pagy, @coffee_shops = pagy(@coffee_shops)
   end
 
   private
