@@ -135,8 +135,18 @@
   </div>
 </div>
 
-<% if @pagy.pages > 1 %>
-  <div class="py-3 flex justify-end">
-    <%== pagy_nav(@pagy) %>
-  </div>
-<% end %>
+<% link = pagy_anchor(@pagy) -%>
+<div class="mt-4 flex justify-end">
+  <nav class="pagy-nav pagination" role="navigation">
+    <% if @pagy.prev %>
+      <span class="page prev"><%== link.call(@pagy.prev, "Prev") %></span>
+    <% else %>
+      <span class="page prev disabled">Prev</span>
+    <% end %>
+    <% if @pagy.next %>
+      <span class="page next"><%== link.call(@pagy.next, "Next") %></span>
+    <% else %>
+      <span class="page next disabled">Next</span>
+    <% end %>
+  </nav>
+</div>
