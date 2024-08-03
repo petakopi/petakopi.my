@@ -37,7 +37,7 @@ namespace :report do
     unsynced_coffee_shop_ids =
       CoffeeShop
         .status_published
-        .where.not(google_place_id: nil)
+        .where.associated(:google_location)
         .where.not(id: synced_coffe_shop_ids)
         .pluck(:id)
 
@@ -86,7 +86,7 @@ namespace :report do
     unsynced_coffee_shop_ids =
       CoffeeShop
         .status_temporarily_closed
-        .where.not(google_place_id: nil)
+        .where.associated(:google_location)
         .where.not(id: synced_coffe_shop_ids)
         .pluck(:id)
 
