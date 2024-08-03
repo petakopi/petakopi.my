@@ -1,10 +1,15 @@
 class ReportsController < ApplicationController
+  before_action :validate_cloudflare_turnstile, only: %i[create]
+
   def new
-    @coffee_shop = CoffeeShop.find(params[:coffee_shop_id])
+    @coffee_shop =
+      CoffeeShop.find_by(slug: params[:coffee_shop_id]) ||
+      CoffeeShop.find_by(id: params[:coffee_shop_id])
+    @return_path = request.referer
   end
 
   def create
-    coffee_shop = CoffeeShop.find_by(id: params[:coffee_shop_id])
+    coffee_shop = CoffeeShop.find_by(slug: params[:coffee_shop_id])
 
     message = [
       "Coffee Shop ID: #{coffee_shop&.id}",

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       member do
         post "duplicate"
         post "sync_opening_hours"
+        post "update_locality"
       end
     end
   end
@@ -36,10 +37,12 @@ Rails.application.routes.draw do
   get "privacy" => "pages#privacy"
   get "terms" => "pages#terms"
   get "map" => "map#index"
+  get "mapbox" => "mapbox#index", defaults: {format: :json}
 
-  namespace :api do
+  namespace :api, defaults: {format: :json} do
     namespace :v1 do
       resources :coffee_shops, only: [:index, :show]
+      resources :maps, only: [:index]
     end
   end
 
@@ -58,16 +61,26 @@ Rails.application.routes.draw do
   end
 
   resources :coffee_shops, only: [:new, :create, :edit, :update, :index] do
+    # For business owners
     resource :location, only: [:edit, :update], module: :coffee_shops
     resource :opening_hours, only: [:edit, :update], module: :coffee_shops
     resource :analytics, only: [:show], module: :coffee_shops
+    resources :feedbacks, only: [:index, :show], module: :coffee_shops
 
-    resources :favourites, only: [:create, :destroy]
-    resources :check_ins, only: [:create]
+    # For users
     resources :reports, only: [:new, :create]
+    resources :tell_managers, only: [:new, :create]
   end
+  resources :bookmarks, only: [:new, :edit, :update, :create, :destroy]
   resources :coffee_shops_v2, only: [:new, :create]
-  resources :users, path: "u", only: [:show, :edit, :update]
+  resources :collections, only: [:new, :create, :edit, :update, :destroy]
+  resources :users, path: "u", only: [:show, :edit, :update] do
+    resources :bookmarks, only: [:index], controller: "users/bookmarks"
+  end
+  # Declare outside to prevent conflict with /u/:username/[edit|update]
+  get "u/:user_id/:collection_slug", to: "users/collections#show", as: :user_collection
+
+  resources :inbox, only: [:index, :show]
 
   get "/coffee_shops/:id", to: redirect("/%{id}", status: 301)
   get "/cs/:id", to: redirect("/%{id}", status: 301)

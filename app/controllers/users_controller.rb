@@ -3,28 +3,19 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find_by!(username: params[:id])
-    @favourites =
-      @user
-        .favourite_coffee_shops
-        .status_published
-        .includes(logo_attachment: :blob)
-        .order(created_at: :desc)
-
+    @bookmarks =
+      Bookmark
+        .includes(coffee_shop: [logo_attachment: :blob])
+        .with_published_coffee_shop
+        .where(user: @user)
+    @collections = @user.collections.order(name: :asc)
     @submitted_coffee_shops =
       @user
         .submitted_coffee_shops
         .status_published
         .includes(logo_attachment: :blob)
         .order(approved_at: :desc)
-
-    check_in_range = (1.year.ago + 1.day).to_date..Date.today
-    @check_ins =
-      CheckIn
-        .where(user: @user)
-        .group_by_day(:created_at, range: check_in_range, format: "%A, %B %e, %Y")
-        .count
-
-    @check_in_months = check_in_range.map { |date| date.strftime("%B") }.uniq
+        .limit(5)
   end
 
   def edit

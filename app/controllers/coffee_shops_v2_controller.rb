@@ -1,4 +1,6 @@
 class CoffeeShopsV2Controller < ApplicationController
+  before_action :validate_cloudflare_turnstile, only: %i[create]
+
   def new
     @coffee_shop = CoffeeShop.new
     @coffee_shop.build_google_location

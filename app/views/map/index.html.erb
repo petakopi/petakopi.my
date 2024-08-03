@@ -10,6 +10,12 @@
       <%= render partial: "shared/tags/#{tag.slug.underscore}", locals: { name: tag.name } %>
     <% end %>
   <% end %>
+
+  <div class="mt-4">
+    <a href="<%= map_path %>" class="px-3 py-1 inline-flex text-xs leading-5 rounded-full bg-gray-100 text-gray-800 border border-gray-800 font-semibold">
+      RESET FILTERS
+    </a>
+  </div>
 </div>
 
 <div id="map" style="<%= turbo_native_app? ? "position: absolute; top: 0; bottom: 0; width: 100%" : "height: 500px" %>"></div>
@@ -17,7 +23,7 @@
 <%= content_for :js do %>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
   <script>
-    mapboxgl.accessToken = "<%= Rails.application.credentials.dig(:mapbox_api_key) %>"
+    mapboxgl.accessToken = "<%= ENV['MAPBOX_API_KEY'] %>"
 
     var map = new mapboxgl.Map({
       container: "map",
@@ -49,7 +55,7 @@
       // add the point_count property to your source data.
       map.addSource("coffee_shops", {
         type: "geojson",
-        data: "<%= api_v1_coffee_shops_path(type: 'geojson', tags: params[:tags]).html_safe %>",
+        data: "<%= mapbox_path(type: 'geojson', tags: params[:tags]).html_safe %>",
         cluster: true,
         clusterMaxZoom: 14, // Max zoom to cluster points on
         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)

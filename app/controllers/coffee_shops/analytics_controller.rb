@@ -1,4 +1,6 @@
 class CoffeeShops::AnalyticsController < ApplicationController
+  before_action :authenticate_user!
+
   def show
     @coffee_shop = current_user.coffee_shops.find_by(slug: params[:coffee_shop_id]) ||
       current_user.coffee_shops.find(params[:coffee_shop_id].to_i)

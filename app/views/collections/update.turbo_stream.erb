@@ -1,0 +1,23 @@
+<%= turbo_stream.update "collection", "" %>
+
+<%=
+  turbo_stream.replace(
+    "toast",
+    partial: "shared/toast",
+    locals: {
+      type: "success",
+      message: "Collection #{@collection.name} was successfully updated.",
+    }
+  )
+%>
+
+<%=
+  turbo_stream.replace(
+    "collections",
+    partial: "users/collections",
+    locals: {
+      collections: @collections,
+      user: current_user,
+    }
+  )
+%>

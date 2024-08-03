@@ -29,7 +29,7 @@ class LatLngExtractor
   end
 
   def google_map_api_key
-    Rails.application.credentials.dig(:google_api_key, :api)
+    ENV.fetch("GOOGLE_API_KEY_API")
   end
 
   def extract_using_redirection

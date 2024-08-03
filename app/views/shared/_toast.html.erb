@@ -2,8 +2,8 @@
   id="toast"
   x-data="{show: true}"
   x-show="show"
-  class="pointer-events-none fixed inset-x-0 top-0 flex items-end p-2 sm:items-start sm:p-6 z-[100]">
-  <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+  class="pointer-events-none fixed inset-x-0 bottom-0 flex items-end justify-end p-2 z-[100]">
+  <div class="flex flex-col items-center space-y-4 sm:items-end w-full sm:w-auto">
     <div
       x-show="show"
       x-transition:enter="transform ease-out duration-300 transition"
@@ -12,9 +12,9 @@
       x-transition:leave="transition ease-in duration-100"
       x-transition:leave-start="opacity-100"
       x-transition:leave-end="opacity-0"
-      class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+      class="pointer-events-auto w-full overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
       <div class="p-4 bg-white opacity-90">
-        <div class="flex items-start">
+        <div class="flex items-center">
           <div class="flex-shrink-0">
             <% if type == "success" %>
               <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -26,9 +26,8 @@
               </svg>
             <% end %>
           </div>
-          <div class="ml-3 w-0 flex-1 pt-0.5">
-            <p class="text-sm font-medium text-gray-900"><%= type.titleize %></p>
-            <p class="mt-1 text-sm text-gray-500"><%= message.html_safe %></p>
+          <div class="ml-3 w-0 flex-1 pt-0.5 text-sm font-medium text-gray-900">
+            <%= type.titleize %>
           </div>
           <div class="ml-4 flex flex-shrink-0">
             <button @click="show = false" type="button" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -37,6 +36,9 @@
               </svg>
             </button>
           </div>
+        </div>
+        <div class="mt-2 pt-0.5 text-gray-500 text-sm">
+          <%= message.html_safe %>
         </div>
       </div>
     </div>

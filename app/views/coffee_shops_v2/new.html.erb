@@ -1,5 +1,5 @@
 <%= content_for(:extra_js) do %>
-<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google_api_key, :web)}&libraries=places&callback=dispatchMapsFormEvent",
+<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{ENV.fetch('GOOGLE_API_KEY_WEB')}&libraries=places&callback=dispatchMapsFormEvent",
     async: true,
     defer: true,
     "data-turbolinks-eval": false %>
@@ -317,6 +317,10 @@
                     <%= f.text_field :whatsapp, placeholder: "60123456789", class: "flex-1 block w-full focus:ring-brown-500 focus:border-brown-500 min-w-0 rounded-md sm:text-sm border-gray-300" %>
                   </div>
                 </div>
+              </div>
+
+              <div data-controller="cloudflare-turnstile" class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <%= cloudflare_turnstile %>
               </div>
             </div>
           </div>

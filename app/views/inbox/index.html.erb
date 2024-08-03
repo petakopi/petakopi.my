@@ -1,0 +1,55 @@
+<div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
+  <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-12">
+    <div class="sm:flex sm:items-center">
+      <div class="sm:flex-auto">
+        <h1 class="text-xl font-semibold text-gray-900">
+          Inbox
+        </h1>
+        <p class="mt-2 text-sm text-gray-700">
+          Feedbacks that you have sent.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-8 flex flex-col">
+      <% if @feedbacks.exists? %>
+        <div class="inline-block min-w-full align-middle">
+          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Sent At</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Opened At</th>
+                  <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6"></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <% @feedbacks.each do |feedback| %>
+                  <tr>
+                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                      <%= feedback.coffee_shop.name %>
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <%= feedback.created_at&.strftime("%d %b %Y %I:%M %p") %>
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <%= feedback.opened_at&.strftime("%d %b %Y %I:%M %p") || "Unread" %>
+                    </td>
+                    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                      <a href="<%= inbox_path("feedback:#{feedback.id}") %>" class="text-brown-600 hover:text-brown-900">View</a>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% else %>
+        <div class="text-gray-700">
+          It seems like you haven't sent any feedbacks yet.
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

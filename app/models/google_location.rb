@@ -15,6 +15,16 @@ class GoogleLocation < ApplicationRecord
     "Wilayah Persekutuan Putrajaya" => "Putrajaya"
   }
 
+  scope :within_bounding_box, -> (sw_lat, sw_lng, ne_lat, ne_lng) {
+    where(
+      "lat >= ? AND lat <= ? AND lng >= ? AND lng <= ?",
+      sw_lat,
+      ne_lat,
+      sw_lng,
+      ne_lng
+    )
+  }
+
   def state
     administrative_area_level_1
   end

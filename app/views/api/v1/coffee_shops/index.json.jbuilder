@@ -1,36 +1,15 @@
-if params[:type] == "geojson"
-  json.cache! @cache_key, expires_in: 1.hour, skip_digest: true do
-    json.type "FeatureCollection"
-    json.features do
-      json.array!(@coffee_shops) do |coffee_shop|
-        json.type "Feature"
-        json.properties do
-          json.name coffee_shop.name
-          json.url main_coffee_shop_url(id: coffee_shop.slug)
-          json.logo rails_public_blob_url(coffee_shop.logo)
-        end
-
-        json.geometry do
-          json.type "Point"
-          json.coordinates do
-            json.array!([coffee_shop.lng, coffee_shop.lat])
-          end
-        end
-      end
-    end
+json.status "success"
+json.data do
+  json.pages do
+    json.previous_cursor @page.previous_cursor
+    json.next_cursor @page.next_cursor
+    json.has_previous @page.has_previous?
+    json.has_next @page.has_next?
+    json.is_empty @page.empty?
   end
-else
-  json.cache! @cache_key, expires_in: 1.hour, skip_digest: true do
-    json.array!(@coffee_shops) do |coffee_shop|
-      json.extract!(
-        coffee_shop,
-        :id,
-        :slug,
-        :name,
-        :lat,
-        :lng
-      )
-      json.url main_coffee_shop_url(id: coffee_shop.slug)
+  json.coffee_shops do
+    json.array!(@page.records) do |coffee_shop|
+      json.partial! "api/v1/coffee_shops/coffee_shop", coffee_shop: coffee_shop
     end
   end
 end

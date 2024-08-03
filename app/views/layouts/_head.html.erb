@@ -13,6 +13,8 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="theme-color" content="#543626">
 
+  <%= cloudflare_turnstile_script_tag %>
+
   <% if turbo_native_app? %>
     <meta name="viewport" content="width=device-width,initial-scale=1, user-scalable=no">
   <% else %>

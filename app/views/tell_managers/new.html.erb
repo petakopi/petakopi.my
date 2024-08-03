@@ -1,0 +1,83 @@
+<%= turbo_frame_tag "tell_manager" do %>
+  <div id="report" x-data="{show: true}" x-show="show">
+    <div class="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+      <%= form_for @feedback, url: coffee_shop_tell_managers_path(coffee_shop_id: @coffee_shop.slug) do |f| %>
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <div class="absolute right-0 top-0 pr-4 pt-4 sm:block">
+                <button @click="show = false" type="button" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brown-500 focus:ring-offset-2">
+                  <span class="sr-only">Close</span>
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div class="sm:flex sm:items-start">
+                <div class="mt-3 sm:mt-0 sm:text-left">
+                  <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">
+                    Feedback & Improvement
+                  </h3>
+
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500">
+                      Do you have any feedback for the manager of this coffee
+                      shop? Let them know here.
+                    </p>
+                  </div>
+
+                  <div class="mt-2">
+                    <div class="mt-4 space-y-4 border-b border-gray-900/10 pb-6">
+
+                      <div class"mt-2 text-center text-sm text-gray-600">
+                        <div class="sm:col-span-2">
+                          <%= render "components/alert", alerts: @feedback.errors.full_messages if @feedback.errors.full_messages.count > 0 %>
+                        </div>
+                      </div>
+
+                      <div class="sm:col-span-2">
+                        <label for="email" class="block text-sm font-semibold leading-6 text-gray-900">Contact</label>
+                        <div class="mt-2.5">
+                          <%= f.text_field :contact,
+                            placeholder: "Email or Phone Number",
+                            class: "block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brown-600 text-sm sm:leading-6"
+                          %>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500" id="email-description">
+                        Leave a way for the manager to contact you back (only
+                        if you want to).
+                        </p>
+                      </div>
+
+                      <div class="sm:col-span-2">
+                        <label for="message" class="block text-sm font-semibold leading-6 text-gray-900">Message</label>
+                        <div class="mt-2.5">
+                          <%= f.text_area :message,
+                            placeholder: "Your message here",
+                            rows: 8,
+                            class: "block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brown-600 text-sm sm:leading-6"
+                          %>
+                        </div>
+                      </div>
+
+                      <div data-controller="cloudflare-turnstile">
+                        <%= cloudflare_turnstile %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 flex items-center justify-end gap-x-6">
+                <button type="button" @click="show = false" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+                <button type="submit" class="rounded-md bg-brown-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brown-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brown-600">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

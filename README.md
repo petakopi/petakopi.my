@@ -51,7 +51,18 @@ psql -U petakopi -h localhost -p 5454 -d petakopi
 
 # Get the password
 tomo env:show
-````
+```
+
+## Production
+
+Helpul commands:
+
+```
+tomo env:set FOO=bar
+tomo run -- puma:log -f
+tomo petakopi:tasks db:migrate:status
+tomo petakopi:tasks report:closed_coffee_shops
+```
 
 ## DISCLAIMER
 
@@ -60,8 +71,6 @@ This is not how I usually code, just saying 😛
 ## Sponsors
 
 [<img src="https://i.imgur.com/WYVGZ6Z.png" width="20%" />](https://skylight.io)
-
-[<img src="https://i.imgur.com/3CJ96rE.png" width="20%" />](https://appsignal.com)
 
 ## Contacts
 

@@ -1,7 +1,10 @@
-def populate_missing_lat_lng
-  remote.rails("data:populate_missing_lat_lng")
-end
+def tasks
+  command = settings[:run_args]&.first
 
-def refresh_sitemap
-  remote.rails("sitemap:refresh")
+  if command.nil?
+    puts "Usage: tomo run -- petakopi:tasks <command>"
+    return
+  end
+
+  remote.rails(command)
 end

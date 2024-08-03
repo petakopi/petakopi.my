@@ -1,0 +1,13 @@
+<!-- Close the modal by removing the DOM -->
+<%= turbo_stream.update "tell_manager", "" %>
+
+<%=
+  turbo_stream.replace(
+    "toast",
+    partial: "shared/toast",
+    locals: {
+      type: "success",
+      message: "Your message has been sent to the manager."
+    }
+  )
+%>

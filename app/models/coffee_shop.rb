@@ -28,6 +28,8 @@ class CoffeeShop < ApplicationRecord
   )
 
   belongs_to :submitter, class_name: "User", foreign_key: "submitter_user_id", optional: true
+
+  has_many :bookmarks
   has_many :sync_logs, as: :syncable, dependent: :destroy
   has_many :coffee_shop_tags, dependent: :destroy
   has_many :tags, through: :coffee_shop_tags
@@ -37,6 +39,7 @@ class CoffeeShop < ApplicationRecord
   has_many :favourites
   has_many :favourite_users, through: :favourites, source: :user, dependent: :destroy
   has_many :opening_hours, dependent: :destroy
+  has_many :feedbacks
 
   has_one :google_location, dependent: :destroy
   has_one_attached :logo
@@ -84,7 +87,7 @@ class CoffeeShop < ApplicationRecord
   def set_uuid
     return if uuid.present?
 
-    self.uuid = SecureRandom.uuid
+    self.uuid = UUID7.generate
   end
 
   def process_logo

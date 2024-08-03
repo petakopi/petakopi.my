@@ -1,8 +1,12 @@
 <%= content_for(:page_title) { @coffee_shop.name } %>
 <%= content_for(:page_image) { rails_public_blob_url(@coffee_shop.logo) } if @coffee_shop.logo.attached? %>
-<%= content_for(:page_description) { "#{@coffee_shop.name} in #{@coffee_shop.district}, #{@coffee_shop.state}" } %>
+<%= content_for(:page_description) { "#{@coffee_shop.name} in #{@coffee_shop.google_location.district}, #{@coffee_shop.google_location.state}" } %>
 
 <div id="toast"><!-- Will be replaced with alert from Turbo Stream --></div>
+
+<%= turbo_frame_tag "bookmark" %>
+<%= turbo_frame_tag "report" %>
+<%= turbo_frame_tag "tell_manager" %>
 
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
   <div class="fixed inset-0 z-[-1] bg-no-repeat bg-cover bg-center opacity-25" style="background-image: url(<%= rails_public_blob_url(@coffee_shop.logo) %>); filter: blur(50px);">
@@ -11,11 +15,15 @@
   <div class="relative z-10">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <% if @coffee_shop.logo.attached? %>
-        <%=
-          image_tag rails_public_blob_url(@coffee_shop.logo),
-            class: "mx-auto h-[100px] w-auto rounded-full",
-            alt: "#{@coffee_shop.name} logo"
-        %>
+        <div class="relative mx-auto max-w-md p-5 flex justify-center items-center">
+          <div class="bg-gradient-to-tr from-pink-300 to-blue-300 p-1 rounded-full">
+            <%=
+              image_tag rails_public_blob_url(@coffee_shop.logo),
+                class: "h-16 w-16 rounded-full bg-white p-1",
+                alt: "#{@coffee_shop.name} logo"
+              %>
+          </div>
+        </div>
       <% end %>
       <div class="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 flex items-center space-x-2 justify-center">
         <span><%= @coffee_shop.name %></span>
@@ -76,6 +84,30 @@
             <%= link.to_s.remove("_url").titleize %>
           <% end %>
         <% end %>
+      </div>
+    </div>
+
+    <div class="mt-10 flex flex-col space-y-4">
+      <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <%= render partial: "coffee_shops/buttons/bookmark",
+          locals: {
+            coffee_shop: @coffee_shop,
+            bookmark: @bookmark,
+            bookmark_count: @bookmark_count,
+          }
+        %>
+      </div>
+
+      <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <%= render partial: "coffee_shops/tell_manager",
+          locals: { coffee_shop: @coffee_shop }
+        %>
+      </div>
+
+      <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <%= render partial: "coffee_shops/report",
+          locals: { coffee_shop: @coffee_shop }
+        %>
       </div>
     </div>
 

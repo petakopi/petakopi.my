@@ -1,0 +1,66 @@
+<%= turbo_frame_tag "collections" do %>
+  <div class="mt-8 max-w-3xl mx-auto grid grid-cols-1 gap-6 lg:max-w-7xl lg:grid-flow-col-dense">
+    <div class="space-y-6 lg:col-start-1 lg:col-span-2">
+      <section aria-labelledby="applicant-information-title">
+        <div class="bg-white shadow sm:rounded-lg">
+          <div class="flex items-center justify-between px-4 py-5 sm:px-6">
+            <div>
+              <h2 id="applicant-information-title" class="text-lg leading-6 font-medium text-gray-900">
+                Collections
+              </h2>
+              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                <% if collections.count > 0 %>
+                  Grouped bookmarks by collection.
+                <% else %>
+                  No collections yet.
+                <% end %>
+              </p>
+            </div>
+          </div>
+          <ul class="border-t border-gray-200 divide-y divide-gray-200 text-sm text-gray-600">
+            <% collections.each do |collection| %>
+              <li class="px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                  <div class="flex-shrink-0">
+                    <div class="isolate flex -space-x-1 overflow-hidden">
+                      <% collection.coffee_shops.order("bookmark_collections.created_at DESC").limit(3).each do |coffee_shop| %>
+                        <% next unless coffee_shop.logo.attached? %>
+
+                        <%= image_tag rails_public_blob_url(coffee_shop.logo),
+                          class: "relative z-30 inline-block h-6 w-6 rounded-full ring-2 ring-white border border-gray-200",
+                          loading: "lazy",
+                          title: coffee_shop.name
+                        %>
+                      <% end %>
+                      <% if collection.coffee_shops.count > 3 %>
+                        <span class="relative z-20 inline-block h-6 w-6 rounded-full bg-white border border-gray-200 flex items-center justify-center font-semibold text-gray-500">
+                          +<%= collection.coffee_shops.count - 3 %>
+                        </span>
+                      <% end %>
+                    </div>
+                  </div>
+                  <div class="min-w-0 flex-grow">
+                    <%= link_to collection.name,
+                      user_collection_path(user_id: user.username, collection_slug: collection.slug),
+                      class: "text-brown-600 hover:text-brown-900"
+                    %>
+                  </div>
+                </div>
+
+                <div>
+                  <% if current_user && collection.user == current_user %>
+                    <%= link_to "Manage",
+                      edit_collection_path(id: collection.slug),
+                      data: { turbo_frame: "collection" },
+                      class: "text-brown-600 hover:text-brown-900"
+                    %>
+                  <% end %>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+<% end %>

@@ -1,53 +1,25 @@
-class Api::V1::CoffeeShopsController < ApplicationController
+class Api::V1::CoffeeShopsController < ApiController
   def index
     coffee_shops =
       CoffeeShop
-        .joins(:google_location)
-        .includes(logo_attachment: :blob)
-        .status_published
-        .where
-        .not(google_locations: { lat: nil, lng: nil })
-        .select(
-          :id,
-          :name,
-          :slug,
-          "google_locations.lat",
-          "google_locations.lng",
+        .includes(
+          :google_location,
+          logo_attachment: :blob,
         )
+        .status_published
 
-    @coffee_shops =
-      CoffeeShopsListQuery.call(
-        params: params,
-        relation: coffee_shops
-      )
-
-    ahoy.track "Map Filter", tags: params[:tags] if params[:tags].present?
-
-    @cache_key = ["v1", "coffee_shops", params[:type], params[:tags]]
+    @page =
+      coffee_shops
+        .cursor_paginate(
+          before: params[:before],
+          after: params[:after],
+          limit: DEFAULT_ITEMS_PER_PAGE,
+          order: { id: :desc },
+        )
+        .fetch
   end
 
   def show
-    @coffee_shop =
-      CoffeeShop
-        .status_published
-        .find_by(slug: params[:id])
-
-    # Temporary, of course
-    @coffee_shop.extend(CoffeeShopDecorator)
-    @links = [
-      {"Google Map" => @coffee_shop.google_map},
-      {"Facebook" => @coffee_shop.facebook_url},
-      {"Instagram" => @coffee_shop.instagram_url},
-      {"Twitter" => @coffee_shop.twitter_url},
-      {"TikTok" => @coffee_shop.tiktok_url},
-      {"WhatsApp" => @coffee_shop.whatsapp_url}
-    ]
-      .map(&:compact)
-      .reject(&:empty?)
-      .map do |link|
-        name, url = link.flatten
-
-        {"name" => name, "url" => url}
-      end
+    @coffee_shop = CoffeeShop.find_by!(uuid: params[:id])
   end
 end
