@@ -48,7 +48,7 @@
                 </div>
 
                 <div>
-                  <% if current_user %>
+                  <% if current_user && collection.user == current_user %>
                     <%= link_to "Manage",
                       edit_collection_path(id: collection.slug),
                       data: { turbo_frame: "collection" },

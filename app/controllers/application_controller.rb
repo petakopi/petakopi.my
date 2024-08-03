@@ -7,7 +7,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :turbo_native_app?
 
-  rescue_from RailsCloudflareTurnstile::Forbidden, with: :render_forbidden
+  rescue_from RailsCloudflareTurnstile::Forbidden, with: :redirect_to_turnstile_last_page
+  rescue_from Pagy::OverflowError, with: :redirect_to_pagy_last_page
 
   protected
 
@@ -37,5 +38,19 @@ class ApplicationController < ActionController::Base
     render "errors/forbidden",
       layout: "application_full",
       status: :forbidden
+  end
+
+  def redirect_to_pagy_last_page(exception)
+    redirect_to url_for(page: exception.pagy.last),
+      alert: "Page #{params[:page]} doesn't exist. Showing page #{exception.pagy.last} instead."
+  end
+
+  def redirect_to_turnstile_last_page
+    return_url = params[:return_to]
+
+    return redirect_to root_path if return_url.blank?
+
+    redirect_to root_path,
+      alert: "Please complete the CAPTCHA challenge. Try again <a class='underline' href=\"#{return_url}\">here</a>.".html_safe
   end
 end

@@ -47,7 +47,7 @@ class UpdateCoffeeShopOperationStatus
   end
 
   def api_key
-    Rails.application.credentials.dig(:google_api_key, :api)
+    ENV.fetch("GOOGLE_API_KEY_API")
   end
 
   def service

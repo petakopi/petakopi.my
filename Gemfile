@@ -6,8 +6,8 @@ ruby "3.2.2"
 gem "active_decorator" # Decorator
 gem "activerecord_cursor_paginate" # Cursor pagination
 gem "ahoy_matey" # analytics
-gem "appsignal" # error/performance monitoring
 gem "aws-sdk-s3", require: false
+gem "bugsnag" # Error monitoring
 gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "celluloid" # Actor-based concurrent object framework for Ruby
 gem "connection_pool" # redis connection pooling
@@ -43,7 +43,7 @@ gem "omniauth-rails_csrf_protection" # Migitate against CSRF in OmniAuth gem
 gem "rails", "~> 7.1"
 gem "rails_cloudflare_turnstile" # Cloudflare Turnstile (captcha)
 gem "redis", "~> 5.0" # Use Redis adapter to run Action Cable in production
-gem "sidekiq", "<= 7.2.1" # Background jobs
+gem "sidekiq", "<= 7.3.0" # Background jobs
 gem "sidekiq-cron" # Sidekiq + Cron
 gem "sidekiq-failures" # Monitor failures in Sidekiq
 gem "sidekiq-throttled" # Throttle sidekiq jobs
@@ -60,9 +60,10 @@ gem "uuid7" # UUID generator
 gem "yaaf" # handles form object
 
 group :development, :test do
+  gem "dotenv-rails" # Load environment variables from .env file
   gem "factory_bot_rails" # Fixtures replacement
   gem "pry" # Debugging tool
-  gem "rspec-rails", "~> 6.0.0" # Test framework
+  gem "rspec-rails", "~> 6.1" # Test framework
   gem "standard" # ruby code linting
 end
 

@@ -75,5 +75,4 @@ deploy do
   run "core:clean_releases"
   run "bundler:clean"
   run "core:log_revision"
-  run "petakopi:refresh_sitemap"
 end

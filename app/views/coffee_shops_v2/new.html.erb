@@ -1,5 +1,5 @@
 <%= content_for(:extra_js) do %>
-<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google_api_key, :web)}&libraries=places&callback=dispatchMapsFormEvent",
+<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{ENV.fetch('GOOGLE_API_KEY_WEB')}&libraries=places&callback=dispatchMapsFormEvent",
     async: true,
     defer: true,
     "data-turbolinks-eval": false %>
@@ -320,8 +320,7 @@
               </div>
 
               <div data-controller="cloudflare-turnstile" class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <div class="cf-turnstile" data-sitekey="<%= Rails.application.credentials.dig(:cloudflare, :turnstile, :site_key) %>" data-size="normal" data-theme="light"></div>
-
+                <%= cloudflare_turnstile %>
               </div>
             </div>
           </div>

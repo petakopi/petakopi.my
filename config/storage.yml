@@ -9,8 +9,8 @@ local:
 digitalocean:
   service: S3
   endpoint: https://sgp1.digitaloceanspaces.com
-  access_key_id: <%= Rails.application.credentials.dig(:digitalocean, :access_key) %>
-  secret_access_key: <%= Rails.application.credentials.dig(:digitalocean, :secret) %>
+  access_key_id: <%= ENV["DIGITAL_OCEAN_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["DIGITAL_OCEAN_SECRET_ACCESS_KEY"] %>
   bucket: petakopi
   region: unused
   public: true

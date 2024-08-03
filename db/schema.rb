@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_21_011541) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_27_153312) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pageinspect"
   enable_extension "pgcrypto"
@@ -179,8 +179,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_21_011541) do
 
   create_table "coffee_shops", force: :cascade do |t|
     t.string "name"
-    t.string "district"
-    t.string "state"
     t.jsonb "urls", default: {}, null: false
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
@@ -189,9 +187,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_21_011541) do
     t.bigint "submitter_user_id"
     t.text "admin_notes"
     t.datetime "approved_at"
-    t.string "lat"
-    t.string "lng"
-    t.string "google_place_id"
     t.string "uuid"
     t.index ["slug"], name: "index_coffee_shops_on_slug", unique: true
     t.index ["status"], name: "index_coffee_shops_on_status"
@@ -232,8 +227,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_21_011541) do
   create_table "google_locations", force: :cascade do |t|
     t.bigint "coffee_shop_id", null: false
     t.string "place_id"
-    t.string "lat"
-    t.string "lng"
+    t.float "lat"
+    t.float "lng"
     t.string "locality"
     t.string "administrative_area_level_1"
     t.string "administrative_area_level_2"

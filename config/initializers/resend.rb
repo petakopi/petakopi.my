@@ -1,1 +1,1 @@
-Resend.api_key = Rails.application.credentials.dig(:resend, :key)
+Resend.api_key = ENV["RESEND_API_KEY"]

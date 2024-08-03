@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 require "fileutils"
 
-# path to your application root.
 APP_ROOT = File.expand_path("..", __dir__)
+APP_NAME = "petakopi.my"
 
 def system!(*args)
   system(*args, exception: true)
@@ -28,6 +28,10 @@ FileUtils.chdir APP_ROOT do
   puts "\n== Removing old logs and tempfiles =="
   system! "bin/rails log:clear tmp:clear"
 
-  puts "\n== Restarting application server =="
-  system! "bin/rails restart"
+  # puts "\n== Starting application server =="
+  # system! "bin/rails s -b 0.0.0.0"
+
+  # puts "\n== Configuring puma-dev =="
+  # system "ln -nfs #{APP_ROOT} ~/.puma-dev/#{APP_NAME}"
+  # system "curl -Is https://#{APP_NAME}.test/up | head -n 1"
 end

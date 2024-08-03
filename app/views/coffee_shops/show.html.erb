@@ -1,6 +1,6 @@
 <%= content_for(:page_title) { @coffee_shop.name } %>
 <%= content_for(:page_image) { rails_public_blob_url(@coffee_shop.logo) } if @coffee_shop.logo.attached? %>
-<%= content_for(:page_description) { "#{@coffee_shop.name} in #{@coffee_shop.district}, #{@coffee_shop.state}" } %>
+<%= content_for(:page_description) { "#{@coffee_shop.name} in #{@coffee_shop.google_location.district}, #{@coffee_shop.google_location.state}" } %>
 
 <div id="toast"><!-- Will be replaced with alert from Turbo Stream --></div>
 

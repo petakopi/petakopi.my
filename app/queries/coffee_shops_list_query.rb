@@ -58,11 +58,11 @@ class CoffeeShopsListQuery
 
   def reorder
     if params[:keyword].present? && params[:state].present?
-      relation.order(:name, :district)
+      relation.order(:name, "google_locations.locality")
     elsif params[:keyword].present?
       relation.order(:name)
     elsif params[:keyword].blank? && params[:state].present?
-      relation.order(:district, :name)
+      relation.order("google_locations.locality", :name)
     else
       relation.order(approved_at: :desc)
     end

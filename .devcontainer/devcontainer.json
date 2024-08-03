@@ -1,0 +1,8 @@
+{
+  "name": "petakopi.my",
+  "dockerComposeFile": "compose.yml",
+  "service": "rails",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "forwardPorts": [3000, 5432],
+  "postCreateCommand": "bin/setup"
+}
