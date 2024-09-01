@@ -1,5 +1,17 @@
 <aside class="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
-  <nav class="space-y-1">
+  <div x-data="{ selectedOption: '' }" class="lg:hidden">
+    <select x-model="selectedOption" @change="window.location.href = selectedOption" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brown-500 focus:border-brown-500 sm:text-sm rounded-md">
+      <option value="" disabled selected>Select an option</option>
+      <option value="<%= coffee_shops_path %>">Coffee Shops</option>
+      <option value="<%= edit_coffee_shop_path(id: coffee_shop.slug) %>">Information</option>
+      <option value="<%= coffee_shop_feedbacks_path(coffee_shop.slug) %>">Feedbacks</option>
+      <option value="<%= edit_coffee_shop_location_path(coffee_shop_id: coffee_shop.slug) %>">Location</option>
+      <option value="<%= edit_coffee_shop_opening_hours_path(coffee_shop_id: coffee_shop.slug) %>">Opening Hours</option>
+      <option value="<%= coffee_shop_analytics_path(coffee_shop_id: coffee_shop.slug) %>">Analytics</option>
+    </select>
+  </div>
+
+  <nav class="hidden lg:block space-y-1">
     <%= link_to coffee_shops_path, class: "text-brown-700 hover:text-brown-700 hover:bg-white group rounded-md px-3 py-2 flex items-center text-sm font-medium" do %>
       <%= render partial: "components/icons/list", locals: { css_styles: "text-brown-500 group-hover:text-brown-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" } %>
       <span class="truncate">Coffee Shops</span>
