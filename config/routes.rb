@@ -60,7 +60,7 @@ Rails.application.routes.draw do
     resources :bids, only: [:new, :create]
   end
 
-  resources :coffee_shops, only: [:new, :create, :edit, :update, :index] do
+  resources :coffee_shops, only: [:edit, :update, :index] do
     # For business owners
     resource :location, only: [:edit, :update], module: :coffee_shops
     resource :opening_hours, only: [:edit, :update], module: :coffee_shops

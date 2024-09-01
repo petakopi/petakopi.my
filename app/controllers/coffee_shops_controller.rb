@@ -15,26 +15,6 @@ class CoffeeShopsController < ApplicationController
     ahoy.track "View Coffee Shop", id: @coffee_shop.id, name: @coffee_shop.name
   end
 
-  def new
-    @coffee_shop = CoffeeShop.new
-    @coffee_shop.coffee_shop_tags.build
-  end
-
-  def create
-    @coffee_shop = CoffeeShop.new(coffee_shop_create_params)
-    @coffee_shop.submitter = current_user
-
-    respond_to do |format|
-      if @coffee_shop.save
-        format.html { redirect_to new_coffee_shop_path, notice: success_message }
-        format.json { render :show, status: :created, location: @coffee_shop }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @coffee_shop.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   def edit
   end
 
