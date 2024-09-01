@@ -31,6 +31,9 @@ set env_vars: {
   DATABASE_URL: :prompt,
   SECRET_KEY_BASE: :prompt
 }
+set linked_files: %w[
+  public/sitemap.xml.gz
+]
 set linked_dirs: %w[
   .yarn/cache
   log
