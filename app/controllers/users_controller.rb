@@ -2,7 +2,10 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, only: [:edit, :update]
 
   def show
-    @user = User.find_by!(username: params[:id])
+    @user = User.find_by(username: params[:id])
+
+    return redirect_to root_path, alert: "User #{params[:id]} not found" if @user.nil?
+
     @bookmarks =
       Bookmark
         .includes(coffee_shop: [logo_attachment: :blob])
