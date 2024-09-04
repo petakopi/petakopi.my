@@ -1,4 +1,6 @@
 class CoffeeShops::LocationsController < ApplicationController
+  before_action :authenticate_user!
+
   def edit
     @coffee_shop =
       current_user.coffee_shops.find_by(slug: params[:coffee_shop_id]) ||

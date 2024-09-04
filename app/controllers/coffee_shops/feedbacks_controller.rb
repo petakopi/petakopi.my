@@ -1,4 +1,6 @@
 class CoffeeShops::FeedbacksController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     @coffee_shop = current_user.coffee_shops.find_by(slug: params[:coffee_shop_id])
 
