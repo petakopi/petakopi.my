@@ -317,4 +317,6 @@ Devise.setup do |config|
     Devise::SessionsController.layout "application_full"
     Devise::RegistrationsController.layout "application_full"
   end
+
+  config.remember_for = 1.year
 end

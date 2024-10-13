@@ -34,5 +34,9 @@ module Petakopi
     config.exceptions_app = ->(env) {
       ErrorsController.action(:show).call(env)
     }
+
+    config.session_store :cookie_store,
+      key: "petakopi_session",
+      expire_after: 1.month
   end
 end
