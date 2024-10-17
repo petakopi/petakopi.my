@@ -1,3 +1,7 @@
 sitemap_refresh:
   cron: "0 0 * * *"
   class: "SitemapRefreshWorker"
+
+sitemap_refresh:
+  cron: "5 0 1 * *"
+  class: "UpdateAdsWorker"

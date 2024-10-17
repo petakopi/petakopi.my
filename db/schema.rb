@@ -10,10 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_27_153312) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_17_040725) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pageinspect"
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
@@ -105,6 +103,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_27_153312) do
     t.datetime "end_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "period"
+    t.index ["period"], name: "index_auctions_on_period", unique: true
     t.index ["slug"], name: "index_auctions_on_slug", unique: true
     t.index ["title"], name: "index_auctions_on_title", unique: true
   end
