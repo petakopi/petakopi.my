@@ -43,7 +43,7 @@ gem "omniauth-rails_csrf_protection" # Migitate against CSRF in OmniAuth gem
 gem "rails", "~> 7.1"
 gem "rails_cloudflare_turnstile" # Cloudflare Turnstile (captcha)
 gem "redis", "~> 5.0" # Use Redis adapter to run Action Cable in production
-gem "sidekiq", "<= 7.3.0" # Background jobs
+gem "sidekiq", "<= 7.3.4" # Background jobs
 gem "sidekiq-cron" # Sidekiq + Cron
 gem "sidekiq-failures" # Monitor failures in Sidekiq
 gem "sidekiq-throttled" # Throttle sidekiq jobs
