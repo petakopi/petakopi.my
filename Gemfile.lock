@@ -454,7 +454,7 @@ GEM
       psych (>= 4.0.0)
     redis (5.2.0)
       redis-client (>= 0.22.0)
-    redis-client (0.22.2)
+    redis-client (0.23.0)
       connection_pool
     redis-prescription (2.6.0)
     regexp_parser (2.9.2)
@@ -517,8 +517,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sidekiq (7.3.0)
-      concurrent-ruby (< 2)
+    sidekiq (7.3.6)
       connection_pool (>= 2.3.0)
       logger
       rack (>= 2.2.4)
@@ -682,7 +681,7 @@ DEPENDENCIES
   redis (~> 5.0)
   resend
   rspec-rails (~> 6.1)
-  sidekiq (<= 7.3.0)
+  sidekiq (<= 7.3.6)
   sidekiq-cron
   sidekiq-failures
   sidekiq-throttled
