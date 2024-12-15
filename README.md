@@ -55,7 +55,7 @@ tomo env:show
 
 ## Production
 
-Helpul commands:
+Helpful commands:
 
 ```
 tomo env:set FOO=bar
