@@ -2,7 +2,7 @@ json.extract!(
   coffee_shop,
   :uuid,
   :slug,
-  :name,
+  :name
 )
 json.links coffee_shop.urls.compact_blank do |name, url|
   json.name name

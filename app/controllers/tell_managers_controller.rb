@@ -25,7 +25,7 @@ class TellManagersController < ApplicationController
       OwnersMailer
         .new_feedback_email(
           @coffee_shop.id,
-          @coffee_shop.owners.first.id,
+          @coffee_shop.owners.first.id
         )
         .deliver_later
     else

@@ -5,7 +5,7 @@ class AuctionsController < ApplicationController
   def index
     @current_auctions =
       Auction
-        .includes(bids: {coffee_shop: { logo_attachment: :blob } })
+        .includes(bids: {coffee_shop: {logo_attachment: :blob}})
         .where("end_at > ?", Time.current)
         .where("start_at < ?", Time.current)
         .order(end_at: :asc)

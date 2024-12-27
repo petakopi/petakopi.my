@@ -14,6 +14,6 @@ Ahoy.server_side_visits = :when_needed
 class Ahoy::Store < Ahoy::DatabaseStore
   def track_visit(data)
     data[:country] = request.headers["HTTP_CF_IPCOUNTRY"]
-    super(data)
+    super
   end
 end

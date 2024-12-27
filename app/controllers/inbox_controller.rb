@@ -11,7 +11,7 @@ class InboxController < ApplicationController
 
   def show
     # We may need to add different types of inbox content
-    feedback_id = params[:id]&.split(":").last
+    feedback_id = params[:id]&.split(":")&.last
     @feedback =
       current_user.feedbacks.includes(:coffee_shop).find(feedback_id)
   end

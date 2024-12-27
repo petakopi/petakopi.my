@@ -108,7 +108,7 @@ class Admin::CoffeeShopsController < AdminController
           :id,
           :lat,
           :lng,
-          :place_id,
+          :place_id
         ],
         tag_ids: []
       )

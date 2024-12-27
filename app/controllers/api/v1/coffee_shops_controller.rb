@@ -4,7 +4,7 @@ class Api::V1::CoffeeShopsController < ApiController
       CoffeeShop
         .includes(
           :google_location,
-          logo_attachment: :blob,
+          logo_attachment: :blob
         )
         .status_published
 
@@ -14,7 +14,7 @@ class Api::V1::CoffeeShopsController < ApiController
           before: params[:before],
           after: params[:after],
           limit: DEFAULT_ITEMS_PER_PAGE,
-          order: { id: :desc },
+          order: {id: :desc}
         )
         .fetch
   end

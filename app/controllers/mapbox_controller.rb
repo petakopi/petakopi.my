@@ -5,13 +5,13 @@ class MapboxController < ApplicationController
         .joins(:google_location)
         .includes(logo_attachment: :blob)
         .status_published
-        .where.not(google_locations: { lat: nil, lng: nil })
+        .where.not(google_locations: {lat: nil, lng: nil})
         .select(
           "id",
           "name",
           "slug",
           "google_locations.lat",
-          "google_locations.lng",
+          "google_locations.lng"
         )
 
     @coffee_shops =

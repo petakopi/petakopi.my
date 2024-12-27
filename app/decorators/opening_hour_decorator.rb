@@ -18,9 +18,9 @@ module OpeningHourDecorator
 
     hour = str_time[0..1].to_i
     minutes = str_time[2..3]
-    format = (hour >= 12 ) ? "PM" : "AM"
-    hour = (hour > 12 ) ? hour - 12 : hour
-    hour = (hour == 0 ) ? 12 : hour
+    format = (hour >= 12) ? "PM" : "AM"
+    hour = (hour > 12) ? hour - 12 : hour
+    hour = (hour == 0) ? 12 : hour
 
     "#{hour}:#{minutes} #{format}"
   end

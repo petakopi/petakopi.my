@@ -31,7 +31,7 @@ class HomeController < ApplicationController
   end
 
   def calculate_filter_counter
-    fields = %i(keyword state district tags)
+    fields = %i[keyword state district tags]
 
     fields.reduce(0) do |counter, field|
       if params[field].present?
@@ -50,7 +50,7 @@ class HomeController < ApplicationController
         first_shop = CoffeeShop.find_by(slug: shops.first) if shops&.first.present?
         second_shop = CoffeeShop.find_by(slug: shops.second) if shops&.second.present?
 
-      [first_shop, second_shop].compact
+        [first_shop, second_shop].compact
       end
   end
 end

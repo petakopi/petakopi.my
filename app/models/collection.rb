@@ -7,8 +7,8 @@ class Collection < ApplicationRecord
 
   before_validation :set_slug
 
-  validates :name, presence: true, uniqueness: { scope: :user_id }
-  validates :slug, presence: true, uniqueness: { scope: :user_id }
+  validates :name, presence: true, uniqueness: {scope: :user_id}
+  validates :slug, presence: true, uniqueness: {scope: :user_id}
 
   def to_param
     slug
