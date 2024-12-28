@@ -18,12 +18,12 @@ class Auction < ApplicationRecord
       .includes(
         coffee_shop: [
           :google_location,
-          logo_attachment: :blob,
-        ],
+          logo_attachment: :blob
+        ]
       )
       .order(
         amount: :desc,
-        created_at: :asc,
+        created_at: :asc
       )
   end
 end

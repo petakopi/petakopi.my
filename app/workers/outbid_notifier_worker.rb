@@ -27,7 +27,7 @@ class OutbidNotifierWorker < SidekiqWorker
           .outbid_email(
             @auction.id,
             current_winners,
-            user_id,
+            user_id
           )
           .deliver_later
       end

@@ -15,7 +15,19 @@
           <ul role="list" class="list-disc pl-5 space-y-1">
             <% alerts.each do |alert| %>
               <li>
-                <%= alerts.is_a?(String) ? alerts.html_safe : alerts %>
+                <% if alert.is_a?(String) %>
+                  <%= alert.html_safe %>
+                <% elsif alert.is_a?(Array) %>
+                  <ul role="list" class="list-disc pl-5 space-y-1">
+                    <% alert.each do |nested_alert| %>
+                      <li>
+                        <%= nested_alert.html_safe %>
+                      </li>
+                    <% end %>
+                  </ul>
+                <% else %>
+                  <%= alert %>
+                <% end %>
               </li>
             <% end %>
           </ul>

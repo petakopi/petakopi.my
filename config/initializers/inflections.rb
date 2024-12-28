@@ -15,7 +15,6 @@
 #   inflect.acronym "RESTful"
 # end
 
-
 ActiveSupport::Inflector.inflections do |inflect|
-  inflect.uncountable %w(inbox)
+  inflect.uncountable %w[inbox]
 end

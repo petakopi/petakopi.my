@@ -5,7 +5,7 @@ class GoogleLocation < ApplicationRecord
 
   after_save :sync_with_google
 
-  NORMALIZED_NAMES ={
+  NORMALIZED_NAMES = {
     "Federal Territory of Kuala Lumpur" => "Kuala Lumpur",
     "Labuan Federal Territory" => "Labuan",
     "Malacca" => "Melaka",
@@ -15,7 +15,7 @@ class GoogleLocation < ApplicationRecord
     "Wilayah Persekutuan Putrajaya" => "Putrajaya"
   }
 
-  scope :within_bounding_box, -> (sw_lat, sw_lng, ne_lat, ne_lng) {
+  scope :within_bounding_box, ->(sw_lat, sw_lng, ne_lat, ne_lng) {
     where(
       "lat >= ? AND lat <= ? AND lng >= ? AND lng <= ?",
       sw_lat,

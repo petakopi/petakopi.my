@@ -42,7 +42,7 @@ module CoffeeShopDecorator
         directories_path(state: state_param, district: district_param), class: css_class
     state_link =
       link_to google_location.state,
-        directories_path(state: state_param),class: css_class
+        directories_path(state: state_param), class: css_class
 
     raw "#{district_link}, #{state_link}"
   end

@@ -5,7 +5,7 @@ json.data do
       json.extract!(
         coffee_shop,
         :uuid,
-        :name,
+        :name
       )
       json.lat coffee_shop.google_location.lat
       json.lng coffee_shop.google_location.lng

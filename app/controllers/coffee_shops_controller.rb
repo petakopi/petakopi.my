@@ -91,8 +91,8 @@ class CoffeeShopsController < ApplicationController
   end
 
   def success_message
-    "Coffee shop was successfully submitted. Please give us some time to review it. "\
-    "Feel free to message us at <a href='https://instagram.com/petakopi.my' target='_blank'>@petakopi.my</a> on Instagram "\
+    "Coffee shop was successfully submitted. Please give us some time to review it. " \
+    "Feel free to message us at <a href='https://instagram.com/petakopi.my' target='_blank'>@petakopi.my</a> on Instagram " \
     "for any question."
   end
 end

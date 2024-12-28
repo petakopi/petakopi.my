@@ -31,8 +31,8 @@ class CoffeeShops::LocationsController < ApplicationController
         google_location_attributes: [
           :lat,
           :lng,
-          :place_id,
-        ],
+          :place_id
+        ]
       )
   end
 end

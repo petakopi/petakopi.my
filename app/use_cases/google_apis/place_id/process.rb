@@ -7,7 +7,7 @@ class GoogleApis::PlaceId::Process < Micro::Case
 
   def call!
     if coffee_shop.google_location.place_id.present?
-      return Success result: { coffee_shop: coffee_shop }
+      return Success result: {coffee_shop: coffee_shop}
     end
 
     unless valid?
@@ -20,7 +20,7 @@ class GoogleApis::PlaceId::Process < Micro::Case
     get_google_place_id
     save
 
-    Success result: { coffee_shop: coffee_shop }
+    Success result: {coffee_shop: coffee_shop}
   end
 
   private

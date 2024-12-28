@@ -11,4 +11,3 @@ class UsersMailer < ApplicationMailer
       from: "hello@petakopi.my"
   end
 end
-

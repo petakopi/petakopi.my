@@ -27,7 +27,7 @@ class BidsController < ApplicationController
           "Auction Title: #{@auction.title}",
           "Bidder: #{@bid.coffee_shop.name}",
           "Bid Amount: RM#{@bid.amount}",
-          "Bid at: #{@bid.created_at.to_fs(:db)}",
+          "Bid at: #{@bid.created_at.to_fs(:db)}"
         ].join("\n")
 
         TelegramNotifierWorker.perform_async(message)

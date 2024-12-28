@@ -2,7 +2,7 @@ class CoffeeShopCreatorForm < YAAF::Form
   attr_accessor :coffee_shop_attributes
 
   def initialize(attributes)
-    super(attributes)
+    super
 
     @models = [coffee_shop]
   end

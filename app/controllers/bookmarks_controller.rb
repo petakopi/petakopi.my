@@ -1,6 +1,7 @@
 class BookmarksController < ApplicationController
   # TODO: Remove?
-  def new; end
+  def new
+  end
 
   def edit
     @bookmark = current_user.bookmarks.find(params[:id])

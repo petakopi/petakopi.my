@@ -7,7 +7,7 @@ class GoogleApis::OpeningHours::Process < Micro::Case
     create_new_opening_hours
     record_opening_hours_sync
 
-    Success result: { coffee_shop: coffee_shop }
+    Success result: {coffee_shop: coffee_shop}
   end
 
   private
