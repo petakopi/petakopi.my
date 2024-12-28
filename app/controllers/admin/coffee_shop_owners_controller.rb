@@ -46,6 +46,7 @@ class Admin::CoffeeShopOwnersController < AdminController
     @coffee_shops =
       CoffeeShop
         .status_published
+        .order(:name)
         .select(:id, :name, :slug)
         .map do |cs|
           [
@@ -53,6 +54,9 @@ class Admin::CoffeeShopOwnersController < AdminController
             cs.id
           ]
         end
-    @users = User.select(:email, :id).map { |user| [user.email, user.id] }
+    @users =
+      User
+        .order(:email)
+        .select(:email, :id).map { |user| [user.email, user.id] }
   end
 end
