@@ -14,6 +14,7 @@ class AuctionsController < ApplicationController
       Auction
         .includes(:bids)
         .where("end_at < ?", Time.current)
+        .where.not("end_at < ?", 1.month.ago)
         .order(end_at: :desc)
   end
 
