@@ -2,6 +2,7 @@ class OwnersMailer < ApplicationMailer
   def new_feedback_email(coffee_shop_id, user_id)
     @coffee_shop = CoffeeShop.find(coffee_shop_id)
     @user = User.find(user_id)
+    @latest_feedback = @coffee_shop.feedbacks.last
 
     mail to: @user.email,
       subject: "You have a new feedback for #{@coffee_shop.name}",
@@ -36,6 +37,14 @@ class OwnersMailer < ApplicationMailer
     mail to: "amree@petakopi.my",
       bcc: emails,
       subject: "Last Day to Bid for #{@auction.title}",
+      from: "hello@petakopi.my"
+  end
+
+  def auctions_started_email(user_id)
+    @user = User.find(user_id)
+
+    mail to: User.find(user_id).email,
+      subject: "[petakopi.my] Bid for 2025 Ads Now!",
       from: "hello@petakopi.my"
   end
 end
