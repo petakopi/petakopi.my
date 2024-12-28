@@ -30,7 +30,8 @@
             <%= render "layouts/menu/directories" %>
             <%= link_to "Submit Coffee Shop", new_coffee_shop_v2_path, class: "text-base font-medium text-brown-600 font-medium hover:text-gray-900" %>
             <% if current_user&.staff? %>
-              <%= link_to "Admin", admin_coffee_shops_path, class: "text-base font-medium text-red-500 hover:text-red-900" %>
+              <%= link_to "Coffee Shops", admin_coffee_shops_path, class: "text-base font-medium text-red-500 hover:text-red-900" %>
+              <%= link_to "Owners", admin_coffee_shop_owners_path, class: "text-base font-medium text-red-500 hover:text-red-900" %>
             <% end %>
           </nav>
 

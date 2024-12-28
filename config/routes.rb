@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         post "update_locality"
       end
     end
+    resources :coffee_shop_owners, only: [:index, :new, :create, :destroy]
   end
 
   namespace :business do

@@ -1,0 +1,66 @@
+<div class"mt-4 text-center text-sm text-gray-600">
+  <% if @coffee_shop_owner.errors.full_messages.count > 0 %>
+    <%= render "components/alert",
+      alerts: @coffee_shop_owner.errors.full_messages  %>
+  <% end %>
+</div>
+
+<div class="bg-white overflow-hidden shadow rounded-lg mt-4">
+  <div class="px-4 py-5 sm:p-6">
+    <div>
+      <%= form_with(model: [:admin, @coffee_shop_owner]) do |f| %>
+        <div class="mb-4">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            New Owner
+          </h3>
+        </div>
+        <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <%= f.label :user_id, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Owner's Email
+            <% end %>
+            <div class="mt-1 sm:self-center flex items-center">
+              <%= f.select :user_id,
+                @users,
+                {prompt: "Select an email", selected: @coffee_shop_owner.user_id},
+                {
+                  required: true,
+                  class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                }
+              %>
+            </div>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <%= f.label :coffee_shop_id, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Coffee Shop
+            <% end %>
+            <div class="mt-1 sm:self-center flex items-center">
+              <%= f.select :coffee_shop_id,
+                @coffee_shops,
+                {prompt: "Select a coffee shop", selected: @coffee_shop_owner.coffee_shop_id},
+                {
+                  required: true,
+                  class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                }
+              %>
+            </div>
+          </div>
+
+          <div class="pt-5">
+            <div class="flex justify-end">
+              <%= link_to admin_coffee_shop_owners_path,
+                class: "inline-flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-700" do
+              %>
+                Cancel
+              <% end %>
+              <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500">
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

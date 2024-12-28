@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @coffee_shop_owner %>
+
+<div>
+  <%= link_to "Edit this coffee shop owner", edit_coffee_shop_owner_path(@coffee_shop_owner) %> |
+  <%= link_to "Back to coffee shop owners", coffee_shop_owners_path %>
+
+  <%= button_to "Destroy this coffee shop owner", @coffee_shop_owner, method: :delete %>
+</div>
