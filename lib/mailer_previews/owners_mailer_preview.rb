@@ -1,4 +1,4 @@
-class OwnersMailerPreview < ActionMailer::Preview
+class MailerPreviews::OwnersMailerPreview < ActionMailer::Preview
   def new_feedback_email
     OwnersMailer
       .new_feedback_email(CoffeeShop.first.id, User.first.id)
