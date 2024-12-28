@@ -305,7 +305,7 @@ GEM
     llhttp-ffi (0.5.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    logger (1.6.3)
+    logger (1.6.4)
     lograge (0.14.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -525,7 +525,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sidekiq (7.3.6)
+    sidekiq (7.3.7)
       connection_pool (>= 2.3.0)
       logger
       rack (>= 2.2.4)
@@ -692,7 +692,7 @@ DEPENDENCIES
   redis (~> 5.0)
   resend
   rspec-rails (~> 6.1)
-  sidekiq (<= 7.3.6)
+  sidekiq (<= 7.3.7)
   sidekiq-cron
   sidekiq-failures
   sidekiq-throttled
