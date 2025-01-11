@@ -1,4 +1,6 @@
 namespace :report do
+  # tomo run -- petakopi:tasks report:closed_coffee_shops
+  # https://console.cloud.google.com/google/maps-apis/quotas
   desc "Generate report for closed businesses"
   task closed_coffee_shops: :environment do
     require "google/apis/sheets_v4"
