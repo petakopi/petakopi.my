@@ -1,6 +1,7 @@
 namespace :report do
   # tomo run -- petakopi:tasks report:closed_coffee_shops
   # https://console.cloud.google.com/google/maps-apis/quotas
+  # - Increase the daily and minutely quota based on the number of coffee shops
   desc "Generate report for closed businesses"
   task closed_coffee_shops: :environment do
     require "google/apis/sheets_v4"
@@ -54,7 +55,6 @@ namespace :report do
       rescue => exception
         puts "Error: #{exception.message}"
       end
-      sleep(2)
     end
   end
 
