@@ -56,6 +56,7 @@ gem "tinify" # tinypng.com gem for image processing
 gem "tomo-plugin-sidekiq" # tomo plugin for managing sidekiq via systemd
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "u-case" # Use case pattern
+gem "vite_rails" # Vite integration
 gem "uuid7" # UUID generator
 gem "yaaf" # handles form object
 
