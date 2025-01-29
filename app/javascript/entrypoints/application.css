@@ -1,0 +1,8 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import "../../assets/stylesheets/pagy";
+@import "../../assets/stylesheets/actiontext.css";
+@import "../../assets/stylesheets/tippy.css";
+@import "../../assets/stylesheets/custom.css";
