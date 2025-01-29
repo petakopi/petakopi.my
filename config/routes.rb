@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "up" => "health#show", :as => :health_check
+
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks"}
 
   authenticate :user, ->(user) { user.admin? } do

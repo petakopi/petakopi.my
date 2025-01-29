@@ -11,7 +11,6 @@ gem "bugsnag" # Error monitoring
 gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "celluloid" # Actor-based concurrent object framework for Ruby
 gem "connection_pool" # redis connection pooling
-gem "cssbundling-rails" # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem "chartkick" # create js charts
 gem "devise" # authentication
 gem "dry-validation" # validation
@@ -27,7 +26,6 @@ gem "image_optim" # Image optimization
 gem "image_optim_pack" # Image optimization
 gem "image_processing", ">= 1.2" # Image processor
 gem "jbuilder" # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jsbundling-rails" # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "lograge" # Log formatter
 gem "newrelic_rpm" # New Relic monitoring
 gem "nokogiri" # Parse HTML
@@ -52,6 +50,7 @@ gem "skylight" # Performance monitoring tool
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "telegram-bot-ruby" # Interact with Telegram
+gem "thruster", require: false # Thruster is a Ruby library for building and running web applications
 gem "tinify" # tinypng.com gem for image processing
 gem "tomo-plugin-sidekiq" # tomo plugin for managing sidekiq via systemd
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
