@@ -3,7 +3,7 @@ window.Components = {},
     return {
       init() {
         this.optionCount = this.$refs.listbox.children.length,
-          this.$watch("activeIndex", (e=>{
+          this.$watch("activeIndex", (_ => {
             this.open && (null !== this.activeIndex ? this.activeDescendant = this.$refs.listbox.children[this.activeIndex].id : this.activeDescendant = "")
           }
           ))
@@ -16,7 +16,7 @@ window.Components = {},
       get active() {
         return this.items[this.activeIndex]
       },
-      get[e.modelName || "selected"]() {
+      get [e.modelName || "selected"]() {
         return this.items[this.selectedIndex]
       },
       choose(e) {
@@ -26,7 +26,7 @@ window.Components = {},
       onButtonClick() {
         this.open || (this.activeIndex = this.selectedIndex,
           this.open = !0,
-          this.$nextTick((()=>{
+          this.$nextTick((() => {
             this.$refs.listbox.focus(),
               this.$refs.listbox.children[this.activeIndex].scrollIntoView({
                 block: "nearest"
@@ -59,13 +59,13 @@ window.Components = {},
     }
   }
   ,
-  window.Components.menu = function(e={
+  window.Components.menu = function(e = {
     open: !1
   }) {
     return {
       init() {
         this.items = Array.from(this.$el.querySelectorAll('[role="menuitem"]')),
-          this.$watch("open", (()=>{
+          this.$watch("open", (() => {
             this.open && (this.activeIndex = -1)
           }
           ))
@@ -79,7 +79,7 @@ window.Components = {},
       },
       onButtonClick() {
         this.open = !this.open,
-          this.open && this.$nextTick((()=>{
+          this.open && this.$nextTick((() => {
             this.$refs["menu-items"].focus()
           }
           ))
@@ -88,7 +88,7 @@ window.Components = {},
         this.open = !this.open,
           this.open && (this.activeIndex = 0,
             this.activeDescendant = this.items[this.activeIndex].id,
-            this.$nextTick((()=>{
+            this.$nextTick((() => {
               this.$refs["menu-items"].focus()
             }
             )))
@@ -111,7 +111,7 @@ window.Components = {},
       },
       onClickAway(e) {
         if (this.open) {
-          const t = ["[contentEditable=true]", "[tabindex]", "a[href]", "area[href]", "button:not([disabled])", "iframe", "input:not([disabled])", "select:not([disabled])", "textarea:not([disabled])"].map((e=>`${e}:not([tabindex='-1'])`)).join(",");
+          const t = ["[contentEditable=true]", "[tabindex]", "a[href]", "area[href]", "button:not([disabled])", "iframe", "input:not([disabled])", "select:not([disabled])", "textarea:not([disabled])"].map((e => `${e}:not([tabindex='-1'])`)).join(",");
           this.open = !1,
             e.target.closest(t) || this.focusButton()
         }
@@ -123,25 +123,25 @@ window.Components = {},
     return {
       __type: "popoverGroup",
       init() {
-        let e = t=>{
-          document.body.contains(this.$el) ? t.target instanceof Element && !this.$el.contains(t.target) && window.dispatchEvent(new CustomEvent("close-popover-group",{
+        let e = t => {
+          document.body.contains(this.$el) ? t.target instanceof Element && !this.$el.contains(t.target) && window.dispatchEvent(new CustomEvent("close-popover-group", {
             detail: this.$el
           })) : window.removeEventListener("focus", e, !0)
         }
-        ;
+          ;
         window.addEventListener("focus", e, !0)
       }
     }
   }
   ,
-  window.Components.popover = function({open: e=!1, focus: t=!1}={}) {
-    const i = ["[contentEditable=true]", "[tabindex]", "a[href]", "area[href]", "button:not([disabled])", "iframe", "input:not([disabled])", "select:not([disabled])", "textarea:not([disabled])"].map((e=>`${e}:not([tabindex='-1'])`)).join(",");
+  window.Components.popover = function({ open: e = !1, focus: t = !1 } = {}) {
+    const i = ["[contentEditable=true]", "[tabindex]", "a[href]", "area[href]", "button:not([disabled])", "iframe", "input:not([disabled])", "select:not([disabled])", "textarea:not([disabled])"].map((e => `${e}:not([tabindex='-1'])`)).join(",");
     return {
       __type: "popover",
       open: e,
       init() {
-        t && this.$watch("open", (e=>{
-          e && this.$nextTick((()=>{
+        t && this.$watch("open", (e => {
+          e && this.$nextTick((() => {
             !function(e) {
               const t = Array.from(e.querySelectorAll(i));
               !function e(i) {
@@ -155,24 +155,24 @@ window.Components = {},
           ))
         }
         ));
-        let e = i=>{
+        let e = i => {
           if (!document.body.contains(this.$el))
             return void window.removeEventListener("focus", e, !0);
           let n = t ? this.$refs.panel : this.$el;
           if (this.open && i.target instanceof Element && !n.contains(i.target)) {
             let e = this.$el;
-            for (; e.parentNode; )
+            for (; e.parentNode;)
               if (e = e.parentNode,
                 e.__x instanceof this.constructor) {
                 if ("popoverGroup" === e.__x.$data.__type)
-                return;
+                  return;
                 if ("popover" === e.__x.$data.__type)
-                break
+                  break
               }
             this.open = !1
           }
         }
-        ;
+          ;
         window.addEventListener("focus", e, !0)
       },
       onEscape() {
@@ -189,7 +189,7 @@ window.Components = {},
     }
   }
   ,
-  window.Components.radioGroup = function({initialCheckedIndex: e=0}={}) {
+  window.Components.radioGroup = function({ initialCheckedIndex: e = 0 } = {}) {
     return {
       value: void 0,
       active: void 0,
@@ -197,15 +197,15 @@ window.Components = {},
         let t = Array.from(this.$el.querySelectorAll("input"));
         this.value = t[e]?.value;
         for (let e of t)
-          e.addEventListener("change", (()=>{
+          e.addEventListener("change", (() => {
             this.active = e.value
           }
           )),
-            e.addEventListener("focus", (()=>{
+            e.addEventListener("focus", (() => {
               this.active = e.value
             }
             ));
-        window.addEventListener("focus", (()=>{
+        window.addEventListener("focus", (() => {
           console.log("Focus change"),
             t.includes(document.activeElement) || (console.log("HIT"),
               this.active = void 0)
@@ -225,7 +225,7 @@ window.Components = {},
           , i = Array.from(this.$el.querySelectorAll('[x-data^="Components.tabPanel("]'))
           , n = t.indexOf(e.detail);
         this.selectedIndex = n,
-          window.dispatchEvent(new CustomEvent("tab-select",{
+          window.dispatchEvent(new CustomEvent("tab-select", {
             detail: {
               tab: e.detail,
               panel: i[n]
@@ -250,25 +250,25 @@ window.Components = {},
     }
   }
   ,
-  window.Components.tab = function(e=0) {
+  window.Components.tab = function(e = 0) {
     return {
       selected: !1,
       init() {
         let t = Array.from(this.$el.closest('[x-data^="Components.tabs("]').querySelectorAll('[x-data^="Components.tab("]'));
         this.selected = t.indexOf(this.$el) === e,
-          this.$watch("selected", (e=>{
+          this.$watch("selected", (e => {
             e && this.$el.focus()
           }
           ))
       },
       onClick() {
-        window.dispatchEvent(new CustomEvent("tab-click",{
+        window.dispatchEvent(new CustomEvent("tab-click", {
           detail: this.$el
         }))
       },
       onKeydown(e) {
         ["ArrowLeft", "ArrowRight", "Home", "PageUp", "End", "PageDown"].includes(e.key) && e.preventDefault(),
-          window.dispatchEvent(new CustomEvent("tab-keydown",{
+          window.dispatchEvent(new CustomEvent("tab-keydown", {
             detail: {
               tab: this.$el,
               key: e.key
@@ -281,7 +281,7 @@ window.Components = {},
     }
   }
   ,
-  window.Components.tabPanel = function(e=0) {
+  window.Components.tabPanel = function(e = 0) {
     return {
       selected: !1,
       init() {
@@ -293,4 +293,4 @@ window.Components = {},
       }
     }
   }
-;
+  ;
