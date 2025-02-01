@@ -56,6 +56,9 @@ GEM
       activemodel (= 7.2.2.1)
       activesupport (= 7.2.2.1)
       timeout (>= 0.4.0)
+    activerecord-postgis-adapter (10.0.1)
+      activerecord (~> 7.2.0)
+      rgeo-activerecord (~> 8.0.0)
     activerecord_cursor_paginate (0.2.0)
       activerecord (>= 7.0)
     activestorage (7.2.2.1)
@@ -481,6 +484,13 @@ GEM
       railties (>= 5.2)
     retriable (3.1.2)
     rexml (3.4.0)
+    rgeo (3.0.1)
+    rgeo-activerecord (8.0.0)
+      activerecord (>= 7.0)
+      rgeo (>= 3.0)
+    rgeo-geojson (2.2.0)
+      multi_json (~> 1.15)
+      rgeo (>= 1.0.0)
     rspec-core (3.13.2)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.3)
@@ -657,6 +667,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_decorator
+  activerecord-postgis-adapter
   activerecord_cursor_paginate
   ahoy_matey
   aws-sdk-s3
@@ -700,6 +711,7 @@ DEPENDENCIES
   rails_cloudflare_turnstile
   redis (~> 5.0)
   resend
+  rgeo-geojson
   rspec-rails (~> 6.1)
   sidekiq (<= 7.3.6)
   sidekiq-cron

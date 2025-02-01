@@ -5,6 +5,7 @@ ruby "3.2.2"
 
 gem "active_decorator" # Decorator
 gem "activerecord_cursor_paginate" # Cursor pagination
+gem "activerecord-postgis-adapter" # PostGIS adapter for ActiveRecord
 gem "ahoy_matey" # analytics
 gem "aws-sdk-s3", require: false
 gem "bugsnag" # Error monitoring
@@ -41,6 +42,7 @@ gem "omniauth-rails_csrf_protection" # Migitate against CSRF in OmniAuth gem
 gem "rails", "~> 7.1"
 gem "rails_cloudflare_turnstile" # Cloudflare Turnstile (captcha)
 gem "redis", "~> 5.0" # Use Redis adapter to run Action Cable in production
+gem "rgeo-geojson" # GeoJSON support for RGeo
 gem "sidekiq", "<= 7.3.6" # Background jobs
 gem "sidekiq-cron" # Sidekiq + Cron
 gem "sidekiq-failures" # Monitor failures in Sidekiq
