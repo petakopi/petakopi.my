@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_17_040725) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_02_021910) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
@@ -188,6 +189,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_17_040725) do
     t.text "admin_notes"
     t.datetime "approved_at"
     t.string "uuid"
+    t.string "district"
+    t.string "state"
     t.index ["slug"], name: "index_coffee_shops_on_slug", unique: true
     t.index ["status"], name: "index_coffee_shops_on_status"
     t.index ["submitter_user_id"], name: "index_coffee_shops_on_submitter_user_id"
@@ -222,6 +225,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_17_040725) do
     t.datetime "updated_at", null: false
     t.index ["coffee_shop_id"], name: "index_feedbacks_on_coffee_shop_id"
     t.index ["user_id"], name: "index_feedbacks_on_user_id"
+  end
+
+  create_table "geo_locations", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "kind", null: false
+    t.geometry "geom", limit: {:srid=>0, :type=>"geometry"}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["geom"], name: "index_geo_locations_on_geom", using: :gist
+    t.index ["name", "kind"], name: "index_geo_locations_on_name_and_kind"
   end
 
   create_table "google_locations", force: :cascade do |t|

@@ -4,6 +4,7 @@ class GoogleLocation < ApplicationRecord
   validate :location_is_correct
 
   after_save :sync_with_google
+  after_save :set_district_state
 
   NORMALIZED_NAMES = {
     "Federal Territory of Kuala Lumpur" => "Kuala Lumpur",
@@ -43,6 +44,16 @@ class GoogleLocation < ApplicationRecord
 
   def has_place_id?
     place_id.present?
+  end
+
+  def set_district_state
+    regions =
+      GeoLocation.by_point.find_all_by_point(lng, lat).pluck(:kind, :name)
+
+    coffee_shop.update(
+      district: regions.select { |k, v| k == "region" }.flatten[1],
+      state: regions.select { |k, v| k == "state" }.flatten[1]
+    )
   end
 
   private
