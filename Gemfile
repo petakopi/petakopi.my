@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.2.2"
+ruby "3.4.1"
 
 gem "active_decorator" # Decorator
 gem "activerecord_cursor_paginate" # Cursor pagination
