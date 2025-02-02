@@ -27,7 +27,7 @@
         <div>
           <%= collection_select nil,
             :state,
-            CoffeeShop.status_published.all.pluck(:state).compact.sort,
+            CoffeeShop.status_published.all.pluck(:state).compact.uniq.sort,
             :to_s,
             :to_s,
             {
