@@ -26,14 +26,6 @@ class GoogleLocation < ApplicationRecord
     )
   }
 
-  def state
-    administrative_area_level_1
-  end
-
-  def district
-    locality
-  end
-
   def url
     if has_place_id?
       "https://www.google.com/maps/search/?api=1&query=#{lat},#{lng}&query_place_id=#{place_id}"

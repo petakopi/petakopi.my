@@ -27,7 +27,7 @@
         <div>
           <%= collection_select nil,
             :state,
-            GoogleLocation.distinct.pluck(:administrative_area_level_1).compact.sort,
+            CoffeeShop.status_published.all.pluck(:state).compact.sort,
             :to_s,
             :to_s,
             {
@@ -45,7 +45,9 @@
         <div>
           <%= collection_select nil,
             :district,
-            params[:state] ? GoogleLocation.where(administrative_area_level_1: params[:state]).distinct.pluck(:locality).compact.sort.prepend("") : [],
+            params[:state] ?
+              CoffeeShop.status_published.all.where(state: params[:state]).pluck(:district).compact.sort.prepend("") :
+              [],
             :to_s,
             :to_s,
             { selected: params[:district] },
