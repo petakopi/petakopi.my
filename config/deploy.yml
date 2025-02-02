@@ -1,0 +1,86 @@
+service: petakopi
+
+image: amree/petakopi.my
+
+servers:
+  web:
+    hosts:
+      - 210.79.129.62
+    labels:
+      traefik.http.routers.petakopi.entrypoints: websecure
+      traefik.http.routers.petakopi.rule: Host(`beta.petakopi.my`)
+      traefik.http.routers.petakopi.tls.certresolver: letsencrypt
+  job:
+    hosts:
+    - 210.79.129.62
+    cmd: bundle exec sidekiq -q default -q mailers
+
+proxy:
+  ssl: true
+  host: solahee.com
+  forward_headers: true
+
+registry:
+  username: amree
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+
+env:
+  clear:
+    RAILS_LOG_TO_STDOUT: true
+    RAILS_SERVE_STATIC_FILES: true
+    POSTGRES_USER: "postgres"
+    POSTGRES_DB: "petakopi"
+    POSTGRES_HOST: "petakopi-db"
+    REDIS_URL: "redis://petakopi-redis:6379/0"
+  secret:
+    - CLOUDFLARE_TURNSTILE_SECRET_KEY
+    - CLOUDFLARE_TURNSTILE_SITE_KEY
+    - DIGITAL_OCEAN_ACCESS_KEY_ID
+    - DIGITAL_OCEAN_SECRET_ACCESS_KEY
+    - GOOGLE_API_KEY_API
+    - GOOGLE_API_KEY_WEB
+    - GOOGLE_OAUTH_CLIENT_ID
+    - GOOGLE_OAUTH_CLIENT_SECRET
+    - GOOGLE_SERVICE_SPREADSHEET_EMAIL
+    - GOOGLE_SERVICE_SPREADSHEET_PRIVATE_KEY
+    - KAMAL_REGISTRY_PASSWORD
+    - MAPBOX_API_KEY
+    - NEWRELIC_LICENSE_KEY
+    - POSTGRES_PASSWORD
+    - RAILS_MASTER_KEY
+    - RESEND_API_KEY
+    - SECRET_KEY_BASE
+    - SKYLIGHT_AUTH_TOKEN
+    - TELEGRAM_BOT_TOKEN
+    - TELEGRAM_NOTIFICATION_CHAT_ID
+    - TINIFY_API_KEY
+
+aliases:
+  shell: app exec --interactive --reuse "bash"
+  console: app exec --interactive --reuse "bundle exec rails console"
+
+ssh:
+  user: ubuntu
+
+accessories:
+  db:
+    image: postgres:17
+    host: 210.79.129.62
+    env:
+      clear:
+        POSTGRES_USER: "postgres"
+        POSTGRES_DB: "petakopi"
+      secret:
+        - POSTGRES_PASSWORD
+    directories:
+      - data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7.0
+    host: 210.79.129.62
+    directories:
+      - data:/data

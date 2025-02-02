@@ -13,6 +13,7 @@ test:
 
 production:
   <<: *default
-  database: petakopi_production
-  username: petakopi
-  password: <%= ENV["PETAKOPI_DATABASE_PASSWORD"] %>
+  host: <%= ENV["POSTGRES_HOST"] %>
+  username: <%= ENV["POSTGRES_USER"] %>
+  password: <%= ENV["POSTGRES_PASSWORD"] %>
+  database: <%= ENV["POSTGRES_DB"] %>
