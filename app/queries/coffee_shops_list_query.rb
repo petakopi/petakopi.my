@@ -24,16 +24,12 @@ class CoffeeShopsListQuery
   def filter_by_locations
     if params[:state].present? && params[:district].present?
       relation.where(
-        google_locations: {
-          administrative_area_level_1: params[:state],
-          locality: params[:district]
-        }
+        district: params[:district],
+        state: params[:state]
       )
     elsif params[:state].present? && params[:district].blank?
       relation.where(
-        google_locations: {
-          administrative_area_level_1: params[:state]
-        }
+        state: params[:state]
       )
     else
       relation
@@ -58,11 +54,11 @@ class CoffeeShopsListQuery
 
   def reorder
     if params[:keyword].present? && params[:state].present?
-      relation.order(:name, "google_locations.locality")
+      relation.order(:name, :district)
     elsif params[:keyword].present?
       relation.order(:name)
     elsif params[:keyword].blank? && params[:state].present?
-      relation.order("google_locations.locality", :name)
+      relation.order(:district, :name)
     else
       relation.order(approved_at: :desc)
     end

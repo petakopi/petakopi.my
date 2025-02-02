@@ -1,7 +1,7 @@
 class LocationsController < ApplicationController
   def cities
     @target = params[:target]
-    @districts = GoogleLocation.where(administrative_area_level_1: params[:state]).distinct.pluck(:locality).compact.sort
+    @districts = CoffeeShop.status_published.where(state: params[:state]).distinct.pluck(:district).compact.sort
     @districts = @districts.prepend("") if params[:include_blank]
 
     respond_to do |format|

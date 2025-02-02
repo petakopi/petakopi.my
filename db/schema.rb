@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_01_071728) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_02_021910) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -189,6 +189,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_01_071728) do
     t.text "admin_notes"
     t.datetime "approved_at"
     t.string "uuid"
+    t.string "district"
+    t.string "state"
     t.index ["slug"], name: "index_coffee_shops_on_slug", unique: true
     t.index ["status"], name: "index_coffee_shops_on_status"
     t.index ["submitter_user_id"], name: "index_coffee_shops_on_submitter_user_id"
