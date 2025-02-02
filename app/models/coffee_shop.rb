@@ -15,7 +15,7 @@ class CoffeeShop < ApplicationRecord
   attr_accessor :logo_url, :latitude, :longitude, :google_place_id
 
   enum(
-    status: {
+    :status, {
       unpublished: 0,
       published: 1,
       rejected: 2,
@@ -24,7 +24,7 @@ class CoffeeShop < ApplicationRecord
       closed: 5,
       temporarily_closed: 6
     },
-    _prefix: :status
+    prefix: :status
   )
 
   belongs_to :submitter, class_name: "User", foreign_key: "submitter_user_id", optional: true
