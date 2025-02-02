@@ -63,6 +63,7 @@ env:
 aliases:
   shell: app exec --interactive --reuse "bash"
   console: app exec --interactive --reuse "bundle exec rails console"
+  logs: app logs -f
 
 ssh:
   user: root

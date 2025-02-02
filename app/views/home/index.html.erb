@@ -46,7 +46,15 @@
           <%= collection_select nil,
             :district,
             params[:state] ?
-              CoffeeShop.status_published.all.where(state: params[:state]).pluck(:district).compact.sort.prepend("") :
+              CoffeeShop
+              .status_published
+              .all
+              .where(state: params[:state])
+              .pluck(:district)
+              .compact
+              .uniq
+              .sort
+              .prepend("") :
               [],
             :to_s,
             :to_s,
