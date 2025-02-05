@@ -17,17 +17,113 @@ for moderators on how to verify the data.
 
 ## Development
 
-Pre-seed DB:
+For a quick start, use [Development Containers](https://containers.dev/).
+
+### Development Containers
+
+Clone the project and open it using [Visual Studio
+Code](https://code.visualstudio.com/). Make sure you have installed [Dev
+Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+extension.
+
+You should see a popup asking if you want to "Reopen in Container". If you
+don't:
+- Use `CMD + SHIFT + P`
+- Select "Dev Containers: Reopen in Container"
+
+It's going to take a while to install everything for the first time. But, if
+everything works well, you should be seeing something like this:
 
 ```
-rails seeder:locations
+Running the postCreateCommand from devcontainer.json...
+
+[58478 ms] Start: Run in container: /bin/sh -c bin/setup
+== Installing dependencies ==
+...
+
+== Preparing database ==
+...
+
+== Removing old logs and tempfiles ==
+Done. Press any key to close the terminal.
+```
+
+Open two new terminals from VS Code and run them (separately):
+
+```
+./bin/rails s # to start the Rails server
+./bin/vite dev # to start the Vite server
+```
+
+You should make sure nothing is running on port `3000` as `rails s` will forward
+that port. That is the only port exposed to the host.
+
+You can access the database with:
+
+```
+psql -U postgres -h postgres -d petakopi_development
+```
+
+If you have to rebuild the image, use the same menu but choose "Rebuild
+Container without Cache".
+
+I am not that familiar with Development Container, but it seems like you have
+to stop the services manually once you close your editor. See the helpful
+commands below.
+
+Additionally, if you accidentally closed your editor and you want to open it in
+the container again, you'd have to stop the services first. Otherwise, there
+will be errors with the connections.
+
+I am pretty sure there are better ways to do this, but worst case scenario,
+remove the containers and start again. It is going to take a little bit of time
+IF you delete the volumes as everything needs to be installed again.
+
+Some helpful docker commands:
+
+```bash
+# Stop and remove the containers
+docker compose -f .devcontainer/compose.yml down
+
+# Stop and remove the containers with the volumes
+docker compose -f .devcontainer/compose.yml down -v
+
+# See if your container is still running
+docker ps
+```
+
+To get started with some data, you can seed your development with:
+
+```
 rails seeder:tags
 ```
 
-### Google Credentials
+Due to recent changes, I need to update the seeders too.
 
-Depending on the setup, we may have to allow our IP to use Google API
-[here](https://console.cloud.google.com/google/maps-apis/credentials).
+### Credentials
+
+petakopi.my uses couple of services and we need to add the credentials if we
+want to develop features related to them.
+
+In order to set the values, put them in `.env.development.local` and make sure
+to restart the server if you update the contents.
+
+```
+CLOUDFLARE_TURNSTILE_SECRET_KEY=
+CLOUDFLARE_TURNSTILE_SITE_KEY=
+GOOGLE_API_KEY_API=
+GOOGLE_API_KEY_WEB=
+GOOGLE_OAUTH_CLIENT_ID=
+GOOGLE_OAUTH_CLIENT_SECRET=
+GOOGLE_SERVICE_SPREADSHEET_EMAIL=
+GOOGLE_SERVICE_SPREADSHEET_PRIVATE_KEY=
+MAPBOX_API_KEY=
+RESEND_API_KEY=
+SECRET_KEY_BASE=
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_NOTIFICATION_CHAT_ID=
+TINIFY_API_KEY=
+```
 
 ## Reports
 

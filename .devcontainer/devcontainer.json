@@ -1,8 +1,19 @@
 {
+  // https://containers.dev/implementors/json_reference/
+
   "name": "petakopi.my",
   "dockerComposeFile": "compose.yml",
   "service": "rails",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "forwardPorts": [3000, 5432],
+  "forwardPorts": [3000],
   "postCreateCommand": "bin/setup"
+
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
+
+  // Configure tool-specific properties.
+  // "customizations": {},
+
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
 }

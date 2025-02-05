@@ -5,41 +5,58 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+      args:
+        RUBY_VERSION: 3.4.1
+        NODE_VERSION: 22.11.0
 
     volumes:
-    - ../..:/workspaces:cached
+      - ../..:/workspaces:cached
+      - bundle:/usr/local/bundle
+      - node_modules:/workspaces/${localWorkspaceFolderBasename}/node_modules
 
-    # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
 
-    # Uncomment the next line to use a non-root user for all processes.
-    # user: vscode
+    user: vscode
 
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
     depends_on:
-    - redis
-    - postgres
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
     environment:
-    - DATABASE_URL=postgres://dev:password@postgres/petakopi_development
+      - RAILS_ENV=development
+      - DATABASE_URL=postgis://postgres:postgres@postgres/petakopi_development
+      - REDIS_URL=redis://redis:6379/0
+      - BUNDLE_PATH=/usr/local/bundle
+      - BUNDLE_BIN=/usr/local/bundle/bin
+      - GEM_HOME=/usr/local/bundle
+      - BUNDLE_APP_CONFIG=/usr/local/bundle
+      - PATH=/usr/local/bundle/bin:/usr/local/node/bin:$PATH
 
   redis:
     image: redis:7.2
     restart: unless-stopped
     volumes:
-    - redis-data:/data
+      - redis-data:/data
 
   postgres:
-    image: postgres:12.15
+    image: postgis/postgis:17-3.5
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=petakopi_development
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
+  bundle:
+  node_modules:
   redis-data:
   postgres-data:
