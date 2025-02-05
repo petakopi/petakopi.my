@@ -60,3 +60,6 @@ node_modules
 
 # Data files to seed the DB
 /data
+
+# AI tools
+/.aider*
