@@ -58,6 +58,8 @@ Open two new terminals from VS Code and run them (separately):
 You should make sure nothing is running on port `3000` as `rails s` will forward
 that port. That is the only port exposed to the host.
 
+You should be able to access the website at http://localhost:3000 🎉.
+
 You can access the database with:
 
 ```
