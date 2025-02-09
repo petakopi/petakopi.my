@@ -15,7 +15,7 @@ class Admin::CoffeeShopOwnersController < AdminController
 
     if @coffee_shop_owner.save
       redirect_to admin_coffee_shop_owners_url,
-        notice: "Coffee shop owner for #{@coffee_shop_owner.coffee_shops.pluck(:slug)} was successfully created."
+        notice: "Coffee shop owner for #{@coffee_shop_owner.coffee_shop.pluck(:slug)} was successfully created."
     else
       set_data
       render :new, status: :unprocessable_entity
