@@ -8,7 +8,11 @@ export default class extends Controller {
   }
 
   static targets = [
+    "askPermissionModal",
     "filterFormModal",
+    "locationButton",
+    "locationButtonText",
+    "locationSpinner",
   ]
 
   connect() {
@@ -29,7 +33,7 @@ export default class extends Controller {
       })
     }
 
-    var geolocate =
+    this.geolocateControl =
       new mapboxgl.GeolocateControl({
         positionOptions: {
           enableHighAccuracy: true
@@ -41,7 +45,66 @@ export default class extends Controller {
       })
 
     this.map.addControl(new mapboxgl.NavigationControl())
-    this.map.addControl(geolocate)
+    this.map.addControl(this.geolocateControl)
+  }
+
+  setCurrentLocation() {
+    // Disable button and show loading state
+    this.locationButtonTarget.disabled = true;
+    this.locationButtonTextTarget.textContent = "Getting location...";
+    this.locationSpinnerTarget.classList.remove("hidden");
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          this.latValue = lat;
+          this.lngValue = lng;
+
+          // Close modal first
+          this.toggleAskPermissionModal();
+
+          // Short delay to allow modal to close and map to be visible
+          setTimeout(() => {
+            this.map.setCenter([lng, lat]);
+            this.map.setZoom(14);
+            this.geolocateControl.trigger();
+            this.resetLocationButton();
+          }, 300); // Adjust timing as needed
+        },
+        () => {
+          alert("Unable to get your location. Please make sure you've granted location permissions.");
+
+          this.toggleAskPermissionModal();
+          this.resetLocationButton();
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser");
+
+      this.toggleAskPermissionModal();
+      this.resetLocationButton();
+    }
+  }
+
+  resetLocationButton() {
+    this.locationButtonTarget.disabled = false;
+    this.locationButtonTextTarget.textContent = "Yes";
+    this.locationSpinnerTarget.classList.add("hidden");
+  }
+
+  toggleAskPermissionModal() {
+    if (this.askPermissionModalTarget.style.display === "block") {
+      this.askPermissionModalTarget.style.display = "none"
+    } else {
+      this.askPermissionModalTarget.style.display = "block"
+    }
   }
 
   toggleFilterFormModal() {
