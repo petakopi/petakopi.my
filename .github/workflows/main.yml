@@ -35,7 +35,7 @@ jobs:
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1.187.0
         with:
-          ruby-version: "3.2.2"
+          ruby-version: "3.4.1"
           bundler-cache: true
 
       - name: Set up database schema
