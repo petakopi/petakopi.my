@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_02_021910) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_10_121056) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
@@ -230,7 +230,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_02_021910) do
   create_table "geo_locations", force: :cascade do |t|
     t.string "name", null: false
     t.string "kind", null: false
-    t.geometry "geom", limit: {:srid=>0, :type=>"geometry"}, null: false
+    t.geometry "geom", limit: {srid: 0, type: "geometry"}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["geom"], name: "index_geo_locations_on_geom", using: :gist
@@ -242,11 +242,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_02_021910) do
     t.string "place_id"
     t.float "lat"
     t.float "lng"
-    t.string "locality"
-    t.string "administrative_area_level_1"
-    t.string "administrative_area_level_2"
-    t.string "postal_code"
-    t.string "country"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["coffee_shop_id"], name: "index_google_locations_on_coffee_shop_id"
