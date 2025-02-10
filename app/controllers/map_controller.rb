@@ -1,14 +1,6 @@
 class MapController < ApplicationController
-  layout :current_layout
+  layout "application_full"
 
   def index
-  end
-
-  private
-
-  def current_layout
-    return "application_full" if turbo_native_app?
-
-    "application"
   end
 end

@@ -1,181 +1,76 @@
 <%= content_for(:page_title) { "Live Map for nearby coffee places"} %>
 <%= content_for(:page_description) { "See nearby coffee places on a live map!" } %>
-<%= content_for :extra_styles do %>
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet" />
-<% end %>
+<div
+    class="w-full h-screen relative"
+    data-controller="mapbox"
+    data-mapbox-api-key-value="<%= ENV['MAPBOX_API_KEY'] %>"
+    id="map">
 
-<div class="pr-4 py-5 sm:py-6 sm:pr-6">
-  <% Tag.all.order(:position).each do |tag| %>
-    <%= link_to map_path(tags: tag.slug), data: { turbo: false } do %>
-      <%= render partial: "shared/tags/#{tag.slug.underscore}", locals: { name: tag.name } %>
-    <% end %>
-  <% end %>
+    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-50 font-sans">
+      <button
+          data-action="click->mapbox#toggleFilterFormModal"
+          class="bg-white bg-opacity-75 hover:bg-opacity-100 rounded-full py-2 px-4 text-sm shadow-md flex items-center justify-center text-gray-900 space-x-4">
+          <span>Filter</span>
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-5 w-5">
+              <path d="M0 416c0 8.8 7.2 16 16 16l65.6 0c7.4 36.5 39.7 64 78.4 64s71-27.5 78.4-64L496 432c8.8 0 16-7.2 16-16s-7.2-16-16-16l-257.6 0c-7.4-36.5-39.7-64-78.4-64s-71 27.5-78.4 64L16 400c-8.8 0-16 7.2-16 16zm112 0a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM304 256a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm48-80c-38.7 0-71 27.5-78.4 64L16 240c-8.8 0-16 7.2-16 16s7.2 16 16 16l257.6 0c7.4 36.5 39.7 64 78.4 64s71-27.5 78.4-64l65.6 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-65.6 0c-7.4-36.5-39.7-64-78.4-64zM192 144a48 48 0 1 1 0-96 48 48 0 1 1 0 96zm78.4-64C263 43.5 230.7 16 192 16s-71 27.5-78.4 64L16 80C7.2 80 0 87.2 0 96s7.2 16 16 16l97.6 0c7.4 36.5 39.7 64 78.4 64s71-27.5 78.4-64L496 112c8.8 0 16-7.2 16-16s-7.2-16-16-16L270.4 80z"/>
+            </svg>
+          </span>
+      </button>
+    </div>
 
-  <div class="mt-4">
-    <a href="<%= map_path %>" class="px-3 py-1 inline-flex text-xs leading-5 rounded-full bg-gray-100 text-gray-800 border border-gray-800 font-semibold">
-      RESET FILTERS
-    </a>
-  </div>
+    <!-- Filter form modal -->
+    <div
+        data-mapbox-target="filterFormModal"
+        style="display: none;"
+        class="fixed inset-0 z-[100] font-sans">
+      <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
+      <div class="fixed inset-0 z-10 w-screen overflow-y-auto p-4 sm:p-6 md:p-8">
+        <div class="flex min-h-full items-center justify-center">
+          <div class="relative w-full bg-white rounded-lg shadow-xl sm:max-w-[420px]">
+            <!-- Close button -->
+            <div class="absolute right-0 top-0 p-4">
+              <button data-action="click->mapbox#toggleFilterFormModal" type="button" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <span class="sr-only">Close</span>
+                <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Content container -->
+            <div class="p-4 sm:p-6">
+              <div class="flex flex-col sm:flex-row sm:items-start">
+                <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
+                  <svg class="size-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                  </svg>
+                </div>
+                <div class="mt-3 sm:ml-4 sm:mt-0">
+                  <h3 class="text-base font-semibold text-gray-900" id="modal-title">Deactivate account</h3>
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500">Are you sure you want to deactivate your account? All of your data will be permanently removed from our servers forever. This action cannot be undone.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action buttons -->
+              <div class="mt-5 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+                <button
+                    data-action="click->mapbox#toggleFilterFormModal"
+                    type="button"
+                    class="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  Cancel
+                </button>
+                <button
+                    type="button"
+                    class="inline-flex justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
+                  Deactivate
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
-
-<div id="map" style="<%= turbo_native_app? ? "position: absolute; top: 0; bottom: 0; width: 100%" : "height: 500px" %>"></div>
-
-<%= content_for :js do %>
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
-  <script>
-    mapboxgl.accessToken = "<%= ENV['MAPBOX_API_KEY'] %>"
-
-    var map = new mapboxgl.Map({
-      container: "map",
-      style: "mapbox://styles/mapbox/light-v10?optimize=true",
-      center: [101.7121498580279, 3.1578064758309883],
-      zoom: 10
-    })
-
-    var geolocate =
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        // When active the map will receive updates to the device's location as it changes.
-        trackUserLocation: true,
-        // Draw an arrow next to the location dot to indicate which direction the device is heading.
-        showUserHeading: true
-      })
-
-    map.addControl(new mapboxgl.NavigationControl())
-    map.addControl(new mapboxgl.FullscreenControl())
-    map.addControl(geolocate)
-
-    map.on("load", () => {
-      geolocate.trigger()
-
-      // Add a new source from our GeoJSON data and
-      // set the "cluster" option to true. GL-JS will
-      // add the point_count property to your source data.
-      map.addSource("coffee_shops", {
-        type: "geojson",
-        data: "<%= mapbox_path(type: 'geojson', tags: params[:tags]).html_safe %>",
-        cluster: true,
-        clusterMaxZoom: 14, // Max zoom to cluster points on
-        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
-      })
-
-      map.addLayer({
-        id: "clusters",
-        type: "circle",
-        source: "coffee_shops",
-        filter: ["has", "point_count"],
-        paint: {
-          // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-          // with three steps to implement three types of circles:
-          //   * Blue, 20px circles when point count is less than 50
-          //   * Yellow, 30px circles when point count is between 50 and 100
-          //   * Pink, 40px circles when point count is greater than or equal to 100
-          "circle-color": [
-            "step",
-            ["get", "point_count"],
-            "#51bbd6",
-            50,
-            "#f1f075",
-            100,
-            "#f28cb1"
-          ],
-          "circle-radius": [
-            "step",
-            ["get", "point_count"],
-            20,
-            50,
-            30,
-            100,
-            40
-          ]
-        }
-      })
-
-      map.addLayer({
-        id: "cluster-count",
-        type: "symbol",
-        source: "coffee_shops",
-        filter: ["has", "point_count"],
-        layout: {
-          "text-field": "{point_count_abbreviated}",
-          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-          "text-size": 12
-        }
-      })
-
-      map.addLayer({
-        id: "unclustered-point",
-        type: "circle",
-        source: "coffee_shops",
-        filter: ["!", ["has", "point_count"]],
-        paint: {
-          "circle-color": "#11b4da",
-          "circle-radius": 10,
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "#fff"
-        }
-      })
-
-      // inspect a cluster on click
-      map.on("click", "clusters", (e) => {
-        const features = map.queryRenderedFeatures(e.point, {
-          layers: ["clusters"]
-        })
-        const clusterId = features[0].properties.cluster_id
-        map.getSource("coffee_shops").getClusterExpansionZoom(
-          clusterId,
-          (err, zoom) => {
-            if (err) return
-
-            map.easeTo({
-              center: features[0].geometry.coordinates,
-              zoom: zoom
-            })
-          }
-        )
-      })
-
-      // When a click event occurs on a feature in
-      // the unclustered-point layer, open a popup at
-      // the location of the feature, with
-      // description HTML from its properties.
-      map.on("click", "unclustered-point", (e) => {
-        const coordinates = e.features[0].geometry.coordinates.slice()
-        const name = e.features[0].properties.name
-        const url = e.features[0].properties.url
-        const logo = e.features[0].properties.logo
-        const popupText = `
-           <div class="flex items-center font-semibold space-x-3">
-             <img src="${logo}" class="h-10 w-10 rounded-full border border-brown">
-             <a href="${url}" target="_blank">${name} &rarr;</a>
-           </div>
-        `
-
-        // Ensure that if the map is zoomed out such that
-        // multiple copies of the feature are visible, the
-        // popup appears over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
-        }
-
-        new mapboxgl.Popup()
-          .setLngLat(coordinates)
-          .setHTML(popupText)
-          .addTo(map)
-      })
-
-      map.on("mouseenter", "clusters", () => {
-        map.getCanvas().style.cursor = "pointer"
-      })
-      map.on("mouseleave", "clusters", () => {
-        map.getCanvas().style.cursor = ""
-      })
-
-
-      setTimeout(() => this.map.resize(), 0);
-    })
-  </script>
-
-<% end %>

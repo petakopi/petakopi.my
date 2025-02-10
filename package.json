@@ -18,6 +18,7 @@
     "chartkick": "^5.0.1",
     "esbuild": "^0.20.0",
     "esbuild-rails": "^1.0.7",
+    "mapbox-gl": "^3.9.4",
     "postcss": "^8.4.35",
     "postcss-import": "^16.0.0",
     "sass": "^1.70.0",
