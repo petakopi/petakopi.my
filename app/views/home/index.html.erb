@@ -1,23 +1,37 @@
-<div class="flex justify-end mb-4 gap-x-2">
-  <button type="button" class="inline-flex items-center gap-x-1.5 rounded-full px-2 py-1 text-xs font-medium text-gray-900 ring-1 ring-inset ring-gray-200">
-    <svg class="size-1.5 fill-gray-500" viewBox="0 0 6 6" aria-hidden="true">
-      <circle cx="3" cy="3" r="3" />
-    </svg>
-    Use current location
-  </button>
+<div data-controller="tabs-home">
+  <div class="mb-4">
+    <div class="border-b border-gray-200">
+      <nav class="-mb-px flex">
+        <a
+            data-tabs-home-target="tabs"
+            data-action="click->tabs-home#changeTab"
+            data-url="<%= home_coffee_shops_path(location: "everywhere") %>"
+            href="#"
+            class="w-1/4 border-b-2 border-brown-500 px-1 py-4 text-center text-sm font-medium text-brown-600">Everywhere</a>
+        <a
+            data-tabs-home-target="tabs"
+            data-action="click->tabs-home#changeTab"
+            data-url="<%= home_coffee_shops_path(location: "nearby") %>"
+            href="#"
+            class="w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Nearby</a>
+        <a
+            href="<%= map_path %>"
+            class="w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Live Map &rarr;</a>
+      </nav>
+    </div>
+  </div>
 
-  <button type="button" class="inline-flex items-center gap-x-1.5 rounded-full px-2 py-1 text-xs font-medium text-gray-900 ring-1 ring-inset ring-gray-200">
-    <svg class="size-1.5 fill-gray-500" viewBox="0 0 6 6" aria-hidden="true">
-      <circle cx="3" cy="3" r="3" />
-    </svg>
-    More Filters
-  </button>
-</div>
-
-<%= turbo_frame_tag "coffee_shops", src: home_coffee_shops_path, loading: "lazy" do %>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <% 10.times do %>
-      <%= render "shared/loaders/coffee_shop_card" %>
+  <div class="text-sm text-slate-700">
+    <%= turbo_frame_tag "coffee_shops", data: { tabs_home_target: "container" } do %>
     <% end %>
   </div>
-<% end %>
+
+  <div data-tabs-home-target="loading" class="hidden">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <% 12.times do %>
+        <%= render "shared/loaders/coffee_shop_card" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
