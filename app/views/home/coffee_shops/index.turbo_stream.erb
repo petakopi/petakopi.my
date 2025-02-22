@@ -2,6 +2,6 @@
   <%= render partial: "coffee_shop", collection: @coffee_shops %>
 <% end %>
 
-<%= turbo_stream.replace "pager" do %>
+<%= turbo_stream.replace "hws-pager" do %>
   <%= render "pager", pagy: @pagy %>
 <% end %>

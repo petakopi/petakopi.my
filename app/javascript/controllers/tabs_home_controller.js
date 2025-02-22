@@ -46,7 +46,8 @@ export default class extends Controller {
 
   async fetchContent(url) {
     try {
-      document.getElementById("pager").innerHTML = ""
+      // Prevent next page loaded when switching tabs
+      document.getElementById("hws-pager").innerHTML = ""
 
       const response = await get(url, {
         responseKind: "turbo-stream"
