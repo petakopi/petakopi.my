@@ -1,7 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
+import { get } from "@rails/request.js"
 
 export default class extends Controller {
-  static targets = ["container", "loading", "tabs"]
+  static targets = [
+    "container",
+    "loader",
+    "loadingContainer",
+    "tabs",
+  ]
 
   static classes = {
     active: ["border-brown-500", "text-brown-600"],
@@ -20,7 +26,7 @@ export default class extends Controller {
   activateTab(selectedTab) {
     this.updateTabStates(selectedTab)
     this.showLoadingState()
-    this.loadNewContent(selectedTab)
+    this.fetchContent(selectedTab.dataset.url)
   }
 
   updateTabStates(selectedTab) {
@@ -34,12 +40,23 @@ export default class extends Controller {
   }
 
   showLoadingState() {
-    const loadingContent = this.loadingTarget.cloneNode(true)
+    const loadingContent = this.loadingContainerTarget.cloneNode(true)
     this.containerTarget.innerHTML = loadingContent.innerHTML
   }
 
-  loadNewContent(tab) {
-    this.containerTarget.src = tab.dataset.url
-    this.containerTarget.reload()
+  async fetchContent(url) {
+    try {
+      document.getElementById("pager").innerHTML = ""
+
+      const response = await get(url, {
+        responseKind: "turbo-stream"
+      })
+
+      if (response.ok) {
+        this.loaderTargets.forEach(loader => loader.remove())
+      }
+    } catch (error) {
+      console.error("Error fetching content:", error)
+    }
   }
 }

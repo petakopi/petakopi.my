@@ -1,16 +1,13 @@
-<% if pagy.next %>
-  <div id="pager" class="min-w-full my-8 flex justify-center">
-    <%= link_to "Load more...",
-        home_coffee_shops_path(page: pagy.next, location: params[:location]),
-        id: "load-more",
-        class: "hidden",
-        data: { turbo_stream: true } %>
-  </div>
-
-<% else %>
-  <div class="min-w-full my-8 flex justify-center">
+<div id="pager" class="min-w-full my-8 flex justify-center">
+  <% if pagy.next %>
+    <%= link_to "Loading more coffee shops. Please wait...",
+      home_coffee_shops_path(page: pagy.next, location: params[:location]),
+      id: "load-more-link",
+      class: "text-sm text-slate-700",
+      data: { turbo_stream: true } %>
+  <% else %>
     <div class="rounded py-3 px-5 text-slate-700 block">
       No more coffee shops to display 🥲
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>
