@@ -1,4 +1,4 @@
-<div data-controller="tabs-home">
+<div data-controller="tabs-home infinite-scroll">
   <div class="mb-4">
     <div class="border-b border-gray-200">
       <nav class="-mb-px flex">
@@ -22,16 +22,20 @@
   </div>
 
   <div class="text-sm text-slate-700">
-    <%= turbo_frame_tag "coffee_shops", data: { tabs_home_target: "container" } do %>
+    <%= turbo_frame_tag "coffee_shops",
+      data: { tabs_home_target: "container" },
+      class: "grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" do %>
     <% end %>
   </div>
 
   <div data-tabs-home-target="loading" class="hidden">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <% 12.times do %>
-        <%= render "shared/loaders/coffee_shop_card" %>
-      <% end %>
-    </div>
+    <% 8.times do %>
+      <%= render "shared/loaders/coffee_shop_card" %>
+    <% end %>
+  </div>
+
+  <div data-infinite-scroll-target="loader">
+    <%= render partial: "home/coffee_shops/pager", locals: { pagy: @pagy } %>
   </div>
 </div>
 

@@ -1,22 +1,5 @@
+<!-- Initial load of coffee shops from the homepage -->
+<!-- Subsequent requests will go through Turbo Streams, not this view -->
 <%= turbo_frame_tag "coffee_shops" do %>
-  <!-- Card Grid -->
-  <div id="coffee-shop-list" class="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-    <% @coffee_shops.each do |coffee_shop| %>
-      <div class="rounded border border-gray-200 bg-gray-50">
-        <a href="#" class="cursor-pointer">
-          <div>
-            <img src="https://placehold.co/400x400" class="h-72 w-full rounded-t object-cover" />
-            <div class="p-4">
-              <p class="mb-4 text-lg leading-relaxed font-bold text-gray-800">
-                <%= coffee_shop.name %>
-              </p>
-              <small class="leading-5 text-gray-500">
-                <%= [coffee_shop.district, coffee_shop.state].join(", ") %>
-              </small>
-            </div>
-          </div>
-        </a>
-      </div>
-    <% end %>
-  </div>
+  <%= render partial: "coffee_shop", collection: @coffee_shops %>
 <% end %>

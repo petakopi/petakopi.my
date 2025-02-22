@@ -1,0 +1,7 @@
+<%= turbo_stream.append "coffee_shops" do %>
+  <%= render partial: "coffee_shop", collection: @coffee_shops %>
+<% end %>
+
+<%= turbo_stream.replace "pager" do %>
+  <%= render "pager", pagy: @pagy %>
+<% end %>
