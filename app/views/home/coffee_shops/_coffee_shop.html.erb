@@ -7,7 +7,11 @@
         <%= coffee_shop.name %>
         </p>
         <small class="leading-5 text-gray-500">
-          <%= [coffee_shop.district, coffee_shop.state].join(", ") %>
+          <% if coffee_shop.try(:distance_meters).present? %>
+            From <%= (coffee_shop.distance_meters / 1000).round(2) %> KM, <%= [coffee_shop.district, coffee_shop.state].join(", ") %>
+          <% else %>
+            <%= [coffee_shop.district, coffee_shop.state].join(", ") %>
+          <% end %>
         </small>
       </div>
     </div>

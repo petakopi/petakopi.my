@@ -104,4 +104,27 @@ class CoffeeShop < ApplicationRecord
 
     self.approved_at = Time.current
   end
+
+  def self.nearest_to(lat:, lng:, limit_km: 10)
+    point = "POINT(#{lng} #{lat})"
+    meters = limit_km * 1000
+    distance_calc = "ST_Distance(location, ST_SetSRID(ST_GeomFromText('#{point}'), 4326))"
+
+    select("coffee_shops.*, #{distance_calc} AS distance_meters")
+      .where("ST_DWithin(location, ST_SetSRID(ST_GeomFromText('#{point}'), 4326), #{meters})")
+      .where.not(location: nil)
+      .order("distance_meters")
+  end
+
+  # def gis_lat
+  #   location&.latitude
+  # end
+  #
+  # def gis_lng
+  #   location&.longitude
+  # end
+  #
+  # def coordinates=(array)
+  #   self.location = "POINT(#{array[1]} #{array[0]})"
+  # end
 end
