@@ -25,7 +25,7 @@ export default class extends Controller {
   klccCoordinates = { lat: 3.1578, lng: 101.7119 }
 
   connect() {
-    if (typeof (google) != "undefined"){
+    if (typeof (google) != "undefined") {
       this.initializeMap()
     }
   }
@@ -128,9 +128,11 @@ export default class extends Controller {
       })
       this.placeMarker().setVisible(true)
 
+      const lat = place.geometry.location.lat()
+      const lng = place.geometry.location.lng()
       this.googlePlaceIdTarget.value = place.place_id
-      this.latitudeTarget.value = place.geometry.location.lat()
-      this.longitudeTarget.value = place.geometry.location.lng()
+      this.latitudeTarget.value = lat
+      this.longitudeTarget.value = lng
     })
 
     return this._placeAutoComplete
@@ -170,8 +172,10 @@ export default class extends Controller {
       })
 
     this._locationMarker.addListener("dragend", (e) => {
-      this.latitudeTarget.value = e.latLng.lat()
-      this.longitudeTarget.value = e.latLng.lng()
+      const lat = e.latLng.lat()
+      const lng = e.latLng.lng()
+      this.latitudeTarget.value = lat
+      this.longitudeTarget.value = lng
     })
 
     return this._locationMarker
@@ -193,8 +197,10 @@ export default class extends Controller {
     this.locationMap().addListener("click", (e) => {
       this.locationMarker().setPosition(e.latLng)
 
-      this.latitudeTarget.value = e.latLng.lat()
-      this.longitudeTarget.value = e.latLng.lng()
+      const lat = e.latLng.lat()
+      const lng = e.latLng.lng()
+      this.latitudeTarget.value = lat
+      this.longitudeTarget.value = lng
     })
 
     this._locationAutoComplete.addListener("place_changed", () => {

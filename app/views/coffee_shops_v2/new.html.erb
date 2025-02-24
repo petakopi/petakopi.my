@@ -24,11 +24,9 @@
         },
         method: "post" do |f| %>
 
-        <%= f.fields_for :google_location do |location_form| %>
-          <%= location_form.hidden_field :place_id, data: { maps_target: "googlePlaceId" } %>
-          <%= location_form.hidden_field :lat, data: { maps_target: "latitude" }  %>
-          <%= location_form.hidden_field :lng, data: { maps_target: "longitude" }  %>
-        <% end %>
+        <%= f.hidden_field :google_place_id, data: { maps_target: "googlePlaceId" } %>
+        <%= f.hidden_field :tmp_lat, data: { maps_target: "latitude" } %>
+        <%= f.hidden_field :tmp_lng, data: { maps_target: "longitude" } %>
 
         <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
           <div class="space-y-6 sm:space-y-5">

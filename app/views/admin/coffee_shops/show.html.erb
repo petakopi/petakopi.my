@@ -117,36 +117,38 @@
         </dd>
       </div>
 
-      <% if @coffee_shop.google_location %>
-        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">
-            Location
-          </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <%=
-              [
-                @coffee_shop.district,
-                @coffee_shop.state
-              ].compact.join(", ")
-            %>
-          </dd>
-        </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Location
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%=
+            [
+              @coffee_shop.district,
+              @coffee_shop.state
+            ].compact.join(", ")
+          %>
+        </dd>
+      </div>
 
+      <% if @coffee_shop.google_place_id.present? %>
         <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">
             Google Place ID
           </dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <%= @coffee_shop.google_location.place_id %>
+            <%= @coffee_shop.google_place_id %>
           </dd>
         </div>
+      <% end %>
 
+      <% if @coffee_shop.location.present? %>
         <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">
             Latitude
           </dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <%= @coffee_shop.google_location.lat %>
+            <%= @coffee_shop.lat %>
           </dd>
         </div>
 
@@ -155,7 +157,7 @@
             Longitude
           </dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <%= @coffee_shop.google_location.lng %>
+            <%= @coffee_shop.lng %>
           </dd>
         </div>
       <% end %>

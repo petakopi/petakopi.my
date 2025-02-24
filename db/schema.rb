@@ -10,9 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_10_121056) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_24_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_stat_statements"
+  enable_extension "pgcrypto"
   enable_extension "postgis"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
@@ -191,6 +193,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_10_121056) do
     t.string "uuid"
     t.string "district"
     t.string "state"
+    t.geography "location", limit: {srid: 4326, type: "st_point", geographic: true}
+    t.string "google_place_id"
+    t.index ["location"], name: "index_coffee_shops_on_location", using: :gist
     t.index ["slug"], name: "index_coffee_shops_on_slug", unique: true
     t.index ["status"], name: "index_coffee_shops_on_status"
     t.index ["submitter_user_id"], name: "index_coffee_shops_on_submitter_user_id"

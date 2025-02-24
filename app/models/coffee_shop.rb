@@ -4,15 +4,12 @@ class CoffeeShop < ApplicationRecord
   serialize :urls, coder: HashSerializer
   store_accessor :urls,
     :facebook,
-    :google_embed,
-    :google_map,
     :instagram,
     :tiktok,
     :twitter,
-    :waze,
     :whatsapp
 
-  attr_accessor :logo_url, :latitude, :longitude, :google_place_id
+  attr_accessor :logo_url
 
   enum(
     :status, {
@@ -41,7 +38,6 @@ class CoffeeShop < ApplicationRecord
   has_many :opening_hours, dependent: :destroy
   has_many :feedbacks
 
-  has_one :google_location, dependent: :destroy
   has_one_attached :logo
 
   validates :slug, presence: true
@@ -56,14 +52,25 @@ class CoffeeShop < ApplicationRecord
   after_save :process_logo
 
   accepts_nested_attributes_for :coffee_shop_tags
-  accepts_nested_attributes_for :google_location
 
   has_rich_text :description
 
-  def google_map
-    return "#" if google_location.blank?
+  def lat
+    location&.y
+  end
 
-    google_location.url
+  def lng
+    location&.x
+  end
+
+  def google_map
+    return "#" if location.blank?
+
+    if google_place_id.present?
+      "https://www.google.com/maps/search/?api=1&query=#{lat},#{lng}&query_place_id=#{google_place_id}"
+    else
+      "https://www.google.com/maps/?q=#{lat},#{lng}"
+    end
   end
 
   def clean_urls

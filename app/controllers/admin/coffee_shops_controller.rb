@@ -82,7 +82,7 @@ class Admin::CoffeeShopsController < AdminController
 
   def set_coffee_shop
     @coffee_shop =
-      CoffeeShop
+      CoffeeShopForm
         .includes(:tags, :opening_hours)
         .find(params[:id])
   end
@@ -94,9 +94,10 @@ class Admin::CoffeeShopsController < AdminController
         :admin_notes,
         :description,
         :facebook,
+        :google_place_id,
         :instagram,
-        :lat,
-        :lng,
+        :tmp_lat,
+        :tmp_lng,
         :logo,
         :name,
         :slug,
@@ -104,12 +105,6 @@ class Admin::CoffeeShopsController < AdminController
         :tiktok,
         :twitter,
         :whatsapp,
-        google_location_attributes: [
-          :id,
-          :lat,
-          :lng,
-          :place_id
-        ],
         tag_ids: []
       )
   end
