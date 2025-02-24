@@ -14,3 +14,12 @@ digitalocean:
   bucket: petakopi
   region: unused
   public: true
+
+cloudflare:
+  service: S3
+  endpoint: https://<%= ENV["CLOUDFLARE_R2_ENDPOINT"] %>.r2.cloudflarestorage.com
+  access_key_id: <%= ENV["CLOUDFLARE_R2_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["CLOUDFLARE_R2_SECRET_ACCESS_KEY"] %>
+  region: auto
+  bucket: petakopi-my
+  public: true
