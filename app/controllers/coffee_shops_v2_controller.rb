@@ -3,17 +3,14 @@ class CoffeeShopsV2Controller < ApplicationController
 
   def new
     @coffee_shop = CoffeeShop.new
-    @coffee_shop.build_google_location
   end
 
   def create
-    @coffee_shop = CoffeeShopCreatorForm.new(coffee_shop_attributes: coffee_shop_params)
+    @coffee_shop = CoffeeShopForm.new(coffee_shop_params)
 
     if @coffee_shop.save
       redirect_to new_coffee_shops_v2_path, notice: success_message
     else
-      @coffee_shop = @coffee_shop.coffee_shop
-
       render :new, status: :unprocessable_entity
     end
   end
@@ -27,18 +24,14 @@ class CoffeeShopsV2Controller < ApplicationController
         :facebook,
         :google_place_id,
         :instagram,
-        :latitude,
+        :location,
         :logo,
-        :longitude,
         :name,
         :tiktok,
+        :tmp_lat,
+        :tmp_lng,
         :twitter,
         :whatsapp,
-        google_location_attributes: [
-          :lat,
-          :lng,
-          :place_id
-        ],
         tag_ids: []
       )
   end

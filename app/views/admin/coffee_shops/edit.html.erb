@@ -20,7 +20,7 @@
       data-select-url-value="<%= cities_locations_path %>"
       data-select-param-value="state"
       >
-      <%= form_for [:admin, @coffee_shop] do |f| %>
+      <%= form_with model: [:admin, @coffee_shop] do |f| %>
         <div class="space-y-5 divide-y divide-gray-200">
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
             <%= f.label :slug, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
@@ -49,56 +49,56 @@
             </div>
           </div>
 
-          <%= f.fields_for :google_location do |location_form| %>
-            <%= location_form.hidden_field :id %>
-
-            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-              <%= location_form.label :place_id,
-                class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+            <%= f.label :google_place_id,
+              class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do
+            %>
+              Google Place ID
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :google_place_id,
+                class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md",
+                placeholder: "Place ID"
               %>
-                Google Place ID
-              <% end %>
-              <div class="mt-1">
-                <%= location_form.text_field :place_id,
-                  class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md",
-                  placeholder: "Place ID"
-                %>
-              </div>
-              <div class="mt-1 text-sm">
-                <%= link_to "View Map",
-                  location_form.object.url,
-                  target: "_blank",
-                  class: "text-brown-500 hover:text-brown-900"
-                %>
-              </div>
             </div>
-
-            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-              <%= location_form.label :lat,
-                class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do
+            <div class="mt-1 text-sm">
+              <%= link_to "View Map",
+                @coffee_shop.google_map,
+                target: "_blank",
+                class: "text-brown-500 hover:text-brown-900"
               %>
-                Latitude
-              <% end %>
-              <div class="mt-1">
-                <%= location_form.text_field :lat,
-                  class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md",
-                  placeholder: "Latitude"
-                %>
-              </div>
             </div>
+          </div>
 
-            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-              <%= location_form.label :lng,
-                class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+            <%= f.label :lat,
+              class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do
+            %>
+              Latitude
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :tmp_lat,
+                value: @coffee_shop.lat,
+                class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md",
+                placeholder: "Latitude"
               %>
-                Longitude
-              <% end %>
-              <div class="mt-1">
-                <%= location_form.text_field :lng, class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md", placeholder: "Longitude" %>
-              </div>
             </div>
+          </div>
 
-          <% end %>
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+            <%= f.label :lng,
+              class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do
+            %>
+              Longitude
+            <% end %>
+            <div class="mt-1">
+              <%= f.text_field :tmp_lng,
+                value: @coffee_shop.lng,
+                class: "max-w-lg block w-full shadow-sm focus:ring-brown-500 focus:border-brown-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md",
+                placeholder: "Longitude"
+              %>
+            </div>
+          </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
             <%= f.label :district, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
