@@ -56,26 +56,11 @@ class GoogleApi::GoogleLocationSyncer
     response = HTTP.get("https://maps.googleapis.com/maps/api/geocode/json?place_id=#{@google_location.place_id}&key=#{api_key}")
 
     if response.status.success? && response.parse["error_message"].blank?
-      address = response.parse.dig("results", 0, "address_components")
-
-      administrative_area_level_1 =
-        address.find { |x| x["types"].include?("administrative_area_level_1") }&.[]("long_name")
-
       @google_location.assign_attributes(
         lat:
           response.parse.dig("results", 0, "geometry", "location", "lat"),
         lng:
-          response.parse.dig("results", 0, "geometry", "location", "lng"),
-        locality:
-          address.find { |x| x["types"].include?("locality") }&.[]("long_name"),
-        administrative_area_level_1:
-          GoogleLocation::NORMALIZED_NAMES[administrative_area_level_1] || administrative_area_level_1,
-        administrative_area_level_2:
-          address.find { |x| x["types"].include?("administrative_area_level_2") }&.[]("long_name"),
-        postal_code:
-          address.find { |x| x["types"].include?("postal_code") }&.[]("long_name"),
-        country:
-          address.find { |x| x["types"].include?("country") }&.[]("long_name")
+          response.parse.dig("results", 0, "geometry", "location", "lng")
       )
 
       Success(nil)
