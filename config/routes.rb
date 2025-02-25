@@ -55,7 +55,7 @@ Rails.application.routes.draw do
     elsif Rails.env.development? || Rails.env.test?
       route_for(:rails_blob, blob)
     else
-      File.join("https://assets-v2.petakopi.my", blob.key)
+      File.join("https://assets.petakopi.my", blob.key)
     end
   end
 
