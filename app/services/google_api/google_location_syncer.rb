@@ -3,33 +3,32 @@ class GoogleApi::GoogleLocationSyncer
   include Dry::Monads[:result, :do]
 
   ValidationSchema = Dry::Schema.Params do
-    optional(:place_id).maybe(:str?)
-    optional(:lat).maybe(:float?)
-    optional(:lng).maybe(:float?)
+    optional(:google_place_id).maybe(:string)
+    optional(:location)
 
     rules do
       rule(:place_or_coords) do
-        if values[:place_id].blank? || (values[:lat].blank? && values[:lng].blank?)
-          key.failure("must have either place_id or lat/lng")
+        if values[:google_place_id].blank? && values[:location].blank?
+          key.failure("must have either google_place_id or location")
         end
       end
     end
   end
 
-  def initialize(google_location:)
-    @google_location = google_location
+  def initialize(coffee_shop:)
+    @coffee_shop = coffee_shop
   end
 
   def call
     yield validate_params
 
-    if fetch_from_place?
-      yield fetch_location_from_place_id
-    else
-      yield reverse_geocoding
+    if @coffee_shop.google_place_id.present?
+      yield refresh_location_from_google
     end
 
-    save_google_location
+    yield reverse_geocoding
+
+    save_coffee_shop
   end
 
   private
@@ -39,7 +38,7 @@ class GoogleApi::GoogleLocationSyncer
   end
 
   def validate_params
-    result = ValidationSchema.call(@google_location.attributes)
+    result = ValidationSchema.call(@coffee_shop.attributes)
 
     if result.success?
       Success(nil)
@@ -48,64 +47,45 @@ class GoogleApi::GoogleLocationSyncer
     end
   end
 
-  def fetch_from_place?
-    @google_location.place_id.present?
-  end
-
-  def fetch_location_from_place_id
-    response = HTTP.get("https://maps.googleapis.com/maps/api/geocode/json?place_id=#{@google_location.place_id}&key=#{api_key}")
+  def refresh_location_from_google
+    response = HTTP.get("https://maps.googleapis.com/maps/api/geocode/json?place_id=#{@coffee_shop.google_place_id}&key=#{api_key}")
 
     if response.status.success? && response.parse["error_message"].blank?
-      @google_location.assign_attributes(
-        lat:
-          response.parse.dig("results", 0, "geometry", "location", "lat"),
-        lng:
-          response.parse.dig("results", 0, "geometry", "location", "lng")
-      )
+      lat = response.parse.dig("results", 0, "geometry", "location", "lat")
+      lng = response.parse.dig("results", 0, "geometry", "location", "lng")
+
+      # Create PostGIS point
+      @coffee_shop.location = "POINT(#{lng} #{lat})"
 
       Success(nil)
     elsif response.status.success? && response.parse["error_message"].present?
-      Failure("Place ID: #{@google_location.place_id} - #{response.parse["error_message"]}")
+      Failure("Place ID: #{@coffee_shop.google_place_id} - #{response.parse["error_message"]}")
     else
       Failure("Error fetching location from Google using place_id")
     end
   end
 
   def reverse_geocoding
-    latlng = [@google_location.lat, @google_location.lng].join(",")
+    state_geo = GeoLocation.by_point.find_state_by_point(@coffee_shop.lng, @coffee_shop.lat)
+    district_geo = GeoLocation.by_point.find_district_by_point(@coffee_shop.lng, @coffee_shop.lat)
 
-    response = HTTP.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=#{latlng}&key=#{api_key}")
-
-    if response.status.success?
-      address = response.parse.dig("results", 0, "address_components")
-
-      administrative_area_level_1 =
-        address.find { |x| x["types"].include?("administrative_area_level_1") }&.[]("long_name")
-
-      @google_location.assign_attributes(
-        locality:
-          address.find { |x| x["types"].include?("locality") }&.[]("long_name"),
-        administrative_area_level_1:
-          GoogleLocation::NORMALIZED_NAMES[administrative_area_level_1] || administrative_area_level_1,
-        administrative_area_level_2:
-          address.find { |x| x["types"].include?("administrative_area_level_2") }&.[]("long_name"),
-        postal_code:
-          address.find { |x| x["types"].include?("postal_code") }&.[]("long_name"),
-        country:
-          address.find { |x| x["types"].include?("country") }&.[]("long_name")
+    if state_geo || district_geo
+      @coffee_shop.assign_attributes(
+        state: state_geo&.name,
+        district: district_geo&.name
       )
 
       Success(nil)
     else
-      Failure("Error fetching location from Google using lat/lng")
+      Failure("Could not find state or district for coordinates: #{@coffee_shop.lat}, #{@coffee_shop.lng}")
     end
   end
 
-  def save_google_location
-    if @google_location.save
-      Success(@google_location)
+  def save_coffee_shop
+    if @coffee_shop.save
+      Success(@coffee_shop)
     else
-      Failure(@google_location.errors.full_messages.join(", "))
+      Failure(@coffee_shop.errors.full_messages.join(", "))
     end
   end
 end

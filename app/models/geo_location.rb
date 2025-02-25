@@ -5,7 +5,7 @@ class GeoLocation < ApplicationRecord
   validates :kind, presence: true
   validates :geom, presence: true
 
-  scope :districts, -> { where(kind: "district") }
+  scope :districts, -> { where(kind: "region") }
   scope :states, -> { where(kind: "state") }
 
   def self.by_point
