@@ -64,10 +64,8 @@ class Admin::CoffeeShopsController < AdminController
   end
 
   def update_locality
-    google_location = @coffee_shop.google_location
-
     result =
-      GoogleApi::GoogleLocationSyncer.call(google_location: google_location)
+      GoogleApi::GoogleLocationSyncer.call(coffee_shop: @coffee_shop)
 
     if result.success?
       redirect_to admin_coffee_shop_url(@coffee_shop),

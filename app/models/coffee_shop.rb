@@ -1,6 +1,8 @@
 class CoffeeShop < ApplicationRecord
   has_paper_trail on: [:update]
 
+  after_save :sync_google_location
+
   serialize :urls, coder: HashSerializer
   store_accessor :urls,
     :facebook,
@@ -110,5 +112,13 @@ class CoffeeShop < ApplicationRecord
     return unless status_changed? && status_published? && approved_at.blank?
 
     self.approved_at = Time.current
+  end
+
+  private
+
+  def sync_google_location
+    if saved_change_to_google_place_id? || saved_change_to_location?
+      GoogleApi::GoogleLocationSyncWorker.perform_async(id)
+    end
   end
 end
