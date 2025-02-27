@@ -1,3 +1,10 @@
+<%= content_for(:extra_js) do %>
+<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{ENV.fetch('GOOGLE_API_KEY_WEB')}&libraries=places&callback=dispatchMapsFormEvent",
+    async: true,
+    defer: true,
+    "data-turbolinks-eval": false %>
+<% end %>
+
 <div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
   <%= render partial: "coffee_shops/coffee_shop_menu", locals: { coffee_shop: @coffee_shop } %>
 
@@ -15,19 +22,16 @@
         controller: "maps",
         action: "google-maps-callback@window->maps#initializeMap",
         maps_coffee_shop_name_value: @coffee_shop.name,
-        maps_place_id_value: @coffee_shop.google_location.place_id,
-        maps_lat_value: @coffee_shop.google_location.lat,
-        maps_lng_value: @coffee_shop.google_location.lng,
+        maps_place_id_value: @coffee_shop.google_place_id,
+        maps_lat_value: @coffee_shop.lat,
+        maps_lng_value: @coffee_shop.lng,
       } do |f|
     %>
       <div class="shadow sm:rounded-md sm:overflow-hidden">
         <div class="bg-white py-6 px-4 sm:p-6">
-
-            <%= f.fields_for :google_location do |location_form| %>
-              <%= location_form.hidden_field :place_id, data: { maps_target: "googlePlaceId" } %>
-              <%= location_form.hidden_field :lat, data: { maps_target: "latitude" }  %>
-              <%= location_form.hidden_field :lng, data: { maps_target: "longitude" }  %>
-            <% end %>
+            <%= f.hidden_field :google_place_id, data: { maps_target: "googlePlaceId" } %>
+            <%= f.hidden_field :tmp_lat, value: @coffee_shop.lat, data: { maps_target: "latitude" } %>
+            <%= f.hidden_field :tmp_lng, value: @coffee_shop.lng, data: { maps_target: "longitude" } %>
 
             <div class="space-y-6 sm:space-y-5">
               <div>
@@ -35,7 +39,7 @@
                   Location
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">
-                  We depends on Google to get most of the information.
+                  We depend on Google to get most of the information.
                 </p>
               </div>
 
@@ -53,7 +57,7 @@
                               class="h-4 w-4 border-gray-300 text-brown-600 focus:ring-brown-600"
                               data-action="change->maps#toggleLocation"
                               data-maps-target="placeRadio"
-                              <%= @coffee_shop.google_location.has_place_id? ? "checked" : "" %>
+                              <%= @coffee_shop.google_place_id.present? ? "checked" : "" %>
                             />
                           </div>
                           <div class="ml-3 text-sm leading-6">
@@ -70,7 +74,7 @@
                           </div>
                         </div>
                         <div
-                          class="relative ml-7 h-80 <%= @coffee_shop.google_location.has_place_id? ? "" : "hidden" %>"
+                          class="relative ml-7 h-80 <%= @coffee_shop.google_place_id.present? ? "" : "hidden" %>"
                           data-maps-target="placeContainer">
                           <div style="display: none">
                             <input
@@ -93,7 +97,7 @@
                               class="h-4 w-4 border-gray-300 text-brown-600 focus:ring-brown-600"
                               data-action="change->maps#toggleLocation"
                               data-maps-target="locationRadio"
-                              <%= @coffee_shop.google_location.has_place_id? ? "" : "checked" %>
+                              <%= @coffee_shop.google_place_id.present? ? "" : "checked" %>
                             />
                           </div>
                           <div class="ml-3 text-sm leading-6">
@@ -111,7 +115,7 @@
                           </div>
                         </div>
                         <div
-                          class="relative ml-7 h-80 <%= @coffee_shop.google_location.has_place_id? ? "hidden" : "" %>"
+                          class="relative ml-7 h-80 <%= @coffee_shop.google_place_id.present? ? "hidden" : "" %>"
                           data-maps-target="locationContainer">
                           <div style="display: none">
                             <input

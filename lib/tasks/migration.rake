@@ -1,19 +1,20 @@
 namespace :migration do
-  desc "Populate CoffeeShop.location"
-  task populate_from_google_location: :environment do
-    CoffeeShop
-      .status_published
-      .where(location: nil)
-      .find_each do |coffee_shop|
-        puts "Processing #{coffee_shop.id} - #{coffee_shop.name}"
-        coffee_shop.update(
-          location: "POINT(#{coffee_shop.google_location.lng} #{coffee_shop.google_location.lat})",
-          google_place_id: coffee_shop.google_location.place_id
-        )
-      end
-
-    puts "Done with #{CoffeeShop.status_published.where(location: nil).count} coffee shops left"
-  end
+  # TODO: Remove
+  # desc "Populate CoffeeShop.location"
+  # task populate_from_google_location: :environment do
+  #   CoffeeShop
+  #     .status_published
+  #     .where(location: nil)
+  #     .find_each do |coffee_shop|
+  #       puts "Processing #{coffee_shop.id} - #{coffee_shop.name}"
+  #       coffee_shop.update(
+  #         location: "POINT(#{coffee_shop.google_location.lng} #{coffee_shop.google_location.lat})",
+  #         google_place_id: coffee_shop.google_location.place_id
+  #       )
+  #     end
+  #
+  #   puts "Done with #{CoffeeShop.status_published.where(location: nil).count} coffee shops left"
+  # end
 
   desc "Populate CoffeeShop.district and CoffeeShop.state"
   task populate_district_state: :environment do
