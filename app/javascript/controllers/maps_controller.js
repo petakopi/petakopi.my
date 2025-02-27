@@ -95,6 +95,11 @@ export default class extends Controller {
       return this._placeAutoComplete
     }
 
+    // Pre-populate the search box with the coffee shop name
+    if (this.coffeeShopNameValue) {
+      this.placeInputTarget.value = this.coffeeShopNameValue
+    }
+
     this._placeAutoComplete =
       new google.maps.places.Autocomplete(this.placeInputTarget, {
         componentRestrictions: { country: "my" },
@@ -130,6 +135,7 @@ export default class extends Controller {
 
       const lat = place.geometry.location.lat()
       const lng = place.geometry.location.lng()
+
       this.googlePlaceIdTarget.value = place.place_id
       this.latitudeTarget.value = lat
       this.longitudeTarget.value = lng
@@ -184,6 +190,11 @@ export default class extends Controller {
   locationAutoComplete() {
     if (this._locationAutoComplete != undefined || !this.hasLocationInputTarget) {
       return this._locationAutoComplete
+    }
+
+    // Pre-populate the search box with the coffee shop name
+    if (this.coffeeShopNameValue) {
+      this.locationInputTarget.value = this.coffeeShopNameValue
     }
 
     this._locationAutoComplete =

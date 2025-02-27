@@ -1,10 +1,3 @@
-<%= content_for(:extra_js) do %>
-<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{ENV.fetch('GOOGLE_API_KEY_WEB')}&libraries=places&callback=dispatchMapsFormEvent",
-    async: true,
-    defer: true,
-    "data-turbolinks-eval": false %>
-<% end %>
-
 <div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
   <%= render partial: "coffee_shops/coffee_shop_menu", locals: { coffee_shop: @coffee_shop } %>
 
