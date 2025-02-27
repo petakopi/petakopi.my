@@ -1,8 +1,6 @@
 class CoffeeShop < ApplicationRecord
   has_paper_trail on: [:update]
 
-  after_save :sync_google_location
-
   serialize :urls, coder: HashSerializer
   store_accessor :urls,
     :facebook,
@@ -41,6 +39,7 @@ class CoffeeShop < ApplicationRecord
   has_many :feedbacks
 
   has_one_attached :logo
+  has_one :google_location, dependent: :destroy
 
   validates :slug, presence: true
   validates :slug, uniqueness: true
@@ -52,6 +51,7 @@ class CoffeeShop < ApplicationRecord
   before_save :update_approved_at
 
   after_save :process_logo
+  after_save :sync_google_location
 
   accepts_nested_attributes_for :coffee_shop_tags
 
