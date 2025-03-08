@@ -44,7 +44,7 @@ gem "rails", "~> 8.0.1"
 gem "rails_cloudflare_turnstile", github: "petakopi/rails-cloudflare-turnstile", branch: "rails-v8" # Cloudflare Turnstile (captcha)
 gem "redis", "~> 5.0" # Use Redis adapter to run Action Cable in production
 gem "rgeo-geojson" # GeoJSON support for RGeo
-gem "sidekiq", "<= 7.3.6" # Background jobs
+gem "sidekiq", "<= 8.0.1" # Background jobs
 gem "sidekiq-cron" # Sidekiq + Cron
 gem "sidekiq-failures" # Monitor failures in Sidekiq
 gem "sidekiq-throttled" # Throttle sidekiq jobs
