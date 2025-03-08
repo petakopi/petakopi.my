@@ -7,7 +7,6 @@ gem "active_decorator" # Decorator
 gem "activerecord_cursor_paginate" # Cursor pagination
 gem "activerecord-postgis-adapter", github: "rgeo/activerecord-postgis-adapter", branch: "master" # PostGIS adapter for ActiveRecord
 gem "ahoy_matey" # analytics
-gem "aws-sdk-s3", require: false
 gem "bugsnag" # Error monitoring
 gem "bootsnap", require: false # Reduces boot times through caching; required in config/boot.rb
 gem "celluloid" # Actor-based concurrent object framework for Ruby
@@ -81,3 +80,7 @@ group :test do
   gem "webdrivers", "~> 5.0", require: false
   gem "simplecov", require: false
 end
+
+# Locked due to checksum bug
+gem "aws-sdk-s3", "1.170", require: false
+gem "aws-sdk-core", "3.211"
