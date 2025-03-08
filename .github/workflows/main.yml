@@ -16,7 +16,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:11-alpine
+        image: postgis/postgis:17-3.5
         ports:
           - "5432:5432"
         env:
@@ -26,14 +26,14 @@ jobs:
 
     env:
       RAILS_ENV: test
-      DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
+      DATABASE_URL: "postgis://rails:password@localhost:5432/rails_test"
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@v1.187.0
+        uses: ruby/setup-ruby@v1.222.0
         with:
           ruby-version: "3.4.1"
           bundler-cache: true
