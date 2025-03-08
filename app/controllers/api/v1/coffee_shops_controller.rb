@@ -3,7 +3,6 @@ class Api::V1::CoffeeShopsController < ApiController
     coffee_shops =
       CoffeeShop
         .includes(
-          :google_location,
           logo_attachment: :blob
         )
         .status_published

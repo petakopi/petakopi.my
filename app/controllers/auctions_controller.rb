@@ -23,7 +23,7 @@ class AuctionsController < ApplicationController
     @bids =
       @auction
         .bids
-        .includes(coffee_shop: [:google_location, logo_attachment: :blob])
+        .includes(coffee_shop: [logo_attachment: :blob])
         .order(amount: :desc, created_at: :asc)
     @top_bids = @bids.first(2)
   end

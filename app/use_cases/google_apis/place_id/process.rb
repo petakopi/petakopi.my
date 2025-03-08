@@ -6,7 +6,7 @@ class GoogleApis::PlaceId::Process < Micro::Case
   attributes :google_place_id
 
   def call!
-    if coffee_shop.google_location.place_id.present?
+    if coffee_shop.google_place_id.present?
       return Success result: {coffee_shop: coffee_shop}
     end
 

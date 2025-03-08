@@ -17,7 +17,6 @@ class Auction < ApplicationRecord
     bids
       .includes(
         coffee_shop: [
-          :google_location,
           logo_attachment: :blob
         ]
       )

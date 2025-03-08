@@ -18,7 +18,6 @@ class DuplicateCoffeeShop
       filename: coffee_shop.logo.filename,
       content_type: coffee_shop.logo.content_type
     )
-    dup.google_location = coffee_shop.google_location.dup
     dup.save!
 
     dup

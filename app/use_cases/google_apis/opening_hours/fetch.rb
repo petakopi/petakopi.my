@@ -28,7 +28,7 @@ class GoogleApis::OpeningHours::Fetch < Micro::Case
     @response ||=
       begin
         params = {
-          placeid: coffee_shop.google_location.place_id,
+          placeid: coffee_shop.google_place_id,
           fields: "opening_hours",
           key: api_key
         }
