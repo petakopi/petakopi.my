@@ -1,71 +1,107 @@
 require "open-uri"
+require "tempfile"
 
+# LogoProcessor handles image processing for coffee shop logos
+# It resizes, optimizes, and potentially compresses images to ensure
+# they meet size and quality requirements
 class LogoProcessor
   include Callable
 
-  ACCEPTABLE_FILE_SIZE = 100_000
+  ACCEPTABLE_FILE_SIZE = 20_000 # 20KB
+  MAX_WIDTH = 512
 
   def initialize(coffee_shop:)
     @coffee_shop = coffee_shop
+    @temp_files = []
   end
 
   def call
     return unless valid?
 
-    process
-    reattach
-    cleanup
+    Rails.logger.info("Processing logo for coffee shop ##{coffee_shop.id}")
+
+    begin
+      process
+      reattach
+      true
+    rescue => e
+      Rails.logger.error("Logo processing failed: #{e.message}")
+      false
+    ensure
+      cleanup
+    end
   end
 
   private
 
-  attr_reader :coffee_shop
+  attr_reader :coffee_shop, :temp_files
 
   def valid?
-    coffee_shop.logo.attached?
+    return true if coffee_shop.logo.attached?
+
+    Rails.logger.info("No logo attached for coffee shop ##{coffee_shop.id}")
+    false
   end
 
   def process
-    input = "#{path}original-#{file_name}"
-    output = "#{path}#{file_name}"
+    input_file = create_temp_file("original")
+    output_file = create_temp_file("processed")
 
-    IO.copy_stream(URI.parse(coffee_shop.logo.url).open, input)
+    # Download the original image
+    blob = coffee_shop.logo.blob
+    File.binwrite(input_file.path, blob.download)
 
+    # Resize the image
+    Rails.logger.info("Resizing logo to max width #{MAX_WIDTH}px")
     ImageProcessing::Vips
-      .source(input)
-      .resize_to_limit(512, nil)
-      .call(destination: output)
+      .source(input_file.path)
+      .resize_to_limit(MAX_WIDTH, nil)
+      .call(destination: output_file.path)
 
-    ImageOptim.new.optimize_image!(output)
+    # Optimize the image
+    Rails.logger.info("Optimizing logo image")
+    ImageOptim.new.optimize_image!(output_file.path)
 
-    return if File.size(output) <= ACCEPTABLE_FILE_SIZE
+    # Compress with TinyPNG if still too large
+    if File.size(output_file.path) > ACCEPTABLE_FILE_SIZE
+      Rails.logger.info("Logo still too large (#{File.size(output_file.path)} bytes), compressing with TinyPNG")
+      source = Tinify.from_file(output_file.path)
+      source.to_file(output_file.path)
+    end
 
-    source = Tinify.from_file(output)
-    source.to_file(output)
+    @processed_file = output_file
   end
 
   def reattach
+    Rails.logger.info("Reattaching processed logo to coffee shop ##{coffee_shop.id}")
     coffee_shop.logo.attach(
-      io: File.open("#{path}#{file_name}"),
-      filename: file_name.to_s
+      io: File.open(@processed_file.path),
+      filename: generate_filename,
+      content_type: coffee_shop.logo.content_type
     )
+
+    # Bust any caches
+    coffee_shop.touch
   end
 
   def cleanup
-    File.delete("#{path}#{file_name}")
-    File.delete("#{path}original-#{file_name}")
-
-    coffee_shop.touch # bust the cache if there's any
+    Rails.logger.info("Cleaning up temporary files")
+    @temp_files.each do |file|
+      file.close
+      file.unlink if file.respond_to?(:unlink) && File.exist?(file.path)
+    rescue => e
+      Rails.logger.warn("Failed to clean up temp file: #{e.message}")
+    end
   end
 
-  def file_name
-    @file_name ||=
-      begin
-        id = coffee_shop.id
-        random_chars = Time.current.to_i
+  def create_temp_file(prefix)
+    file = Tempfile.new([prefix, file_extension])
+    @temp_files << file
+    file
+  end
 
-        "#{id}-#{random_chars}#{file_extension}"
-      end
+  def generate_filename
+    "#{coffee_shop.id}-#{Time.current.to_i}#{file_extension}"
   end
 
   def file_extension
@@ -75,9 +111,5 @@ class LogoProcessor
     return ext if ext.present?
 
     ".#{logo.content_type.split("/")[1]}"
-  end
-
-  def path
-    "/tmp/"
   end
 end
