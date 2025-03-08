@@ -2,17 +2,9 @@ class MapboxController < ApplicationController
   def index
     coffee_shops =
       CoffeeShop
-        .joins(:google_location)
         .includes(logo_attachment: :blob)
         .status_published
-        .where.not(google_locations: {lat: nil, lng: nil})
-        .select(
-          "id",
-          "name",
-          "slug",
-          "google_locations.lat",
-          "google_locations.lng"
-        )
+        .where.not(location: nil)
 
     @coffee_shops =
       CoffeeShopsListQuery.call(

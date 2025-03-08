@@ -117,6 +117,8 @@ class CoffeeShop < ApplicationRecord
   private
 
   def sync_google_location
+    return unless status_published?
+
     if saved_change_to_google_place_id? || saved_change_to_location?
       GoogleApi::GoogleLocationSyncWorker.perform_async(id)
     end

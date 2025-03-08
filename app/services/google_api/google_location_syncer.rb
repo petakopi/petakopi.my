@@ -58,10 +58,8 @@ class GoogleApi::GoogleLocationSyncer
       @coffee_shop.location = "POINT(#{lng} #{lat})"
 
       Success(nil)
-    elsif response.status.success? && response.parse["error_message"].present?
-      Failure("Place ID: #{@coffee_shop.google_place_id} - #{response.parse["error_message"]}")
     else
-      Failure("Error fetching location from Google using place_id")
+      Failure("Error refreshing location from Google: #{@coffee_shop.google_place_id} - #{response.parse["error_message"]}")
     end
   end
 
