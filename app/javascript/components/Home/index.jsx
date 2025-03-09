@@ -11,7 +11,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
 }
 
-export default function Home({ coffee_shops, pagination }) {
+export default function Home() {
   const [tabs, setTabs] = useState(initialTabs.map((tab, index) => ({
     ...tab,
     current: index === 0
@@ -20,10 +20,10 @@ export default function Home({ coffee_shops, pagination }) {
   const [activeTab, setActiveTab] = useState(0)
 
   // Everywhere tab state
-  const [everywhereShops, setEverywhereShops] = useState(coffee_shops || [])
-  const [everywhereNextCursor, setEverywhereNextCursor] = useState(pagination?.next_cursor || null)
-  const [everywhereHasMore, setEverywhereHasMore] = useState(pagination?.has_next || false)
-  const [everywhereLoading, setEverywhereLoading] = useState(false)
+  const [everywhereShops, setEverywhereShops] = useState([])
+  const [everywhereNextCursor, setEverywhereNextCursor] = useState(null)
+  const [everywhereHasMore, setEverywhereHasMore] = useState(true)
+  const [everywhereLoading, setEverywhereLoading] = useState(true)
 
   // Nearby tab state
   const [nearbyShops, setNearbyShops] = useState([])
@@ -65,7 +65,14 @@ export default function Home({ coffee_shops, pagination }) {
     if (node) nearbyObserver.current.observe(node)
   }, [nearbyLoading, nearbyHasMore])
 
+  // Initial data loading for both tabs
   useEffect(() => {
+    // Load everywhere data when component mounts
+    if (everywhereShops.length === 0) {
+      fetchEverywhereShops()
+    }
+
+    // Load nearby data when tab is active and we have location
     if (activeTab === 1) {
       if (locationPermission === "granted" && userLocation) {
         setNearbyLoading(true)
@@ -79,7 +86,7 @@ export default function Home({ coffee_shops, pagination }) {
   const requestLocationPermission = () => {
     // Set to prompt state to show loading indicator
     setLocationPermission("prompt")
-    
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -165,6 +172,29 @@ export default function Home({ coffee_shops, pagination }) {
     }
   }
 
+  const fetchEverywhereShops = async () => {
+    setEverywhereLoading(true)
+    try {
+      const response = await fetch('/api/v1/coffee_shops')
+      const data = await response.json()
+      if (data.status === "success" && data.data && data.data.coffee_shops) {
+        setEverywhereShops(data.data.coffee_shops)
+        setEverywhereNextCursor(data.data.pages.next_cursor)
+        setEverywhereHasMore(data.data.pages.has_next)
+      } else {
+        console.error('Unexpected response format:', data)
+        setEverywhereShops([])
+        setEverywhereHasMore(false)
+      }
+    } catch (error) {
+      console.error('Error fetching everywhere coffee shops:', error)
+      setEverywhereShops([])
+      setEverywhereHasMore(false)
+    } finally {
+      setEverywhereLoading(false)
+    }
+  }
+
   const fetchMoreEverywhereShops = async () => {
     if (!everywhereNextCursor || !everywhereHasMore || everywhereLoading) return
 
@@ -213,7 +243,7 @@ export default function Home({ coffee_shops, pagination }) {
       fetchNearbyShops()
     }
   }
-  
+
   return (
     <div>
       <div className="border-b border-gray-200">
@@ -238,7 +268,7 @@ export default function Home({ coffee_shops, pagination }) {
       <div className="mt-8 p-4 bg-gray-50 rounded-lg">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {activeTab === 0 && (
-            <EverywhereTab 
+            <EverywhereTab
               everywhereShops={everywhereShops}
               everywhereLoading={everywhereLoading}
               everywhereHasMore={everywhereHasMore}
@@ -247,7 +277,7 @@ export default function Home({ coffee_shops, pagination }) {
           )}
 
           {activeTab === 1 && (
-            <NearbyTab 
+            <NearbyTab
               nearbyShops={nearbyShops}
               nearbyLoading={nearbyLoading}
               nearbyHasMore={nearbyHasMore}
