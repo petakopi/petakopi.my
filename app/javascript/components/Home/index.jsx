@@ -77,6 +77,9 @@ export default function Home({ coffee_shops, pagination }) {
   }, [activeTab, locationPermission, userLocation, selectedDistance])
 
   const requestLocationPermission = () => {
+    // Set to prompt state to show loading indicator
+    setLocationPermission("prompt")
+    
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
