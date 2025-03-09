@@ -4,7 +4,7 @@
       <div class="flex-shrink-0 h-10 w-10">
         <%= link_to main_coffee_shop_path(id: coffee_shop.slug) do %>
           <% if coffee_shop.logo.attached? %>
-            <%= image_tag optimized_blob_url(asset: coffee_shop.logo, options: ["width=80", "height=80"]),
+            <%= image_tag optimized_blob_url(asset: coffee_shop.logo, options: ["width=200", "height=200"]),
               class: "h-10 w-10 rounded-full border border-brown",
               loading: "lazy",
               alt: coffee_shop.name
