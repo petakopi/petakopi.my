@@ -28,6 +28,7 @@
     "tailwindcss-displaymodes": "^1.0.8",
     "trix": "^2.0.0-alpha.1",
     "turbo-mount": "^0.4.1",
+    "typescript": "^5.8.2",
     "workbox-cli": "^7.3.0"
   },
   "scripts": {

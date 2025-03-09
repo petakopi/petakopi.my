@@ -86,6 +86,9 @@ importers:
       turbo-mount:
         specifier: ^0.4.1
         version: 0.4.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(stimulus-vite-helpers@3.1.0)
+      typescript:
+        specifier: ^5.8.2
+        version: 5.8.2
       workbox-cli:
         specifier: ^7.3.0
         version: 7.3.0(@types/babel__core@7.20.5)
@@ -2884,6 +2887,11 @@ packages:
 
   typedarray-to-buffer@3.1.5:
     resolution: {integrity: sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==}
+
+  typescript@5.8.2:
+    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
 
   unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
@@ -5921,6 +5929,8 @@ snapshots:
   typedarray-to-buffer@3.1.5:
     dependencies:
       is-typedarray: 1.0.0
+
+  typescript@5.8.2: {}
 
   unbox-primitive@1.0.2:
     dependencies:

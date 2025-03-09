@@ -1,1 +1,0 @@
-import "chartkick/chart.js"

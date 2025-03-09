@@ -22,7 +22,8 @@ module.exports = {
   content: [
     './app/views/**/*.html.erb',
     './app/helpers/**/*.rb',
-    './app/javascript/**/*.js'
+    './app/javascript/**/*.js',
+    './app/javascript/**/*.{js,ts,jsx,tsx}',
   ],
   plugins: [
     require('@tailwindcss/typography'),

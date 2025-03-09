@@ -3,22 +3,22 @@ import "@hotwired/turbo-rails";
 import { Turbo } from "@hotwired/turbo-rails";
 import "@rails/actiontext";
 import "trix";
-import "../turbo-mount"
 
 // Alpine.js and its plugins
 import Alpine from "alpinejs";
 import Tooltip from "@ryangjchandler/alpine-tooltip";
 import focus from '@alpinejs/focus';
 
-// Analytics
+// Other JS libraries
 import "ahoy.js";
+import "chartkick/chart.js"
 
 // Page transition utilities
 import Turn from "@domchristie/turn";
 
 // Local imports
-import "../controllers";
 import "../tailwind.alpine";
+import "../turbo-mount"
 
 /**
  * Turbo Configuration
