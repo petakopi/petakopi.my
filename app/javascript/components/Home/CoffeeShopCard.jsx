@@ -12,13 +12,9 @@ const CoffeeShopCard = ({ coffee_shop, isLastElement, refCallback }) => {
     >
       <div className="flex flex-col h-full">
         <div className="relative mb-3">
-          <img
-            src={coffee_shop.logo && coffee_shop.logo !== ""
-              ? coffee_shop.logo
-              : `https://placehold.co/600x400/brown/white?text=${encodeURIComponent(coffee_shop.name)}`}
-            alt={coffee_shop.name}
-            className="w-full h-48 object-cover rounded-lg"
-          />
+          <div className="w-full h-48 bg-brown-100 rounded-lg flex items-center justify-center">
+            <span className="text-brown-700 text-xl font-medium">{coffee_shop.name}</span>
+          </div>
           {coffee_shop.district && (
             <span className="absolute top-2 right-2 bg-white bg-opacity-90 text-xs px-2 py-1 rounded-full">
               {coffee_shop.district}
