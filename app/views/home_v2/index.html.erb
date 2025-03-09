@@ -1,2 +1,20 @@
-asdf
-<%= turbo_mount("Home") %>
+<%= turbo_mount(
+  "Home",
+  props: {
+    coffee_shops: @page.records.map do |record|
+      {
+        name: record.name,
+        slug: record.slug,
+        district: record.district,
+        state: record.state,
+        links: record.urls.compact_blank.map { |name, url| { name: name, url: url } },
+        updated_at: record.updated_at,
+        logo: record.logo.attached? ? rails_public_blob_url(record.logo) : ""
+      }
+    end,
+    pagination: {
+      next_cursor: @page.next_cursor,
+      has_next: @page.has_next?
+    }
+  }
+) %>
