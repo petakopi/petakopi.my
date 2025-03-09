@@ -24,7 +24,7 @@ import "../turbo-mount"
  * Turbo Configuration
  */
 const configureTurbo = () => {
-  Turbo.setProgressBarDelay(100);
+  Turbo.config.drive.progressBarDelay = 100
 
   document.addEventListener("turbo:frame-missing", (event) => {
     const { detail: { response, visit } } = event;

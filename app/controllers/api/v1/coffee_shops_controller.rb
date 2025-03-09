@@ -1,11 +1,16 @@
 class Api::V1::CoffeeShopsController < ApiController
   def index
     coffee_shops =
-      CoffeeShop
-        .includes(
-          logo_attachment: :blob
-        )
-        .status_published
+      CoffeeShopsListQuery
+        .call(
+          params: params,
+          relation:
+            CoffeeShop
+              .includes(
+                :tags,
+                logo_attachment: :blob
+              )
+        ).status_published
 
     # Default ordering
     order_clause = {id: :desc}
