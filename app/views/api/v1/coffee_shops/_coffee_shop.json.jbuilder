@@ -13,5 +13,5 @@ json.lng coffee_shop.lng
 json.district coffee_shop.district
 json.state coffee_shop.state
 json.url main_coffee_shop_url(id: coffee_shop.slug)
-json.logo optimized_blob_url(asset: coffee_shop.logo, options: ["width=38"])
+json.logo optimized_blob_url(asset: coffee_shop.logo, options: ["width=80"])
 json.updated_at coffee_shop.updated_at

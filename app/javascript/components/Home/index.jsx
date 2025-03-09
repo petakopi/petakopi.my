@@ -32,7 +32,7 @@ export default function Home() {
   const [nearbyLoading, setNearbyLoading] = useState(false)
   const [userLocation, setUserLocation] = useState(null)
   const [locationPermission, setLocationPermission] = useState("prompt") // "granted", "denied", "blocked", "prompt"
-  const [selectedDistance, setSelectedDistance] = useState(10) // Default to 10km
+  const [selectedDistance, setSelectedDistance] = useState(5) // Default to 5km
 
   // Refs for intersection observer
   const everywhereObserver = useRef()
