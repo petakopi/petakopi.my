@@ -27,7 +27,16 @@ const CoffeeShopCard = ({ coffee_shop, isLastElement, refCallback }) => {
         </div>
 
         <div className="flex-grow">
-          <h3 className="font-medium text-lg">{coffee_shop.name}</h3>
+          <div className="flex items-center gap-3 mb-1">
+            {coffee_shop.logo && coffee_shop.logo !== "" && (
+              <img
+                src={coffee_shop.logo}
+                alt={`${coffee_shop.name} logo`}
+                className="w-[38px] h-[38px] rounded-full object-cover"
+              />
+            )}
+            <h3 className="font-medium text-lg">{coffee_shop.name}</h3>
+          </div>
           <p className="text-sm text-gray-600 mt-1">
             {coffee_shop.state || 'Location not specified'}
           </p>
