@@ -40,7 +40,7 @@
               <div>
                 <button type="button" class="flex text-sm rounded-full focus:outline-none" id="user-menu-button" x-ref="button" @click="onButtonClick()" @keyup.space.prevent="onButtonEnter()" @keydown.enter.prevent="onButtonEnter()" aria-expanded="false" aria-haspopup="true" x-bind:aria-expanded="open.toString()" @keydown.arrow-up.prevent="onArrowUp()" @keydown.arrow-down.prevent="onArrowDown()">
                   <% if current_user.avatar.attached? %>
-                    <%= image_tag optimized_blob_url(asset: current_user.avatar, options: ["width=40", "height=40"]),
+                    <%= image_tag optimized_blob_url(asset: current_user.avatar, options: ["width=80", "height=80"]),
                       class: "h-10 w-10 rounded-full border border-brown"
                     %>
                   <% else %>
