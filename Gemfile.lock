@@ -664,6 +664,8 @@ GEM
     tomo-plugin-sidekiq (1.4.2)
       tomo (~> 1.0)
     trailblazer-option (0.1.2)
+    turbo-mount (0.4.1)
+      railties (>= 6.0.0)
     turbo-rails (2.0.13)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
@@ -785,6 +787,7 @@ DEPENDENCIES
   thruster
   tinify
   tomo-plugin-sidekiq
+  turbo-mount
   turbo-rails
   u-case
   uuid7

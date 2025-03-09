@@ -11,6 +11,7 @@
     "@ryangjchandler/alpine-tooltip": "ryangjchandler/alpine-tooltip",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
+    "@vitejs/plugin-react": "^4.3.4",
     "ahoy.js": "^0.4.4",
     "alpinejs": "^3.14.8",
     "autoprefixer": "^10.4.20",
@@ -20,10 +21,13 @@
     "esbuild-rails": "^1.0.7",
     "postcss": "^8.5.2",
     "postcss-import": "^16.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "sass": "^1.85.1",
     "tailwindcss": "^3.4.17",
     "tailwindcss-displaymodes": "^1.0.8",
     "trix": "^2.0.0-alpha.1",
+    "turbo-mount": "^0.4.1",
     "workbox-cli": "^7.3.0"
   },
   "scripts": {

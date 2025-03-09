@@ -3,6 +3,7 @@ import "@hotwired/turbo-rails";
 import { Turbo } from "@hotwired/turbo-rails";
 import "@rails/actiontext";
 import "trix";
+import "../turbo-mount"
 
 // Alpine.js and its plugins
 import Alpine from "alpinejs";
