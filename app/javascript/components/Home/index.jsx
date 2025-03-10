@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import EverywhereTab from "./EverywhereTab"
 import NearbyTab from "./NearbyTab"
+import FilterSidebar from "./FilterSidebar"
 
 const initialTabs = [
   { name: "Everywhere", href: "#" },
@@ -37,6 +38,9 @@ export default function Home() {
   const [userLocation, setUserLocation] = useState(null)
   const [locationPermission, setLocationPermission] = useState("prompt") // "granted", "denied", "blocked", "prompt"
   const [selectedDistance, setSelectedDistance] = useState(5) // Default to 5km
+  
+  // Filter sidebar state
+  const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false)
 
   // Initial data loading for both tabs
   useEffect(() => {
@@ -244,22 +248,34 @@ export default function Home() {
   return (
     <div>
       <div className="border-b border-gray-200">
-        <nav className="-mb-px flex space-x-8">
-          {tabs.map((tab, index) => (
-            <button
-              key={tab.name}
-              onClick={() => handleTabChange(index)}
-              className={classNames(
-                tab.current
-                  ? "border-brown-500 text-brown-600"
-                  : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                "whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium",
-              )}
-            >
-              {tab.name}
-            </button>
-          ))}
-        </nav>
+        <div className="flex justify-between items-center">
+          <nav className="-mb-px flex space-x-8">
+            {tabs.map((tab, index) => (
+              <button
+                key={tab.name}
+                onClick={() => handleTabChange(index)}
+                className={classNames(
+                  tab.current
+                    ? "border-brown-500 text-brown-600"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                  "whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium",
+                )}
+              >
+                {tab.name}
+              </button>
+            ))}
+          </nav>
+          
+          <button
+            onClick={() => setIsFilterSidebarOpen(true)}
+            className="flex items-center space-x-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-brown-600"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            <span>Filter</span>
+          </button>
+        </div>
       </div>
 
       <div className="mt-8 p-4 bg-gray-50 rounded-lg">
@@ -304,6 +320,20 @@ export default function Home() {
           />
         )}
       </div>
+      
+      {/* Filter Sidebar */}
+      <FilterSidebar
+        isOpen={isFilterSidebarOpen}
+        onClose={() => setIsFilterSidebarOpen(false)}
+      />
+      
+      {/* Overlay when sidebar is open */}
+      {isFilterSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsFilterSidebarOpen(false)}
+        />
+      )}
     </div>
   )
 }

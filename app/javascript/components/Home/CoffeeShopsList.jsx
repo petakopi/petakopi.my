@@ -3,8 +3,8 @@ import CoffeeShopCard from "./CoffeeShopCard"
 import LoadingIndicator from "./LoadingIndicator"
 import SkeletonCard from "../SkeletonCard"
 
-const CoffeeShopsList = ({ 
-  shops, 
+const CoffeeShopsList = ({
+  shops,
   loading
 }) => {
   if (loading && shops.length === 0) {
