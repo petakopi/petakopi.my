@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react"
 import EverywhereTab from "./EverywhereTab"
 import NearbyTab from "./NearbyTab"
+import MapTab from "./MapTab"
 import FilterSidebar from "./FilterSidebar"
 
 const initialTabs = [
   { name: "Everywhere", href: "#" },
   { name: "Nearby", href: "#" },
+  { name: "Map", href: "#" },
 ]
 
 function classNames(...classes) {
@@ -46,16 +48,16 @@ export default function Home() {
   // View type state (card or list)
   const [viewType, setViewType] = useState("card")
 
-  // Initial data loading for both tabs
+  // Initial data loading for all tabs
   useEffect(() => {
-    // Load everywhere data when component mounts
-    if (activeTab === 0 && everywhereShops.length === 0) {
+    // Load everywhere data when component mounts or map tab is active
+    if ((activeTab === 0 || (activeTab === 2 && locationPermission !== "granted")) && everywhereShops.length === 0) {
       setEverywhereLoading(true)
       fetchEverywhereShops()
     }
 
     // Load nearby data when tab is active and we have location
-    if (activeTab === 1) {
+    if (activeTab === 1 || (activeTab === 2 && locationPermission === "granted")) {
       if (locationPermission === "granted" && userLocation && nearbyShops.length === 0) {
         setNearbyLoading(true)
         fetchNearbyShops()
@@ -386,35 +388,37 @@ export default function Home() {
           </nav>
           
           <div className="flex items-center space-x-3">
-            {/* View toggle buttons */}
-            <div className="flex border border-gray-300 rounded-md overflow-hidden">
-              <button
-                onClick={() => setViewType("card")}
-                className={`flex items-center px-3 py-1.5 text-sm ${
-                  viewType === "card" 
-                    ? "bg-brown-500 text-white" 
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                }`}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-                Cards
-              </button>
-              <button
-                onClick={() => setViewType("list")}
-                className={`flex items-center px-3 py-1.5 text-sm ${
-                  viewType === "list" 
-                    ? "bg-brown-500 text-white" 
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                }`}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                List
-              </button>
-            </div>
+            {/* View toggle buttons - hide on map tab */}
+            {activeTab !== 2 && (
+              <div className="flex border border-gray-300 rounded-md overflow-hidden">
+                <button
+                  onClick={() => setViewType("card")}
+                  className={`flex items-center px-3 py-1.5 text-sm ${
+                    viewType === "card" 
+                      ? "bg-brown-500 text-white" 
+                      : "bg-white text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                  Cards
+                </button>
+                <button
+                  onClick={() => setViewType("list")}
+                  className={`flex items-center px-3 py-1.5 text-sm ${
+                    viewType === "list" 
+                      ? "bg-brown-500 text-white" 
+                      : "bg-white text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                  List
+                </button>
+              </div>
+            )}
             
             {/* Filter button */}
             <button
@@ -460,9 +464,17 @@ export default function Home() {
               viewType={viewType}
             />
           )}
+          
+          {activeTab === 2 && (
+            <MapTab
+              shops={locationPermission === "granted" ? nearbyShops : everywhereShops}
+              loading={locationPermission === "granted" ? nearbyLoading : everywhereLoading}
+              userLocation={userLocation}
+            />
+          )}
         </div>
         
-        {/* Pagination controls */}
+        {/* Pagination controls - hide on map tab */}
         {activeTab === 0 && (everywhereHasNext || everywhereHasPrev) && (
           <Pagination
             hasNext={everywhereHasNext}
