@@ -41,6 +41,7 @@ export default function Home() {
   
   // Filter sidebar state
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false)
+  const [filters, setFilters] = useState({})
   
   // View type state (card or list)
   const [viewType, setViewType] = useState("card")
@@ -48,13 +49,14 @@ export default function Home() {
   // Initial data loading for both tabs
   useEffect(() => {
     // Load everywhere data when component mounts
-    if (everywhereShops.length === 0) {
+    if (activeTab === 0 && everywhereShops.length === 0) {
+      setEverywhereLoading(true)
       fetchEverywhereShops()
     }
 
     // Load nearby data when tab is active and we have location
     if (activeTab === 1) {
-      if (locationPermission === "granted" && userLocation) {
+      if (locationPermission === "granted" && userLocation && nearbyShops.length === 0) {
         setNearbyLoading(true)
         fetchNearbyShops()
       } else if (locationPermission === "prompt") {
@@ -111,7 +113,13 @@ export default function Home() {
           url.searchParams.append('before', cursor);
         }
       }
+      
+      // Add keyword filter if it exists
+      if (filters.keyword) {
+        url.searchParams.append('keyword', filters.keyword);
+      }
 
+      console.log("Fetching nearby coffee shops with URL:", url.toString());
       const response = await fetch(url);
       const data = await response.json();
       if (data.status === "success" && data.data && data.data.coffee_shops) {
@@ -147,6 +155,11 @@ export default function Home() {
         } else if (direction === 'prev') {
           url.searchParams.append('before', cursor);
         }
+      }
+      
+      // Add keyword filter if it exists
+      if (filters.keyword) {
+        url.searchParams.append('keyword', filters.keyword);
       }
 
       const response = await fetch(url);
@@ -215,6 +228,109 @@ export default function Home() {
       setNearbyHasPrev(false)
       setNearbyLoading(true)
       fetchNearbyShops()
+    }
+  }
+  
+  const handleApplyFilters = (newFilters) => {
+    console.log("Applying filters:", newFilters)
+    
+    // Remove the timestamp if it exists (used just to force updates)
+    const { _timestamp, ...actualFilters } = newFilters
+    
+    // Set filters state with a new object to ensure React detects the change
+    setFilters({...actualFilters})
+    
+    // Force immediate re-render by setting loading state
+    if (activeTab === 0) {
+      // Reset pagination and fetch with new filters
+      setEverywhereShops([])
+      setEverywhereNextCursor(null)
+      setEverywherePrevCursor(null)
+      setEverywhereHasNext(false)
+      setEverywhereHasPrev(false)
+      setEverywhereLoading(true)
+      
+      // Directly fetch data here instead of relying on fetchEverywhereShops
+      const url = new URL('/api/v1/coffee_shops', window.location.origin);
+      
+      // Add keyword filter if it exists
+      if (actualFilters.keyword) {
+        url.searchParams.append('keyword', actualFilters.keyword);
+      }
+
+      console.log("Directly fetching with filters:", url.toString());
+      
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success" && data.data && data.data.coffee_shops) {
+            setEverywhereShops(data.data.coffee_shops)
+            setEverywhereNextCursor(data.data.pages.next_cursor)
+            setEverywherePrevCursor(data.data.pages.prev_cursor)
+            setEverywhereHasNext(data.data.pages.has_next)
+            setEverywhereHasPrev(data.data.pages.has_prev)
+          } else {
+            console.error('Unexpected response format:', data)
+            setEverywhereShops([])
+            setEverywhereHasNext(false)
+            setEverywhereHasPrev(false)
+          }
+          setEverywhereLoading(false)
+        })
+        .catch(error => {
+          console.error('Error fetching everywhere coffee shops:', error)
+          setEverywhereShops([])
+          setEverywhereHasNext(false)
+          setEverywhereHasPrev(false)
+          setEverywhereLoading(false)
+        });
+        
+    } else if (activeTab === 1 && locationPermission === "granted") {
+      // Reset pagination and fetch with new filters
+      setNearbyShops([])
+      setNearbyNextCursor(null)
+      setNearbyPrevCursor(null)
+      setNearbyHasNext(false)
+      setNearbyHasPrev(false)
+      setNearbyLoading(true)
+      
+      // Directly fetch data here instead of relying on fetchNearbyShops
+      const url = new URL('/api/v1/coffee_shops', window.location.origin);
+      url.searchParams.append('lat', userLocation.latitude);
+      url.searchParams.append('lng', userLocation.longitude);
+      url.searchParams.append('distance', selectedDistance);
+      
+      // Add keyword filter if it exists
+      if (actualFilters.keyword) {
+        url.searchParams.append('keyword', actualFilters.keyword);
+      }
+
+      console.log("Directly fetching nearby with filters:", url.toString());
+      
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success" && data.data && data.data.coffee_shops) {
+            setNearbyShops(data.data.coffee_shops)
+            setNearbyNextCursor(data.data.pages.next_cursor)
+            setNearbyPrevCursor(data.data.pages.prev_cursor)
+            setNearbyHasNext(data.data.pages.has_next)
+            setNearbyHasPrev(data.data.pages.has_prev)
+          } else {
+            console.error('Unexpected response format:', data)
+            setNearbyShops([])
+            setNearbyHasNext(false)
+            setNearbyHasPrev(false)
+          }
+          setNearbyLoading(false)
+        })
+        .catch(error => {
+          console.error('Error fetching nearby coffee shops:', error)
+          setNearbyShops([])
+          setNearbyHasNext(false)
+          setNearbyHasPrev(false)
+          setNearbyLoading(false)
+        });
     }
   }
 
@@ -303,12 +419,21 @@ export default function Home() {
             {/* Filter button */}
             <button
               onClick={() => setIsFilterSidebarOpen(true)}
-              className="flex items-center space-x-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-brown-600"
+              className={`flex items-center space-x-1 px-3 py-2 text-sm font-medium ${
+                Object.keys(filters).length > 0 
+                  ? "bg-brown-100 text-brown-700" 
+                  : "text-gray-700 hover:text-brown-600"
+              } rounded-md`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
               <span>Filter</span>
+              {Object.keys(filters).length > 0 && (
+                <span className="ml-1 bg-brown-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {Object.keys(filters).length}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -363,6 +488,8 @@ export default function Home() {
       <FilterSidebar
         isOpen={isFilterSidebarOpen}
         onClose={() => setIsFilterSidebarOpen(false)}
+        onApplyFilters={handleApplyFilters}
+        currentFilters={filters}
       />
       
       {/* Overlay when sidebar is open */}
