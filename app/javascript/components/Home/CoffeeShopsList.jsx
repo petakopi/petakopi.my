@@ -76,12 +76,7 @@ const CoffeeShopsList = ({
                         <p className="font-medium text-brown-600">{coffee_shop.name}</p>
                       </div>
                       <div className="flex items-center">
-                        {coffee_shop.district && (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                            {coffee_shop.district}
-                          </span>
-                        )}
-                        <svg className="ml-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                           <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -89,6 +84,7 @@ const CoffeeShopsList = ({
                     <div className="mt-2 sm:flex sm:justify-between">
                       <div className="sm:flex">
                         <p className="flex items-center text-sm text-gray-500">
+                          {coffee_shop.district && <span className="mr-1">{coffee_shop.district},</span>}
                           {coffee_shop.state || 'Location not specified'}
                         </p>
                       </div>

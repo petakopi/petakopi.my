@@ -8,15 +8,10 @@ const CoffeeShopCard = ({ coffee_shop }) => {
       className="mb-4 p-3 border border-gray-200 rounded-lg"
     >
       <div className="flex flex-col h-full">
-        <div className="relative mb-3">
+        <div className="mb-3">
           <div className="w-full h-48 bg-brown-100 rounded-lg flex items-center justify-center">
             <span className="text-brown-700 text-xl font-medium">{coffee_shop.name}</span>
           </div>
-          {coffee_shop.district && (
-            <span className="absolute top-2 right-2 bg-white bg-opacity-90 text-xs px-2 py-1 rounded-full">
-              {coffee_shop.district}
-            </span>
-          )}
         </div>
 
         <div className="flex-grow">
@@ -31,6 +26,7 @@ const CoffeeShopCard = ({ coffee_shop }) => {
             <h3 className="font-medium text-lg">{coffee_shop.name}</h3>
           </div>
           <p className="text-sm text-gray-600 mt-1">
+            {coffee_shop.district && <span className="mr-1">{coffee_shop.district},</span>}
             {coffee_shop.state || 'Location not specified'}
           </p>
 
