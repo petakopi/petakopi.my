@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
-import EverywhereTab from "./EverywhereTab"
+import ExploreTab from "./ExploreTab"
 import NearbyTab from "./NearbyTab"
 import MapTab from "./MapTab"
 import FilterSidebar from "./FilterSidebar"
 
 const initialTabs = [
-  { name: "Everywhere", href: "#" },
+  { name: "Explore", href: "#" },
   { name: "Nearby", href: "#" },
   { name: "Map", href: "#" },
 ]
@@ -22,7 +22,7 @@ export default function Home() {
 
   const [activeTab, setActiveTab] = useState(0)
 
-  // Everywhere tab state
+  // Explore tab state
   const [everywhereShops, setEverywhereShops] = useState([])
   const [everywhereNextCursor, setEverywhereNextCursor] = useState(null)
   const [everywherePrevCursor, setEverywherePrevCursor] = useState(null)
@@ -50,7 +50,7 @@ export default function Home() {
 
   // Initial data loading for all tabs
   useEffect(() => {
-    // Load everywhere data when component mounts or map tab is active
+    // Load explore data when component mounts or map tab is active
     if ((activeTab === 0 || (activeTab === 2 && locationPermission !== "granted")) && everywhereShops.length === 0) {
       setEverywhereLoading(true)
       fetchEverywhereShops()
@@ -179,7 +179,7 @@ export default function Home() {
         setEverywhereHasPrev(false)
       }
     } catch (error) {
-      console.error('Error fetching everywhere coffee shops:', error)
+      console.error('Error fetching explore coffee shops:', error)
       setEverywhereShops([])
       setEverywhereHasNext(false)
       setEverywhereHasPrev(false)
@@ -260,7 +260,7 @@ export default function Home() {
         url.searchParams.append('keyword', actualFilters.keyword);
       }
 
-      console.log("Directly fetching with filters:", url.toString());
+      console.log("Directly fetching explore with filters:", url.toString());
       
       fetch(url)
         .then(response => response.json())
@@ -280,7 +280,7 @@ export default function Home() {
           setEverywhereLoading(false)
         })
         .catch(error => {
-          console.error('Error fetching everywhere coffee shops:', error)
+          console.error('Error fetching explore coffee shops:', error)
           setEverywhereShops([])
           setEverywhereHasNext(false)
           setEverywhereHasPrev(false)
@@ -446,7 +446,7 @@ export default function Home() {
       <div className="mt-8 p-4 bg-gray-50 rounded-lg">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {activeTab === 0 && (
-            <EverywhereTab
+            <ExploreTab
               everywhereShops={everywhereShops}
               everywhereLoading={everywhereLoading}
               viewType={viewType}
