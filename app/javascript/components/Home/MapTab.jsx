@@ -16,6 +16,10 @@ export default function MapTab({
   const map = useRef(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [mapInitializing, setMapInitializing] = useState(true)
+  const [currentZoom, setCurrentZoom] = useState(0)
+  const [visibleShops, setVisibleShops] = useState([])
+  const [showCards, setShowCards] = useState(false)
+  const [selectedShopId, setSelectedShopId] = useState(null)
   const markersRef = useRef([])
   const clustersRef = useRef(null)
 
@@ -117,9 +121,18 @@ export default function MapTab({
       'bottom-right'
     )
 
+    // Add zoom change listener
+    map.current.on('zoomend', () => {
+      const zoom = map.current.getZoom();
+      console.log("Zoom changed to:", zoom);
+      setCurrentZoom(zoom);
+      setShowCards(zoom >= 13); // Show cards when zoomed in enough
+    });
+
     map.current.on('load', () => {
       setMapLoaded(true)
       setMapInitializing(false)
+      setCurrentZoom(map.current.getZoom());
 
       // Add a filter control to the map
       const filterControl = document.createElement('div');
@@ -222,9 +235,24 @@ export default function MapTab({
         source: 'coffee-shops',
         filter: ['!', ['has', 'point_count']],
         paint: {
-          'circle-color': '#6B4F4F',
-          'circle-radius': 6,
-          'circle-stroke-width': 2,
+          'circle-color': [
+            'case',
+            ['==', ['get', 'id'], ['to-number', ['get', 'selected_id'], -1]],
+            '#FF6B4F', // Highlighted color
+            '#6B4F4F'  // Default color
+          ],
+          'circle-radius': [
+            'case',
+            ['==', ['get', 'id'], ['to-number', ['get', 'selected_id'], -1]],
+            9, // Larger radius for selected
+            6  // Default radius
+          ],
+          'circle-stroke-width': [
+            'case',
+            ['==', ['get', 'id'], ['to-number', ['get', 'selected_id'], -1]],
+            3, // Thicker stroke for selected
+            2  // Default stroke width
+          ],
           'circle-stroke-color': '#ffffff'
         }
       })
@@ -260,12 +288,12 @@ export default function MapTab({
         // Create header with shop name
         const header = document.createElement('div')
         header.className = 'bg-brown-500 text-white p-3 rounded-t'
-        
+
         const title = document.createElement('h3')
         title.className = 'font-bold text-lg'
         title.textContent = name
         header.appendChild(title)
-        
+
         popupContent.appendChild(header)
 
         // Add shop info
@@ -332,6 +360,41 @@ export default function MapTab({
       map.current.on('mouseleave', 'unclustered-point', () => {
         map.current.getCanvas().style.cursor = ''
       })
+
+      // Update visible shops when map moves
+      map.current.on('moveend', () => {
+        if (!map.current.getSource('coffee-shops')) return;
+
+        const currentZoom = map.current.getZoom();
+        console.log("Map moved, current zoom:", currentZoom);
+
+        // Only update visible shops if we're zoomed in enough
+        if (currentZoom >= 13) {
+          const features = map.current.queryRenderedFeatures({ layers: ['unclustered-point'] });
+          console.log("Found features:", features.length);
+
+          // Extract shop data from features
+          const shopsInView = features.map(feature => {
+            // Parse the properties which might be strings due to GeoJSON serialization
+            const props = feature.properties;
+            return {
+              id: typeof props.id === 'string' ? parseInt(props.id, 10) : props.id,
+              name: props.name,
+              address: props.address,
+              slug: props.slug,
+              logo_url: props.logo_url,
+              lat: feature.geometry.coordinates[1],
+              lng: feature.geometry.coordinates[0]
+            };
+          });
+
+          console.log("Setting visible shops:", shopsInView.length);
+          setVisibleShops(shopsInView);
+        } else {
+          console.log("Zoom level too low for cards");
+          setVisibleShops([]);
+        }
+      });
     })
 
     // Clean up on unmount
@@ -391,6 +454,169 @@ export default function MapTab({
     markersRef.current.forEach(marker => marker.remove())
     markersRef.current = []
   }
+
+  // Function to highlight a shop on the map
+  const highlightShop = (shopId) => {
+    setSelectedShopId(shopId);
+
+    if (map.current && map.current.getSource('coffee-shops')) {
+      // Get the current data
+      const data = map.current.getSource('coffee-shops')._data;
+
+      // Update the selected_id property in the source
+      if (data && data.features) {
+        // Add the selected_id to the source properties
+        const updatedData = {
+          ...data,
+          properties: {
+            ...data.properties,
+            selected_id: shopId
+          }
+        };
+
+        // Update the source
+        map.current.getSource('coffee-shops').setData(updatedData);
+
+        // Find the shop coordinates to fly to
+        const selectedFeature = data.features.find(f =>
+          f.properties.id === shopId ||
+          f.properties.id === shopId.toString()
+        );
+
+        if (selectedFeature && selectedFeature.geometry) {
+          // Fly to the selected shop
+          map.current.flyTo({
+            center: selectedFeature.geometry.coordinates,
+            zoom: Math.max(map.current.getZoom(), 14),
+            essential: true
+          });
+        }
+      }
+    }
+  }
+
+  // Function to render coffee shop cards
+  const renderShopCards = () => {
+    if (!showCards || visibleShops.length === 0) return null;
+
+    console.log("Rendering shop cards:", visibleShops.length, "shops visible");
+
+    // Limit to 20 shops
+    const limitedShops = visibleShops.slice(0, 20);
+    const hasMore = visibleShops.length > 20;
+
+    return (
+      <div className="absolute bottom-4 left-4 right-4 z-10 overflow-x-auto pb-2 max-h-[250px]">
+        <div 
+          className="flex space-x-4 px-2 py-2 rounded-lg" 
+          style={{ 
+            scrollbarWidth: 'thin', 
+            scrollbarColor: '#6B4F4F #f5f5f5',
+            cursor: 'grab'
+          }}
+          ref={el => {
+            if (el) {
+              // Add mouse drag scrolling
+              let isDown = false;
+              let startX;
+              let scrollLeft;
+
+              el.addEventListener('mousedown', (e) => {
+                isDown = true;
+                el.style.cursor = 'grabbing';
+                startX = e.pageX - el.offsetLeft;
+                scrollLeft = el.scrollLeft;
+                e.preventDefault();
+              });
+
+              el.addEventListener('mouseleave', () => {
+                isDown = false;
+                el.style.cursor = 'grab';
+              });
+
+              el.addEventListener('mouseup', () => {
+                isDown = false;
+                el.style.cursor = 'grab';
+              });
+
+              el.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - el.offsetLeft;
+                const walk = (x - startX) * 2; // Scroll speed
+                el.scrollLeft = scrollLeft - walk;
+              });
+            }
+          }}
+        >
+          {limitedShops.map((shop, index) => (
+            <div
+              key={`shop-${shop.id || index}`}
+              className={`flex-shrink-0 w-64 bg-white bg-opacity-90 backdrop-blur-sm rounded-lg overflow-hidden transition-all ${selectedShopId === shop.id
+                ? 'shadow-lg ring-2 ring-brown-500'
+                : 'shadow-md hover:shadow-lg'
+                }`}
+              onClick={() => highlightShop(shop.id)}
+            >
+              <a
+                href={`/coffee_shops/${shop.slug}`}
+                className="block"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent the parent onClick from firing
+                }}
+              >
+                <div className="h-24 bg-brown-100 flex items-center justify-center">
+                  {shop.logo_url ? (
+                    <img
+                      src={shop.logo_url}
+                      alt={shop.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://via.placeholder.com/300x200?text=No+Image";
+                      }}
+                    />
+                  ) : (
+                    <div className="text-brown-500 text-center p-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                <div className="p-3">
+                  <h3 className="font-bold text-brown-800 truncate">{shop.name}</h3>
+                  {shop.address && (
+                    <p className="text-xs text-gray-600 mt-1 truncate">{shop.address}</p>
+                  )}
+                  <div className="mt-2 flex justify-between items-center">
+                    <span className="text-xs text-brown-600">View details</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-brown-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </a>
+            </div>
+          ))}
+
+          {hasMore && (
+            <div key="more-info" className="flex-shrink-0 w-64 bg-white bg-opacity-90 backdrop-blur-sm rounded-lg shadow-md overflow-hidden border-2 border-dashed border-brown-200">
+              <div className="h-full p-4 flex flex-col items-center justify-center text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-brown-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-sm text-brown-600">
+                  Cards limited to 20 coffee shops.
+                  <span className="block mt-1">Please zoom in further to see all shops in this area.</span>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="col-span-3 relative">
@@ -491,6 +717,10 @@ export default function MapTab({
           <p className="text-gray-500 text-sm mt-1">Try zooming out or searching in a different location</p>
         </div>
       )}
+
+      {/* Coffee shop cards */}
+      {renderShopCards()}
+
 
     </div>
   )
