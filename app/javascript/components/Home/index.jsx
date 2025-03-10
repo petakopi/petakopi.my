@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react"
+import React, { useState, useEffect } from "react"
 import EverywhereTab from "./EverywhereTab"
 import NearbyTab from "./NearbyTab"
 
@@ -22,48 +22,21 @@ export default function Home() {
   // Everywhere tab state
   const [everywhereShops, setEverywhereShops] = useState([])
   const [everywhereNextCursor, setEverywhereNextCursor] = useState(null)
-  const [everywhereHasMore, setEverywhereHasMore] = useState(true)
+  const [everywherePrevCursor, setEverywherePrevCursor] = useState(null)
+  const [everywhereHasNext, setEverywhereHasNext] = useState(false)
+  const [everywhereHasPrev, setEverywhereHasPrev] = useState(false)
   const [everywhereLoading, setEverywhereLoading] = useState(true)
 
   // Nearby tab state
   const [nearbyShops, setNearbyShops] = useState([])
   const [nearbyNextCursor, setNearbyNextCursor] = useState(null)
-  const [nearbyHasMore, setNearbyHasMore] = useState(true)
+  const [nearbyPrevCursor, setNearbyPrevCursor] = useState(null)
+  const [nearbyHasNext, setNearbyHasNext] = useState(false)
+  const [nearbyHasPrev, setNearbyHasPrev] = useState(false)
   const [nearbyLoading, setNearbyLoading] = useState(false)
   const [userLocation, setUserLocation] = useState(null)
   const [locationPermission, setLocationPermission] = useState("prompt") // "granted", "denied", "blocked", "prompt"
   const [selectedDistance, setSelectedDistance] = useState(5) // Default to 5km
-
-  // Refs for intersection observer
-  const everywhereObserver = useRef()
-  const nearbyObserver = useRef()
-
-  // Last element refs
-  const lastEverywhereElementRef = useCallback(node => {
-    if (everywhereLoading) return
-    if (everywhereObserver.current) everywhereObserver.current.disconnect()
-
-    everywhereObserver.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && everywhereHasMore) {
-        fetchMoreEverywhereShops()
-      }
-    })
-
-    if (node) everywhereObserver.current.observe(node)
-  }, [everywhereLoading, everywhereHasMore])
-
-  const lastNearbyElementRef = useCallback(node => {
-    if (nearbyLoading) return
-    if (nearbyObserver.current) nearbyObserver.current.disconnect()
-
-    nearbyObserver.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && nearbyHasMore) {
-        fetchMoreNearbyShops()
-      }
-    })
-
-    if (node) nearbyObserver.current.observe(node)
-  }, [nearbyLoading, nearbyHasMore])
 
   // Initial data loading for both tabs
   useEffect(() => {
@@ -114,7 +87,7 @@ export default function Home() {
     }
   }
 
-  const fetchNearbyShops = async () => {
+  const fetchNearbyShops = async (cursor = null, direction = 'next') => {
     if (!userLocation) return;
 
     setNearbyLoading(true)
@@ -123,97 +96,89 @@ export default function Home() {
       url.searchParams.append('lat', userLocation.latitude);
       url.searchParams.append('lng', userLocation.longitude);
       url.searchParams.append('distance', selectedDistance);
+      
+      if (cursor) {
+        if (direction === 'next') {
+          url.searchParams.append('after', cursor);
+        } else if (direction === 'prev') {
+          url.searchParams.append('before', cursor);
+        }
+      }
 
       const response = await fetch(url);
       const data = await response.json();
       if (data.status === "success" && data.data && data.data.coffee_shops) {
         setNearbyShops(data.data.coffee_shops)
         setNearbyNextCursor(data.data.pages.next_cursor)
-        setNearbyHasMore(data.data.pages.has_next)
+        setNearbyPrevCursor(data.data.pages.prev_cursor)
+        setNearbyHasNext(data.data.pages.has_next)
+        setNearbyHasPrev(data.data.pages.has_prev)
       } else {
         console.error('Unexpected response format:', data)
         setNearbyShops([])
-        setNearbyHasMore(false)
+        setNearbyHasNext(false)
+        setNearbyHasPrev(false)
       }
     } catch (error) {
       console.error('Error fetching nearby coffee shops:', error)
       setNearbyShops([])
-      setNearbyHasMore(false)
+      setNearbyHasNext(false)
+      setNearbyHasPrev(false)
     } finally {
       setNearbyLoading(false)
     }
   }
 
-  const fetchMoreNearbyShops = async () => {
-    if (!nearbyNextCursor || !nearbyHasMore || nearbyLoading || !userLocation) return
-
-    setNearbyLoading(true)
+  const fetchEverywhereShops = async (cursor = null, direction = 'next') => {
+    setEverywhereLoading(true)
     try {
       const url = new URL('/api/v1/coffee_shops', window.location.origin);
-      url.searchParams.append('lat', userLocation.latitude);
-      url.searchParams.append('lng', userLocation.longitude);
-      url.searchParams.append('distance', selectedDistance);
-      url.searchParams.append('after', nearbyNextCursor);
+      
+      if (cursor) {
+        if (direction === 'next') {
+          url.searchParams.append('after', cursor);
+        } else if (direction === 'prev') {
+          url.searchParams.append('before', cursor);
+        }
+      }
 
       const response = await fetch(url);
       const data = await response.json()
       if (data.status === "success" && data.data && data.data.coffee_shops) {
-        setNearbyShops(prev => [...prev, ...data.data.coffee_shops])
-        setNearbyNextCursor(data.data.pages.next_cursor)
-        setNearbyHasMore(data.data.pages.has_next)
-      } else {
-        setNearbyHasMore(false)
-      }
-    } catch (error) {
-      console.error('Error fetching more nearby coffee shops:', error)
-      setNearbyHasMore(false)
-    } finally {
-      setNearbyLoading(false)
-    }
-  }
-
-  const fetchEverywhereShops = async () => {
-    setEverywhereLoading(true)
-    try {
-      const response = await fetch('/api/v1/coffee_shops')
-      const data = await response.json()
-      if (data.status === "success" && data.data && data.data.coffee_shops) {
         setEverywhereShops(data.data.coffee_shops)
         setEverywhereNextCursor(data.data.pages.next_cursor)
-        setEverywhereHasMore(data.data.pages.has_next)
+        setEverywherePrevCursor(data.data.pages.prev_cursor)
+        setEverywhereHasNext(data.data.pages.has_next)
+        setEverywhereHasPrev(data.data.pages.has_prev)
       } else {
         console.error('Unexpected response format:', data)
         setEverywhereShops([])
-        setEverywhereHasMore(false)
+        setEverywhereHasNext(false)
+        setEverywhereHasPrev(false)
       }
     } catch (error) {
       console.error('Error fetching everywhere coffee shops:', error)
       setEverywhereShops([])
-      setEverywhereHasMore(false)
+      setEverywhereHasNext(false)
+      setEverywhereHasPrev(false)
     } finally {
       setEverywhereLoading(false)
     }
   }
 
-  const fetchMoreEverywhereShops = async () => {
-    if (!everywhereNextCursor || !everywhereHasMore || everywhereLoading) return
+  const handleNextPage = () => {
+    if (activeTab === 0 && everywhereHasNext) {
+      fetchEverywhereShops(everywhereNextCursor, 'next')
+    } else if (activeTab === 1 && nearbyHasNext) {
+      fetchNearbyShops(nearbyNextCursor, 'next')
+    }
+  }
 
-    setEverywhereLoading(true)
-    try {
-      const response = await fetch(`/api/v1/coffee_shops?after=${everywhereNextCursor}`)
-      const data = await response.json()
-      if (data.status === "success" && data.data && data.data.coffee_shops) {
-        setEverywhereShops(prev => [...prev, ...data.data.coffee_shops])
-        setEverywhereNextCursor(data.data.pages.next_cursor)
-        setEverywhereHasMore(data.data.pages.has_next)
-      } else {
-        setEverywhereHasMore(false)
-      }
-    } catch (error) {
-      console.error('Error fetching more everywhere coffee shops:', error)
-      setEverywhereHasMore(false)
-    } finally {
-      setEverywhereLoading(false)
+  const handlePrevPage = () => {
+    if (activeTab === 0 && everywhereHasPrev) {
+      fetchEverywhereShops(everywherePrevCursor, 'prev')
+    } else if (activeTab === 1 && nearbyHasPrev) {
+      fetchNearbyShops(nearbyPrevCursor, 'prev')
     }
   }
 
@@ -238,10 +203,42 @@ export default function Home() {
       // Refetch shops with new distance
       setNearbyShops([])
       setNearbyNextCursor(null)
-      setNearbyHasMore(true)
+      setNearbyPrevCursor(null)
+      setNearbyHasNext(false)
+      setNearbyHasPrev(false)
       setNearbyLoading(true)
       fetchNearbyShops()
     }
+  }
+
+  // Pagination component
+  const Pagination = ({ hasNext, hasPrev, onNext, onPrev, loading }) => {
+    return (
+      <div className="flex justify-center mt-8 space-x-4">
+        <button
+          onClick={onPrev}
+          disabled={!hasPrev || loading}
+          className={`px-4 py-2 rounded ${
+            hasPrev && !loading
+              ? "bg-brown-500 text-white hover:bg-brown-600"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+        >
+          Previous
+        </button>
+        <button
+          onClick={onNext}
+          disabled={!hasNext || loading}
+          className={`px-4 py-2 rounded ${
+            hasNext && !loading
+              ? "bg-brown-500 text-white hover:bg-brown-600"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+        >
+          Next
+        </button>
+      </div>
+    )
   }
 
   return (
@@ -271,8 +268,6 @@ export default function Home() {
             <EverywhereTab
               everywhereShops={everywhereShops}
               everywhereLoading={everywhereLoading}
-              everywhereHasMore={everywhereHasMore}
-              lastEverywhereElementRef={lastEverywhereElementRef}
             />
           )}
 
@@ -280,8 +275,6 @@ export default function Home() {
             <NearbyTab
               nearbyShops={nearbyShops}
               nearbyLoading={nearbyLoading}
-              nearbyHasMore={nearbyHasMore}
-              lastNearbyElementRef={lastNearbyElementRef}
               locationPermission={locationPermission}
               requestLocationPermission={requestLocationPermission}
               selectedDistance={selectedDistance}
@@ -289,6 +282,27 @@ export default function Home() {
             />
           )}
         </div>
+        
+        {/* Pagination controls */}
+        {activeTab === 0 && (everywhereHasNext || everywhereHasPrev) && (
+          <Pagination
+            hasNext={everywhereHasNext}
+            hasPrev={everywhereHasPrev}
+            onNext={handleNextPage}
+            onPrev={handlePrevPage}
+            loading={everywhereLoading}
+          />
+        )}
+        
+        {activeTab === 1 && locationPermission === "granted" && (nearbyHasNext || nearbyHasPrev) && (
+          <Pagination
+            hasNext={nearbyHasNext}
+            hasPrev={nearbyHasPrev}
+            onNext={handleNextPage}
+            onPrev={handlePrevPage}
+            loading={nearbyLoading}
+          />
+        )}
       </div>
     </div>
   )

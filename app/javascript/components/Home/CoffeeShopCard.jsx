@@ -1,11 +1,8 @@
 import React from "react"
 
-const CoffeeShopCard = ({ coffee_shop, isLastElement, refCallback }) => {
-  const cardRef = isLastElement ? refCallback : null;
-
+const CoffeeShopCard = ({ coffee_shop }) => {
   return (
     <div
-      ref={cardRef}
       key={`${coffee_shop.slug}`}
       id={`coffee-shop-${coffee_shop.slug}`}
       className="mb-4 p-3 border border-gray-200 rounded-lg"

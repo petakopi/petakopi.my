@@ -7,8 +7,6 @@ import LoadingIndicator from "./LoadingIndicator"
 const NearbyTab = ({
   nearbyShops,
   nearbyLoading,
-  nearbyHasMore,
-  lastNearbyElementRef,
   locationPermission,
   requestLocationPermission,
   selectedDistance,
@@ -42,8 +40,6 @@ const NearbyTab = ({
           <CoffeeShopsList
             shops={nearbyShops}
             loading={nearbyLoading}
-            hasMore={nearbyHasMore}
-            lastElementRef={lastNearbyElementRef}
           />
         </>
       )}
