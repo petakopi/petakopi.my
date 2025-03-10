@@ -10,7 +10,8 @@ const NearbyTab = ({
   locationPermission,
   requestLocationPermission,
   selectedDistance,
-  handleDistanceChange
+  handleDistanceChange,
+  viewType
 }) => {
   // Show loading indicator when we're waiting for location permission
   if (locationPermission === "prompt") {
@@ -40,6 +41,7 @@ const NearbyTab = ({
           <CoffeeShopsList
             shops={nearbyShops}
             loading={nearbyLoading}
+            viewType={viewType}
           />
         </>
       )}

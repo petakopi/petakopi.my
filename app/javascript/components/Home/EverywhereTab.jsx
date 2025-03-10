@@ -3,12 +3,14 @@ import CoffeeShopsList from "./CoffeeShopsList"
 
 const EverywhereTab = ({
   everywhereShops,
-  everywhereLoading
+  everywhereLoading,
+  viewType
 }) => {
   return (
     <CoffeeShopsList 
       shops={everywhereShops}
       loading={everywhereLoading}
+      viewType={viewType}
     />
   )
 }
