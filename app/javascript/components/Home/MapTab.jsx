@@ -492,18 +492,6 @@ export default function MapTab({
         </div>
       )}
 
-      {/* Map legend */}
-      <div className="absolute bottom-4 right-4 bg-white p-3 rounded-md shadow-md z-10">
-        <h4 className="font-medium text-sm mb-2 text-gray-700">Map Legend</h4>
-        <div className="flex items-center mb-2">
-          <div className="w-4 h-4 rounded-full bg-[#6B4F4F] border-2 border-white mr-2"></div>
-          <span className="text-xs text-gray-600">Coffee Shop</span>
-        </div>
-        <div className="flex items-center">
-          <div className="w-6 h-6 rounded-full bg-[#6B4F4F] flex items-center justify-center text-white text-xs mr-2">5</div>
-          <span className="text-xs text-gray-600">Shop Cluster (click to expand)</span>
-        </div>
-      </div>
     </div>
   )
 }
