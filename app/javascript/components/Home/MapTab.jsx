@@ -4,16 +4,7 @@ import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder"
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css"
 import "mapbox-gl/dist/mapbox-gl.css"
 
-// Coffee cup SVG icon for custom markers
-const COFFEE_ICON = `
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M18 8h1a4 4 0 0 1 0 8h-1" stroke="#6B4F4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" fill="#6B4F4F" stroke="#6B4F4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M6 1v3M10 1v3M14 1v3" stroke="#6B4F4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M7 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" fill="white"/>
-  <path d="M12 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" fill="white"/>
-</svg>
-`
+
 
 export default function MapTab({
   shops,
@@ -227,28 +218,16 @@ export default function MapTab({
       // Add a layer for individual points
       map.current.addLayer({
         id: 'unclustered-point',
-        type: 'symbol',
+        type: 'circle',
         source: 'coffee-shops',
         filter: ['!', ['has', 'point_count']],
-        layout: {
-          'icon-image': 'coffee-icon',
-          'icon-size': 0.8,
-          'icon-allow-overlap': true,
-          'icon-ignore-placement': true
+        paint: {
+          'circle-color': '#6B4F4F',
+          'circle-radius': 6,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ffffff'
         }
       })
-
-      // Load coffee cup icon image
-      map.current.loadImage(
-        'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(COFFEE_ICON),
-        (error, image) => {
-          if (error) throw error;
-
-          if (!map.current.hasImage('coffee-icon')) {
-            map.current.addImage('coffee-icon', image);
-          }
-        }
-      );
 
       // Inspect a cluster on click
       map.current.on('click', 'clusters', (e) => {
@@ -278,35 +257,20 @@ export default function MapTab({
         const popupContent = document.createElement('div')
         popupContent.className = 'map-popup max-w-xs'
 
-        // Add shop image if available
-        if (logo_url) {
-          const img = document.createElement('img')
-          img.src = logo_url
-          img.className = 'w-full h-32 object-cover rounded-t'
-          img.alt = name
-          popupContent.appendChild(img)
-        } else {
-          // Add a placeholder image with coffee icon
-          const placeholderDiv = document.createElement('div')
-          placeholderDiv.className = 'w-full h-24 bg-brown-100 rounded-t flex items-center justify-center'
-          placeholderDiv.innerHTML = `
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 8h1a4 4 0 0 1 0 8h-1" stroke="#6B4F4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" fill="#6B4F4F" stroke="#6B4F4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M6 1v3M10 1v3M14 1v3" stroke="#6B4F4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          `
-          popupContent.appendChild(placeholderDiv)
-        }
+        // Create header with shop name
+        const header = document.createElement('div')
+        header.className = 'bg-brown-500 text-white p-3 rounded-t'
+        
+        const title = document.createElement('h3')
+        title.className = 'font-bold text-lg'
+        title.textContent = name
+        header.appendChild(title)
+        
+        popupContent.appendChild(header)
 
         // Add shop info
         const content = document.createElement('div')
         content.className = 'p-4'
-
-        const title = document.createElement('h3')
-        title.className = 'font-bold text-lg mb-2 text-brown-800'
-        title.textContent = name
-        content.appendChild(title)
 
         if (address) {
           const addressEl = document.createElement('p')
@@ -532,7 +496,7 @@ export default function MapTab({
       <div className="absolute bottom-4 right-4 bg-white p-3 rounded-md shadow-md z-10">
         <h4 className="font-medium text-sm mb-2 text-gray-700">Map Legend</h4>
         <div className="flex items-center mb-2">
-          <div className="mr-2" dangerouslySetInnerHTML={{ __html: COFFEE_ICON }}></div>
+          <div className="w-4 h-4 rounded-full bg-[#6B4F4F] border-2 border-white mr-2"></div>
           <span className="text-xs text-gray-600">Coffee Shop</span>
         </div>
         <div className="flex items-center">
