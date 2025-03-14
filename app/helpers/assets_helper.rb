@@ -2,7 +2,7 @@ module AssetsHelper
   def optimized_blob_url(asset:, env: Rails.env, options: [])
     blob_path = rails_public_blob_url(asset)
 
-    if env.production?
+    if env.production? && asset.image?
       [
         "https://assets.petakopi.my",
         "cdn-cgi/image",

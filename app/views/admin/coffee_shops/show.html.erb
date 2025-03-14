@@ -79,6 +79,14 @@
       >
         Sync Opening Hours
       </a>
+
+      <a
+        data-turbo-method="post"
+        href="<%= sync_cover_photo_admin_coffee_shop_path(@coffee_shop) %>"
+        class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500"
+      >
+        Sync Cover Photo
+      </a>
     </div>
   </div>
 </div>
@@ -236,6 +244,7 @@
           <%= @coffee_shop.updated_at.strftime("%Y-%m-%d %I:%M %p") %>
         </dd>
       </div>
+
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-sm font-medium text-gray-500">
           Status
@@ -256,6 +265,22 @@
           <% end %>
         </dd>
       </div>
+
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Cover Photo
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <div class="flex space-y-2 flex-col lg:flex-row lg:items-center lg:space-x-2 lg:space-y-0">
+            <% if @coffee_shop.cover_photo.attached? %>
+              <%= image_tag optimized_blob_url(asset: @coffee_shop.cover_photo), class: "w-[300px] border border-brown" %>
+            <% else %>
+              -
+            <% end %>
+          </div>
+        </dd>
+      </div>
+
     </dl>
   </div>
 </div>

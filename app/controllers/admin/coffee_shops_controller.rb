@@ -1,6 +1,6 @@
 class Admin::CoffeeShopsController < AdminController
   before_action :set_coffee_shop,
-    only: %i[show edit update duplicate sync_opening_hours update_locality]
+    only: %i[show edit update duplicate sync_opening_hours update_locality sync_cover_photo]
 
   def index
     @coffee_shops =
@@ -76,6 +76,19 @@ class Admin::CoffeeShopsController < AdminController
     end
   end
 
+  def sync_cover_photo
+    result =
+      GoogleApi::GoogleCoverPhotoSyncer.call(coffee_shop: @coffee_shop)
+
+    if result.success?
+      redirect_to admin_coffee_shop_url(@coffee_shop),
+        notice: "Coffee shop cover photo was successfully synced."
+    else
+      redirect_to admin_coffee_shop_url(@coffee_shop),
+        alert: result.failure
+    end
+  end
+
   private
 
   def set_coffee_shop
@@ -90,17 +103,18 @@ class Admin::CoffeeShopsController < AdminController
       .require(:coffee_shop)
       .permit(
         :admin_notes,
+        :cover_photo,
         :description,
         :facebook,
         :google_place_id,
         :instagram,
-        :tmp_lat,
-        :tmp_lng,
         :logo,
         :name,
         :slug,
         :status,
         :tiktok,
+        :tmp_lat,
+        :tmp_lng,
         :twitter,
         :whatsapp,
         tag_ids: []

@@ -40,11 +40,11 @@ export default function Home() {
   const [userLocation, setUserLocation] = useState(null)
   const [locationPermission, setLocationPermission] = useState("prompt") // "granted", "denied", "blocked", "prompt"
   const [selectedDistance, setSelectedDistance] = useState(5) // Default to 5km
-  
+
   // Filter sidebar state
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false)
   const [filters, setFilters] = useState({})
-  
+
   // View type state (card or list)
   const [viewType, setViewType] = useState("card")
 
@@ -107,7 +107,7 @@ export default function Home() {
       url.searchParams.append('lat', userLocation.latitude);
       url.searchParams.append('lng', userLocation.longitude);
       url.searchParams.append('distance', selectedDistance);
-      
+
       if (cursor) {
         if (direction === 'next') {
           url.searchParams.append('after', cursor);
@@ -115,7 +115,7 @@ export default function Home() {
           url.searchParams.append('before', cursor);
         }
       }
-      
+
       // Add keyword filter if it exists
       if (filters.keyword) {
         url.searchParams.append('keyword', filters.keyword);
@@ -150,7 +150,7 @@ export default function Home() {
     setEverywhereLoading(true)
     try {
       const url = new URL('/api/v1/coffee_shops', window.location.origin);
-      
+
       if (cursor) {
         if (direction === 'next') {
           url.searchParams.append('after', cursor);
@@ -158,7 +158,7 @@ export default function Home() {
           url.searchParams.append('before', cursor);
         }
       }
-      
+
       // Add keyword filter if it exists
       if (filters.keyword) {
         url.searchParams.append('keyword', filters.keyword);
@@ -232,16 +232,16 @@ export default function Home() {
       fetchNearbyShops()
     }
   }
-  
+
   const handleApplyFilters = (newFilters) => {
     console.log("Applying filters:", newFilters)
-    
+
     // Remove the timestamp if it exists (used just to force updates)
     const { _timestamp, ...actualFilters } = newFilters
-    
+
     // Set filters state with a new object to ensure React detects the change
-    setFilters({...actualFilters})
-    
+    setFilters({ ...actualFilters })
+
     // Force immediate re-render by setting loading state
     if (activeTab === 0) {
       // Reset pagination and fetch with new filters
@@ -251,17 +251,17 @@ export default function Home() {
       setEverywhereHasNext(false)
       setEverywhereHasPrev(false)
       setEverywhereLoading(true)
-      
+
       // Directly fetch data here instead of relying on fetchEverywhereShops
       const url = new URL('/api/v1/coffee_shops', window.location.origin);
-      
+
       // Add keyword filter if it exists
       if (actualFilters.keyword) {
         url.searchParams.append('keyword', actualFilters.keyword);
       }
 
       console.log("Directly fetching explore with filters:", url.toString());
-      
+
       fetch(url)
         .then(response => response.json())
         .then(data => {
@@ -286,7 +286,7 @@ export default function Home() {
           setEverywhereHasPrev(false)
           setEverywhereLoading(false)
         });
-        
+
     } else if (activeTab === 1 && locationPermission === "granted") {
       // Reset pagination and fetch with new filters
       setNearbyShops([])
@@ -295,20 +295,20 @@ export default function Home() {
       setNearbyHasNext(false)
       setNearbyHasPrev(false)
       setNearbyLoading(true)
-      
+
       // Directly fetch data here instead of relying on fetchNearbyShops
       const url = new URL('/api/v1/coffee_shops', window.location.origin);
       url.searchParams.append('lat', userLocation.latitude);
       url.searchParams.append('lng', userLocation.longitude);
       url.searchParams.append('distance', selectedDistance);
-      
+
       // Add keyword filter if it exists
       if (actualFilters.keyword) {
         url.searchParams.append('keyword', actualFilters.keyword);
       }
 
       console.log("Directly fetching nearby with filters:", url.toString());
-      
+
       fetch(url)
         .then(response => response.json())
         .then(data => {
@@ -343,22 +343,20 @@ export default function Home() {
         <button
           onClick={onPrev}
           disabled={!hasPrev || loading}
-          className={`px-4 py-2 rounded ${
-            hasPrev && !loading
+          className={`px-4 py-2 rounded ${hasPrev && !loading
               ? "bg-brown-500 text-white hover:bg-brown-600"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
-          }`}
+            }`}
         >
           Previous
         </button>
         <button
           onClick={onNext}
           disabled={!hasNext || loading}
-          className={`px-4 py-2 rounded ${
-            hasNext && !loading
+          className={`px-4 py-2 rounded ${hasNext && !loading
               ? "bg-brown-500 text-white hover:bg-brown-600"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
-          }`}
+            }`}
         >
           Next
         </button>
@@ -386,18 +384,17 @@ export default function Home() {
               </button>
             ))}
           </nav>
-          
+
           <div className="flex items-center space-x-3">
             {/* View toggle buttons - hide on map tab */}
             {activeTab !== 2 && (
               <div className="flex border border-gray-300 rounded-md overflow-hidden">
                 <button
                   onClick={() => setViewType("card")}
-                  className={`flex items-center px-3 py-1.5 text-sm ${
-                    viewType === "card" 
-                      ? "bg-brown-500 text-white" 
+                  className={`flex items-center px-3 py-1.5 text-sm ${viewType === "card"
+                      ? "bg-brown-500 text-white"
                       : "bg-white text-gray-700 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -406,11 +403,10 @@ export default function Home() {
                 </button>
                 <button
                   onClick={() => setViewType("list")}
-                  className={`flex items-center px-3 py-1.5 text-sm ${
-                    viewType === "list" 
-                      ? "bg-brown-500 text-white" 
+                  className={`flex items-center px-3 py-1.5 text-sm ${viewType === "list"
+                      ? "bg-brown-500 text-white"
                       : "bg-white text-gray-700 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -419,15 +415,14 @@ export default function Home() {
                 </button>
               </div>
             )}
-            
+
             {/* Filter button */}
             <button
               onClick={() => setIsFilterSidebarOpen(true)}
-              className={`flex items-center space-x-1 px-3 py-2 text-sm font-medium ${
-                Object.keys(filters).length > 0 
-                  ? "bg-brown-100 text-brown-700" 
+              className={`flex items-center space-x-1 px-3 py-2 text-sm font-medium ${Object.keys(filters).length > 0
+                  ? "bg-brown-100 text-brown-700"
                   : "text-gray-700 hover:text-brown-600"
-              } rounded-md`}
+                } rounded-md`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -464,7 +459,7 @@ export default function Home() {
               viewType={viewType}
             />
           )}
-          
+
           {activeTab === 2 && (
             <MapTab
               shops={locationPermission === "granted" ? nearbyShops : everywhereShops}
@@ -473,7 +468,7 @@ export default function Home() {
             />
           )}
         </div>
-        
+
         {/* Pagination controls - hide on map tab */}
         {activeTab === 0 && (everywhereHasNext || everywhereHasPrev) && (
           <Pagination
@@ -484,7 +479,7 @@ export default function Home() {
             loading={everywhereLoading}
           />
         )}
-        
+
         {activeTab === 1 && locationPermission === "granted" && (nearbyHasNext || nearbyHasPrev) && (
           <Pagination
             hasNext={nearbyHasNext}
@@ -495,7 +490,7 @@ export default function Home() {
           />
         )}
       </div>
-      
+
       {/* Filter Sidebar */}
       <FilterSidebar
         isOpen={isFilterSidebarOpen}
@@ -503,7 +498,7 @@ export default function Home() {
         onApplyFilters={handleApplyFilters}
         currentFilters={filters}
       />
-      
+
       {/* Overlay when sidebar is open */}
       {isFilterSidebarOpen && (
         <div

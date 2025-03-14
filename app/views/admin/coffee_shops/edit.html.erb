@@ -186,6 +186,15 @@
           </div>
 
           <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+            <%= f.label :cover_photo, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+              Cover Photo
+            <% end %>
+            <div class="mt-1">
+              <%= f.file_field :cover_photo, class: "text-sm text-gray-700" %>
+            </div>
+          </div>
+
+          <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
             <%= f.label :admin_notes, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
               Admin Notes
             <% end %>

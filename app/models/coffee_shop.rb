@@ -37,8 +37,10 @@ class CoffeeShop < ApplicationRecord
   has_many :favourite_users, through: :favourites, source: :user, dependent: :destroy
   has_many :opening_hours, dependent: :destroy
   has_many :feedbacks
+  has_many_attached :photos
 
   has_one_attached :logo
+  has_one_attached :cover_photo
   has_one :google_location, dependent: :destroy
 
   validates :slug, presence: true
@@ -51,7 +53,9 @@ class CoffeeShop < ApplicationRecord
   before_save :update_approved_at
 
   after_save :process_logo
-  after_save :sync_google_location
+  after_save :process_cover_photo
+  after_commit :sync_google_location
+  after_commit :sync_google_photos, on: :create
 
   accepts_nested_attributes_for :coffee_shop_tags
 
@@ -74,6 +78,8 @@ class CoffeeShop < ApplicationRecord
       "https://www.google.com/maps/?q=#{lat},#{lng}"
     end
   end
+
+  private
 
   def clean_urls
     self.instagram = instagram.split("/")[3].split("?")[0]
@@ -100,12 +106,17 @@ class CoffeeShop < ApplicationRecord
   end
 
   def process_logo
-    return unless logo.attached?
-    return unless attachment_changes.dig("logo").present?
-    # hack to ensure we only do it if filename is not based on our custom format
-    return if logo.filename.to_s.match?(/#{id}-[0-9]+/)
+    return unless logo.attachment.present?
+    return unless logo.attachment.blob_id_previously_changed?
 
     ProcessLogoWorker.perform_in(2.minutes, id)
+  end
+
+  def process_cover_photo
+    return unless cover_photo.attachment.present?
+    return unless cover_photo.attachment.blob_id_previously_changed?
+
+    ProcessCoverPhotoWorker.perform_in(2.minutes, id)
   end
 
   def update_approved_at
@@ -114,13 +125,16 @@ class CoffeeShop < ApplicationRecord
     self.approved_at = Time.current
   end
 
-  private
-
   def sync_google_location
     return unless status_published?
+    return unless previous_changes.key?("google_place_id")
 
-    if saved_change_to_google_place_id? || saved_change_to_location?
-      GoogleApi::GoogleLocationSyncWorker.perform_async(id)
-    end
+    GoogleApi::GoogleLocationSyncWorker.perform_async(id)
+  end
+
+  def sync_google_photos
+    return unless status_published?
+
+    GoogleApi::GoogleCoverPhotoSyncWorker.perform_async(id)
   end
 end

@@ -9,9 +9,19 @@ const CoffeeShopCard = ({ coffee_shop }) => {
     >
       <div className="flex flex-col h-full">
         <div className="mb-3">
-          <div className="w-full h-48 bg-brown-100 rounded-lg flex items-center justify-center">
-            <span className="text-brown-700 text-xl font-medium">{coffee_shop.name}</span>
-          </div>
+          {coffee_shop.cover_photo ? (
+            <div className="w-full h-48 rounded-lg overflow-hidden">
+              <img
+                src={coffee_shop.cover_photo}
+                alt={`${coffee_shop.name} cover`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ) : (
+            <div className="w-full h-48 bg-brown-100 rounded-lg flex items-center justify-center">
+              <span className="text-brown-700 text-xl font-medium">{coffee_shop.name}</span>
+            </div>
+          )}
         </div>
 
         <div className="flex-grow">

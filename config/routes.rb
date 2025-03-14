@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         post "duplicate"
         post "sync_opening_hours"
         post "update_locality"
+        post "sync_cover_photo"
       end
     end
     resources :coffee_shop_owners, only: [:index, :new, :create, :destroy]

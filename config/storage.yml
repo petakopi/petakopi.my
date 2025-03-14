@@ -5,6 +5,7 @@ test:
 local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
+  public: true
 
 cloudflare:
   service: S3

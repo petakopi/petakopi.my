@@ -8,7 +8,8 @@ class Api::V1::CoffeeShopsController < ApiController
             CoffeeShop
               .includes(
                 :tags,
-                logo_attachment: :blob
+                logo_attachment: :blob,
+                cover_photo_attachment: :blob
               )
         ).status_published
 
