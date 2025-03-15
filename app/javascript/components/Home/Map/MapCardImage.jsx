@@ -1,31 +1,29 @@
 import React, { useState } from "react"
 
 const MapCardImage = ({ imageUrl, altText, className, shop }) => {
-  const [imageError, setImageError] = useState(false);
+  const [coverPhotoError, setCoverPhotoError] = useState(false);
+  const [logoError, setLogoError] = useState(false);
   
-  // If cover photo is available and hasn't errored, show it
-  if (imageUrl && !imageError) {
+  // Always try to use cover photo first
+  if (imageUrl && !coverPhotoError) {
     return (
       <img
         src={imageUrl}
         alt={altText}
         className={className}
-        onError={() => setImageError(true)}
+        onError={() => setCoverPhotoError(true)}
       />
     );
   }
   
-  // If cover photo is not available or errored, try to use the logo
-  if (shop?.logo_url) {
+  // If cover photo is not available or errored, use the logo as fallback
+  if (shop?.logo_url && !logoError) {
     return (
       <img
         src={shop.logo_url}
         alt={`${shop?.name || 'Coffee shop'} logo`}
         className={className}
-        onError={() => {
-          // If logo also fails, we'll fall back to the default placeholder
-          setImageError(true);
-        }}
+        onError={() => setLogoError(true)}
       />
     );
   }

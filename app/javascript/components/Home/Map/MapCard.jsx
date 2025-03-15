@@ -27,7 +27,7 @@ const MapCard = ({ shop, isSelected, isHighlighted, onClick }) => {
       `}
       onClick={onClick}
     >
-      {/* Background blur with logo */}
+      {/* Background blur with logo (always shown as a placeholder when available) */}
       {shop.logo_url && <div style={backgroundStyle}></div>}
 
       <div className="flex flex-col h-full relative z-10">
