@@ -1,5 +1,4 @@
 import mapboxgl from "mapbox-gl"
-import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder"
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css"
 import "mapbox-gl/dist/mapbox-gl.css"
 import { setupMapEventHandlers, createGeoJSONFeatures } from "./MapEventHandler"
@@ -35,15 +34,6 @@ export const initializeMap = ({
   map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
   map.addControl(new mapboxgl.NavigationControl(), 'top-right');
   map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
-
-  const geocoder = new MapboxGeocoder({
-    accessToken: mapboxAccessToken,
-    mapboxgl: mapboxgl,
-    marker: false,
-    placeholder: 'Search for a location',
-    proximity: userLocation ? { longitude: userLocation.longitude, latitude: userLocation.latitude } : undefined
-  });
-  map.addControl(geocoder, 'top-left');
 
   map.addControl(
     new mapboxgl.GeolocateControl({
