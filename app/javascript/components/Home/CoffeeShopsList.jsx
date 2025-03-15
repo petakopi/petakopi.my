@@ -2,12 +2,42 @@ import React from "react"
 import CoffeeShopCard from "./CoffeeShopCard"
 import LoadingIndicator from "./LoadingIndicator"
 import SkeletonCard from "../SkeletonCard"
+import {
+  FacebookIcon,
+  InstagramIcon,
+  TwitterIcon,
+  TikTokIcon,
+  WhatsAppIcon,
+  GoogleIcon
+} from "../Icons"
 
 const CoffeeShopsList = ({
   shops,
   loading,
-  viewType = "card" // Default to card view
+  viewType = "card", // Default to card view
+  tab = "explore" // Default to explore tab
 }) => {
+  // Function to get the appropriate icon based on link name
+  const getLinkIcon = (linkName) => {
+    const name = linkName.toLowerCase();
+    switch (name) {
+      case 'facebook':
+        return <FacebookIcon />;
+      case 'instagram':
+        return <InstagramIcon />;
+      case 'twitter':
+        return <TwitterIcon />;
+      case 'tiktok':
+        return <TikTokIcon />;
+      case 'whatsapp':
+        return <WhatsAppIcon />;
+      case 'google':
+        return <GoogleIcon />;
+      default:
+        return null;
+    }
+  };
+
   if (loading && shops.length === 0) {
     if (viewType === "list") {
       // List view skeleton
@@ -60,45 +90,160 @@ const CoffeeShopsList = ({
       <div className="col-span-full">
         <div className="overflow-hidden bg-white shadow sm:rounded-md">
           <ul className="divide-y divide-gray-200">
-            {shops.map((coffee_shop, index) => (
-              <li key={`${coffee_shop.slug}-${index}`}>
-                <a href={`/coffee_shops/${coffee_shop.slug}`} className="block hover:bg-gray-50">
-                  <div className="px-4 py-4 sm:px-6">
-                    <div className="flex items-center justify-between">
+            {shops.map((coffee_shop, index) => {
+              // Check if location exists
+              const hasLocation = coffee_shop.district || coffee_shop.state;
+
+              return (
+                <li key={`${coffee_shop.slug}-${index}`} className="px-4 py-4 sm:px-6 bg-white">
+                  <div className="flex w-full items-center justify-between space-x-6">
+                    <div className="flex-1 truncate">
                       <div className="flex items-center space-x-3">
-                        {coffee_shop.logo && coffee_shop.logo !== "" && (
-                          <img
-                            src={coffee_shop.logo}
-                            alt={`${coffee_shop.name} logo`}
-                            className="w-10 h-10 rounded-full object-cover"
-                          />
-                        )}
-                        <p className="font-medium text-brown-600">{coffee_shop.name}</p>
+                        <h3 className="truncate text-sm font-medium text-gray-900 flex items-center">
+                          <a href={`/coffee_shops/${coffee_shop.slug}`}>
+                            {coffee_shop.name}
+                          </a>
+                        </h3>
                       </div>
-                      <div className="flex items-center">
-                        <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="mt-2 sm:flex sm:justify-between">
-                      <div className="sm:flex">
-                        <p className="flex items-center text-sm text-gray-500">
-                          {coffee_shop.district && <span className="mr-1">{coffee_shop.district},</span>}
-                          {coffee_shop.state || 'Location not specified'}
+                      {hasLocation && (
+                        <p className="mt-1 truncate text-sm text-gray-500">
+                          {coffee_shop.district && <span>{coffee_shop.district}, </span>}
+                          {coffee_shop.state}
                         </p>
-                      </div>
-                      <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                        <p>
-                          Updated: {new Date(coffee_shop.updated_at).toLocaleDateString()}
-                        </p>
-                      </div>
+                      )}
                     </div>
+                    <a href={`/coffee_shops/${coffee_shop.slug}`}>
+                      {coffee_shop.logo && coffee_shop.logo !== "" ? (
+                        <img
+                          src={coffee_shop.logo}
+                          alt={`${coffee_shop.name} logo`}
+                          className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300 border border-brown"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="h-10 w-10 rounded-full flex items-center justify-center bg-gray-200">
+                          <svg className="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      )}
+                    </a>
                   </div>
-                </a>
-              </li>
-            ))}
+
+                  {coffee_shop.links && coffee_shop.links.length > 0 && (
+                    <div className="text-sm text-gray-500 mt-8">
+                      <div className="flex space-x-3.5 items-center">
+                        {coffee_shop.links
+                          .filter(link => link.url)
+                          .map((link, i) => (
+                            <span key={i} onClick={(e) => e.stopPropagation()}>
+                              <a
+                                href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-gray-600 hover:text-gray-900"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                {getLinkIcon(link.name)}
+                              </a>
+                            </span>
+                          ))}
+                      </div>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
+        </div>
+      </div>
+    );
+  };
+
+  // Render desktop table view
+  const renderDesktopTableView = () => {
+    return (
+      <div className="hidden sm:block col-span-full">
+        <div className="mt-4 flex flex-col">
+          <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+              <div className="shadow border-b border-gray-200 sm:rounded-lg">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {shops.map((coffee_shop, index) => {
+                      // Check if location exists
+                      const hasLocation = coffee_shop.district || coffee_shop.state;
+
+                      return (
+                        <tr key={`desktop-${coffee_shop.slug}-${index}`} className="bg-white">
+                          <td className="px-6 py-4 sticky sm:static left-0 z-0 min-w-[220px]">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 h-10 w-10">
+                                <a href={`/coffee_shops/${coffee_shop.slug}`}>
+                                  {coffee_shop.logo && coffee_shop.logo !== "" ? (
+                                    <img
+                                      src={coffee_shop.logo}
+                                      alt={`${coffee_shop.name} logo`}
+                                      className="h-10 w-10 rounded-full border border-brown"
+                                      loading="lazy"
+                                    />
+                                  ) : (
+                                    <div className="h-10 w-10 rounded-full flex items-center justify-center bg-gray-200">
+                                      <svg className="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                      </svg>
+                                    </div>
+                                  )}
+                                </a>
+                              </div>
+                              <div className="ml-4">
+                                <div className="text-sm font-medium text-gray-900 flex items-center">
+                                  <a href={`/coffee_shops/${coffee_shop.slug}`}>
+                                    {coffee_shop.name}
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {hasLocation && (
+                              <div className="text-sm text-gray-900">
+                                {coffee_shop.district && <span>{coffee_shop.district}, </span>}
+                                {coffee_shop.state}
+                              </div>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <div className="flex space-x-2 items-center">
+                              {coffee_shop.links && coffee_shop.links
+                                .filter(link => link.url)
+                                .map((link, i) => (
+                                  <span key={i}>
+                                    <a
+                                      href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-gray-600 hover:text-gray-900"
+                                    >
+                                      {getLinkIcon(link.name)}
+                                    </a>
+                                  </span>
+                                ))}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href={`/coffee_shops/${coffee_shop.slug}`} className="text-brown-600 hover:text-brown-900">
+                              View
+                            </a>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -109,9 +254,10 @@ const CoffeeShopsList = ({
     return (
       <>
         {shops.map((coffee_shop, index) => (
-          <CoffeeShopCard 
+          <CoffeeShopCard
             key={`${coffee_shop.slug}-${index}`}
             coffee_shop={coffee_shop}
+            tab={tab}
           />
         ))}
       </>
@@ -120,7 +266,12 @@ const CoffeeShopsList = ({
 
   return (
     <>
-      {viewType === "list" ? renderListView() : renderCardView()}
+      {viewType === "list" ? (
+        <>
+          <div className="sm:hidden">{renderListView()}</div>
+          {renderDesktopTableView()}
+        </>
+      ) : renderCardView()}
 
       {loading && shops.length > 0 && (
         <div className="col-span-full text-center py-4">

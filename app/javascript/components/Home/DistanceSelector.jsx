@@ -9,19 +9,19 @@ const distanceOptions = [
 
 const DistanceSelector = ({ selectedDistance, handleDistanceChange, disabled = false }) => {
   return (
-    <div className="col-span-full mb-4">
-      <div className="flex flex-wrap gap-2 justify-center">
+    <div className="flex items-center">
+      <div className="flex border border-gray-300 rounded-md overflow-hidden">
         {distanceOptions.map((option) => (
           <button
             key={option.value}
             onClick={() => !disabled && handleDistanceChange(option.value)}
             disabled={disabled}
-            className={`px-3 py-1 rounded-full text-sm ${
+            className={`px-3 py-1.5 text-sm ${
               selectedDistance === option.value
                 ? "bg-brown-500 text-white"
                 : disabled 
-                  ? "bg-gray-200 text-gray-700"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  ? "bg-white text-gray-400 cursor-not-allowed"
+                  : "bg-white text-gray-700 hover:bg-gray-100"
             }`}
           >
             {option.label}

@@ -1,6 +1,5 @@
 import React from "react"
 import CoffeeShopsList from "./CoffeeShopsList"
-import DistanceSelector from "./DistanceSelector"
 import LocationPermissionPrompt from "./LocationPermissionPrompt"
 import LoadingIndicator from "./LoadingIndicator"
 
@@ -9,8 +8,6 @@ const NearbyTab = ({
   nearbyLoading,
   locationPermission,
   requestLocationPermission,
-  selectedDistance,
-  handleDistanceChange,
   viewType
 }) => {
   // Show loading indicator when we're waiting for location permission
@@ -31,19 +28,12 @@ const NearbyTab = ({
       />
 
       {(locationPermission !== "denied" && locationPermission !== "blocked") && (
-        <>
-          <DistanceSelector
-            selectedDistance={selectedDistance}
-            handleDistanceChange={handleDistanceChange}
-            disabled={nearbyLoading && nearbyShops.length === 0}
-          />
-
-          <CoffeeShopsList
-            shops={nearbyShops}
-            loading={nearbyLoading}
-            viewType={viewType}
-          />
-        </>
+        <CoffeeShopsList
+          shops={nearbyShops}
+          loading={nearbyLoading}
+          viewType={viewType}
+          tab="nearby"
+        />
       )}
     </>
   )

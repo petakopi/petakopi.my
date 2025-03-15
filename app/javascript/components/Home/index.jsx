@@ -3,6 +3,7 @@ import ExploreTab from "./ExploreTab"
 import NearbyTab from "./NearbyTab"
 import MapTab from "./MapTab"
 import FilterSidebar from "./FilterSidebar"
+import DistanceSelector from "./DistanceSelector"
 
 const initialTabs = [
   { name: "Explore", href: "#" },
@@ -366,8 +367,9 @@ export default function Home() {
 
   return (
     <div>
+      {/* Main navigation tabs */}
       <div className="border-b border-gray-200">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
           <nav className="-mb-px flex space-x-8">
             {tabs.map((tab, index) => (
               <button
@@ -384,37 +386,40 @@ export default function Home() {
               </button>
             ))}
           </nav>
+        </div>
+      </div>
 
-          <div className="flex items-center space-x-3">
-            {/* View toggle buttons - hide on map tab */}
-            {activeTab !== 2 && (
-              <div className="flex border border-gray-300 rounded-md overflow-hidden">
-                <button
-                  onClick={() => setViewType("card")}
-                  className={`flex items-center px-3 py-1.5 text-sm ${viewType === "card"
-                    ? "bg-brown-500 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                    }`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                  </svg>
-                  Cards
-                </button>
-                <button
-                  onClick={() => setViewType("list")}
-                  className={`flex items-center px-3 py-1.5 text-sm ${viewType === "list"
-                    ? "bg-brown-500 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                    }`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                  List
-                </button>
-              </div>
-            )}
+      {/* Controls bar - moved below tabs for better mobile experience */}
+      {activeTab !== 2 && (
+        <div className="mt-4">
+          {/* View type and filter controls */}
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+            <div className="flex border border-gray-300 rounded-md overflow-hidden">
+              <button
+                onClick={() => setViewType("card")}
+                className={`flex items-center px-3 py-1.5 text-sm ${viewType === "card"
+                  ? "bg-brown-500 text-white"
+                  : "bg-white text-gray-700 hover:bg-gray-100"
+                  }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                Cards
+              </button>
+              <button
+                onClick={() => setViewType("list")}
+                className={`flex items-center px-3 py-1.5 text-sm ${viewType === "list"
+                  ? "bg-brown-500 text-white"
+                  : "bg-white text-gray-700 hover:bg-gray-100"
+                  }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                List
+              </button>
+            </div>
 
             {/* Filter button */}
             <button
@@ -435,11 +440,22 @@ export default function Home() {
               )}
             </button>
           </div>
-        </div>
-      </div>
 
-      <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Distance selector in its own row - only show in Nearby tab */}
+          {activeTab === 1 && locationPermission === "granted" && (
+            <div className="mb-3">
+              <DistanceSelector
+                selectedDistance={selectedDistance}
+                handleDistanceChange={handleDistanceChange}
+                disabled={nearbyLoading && nearbyShops.length === 0}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="mt-4 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-4">
           {activeTab === 0 && (
             <ExploreTab
               everywhereShops={everywhereShops}
@@ -454,8 +470,6 @@ export default function Home() {
               nearbyLoading={nearbyLoading}
               locationPermission={locationPermission}
               requestLocationPermission={requestLocationPermission}
-              selectedDistance={selectedDistance}
-              handleDistanceChange={handleDistanceChange}
               viewType={viewType}
             />
           )}

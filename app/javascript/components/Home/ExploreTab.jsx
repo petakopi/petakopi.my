@@ -11,6 +11,7 @@ const EverywhereTab = ({
       shops={everywhereShops}
       loading={everywhereLoading}
       viewType={viewType}
+      tab="explore"
     />
   )
 }
