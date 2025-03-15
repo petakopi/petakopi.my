@@ -33,7 +33,12 @@ export const initializeMap = ({
 
   map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
   map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-  map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+  
+  // Always add fullscreen control regardless of device support
+  map.addControl(new mapboxgl.FullscreenControl({
+    // Explicitly set the container to force visibility on mobile
+    container: mapContainer.current
+  }), 'top-right');
 
   map.addControl(
     new mapboxgl.GeolocateControl({
