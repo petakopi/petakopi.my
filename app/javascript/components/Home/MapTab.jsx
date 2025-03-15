@@ -186,7 +186,7 @@ export default function MapTab({
   // Handle card click
   const handleCardClick = (shop) => {
     highlightShop(shop.id);
-    window.location.href = `/coffee_shops/${shop.slug}`;
+    window.open(`/coffee_shops/${shop.slug}`, '_blank');
   };
 
   useEffect(() => {

@@ -164,8 +164,7 @@ export const initializeMap = ({
 
       // First fly to the location
       map.flyTo({
-        center: coordinates,
-        zoom: Math.max(map.getZoom(), 14),
+        zoom: Math.max(map.getZoom(), 7),
         essential: true
       });
 
