@@ -16,12 +16,22 @@ function classNames(...classes) {
 }
 
 export default function Home() {
-  const [tabs, setTabs] = useState(initialTabs.map((tab, index) => ({
-    ...tab,
-    current: index === 0
-  })))
+  const [tabs, setTabs] = useState(() => {
+    // Try to get the saved tab index from localStorage
+    const savedTabIndex = localStorage.getItem('petakopi_active_tab');
+    const activeIndex = savedTabIndex !== null ? parseInt(savedTabIndex, 10) : 0;
 
-  const [activeTab, setActiveTab] = useState(0)
+    return initialTabs.map((tab, index) => ({
+      ...tab,
+      current: index === activeIndex
+    }));
+  });
+
+  const [activeTab, setActiveTab] = useState(() => {
+    // Try to get the saved tab index from localStorage
+    const savedTabIndex = localStorage.getItem('petakopi_active_tab');
+    return savedTabIndex !== null ? parseInt(savedTabIndex, 10) : 0;
+  });
 
   // Explore tab state
   const [everywhereShops, setEverywhereShops] = useState([])
@@ -47,7 +57,11 @@ export default function Home() {
   const [filters, setFilters] = useState({})
 
   // View type state (card or list)
-  const [viewType, setViewType] = useState("card")
+  const [viewType, setViewType] = useState(() => {
+    // Try to get the saved view type from localStorage
+    const savedViewType = localStorage.getItem('petakopi_view_type');
+    return savedViewType || "card"; // Default to card view if not found
+  });
 
   // Initial data loading for all tabs
   useEffect(() => {
@@ -214,6 +228,9 @@ export default function Home() {
       }))
     )
 
+    // Save the active tab index to localStorage
+    localStorage.setItem('petakopi_active_tab', index.toString());
+
     // Request location permission when switching to Nearby tab
     if (index === 1 && locationPermission !== "granted") {
       requestLocationPermission()
@@ -364,6 +381,11 @@ export default function Home() {
       </div>
     )
   }
+
+  // Add effect to save view type when it changes
+  useEffect(() => {
+    localStorage.setItem('petakopi_view_type', viewType);
+  }, [viewType]);
 
   return (
     <div>
