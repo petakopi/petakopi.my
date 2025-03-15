@@ -459,51 +459,69 @@ export default function MapTab({
           {limitedShops.map((shop, index) => (
             <div
               key={`shop-${shop.id || index}`}
-              className={`flex-shrink-0 w-64 bg-white bg-opacity-90 backdrop-blur-sm rounded-lg overflow-hidden transition-all ${selectedShopId === shop.id
-                ? 'shadow-lg ring-2 ring-brown-500'
-                : 'shadow-md hover:shadow-lg'
+              className={`flex-shrink-0 w-64 bg-white rounded-lg border border-gray-200 overflow-hidden transition-all cursor-pointer ${selectedShopId === shop.id ? 'shadow-lg ring-2 ring-brown-500' : 'shadow-md hover:shadow-lg'
                 }`}
-              onClick={() => highlightShop(shop.id)}
+              onClick={() => {
+                highlightShop(shop.id);
+                // Navigate to coffee shop page when card is clicked
+                window.location.href = `/coffee_shops/${shop.slug}`;
+              }}
             >
-              <a
-                href={`/coffee_shops/${shop.slug}`}
-                className="block"
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevent the parent onClick from firing
-                }}
-              >
-                <div className="h-24 bg-brown-100 flex items-center justify-center">
-                  {shop.logo_url ? (
-                    <img
-                      src={shop.logo_url}
-                      alt={shop.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "https://via.placeholder.com/300x200?text=No+Image";
-                      }}
-                    />
-                  ) : (
-                    <div className="text-brown-500 text-center p-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
+              <div className="p-4">
+                <div className="flex flex-col h-full">
+                  {/* Cover photo */}
+                  <div className="mb-4">
+                    {shop.cover_photo ? (
+                      <div className="w-full h-32 rounded-lg overflow-hidden">
+                        <img
+                          src={shop.cover_photo}
+                          alt={`${shop.name} cover`}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://via.placeholder.com/300x200?text=No+Image";
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <div className="h-16 w-16 rounded-full flex items-center justify-center bg-gray-200">
+                          <svg className="h-10 w-10 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Shop info */}
+                  <div className="flex items-center space-x-3">
+                    <div className="flex-shrink-0 h-10 w-10">
+                      {shop.logo_url ? (
+                        <img
+                          src={shop.logo_url}
+                          alt={`${shop.name} logo`}
+                          className="h-10 w-10 rounded-full border border-brown"
+                          loading="lazy"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://via.placeholder.com/40x40?text=Logo";
+                          }}
+                        />
+                      ) : (
+                        <div className="h-10 w-10 rounded-full flex items-center justify-center bg-gray-200">
+                          <svg className="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="p-3">
-                  <h3 className="font-bold text-brown-800 truncate">{shop.name}</h3>
-                  {shop.address && (
-                    <p className="text-xs text-gray-600 mt-1 truncate">{shop.address}</p>
-                  )}
-                  <div className="mt-2 flex justify-between items-center">
-                    <span className="text-xs text-brown-600">View details</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-brown-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-900">{shop.name}</h3>
+                    </div>
                   </div>
                 </div>
-              </a>
+              </div>
             </div>
           ))}
 
@@ -561,6 +579,24 @@ export default function MapTab({
           font-family: inherit;
           background-color: white;
           cursor: pointer;
+        }
+
+        /* Fix for fullscreen button on mobile */
+        .mapboxgl-ctrl-fullscreen {
+          display: block !important;
+        }
+
+        /* Ensure controls are visible on mobile */
+        @media (max-width: 640px) {
+          .mapboxgl-ctrl-top-right {
+            display: flex !important;
+            flex-direction: column;
+          }
+
+          .mapboxgl-ctrl-top-right .mapboxgl-ctrl {
+            margin: 10px 10px 0 0 !important;
+            display: block !important;
+          }
         }
 
         .coffee-shop-popup .mapboxgl-popup-content {
