@@ -356,31 +356,48 @@ export default function Home() {
 
   // Pagination component
   const Pagination = ({ hasNext, hasPrev, onNext, onPrev, loading }) => {
+    const handleNext = () => {
+      if (hasNext && !loading) {
+        onNext();
+        // Scroll to top after data loads
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
+      }
+    };
+
+    const handlePrev = () => {
+      if (hasPrev && !loading) {
+        onPrev();
+        // Scroll to top after data loads
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
+      }
+    };
+
     return (
-      <div className="flex justify-center mt-8 space-x-4">
-        <button
-          onClick={onPrev}
-          disabled={!hasPrev || loading}
-          className={`px-4 py-2 rounded ${hasPrev && !loading
-            ? "bg-brown-500 text-white hover:bg-brown-600"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            }`}
-        >
-          Previous
-        </button>
-        <button
-          onClick={onNext}
-          disabled={!hasNext || loading}
-          className={`px-4 py-2 rounded ${hasNext && !loading
-            ? "bg-brown-500 text-white hover:bg-brown-600"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            }`}
-        >
-          Next
-        </button>
+      <div className="py-3 flex justify-end">
+        <nav className="pagy-nav pagination" role="navigation">
+          {hasPrev && !loading ? (
+            <span className="page prev">
+              <a href="#" onClick={(e) => { e.preventDefault(); handlePrev(); }}>Prev</a>
+            </span>
+          ) : (
+            <span className="page prev disabled">Prev</span>
+          )}
+          
+          {hasNext && !loading ? (
+            <span className="page next">
+              <a href="#" onClick={(e) => { e.preventDefault(); handleNext(); }}>Next</a>
+            </span>
+          ) : (
+            <span className="page next disabled">Next</span>
+          )}
+        </nav>
       </div>
-    )
-  }
+    );
+  };
 
   // Add effect to save view type when it changes
   useEffect(() => {
