@@ -203,54 +203,6 @@ export default function Home() {
     }
   }
 
-  const handleNextPage = () => {
-    if (activeTab === 0 && everywhereHasNext) {
-      fetchEverywhereShops(everywhereNextCursor, 'next')
-    } else if (activeTab === 1 && nearbyHasNext) {
-      fetchNearbyShops(nearbyNextCursor, 'next')
-    }
-  }
-
-  const handlePrevPage = () => {
-    if (activeTab === 0 && everywhereHasPrev) {
-      fetchEverywhereShops(everywherePrevCursor, 'prev')
-    } else if (activeTab === 1 && nearbyHasPrev) {
-      fetchNearbyShops(nearbyPrevCursor, 'prev')
-    }
-  }
-
-  const handleTabChange = (index) => {
-    setActiveTab(index)
-    setTabs(
-      tabs.map((tab, i) => ({
-        ...tab,
-        current: i === index
-      }))
-    )
-
-    // Save the active tab index to localStorage
-    localStorage.setItem('petakopi_active_tab', index.toString());
-
-    // Request location permission when switching to Nearby tab
-    if (index === 1 && locationPermission !== "granted") {
-      requestLocationPermission()
-    }
-  }
-
-  const handleDistanceChange = (distance) => {
-    setSelectedDistance(distance)
-    if (userLocation && locationPermission === "granted") {
-      // Refetch shops with new distance
-      setNearbyShops([])
-      setNearbyNextCursor(null)
-      setNearbyPrevCursor(null)
-      setNearbyHasNext(false)
-      setNearbyHasPrev(false)
-      setNearbyLoading(true)
-      fetchNearbyShops()
-    }
-  }
-
   const handleApplyFilters = (newFilters) => {
     console.log("Applying filters:", newFilters)
 
@@ -351,6 +303,54 @@ export default function Home() {
           setNearbyHasPrev(false)
           setNearbyLoading(false)
         });
+    }
+  }
+
+  const handleNextPage = () => {
+    if (activeTab === 0 && everywhereHasNext) {
+      fetchEverywhereShops(everywhereNextCursor, 'next')
+    } else if (activeTab === 1 && nearbyHasNext) {
+      fetchNearbyShops(nearbyNextCursor, 'next')
+    }
+  }
+
+  const handlePrevPage = () => {
+    if (activeTab === 0 && everywhereHasPrev) {
+      fetchEverywhereShops(everywherePrevCursor, 'prev')
+    } else if (activeTab === 1 && nearbyHasPrev) {
+      fetchNearbyShops(nearbyPrevCursor, 'prev')
+    }
+  }
+
+  const handleTabChange = (index) => {
+    setActiveTab(index)
+    setTabs(
+      tabs.map((tab, i) => ({
+        ...tab,
+        current: i === index
+      }))
+    )
+
+    // Save the active tab index to localStorage
+    localStorage.setItem('petakopi_active_tab', index.toString());
+
+    // Request location permission when switching to Nearby tab
+    if (index === 1 && locationPermission !== "granted") {
+      requestLocationPermission()
+    }
+  }
+
+  const handleDistanceChange = (distance) => {
+    setSelectedDistance(distance)
+    if (userLocation && locationPermission === "granted") {
+      // Refetch shops with new distance
+      setNearbyShops([])
+      setNearbyNextCursor(null)
+      setNearbyPrevCursor(null)
+      setNearbyHasNext(false)
+      setNearbyHasPrev(false)
+      setNearbyLoading(true)
+      fetchNearbyShops()
     }
   }
 
@@ -515,8 +515,6 @@ export default function Home() {
 
           {activeTab === 2 && (
             <MapTab
-              shops={locationPermission === "granted" ? nearbyShops : everywhereShops}
-              loading={locationPermission === "granted" ? nearbyLoading : everywhereLoading}
               userLocation={userLocation}
             />
           )}

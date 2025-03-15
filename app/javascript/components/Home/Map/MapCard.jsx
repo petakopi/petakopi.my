@@ -12,10 +12,10 @@ const MapCard = ({ shop, isSelected, isHighlighted, onClick }) => {
     >
       <div className="flex flex-col h-full">
         <div className="w-full">
-          {shop.cover_photo ? (
+          {shop.cover_photo_url ? (
             <div className="w-full h-32 overflow-hidden">
               <img
-                src={shop.cover_photo}
+                src={shop.cover_photo_url}
                 alt={`${shop.name} cover`}
                 className="w-full h-full object-cover"
                 onError={(e) => {
@@ -38,9 +38,9 @@ const MapCard = ({ shop, isSelected, isHighlighted, onClick }) => {
         <div className="p-4">
           <div className="flex items-center space-x-3">
             <div className="flex-shrink-0 h-10 w-10">
-              {shop.logo ? (
+              {shop.logo_url ? (
                 <img
-                  src={shop.logo}
+                  src={shop.logo_url}
                   alt={`${shop.name} logo`}
                   className="h-10 w-10 rounded-full border border-brown"
                   loading="lazy"
