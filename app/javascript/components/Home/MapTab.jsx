@@ -4,8 +4,6 @@ import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder"
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css"
 import "mapbox-gl/dist/mapbox-gl.css"
 
-
-
 export default function MapTab({
   shops,
   loading,
@@ -20,10 +18,11 @@ export default function MapTab({
   const [visibleShops, setVisibleShops] = useState([])
   const [showCards, setShowCards] = useState(false)
   const [selectedShopId, setSelectedShopId] = useState(null)
+  const [highlightedShopId, setHighlightedShopId] = useState(null)
+  const highlightTimeoutRef = useRef(null)
   const markersRef = useRef([])
   const clustersRef = useRef(null)
 
-  // Initialize map when component mounts
   useEffect(() => {
     if (!mapContainer.current) return
 
@@ -39,16 +38,12 @@ export default function MapTab({
       attributionControl: false
     })
 
-    // Add attribution control in bottom-left
     map.current.addControl(new mapboxgl.AttributionControl(), 'bottom-left')
 
-    // Add navigation controls
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right')
 
-    // Add fullscreen control
     map.current.addControl(new mapboxgl.FullscreenControl(), 'top-right')
 
-    // Add geocoder (search box)
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxAccessToken,
       mapboxgl: mapboxgl,
@@ -58,7 +53,6 @@ export default function MapTab({
     })
     map.current.addControl(geocoder, 'top-left')
 
-    // Add geolocation control
     map.current.addControl(
       new mapboxgl.GeolocateControl({
         positionOptions: {
@@ -70,7 +64,6 @@ export default function MapTab({
       'top-right'
     )
 
-    // Add zoom change listener
     map.current.on('zoomend', () => {
       const zoom = map.current.getZoom();
       console.log("Zoom changed to:", zoom);
@@ -83,7 +76,6 @@ export default function MapTab({
       setMapInitializing(false)
       setCurrentZoom(map.current.getZoom());
 
-      // Add a source for clusters
       map.current.addSource('coffee-shops', {
         type: 'geojson',
         data: {
@@ -95,7 +87,6 @@ export default function MapTab({
         clusterRadius: 50
       })
 
-      // Add a layer for the clusters
       map.current.addLayer({
         id: 'clusters',
         type: 'circle',
@@ -119,7 +110,6 @@ export default function MapTab({
         }
       })
 
-      // Add a layer for the cluster counts
       map.current.addLayer({
         id: 'cluster-count',
         type: 'symbol',
@@ -135,7 +125,6 @@ export default function MapTab({
         }
       })
 
-      // Add a layer for individual points
       map.current.addLayer({
         id: 'unclustered-point',
         type: 'circle',
@@ -164,7 +153,6 @@ export default function MapTab({
         }
       })
 
-      // Inspect a cluster on click
       map.current.on('click', 'clusters', (e) => {
         const features = map.current.queryRenderedFeatures(e.point, {
           layers: ['clusters']
@@ -183,78 +171,30 @@ export default function MapTab({
         )
       })
 
-      // Show popup on unclustered point click
       map.current.on('click', 'unclustered-point', (e) => {
-        const coordinates = e.features[0].geometry.coordinates.slice()
-        const { id, name, address, slug, logo_url } = e.features[0].properties
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const { id } = e.features[0].properties;
+        
+        // Convert id to number if it's a string
+        const shopId = typeof id === 'string' ? parseInt(id, 10) : id;
+        
+        // First fly to the location
+        map.current.flyTo({
+          center: coordinates,
+          zoom: Math.max(map.current.getZoom(), 14),
+          essential: true
+        });
+        
+        // Wait for the map to finish flying before highlighting
+        setTimeout(() => {
+          // Set the selected shop (for the ring)
+          setSelectedShopId(shopId);
+          
+          // Animate highlight the shop card
+          animateHighlightShop(shopId);
+        }, 1000);
+      });
 
-        // Create popup content
-        const popupContent = document.createElement('div')
-        popupContent.className = 'map-popup max-w-xs'
-
-        // Create header with shop name
-        const header = document.createElement('div')
-        header.className = 'bg-brown-500 text-white p-3 rounded-t'
-
-        const title = document.createElement('h3')
-        title.className = 'font-bold text-lg'
-        title.textContent = name
-        header.appendChild(title)
-
-        popupContent.appendChild(header)
-
-        // Add shop info
-        const content = document.createElement('div')
-        content.className = 'p-4'
-
-        if (address) {
-          const addressEl = document.createElement('p')
-          addressEl.className = 'text-sm text-gray-600 mb-3 flex items-start'
-          addressEl.innerHTML = `
-            <svg class="mr-1 mt-0.5 flex-shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="#6B4F4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="12" cy="10" r="3" stroke="#6B4F4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>${address}</span>
-          `
-          content.appendChild(addressEl)
-        }
-
-        // Add buttons container
-        const buttonsContainer = document.createElement('div')
-        buttonsContainer.className = 'flex space-x-2 mt-2'
-
-        // View details button
-        const viewDetailsBtn = document.createElement('a')
-        viewDetailsBtn.href = `/coffee_shops/${slug}`
-        viewDetailsBtn.className = 'flex-1 bg-brown-500 hover:bg-brown-600 text-white py-2 px-3 rounded text-sm font-medium text-center transition-colors'
-        viewDetailsBtn.textContent = 'View Details'
-        buttonsContainer.appendChild(viewDetailsBtn)
-
-        // Get directions button
-        const directionsBtn = document.createElement('a')
-        directionsBtn.href = `https://www.google.com/maps/dir/?api=1&destination=${coordinates[1]},${coordinates[0]}`
-        directionsBtn.target = '_blank'
-        directionsBtn.rel = 'noopener noreferrer'
-        directionsBtn.className = 'flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-3 rounded text-sm font-medium text-center transition-colors'
-        directionsBtn.textContent = 'Directions'
-        buttonsContainer.appendChild(directionsBtn)
-
-        content.appendChild(buttonsContainer)
-        popupContent.appendChild(content)
-
-        // Create popup with custom styling
-        new mapboxgl.Popup({
-          offset: 25,
-          maxWidth: '320px',
-          className: 'coffee-shop-popup'
-        })
-          .setLngLat(coordinates)
-          .setDOMContent(popupContent)
-          .addTo(map.current)
-      })
-
-      // Change cursor on hover
       map.current.on('mouseenter', 'clusters', () => {
         map.current.getCanvas().style.cursor = 'pointer'
       })
@@ -268,28 +208,25 @@ export default function MapTab({
         map.current.getCanvas().style.cursor = ''
       })
 
-      // Update visible shops when map moves
       map.current.on('moveend', () => {
         if (!map.current.getSource('coffee-shops')) return;
 
         const currentZoom = map.current.getZoom();
         console.log("Map moved, current zoom:", currentZoom);
 
-        // Only update visible shops if we're zoomed in enough
         if (currentZoom >= 13) {
           const features = map.current.queryRenderedFeatures({ layers: ['unclustered-point'] });
           console.log("Found features:", features.length);
 
-          // Extract shop data from features
           const shopsInView = features.map(feature => {
-            // Parse the properties which might be strings due to GeoJSON serialization
             const props = feature.properties;
             return {
               id: typeof props.id === 'string' ? parseInt(props.id, 10) : props.id,
               name: props.name,
               address: props.address,
               slug: props.slug,
-              logo_url: props.logo_url,
+              logo: props.logo,
+              cover_photo: props.cover_photo,
               lat: feature.geometry.coordinates[1],
               lng: feature.geometry.coordinates[0]
             };
@@ -304,18 +241,15 @@ export default function MapTab({
       });
     })
 
-    // Clean up on unmount
     return () => {
       if (map.current) map.current.remove()
       clearMarkers()
     }
   }, [])
 
-  // Update markers when shops data changes
   useEffect(() => {
     if (!map.current || !mapLoaded || loading) return
 
-    // Convert shops to GeoJSON
     const features = shops
       .filter(shop => shop.lat && shop.lng)
       .map(shop => ({
@@ -329,11 +263,11 @@ export default function MapTab({
           name: shop.name,
           address: shop.address,
           slug: shop.slug,
-          logo_url: shop.logo_url
+          logo: shop.logo,
+          cover_photo: shop.cover_photo
         }
       }))
 
-    // Update the source data
     if (map.current.getSource('coffee-shops')) {
       map.current.getSource('coffee-shops').setData({
         type: 'FeatureCollection',
@@ -341,7 +275,6 @@ export default function MapTab({
       })
     }
 
-    // Fit bounds to markers if we have shops
     if (features.length > 0) {
       const bounds = new mapboxgl.LngLatBounds()
 
@@ -356,7 +289,6 @@ export default function MapTab({
     }
   }, [shops, loading, mapLoaded])
 
-  // Helper to clear markers (for legacy cleanup)
   const clearMarkers = () => {
     markersRef.current.forEach(marker => marker.remove())
     markersRef.current = []
@@ -367,53 +299,71 @@ export default function MapTab({
     setSelectedShopId(shopId);
 
     if (map.current && map.current.getSource('coffee-shops')) {
-      // Get the current data
       const data = map.current.getSource('coffee-shops')._data;
 
-      // Update the selected_id property in the source
-      if (data && data.features) {
-        // Add the selected_id to the source properties
-        const updatedData = {
-          ...data,
-          properties: {
-            ...data.properties,
-            selected_id: shopId
-          }
-        };
-
-        // Update the source
-        map.current.getSource('coffee-shops').setData(updatedData);
-
-        // Find the shop coordinates to fly to
-        const selectedFeature = data.features.find(f =>
-          f.properties.id === shopId ||
-          f.properties.id === shopId.toString()
-        );
-
-        if (selectedFeature && selectedFeature.geometry) {
-          // Fly to the selected shop
-          map.current.flyTo({
-            center: selectedFeature.geometry.coordinates,
-            zoom: Math.max(map.current.getZoom(), 14),
-            essential: true
-          });
+      const updatedData = {
+        ...data,
+        properties: {
+          ...data.properties,
+          selected_id: shopId
         }
+      };
+
+      map.current.getSource('coffee-shops').setData(updatedData);
+
+      const selectedFeature = data.features.find(f =>
+        f.properties.id === shopId ||
+        f.properties.id === shopId.toString()
+      );
+
+      if (selectedFeature && selectedFeature.geometry) {
+        map.current.flyTo({
+          center: selectedFeature.geometry.coordinates,
+          zoom: Math.max(map.current.getZoom(), 14),
+          essential: true
+        });
       }
     }
   }
 
-  // Function to render coffee shop cards
+  // Function to temporarily highlight a shop card with animation
+  const animateHighlightShop = (shopId) => {
+    // Clear any existing timeout
+    if (highlightTimeoutRef.current) {
+      clearTimeout(highlightTimeoutRef.current);
+    }
+    
+    // Set the highlighted shop
+    setHighlightedShopId(shopId);
+    
+    // Find and scroll to the card
+    setTimeout(() => {
+      const cardElement = document.getElementById(`shop-${shopId}`);
+      if (cardElement) {
+        // Scroll the cards container to show the highlighted card
+        const cardsContainer = document.getElementById('map-cards-container');
+        if (cardsContainer) {
+          cardsContainer.scrollLeft = cardElement.offsetLeft - (cardsContainer.offsetWidth / 2) + (cardElement.offsetWidth / 2);
+        }
+      }
+    }, 100);
+    
+    // Clear the highlight after 3 seconds
+    highlightTimeoutRef.current = setTimeout(() => {
+      setHighlightedShopId(null);
+    }, 3000);
+  }
+
   const renderShopCards = () => {
     if (!showCards || visibleShops.length === 0) return null;
 
     console.log("Rendering shop cards:", visibleShops.length, "shops visible");
 
-    // Limit to 20 shops
     const limitedShops = visibleShops.slice(0, 20);
     const hasMore = visibleShops.length > 20;
 
     return (
-      <div className="absolute bottom-4 left-4 right-4 z-10 overflow-x-auto pb-2 max-h-[250px]">
+      <div id="map-cards-container" className="absolute bottom-4 left-4 right-4 z-10 overflow-x-auto pb-2 max-h-[250px]">
         <div
           className="flex space-x-4 px-2 py-2 rounded-lg"
           style={{
@@ -423,7 +373,6 @@ export default function MapTab({
           }}
           ref={el => {
             if (el) {
-              // Add mouse drag scrolling
               let isDown = false;
               let startX;
               let scrollLeft;
@@ -459,16 +408,17 @@ export default function MapTab({
           {limitedShops.map((shop, index) => (
             <div
               key={`shop-${shop.id || index}`}
-              className={`flex-shrink-0 w-64 bg-white rounded-lg border border-gray-200 overflow-hidden transition-all cursor-pointer ${selectedShopId === shop.id ? 'shadow-lg ring-2 ring-brown-500' : 'shadow-md hover:shadow-lg'
-                }`}
+              id={`shop-${shop.id}`}
+              className={`flex-shrink-0 w-64 bg-white rounded-lg overflow-hidden transition-all cursor-pointer 
+                ${selectedShopId === shop.id && !highlightedShopId ? 'shadow-lg ring-2 ring-brown-500' : 'shadow-md hover:shadow-lg'}
+                ${highlightedShopId === shop.id ? 'card-highlight-animation' : ''}
+              `}
               onClick={() => {
                 highlightShop(shop.id);
-                // Navigate to coffee shop page when card is clicked
                 window.location.href = `/coffee_shops/${shop.slug}`;
               }}
             >
               <div className="flex flex-col h-full">
-                {/* Cover photo - now touching the borders */}
                 <div className="w-full">
                   {shop.cover_photo ? (
                     <div className="w-full h-32 overflow-hidden">
@@ -484,8 +434,8 @@ export default function MapTab({
                     </div>
                   ) : (
                     <div className="w-full h-32 bg-gray-100 flex items-center justify-center">
-                      <div className="h-16 w-16 rounded-full flex items-center justify-center bg-gray-200">
-                        <svg className="h-10 w-10 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className="h-20 w-20 rounded-full flex items-center justify-center bg-gray-200">
+                        <svg className="h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                       </div>
@@ -493,13 +443,12 @@ export default function MapTab({
                   )}
                 </div>
 
-                {/* Shop info - now in padding */}
                 <div className="p-4">
                   <div className="flex items-center space-x-3">
                     <div className="flex-shrink-0 h-10 w-10">
-                      {shop.logo_url ? (
+                      {shop.logo ? (
                         <img
-                          src={shop.logo_url}
+                          src={shop.logo}
                           alt={`${shop.name} logo`}
                           className="h-10 w-10 rounded-full border border-brown"
                           loading="lazy"
@@ -517,7 +466,7 @@ export default function MapTab({
                       )}
                     </div>
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">{shop.name}</h3>
+                      <h3 className="text-base font-medium text-gray-900">{shop.name}</h3>
                     </div>
                   </div>
                 </div>
@@ -545,7 +494,6 @@ export default function MapTab({
 
   return (
     <div className="col-span-3 relative">
-      {/* Add custom styles for our map components */}
       <style>{`
         .locate-me-button {
           margin-top: 10px;
@@ -643,7 +591,6 @@ export default function MapTab({
         className="w-full h-[600px] rounded-lg shadow-md"
       />
 
-      {/* Loading overlay */}
       {(loading || mapInitializing) && (
         <div className="absolute inset-0 bg-white bg-opacity-70 flex flex-col justify-center items-center rounded-lg z-10">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brown-500 mb-4"></div>
@@ -653,7 +600,6 @@ export default function MapTab({
         </div>
       )}
 
-      {/* No results message */}
       {shops.length === 0 && !loading && !mapInitializing && (
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white py-3 px-6 rounded-lg shadow-md z-10">
           <p className="text-gray-700 font-medium">No coffee shops found in this area</p>
@@ -661,10 +607,23 @@ export default function MapTab({
         </div>
       )}
 
-      {/* Coffee shop cards */}
       {renderShopCards()}
 
-
+      <style>
+        {`
+        @keyframes highlight-pulse {
+          0% { box-shadow: 0 0 0 0 rgba(139, 69, 19, 0.7); border: none; }
+          50% { box-shadow: 0 0 0 10px rgba(139, 69, 19, 0.4); border: none; }
+          100% { box-shadow: 0 0 0 0 rgba(139, 69, 19, 0); border: none; }
+        }
+        
+        .card-highlight-animation {
+          animation: highlight-pulse 1.5s ease-out;
+          animation-iteration-count: 2;
+          border: none !important;
+        }
+        `}
+      </style>
     </div>
   )
 }
