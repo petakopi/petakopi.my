@@ -18,6 +18,7 @@ export default function MapTab({
   const [visibleShops, setVisibleShops] = useState([])
   const [selectedShopId, setSelectedShopId] = useState(null)
   const [highlightedShopId, setHighlightedShopId] = useState(null)
+  const [hasClusters, setHasClusters] = useState(false)
   const highlightTimeoutRef = useRef(null)
   const markersRef = useRef([])
   const clustersRef = useRef(null)
@@ -30,28 +31,26 @@ export default function MapTab({
       setLoading(true)
       try {
         const url = new URL('/api/v1/maps', window.location.origin);
-        
+
         // Add user location if available
         if (userLocation) {
           url.searchParams.append('lat', userLocation.latitude);
           url.searchParams.append('lng', userLocation.longitude);
         }
-        
+
         console.log("Fetching shops for map from:", url.toString());
         const response = await fetch(url);
         const data = await response.json();
         console.log("API Response:", data);
-        
+
         if (data && data.status === "success" && data.data && Array.isArray(data.data.coffee_shops)) {
           // Nested structure with status and data
           const fetchedShops = data.data.coffee_shops;
           console.log("Received shops:", fetchedShops.length);
           setShops(fetchedShops);
-          
-          // Always set visible shops to the first 20 shops
-          const initialVisibleShops = fetchedShops.slice(0, 20);
-          console.log("Setting initial visible shops:", initialVisibleShops.length);
-          setVisibleShops(initialVisibleShops);
+
+          // Don't set visible shops here - we'll wait for the map to load and show markers first
+          // setVisibleShops will be called after the map loads and markers are displayed
         } else {
           console.error('Unexpected response format:', data);
           setShops([]);
@@ -65,18 +64,94 @@ export default function MapTab({
         setLoading(false);
       }
     };
-    
+
     // Only fetch shops once when the component mounts or when userLocation changes
     fetchShops();
   }, [userLocation]); // Only re-fetch when userLocation changes
 
-  // Always ensure we have visible shops if we have shops
+  // We'll remove this effect since we only want to show cards after markers are displayed
+  // The visible shops will be set by the map's 'sourcedata' event handler
+
+  // Force update visible shops when map is interacted with
   useEffect(() => {
-    if (shops.length > 0 && visibleShops.length === 0) {
-      console.log("Resetting visible shops because they were empty");
-      setVisibleShops(shops.slice(0, 20));
+    if (!map.current || !mapLoaded) return;
+
+    // Debounce function to prevent too many updates
+    let updateTimeout = null;
+
+    // Add a handler to force update visible shops
+    const forceUpdateHandler = () => {
+      // Clear any existing timeout
+      if (updateTimeout) {
+        clearTimeout(updateTimeout);
+      }
+
+      // Set a new timeout to update after a delay
+      updateTimeout = setTimeout(() => {
+        if (map.current) {
+          console.log("=== FORCE UPDATE VISIBLE SHOPS ===");
+          // Get unclustered points
+          const features = map.current.queryRenderedFeatures({ layers: ['unclustered-point'] });
+          console.log("Force update: unclustered features found:", features.length);
+
+          if (features.length > 0) {
+            const updatedVisibleShops = features.map(feature => {
+              const props = feature.properties;
+              const id = typeof props.id === 'string' ? parseInt(props.id, 10) : props.id;
+              return shops.find(shop => shop.id === id);
+            })
+              .filter(Boolean)
+              .slice(0, 20);
+
+            if (updatedVisibleShops.length > 0) {
+              console.log("Force updating visible shops:", updatedVisibleShops.length);
+
+              // Compare with current visible shops to avoid unnecessary updates
+              const currentIds = visibleShops.map(shop => shop.id).sort().join(',');
+              const newIds = updatedVisibleShops.map(shop => shop.id).sort().join(',');
+
+              if (currentIds !== newIds) {
+                setVisibleShops([...updatedVisibleShops]);
+              } else {
+                console.log("Skipping update - same shops already visible");
+              }
+            }
+          }
+        }
+      }, 300); // Longer delay to prevent rapid updates
+    };
+
+    // Add event listeners for map interaction
+    map.current.on('dragend', forceUpdateHandler);
+    map.current.on('zoomend', forceUpdateHandler);
+    map.current.on('click', forceUpdateHandler);
+
+    return () => {
+      if (map.current) {
+        map.current.off('dragend', forceUpdateHandler);
+        map.current.off('zoomend', forceUpdateHandler);
+        map.current.off('click', forceUpdateHandler);
+      }
+      if (updateTimeout) {
+        clearTimeout(updateTimeout);
+      }
+    };
+  }, [mapLoaded, shops, visibleShops]);
+
+  // Debug useEffect to track visibleShops changes
+  useEffect(() => {
+    console.log("=== VISIBLE SHOPS CHANGED ===");
+    console.log("visibleShops count:", visibleShops.length);
+    if (visibleShops.length > 0) {
+      console.log("First visible shop:", visibleShops[0]);
+      console.log("Visible shop IDs:", visibleShops.map(shop => shop.id));
     }
-  }, [shops, visibleShops]);
+
+    // Debug the displayShops calculation
+    const displayShops = visibleShops.length > 0 ? visibleShops : shops.slice(0, 20);
+    console.log("displayShops count:", displayShops.length);
+    console.log("Are visibleShops being used for display?", visibleShops.length > 0);
+  }, [visibleShops, shops]);
 
   useEffect(() => {
     if (!mapContainer.current) return
@@ -123,13 +198,16 @@ export default function MapTab({
       const zoom = map.current.getZoom();
       console.log("Zoom changed to:", zoom);
       setCurrentZoom(zoom);
+      // Note: The actual update of visible shops is now handled by the combined handler
     });
 
     map.current.on('load', () => {
-      setMapLoaded(true)
-      setMapInitializing(false)
+      console.log("=== MAP LOADED ===");
+      setMapLoaded(true);
+      setMapInitializing(false);
       setCurrentZoom(map.current.getZoom());
 
+      // Add the coffee shops source - start with empty features
       map.current.addSource('coffee-shops', {
         type: 'geojson',
         data: {
@@ -262,36 +340,135 @@ export default function MapTab({
         map.current.getCanvas().style.cursor = ''
       })
 
-      map.current.on('moveend', () => {
-        if (!map.current || !mapLoaded || !map.current.getSource('coffee-shops')) return;
+      // Combined handler for both moveend and zoomend events
+      const updateVisibleShops = () => {
+        console.log("=== MAP VIEW CHANGED ===");
 
-        // Update visible shops based on what's currently in view
-        const features = map.current.queryRenderedFeatures({ layers: ['unclustered-point'] });
-        console.log("Found features in current view:", features.length);
-        
-        if (features.length === 0) {
-          // If no features are visible, keep showing the current visible shops
+        if (!map.current || !mapLoaded) {
+          console.log("Map not ready for querying features");
           return;
         }
-        
-        // Convert features to shop objects and limit to 20
-        const shopsInView = features.map(feature => {
-          const props = feature.properties;
-          // Parse the properties - they might be strings due to GeoJSON serialization
-          const id = typeof props.id === 'string' ? parseInt(props.id, 10) : props.id;
-          
-          // Find the corresponding shop in our shops array to get all properties
-          const matchingShop = shops.find(shop => shop.id === id);
-          if (!matchingShop) return null;
-          
-          return matchingShop;
-        })
-        .filter(Boolean) // Remove any null values
-        .slice(0, 20); // Limit to 20 cards
-        
-        console.log("Setting visible shops:", shopsInView.length);
-        if (shopsInView.length > 0) {
-          setVisibleShops(shopsInView);
+
+        try {
+          // Get the current map bounds
+          const bounds = map.current.getBounds();
+          console.log("Current map bounds:", bounds.toArray());
+
+          // Get the current zoom level
+          const zoom = map.current.getZoom();
+          console.log("Current zoom level:", zoom);
+
+          // First check for unclustered points (individual markers)
+          const visibleMarkers = map.current.queryRenderedFeatures({
+            layers: ['unclustered-point']
+          });
+          console.log("Visible unclustered markers:", visibleMarkers.length);
+
+          // Then check for clusters
+          const visibleClusters = map.current.queryRenderedFeatures({
+            layers: ['clusters']
+          });
+          console.log("Visible clusters:", visibleClusters.length);
+
+          // Update clusters state - force to true for testing
+          setHasClusters(visibleClusters.length > 0);
+          console.log("Setting hasClusters to:", visibleClusters.length > 0);
+
+          // If we have visible unclustered markers, use those directly
+          if (visibleMarkers.length > 0) {
+            // Extract shop IDs from markers
+            const visibleShopIds = visibleMarkers.map(marker => {
+              const id = marker.properties.id;
+              return typeof id === 'string' ? parseInt(id, 10) : id;
+            });
+
+            console.log("Visible shop IDs from markers:", visibleShopIds);
+
+            // Find matching shops from our shops array
+            const matchingShops = shops.filter(shop =>
+              visibleShopIds.includes(shop.id)
+            ).slice(0, 20); // Limit to 20
+
+            console.log("Setting visible shops from markers:", matchingShops.length);
+
+            // Important: Create a new array to ensure React detects the change
+            setVisibleShops([...matchingShops]);
+            return;
+          }
+
+          // If we have clusters but no individual markers, we need to get shops from the clusters
+          if (visibleClusters.length > 0 && visibleMarkers.length === 0) {
+            // We'll use the bounds approach since we can't directly access cluster contents
+            // This is a fallback when we only have clusters visible
+            console.log("Only clusters visible, using bounds approach");
+          }
+
+          // Fallback: Manually check which shops are within the current bounds
+          const visibleShopsInBounds = shops.filter(shop => {
+            if (!shop.lat || !shop.lng) return false;
+
+            const lat = parseFloat(shop.lat);
+            const lng = parseFloat(shop.lng);
+
+            // Check if the shop coordinates are within the current map bounds
+            return lat >= bounds.getSouth() &&
+              lat <= bounds.getNorth() &&
+              lng >= bounds.getWest() &&
+              lng <= bounds.getEast();
+          });
+
+          console.log("Shops in bounds (fallback):", visibleShopsInBounds.length);
+
+          if (visibleShopsInBounds.length === 0) {
+            console.log("No shops in bounds, clearing visible shops");
+            setVisibleShops([]);
+            return;
+          }
+
+          // Sort shops by distance from center if we have user location
+          let sortedShops = [...visibleShopsInBounds];
+          const mapCenter = map.current.getCenter();
+          sortedShops.sort((a, b) => {
+            // Calculate distance from map center
+            const distA = Math.sqrt(
+              Math.pow(parseFloat(a.lat) - mapCenter.lat, 2) +
+              Math.pow(parseFloat(a.lng) - mapCenter.lng, 2)
+            );
+            const distB = Math.sqrt(
+              Math.pow(parseFloat(b.lat) - mapCenter.lat, 2) +
+              Math.pow(parseFloat(b.lng) - mapCenter.lng, 2)
+            );
+            return distA - distB;
+          });
+
+          // Limit to 20 shops
+          const limitedShops = sortedShops.slice(0, 20);
+
+          console.log("Setting visible shops (fallback):", limitedShops.length);
+
+          // Important: Create a new array to ensure React detects the change
+          setVisibleShops([...limitedShops]);
+        } catch (error) {
+          console.error("Error detecting visible shops:", error);
+        }
+      };
+
+      // Add event listeners for both moveend and zoomend
+      map.current.on('moveend', updateVisibleShops);
+      map.current.on('zoomend', updateVisibleShops);
+
+      // Add listener for source data loading - this is when we'll first show the cards
+      map.current.on('sourcedata', (e) => {
+        if (e.sourceId === 'coffee-shops' && map.current.isSourceLoaded('coffee-shops')) {
+          console.log("Source data loaded, updating visible shops");
+
+          // Only update if we don't already have visible shops
+          if (visibleShops.length === 0) {
+            console.log("First time source data loaded, setting initial visible shops");
+            updateVisibleShops();
+          } else {
+            console.log("Source data loaded but we already have visible shops");
+          }
         }
       });
     })
@@ -303,38 +480,72 @@ export default function MapTab({
   }, [])
 
   useEffect(() => {
-    if (!map.current || !mapLoaded || loading || shops.length === 0) return
-
-    // Check if we already have the GeoJSON data
-    if (!map.current.getSource('coffee-shops')._data.features || 
-        map.current.getSource('coffee-shops')._data.features.length === 0) {
-      
-      // If we don't have GeoJSON data yet, create it from the shops array
-      const features = shops
-        .filter(shop => shop.lat && shop.lng)
-        .map(shop => ({
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [parseFloat(shop.lng), parseFloat(shop.lat)]
-          },
-          properties: {
-            id: shop.id,
-            name: shop.name,
-            address: shop.address,
-            slug: shop.slug,
-            logo: shop.logo_url,
-            cover_photo: shop.cover_photo_url
-          }
-        }))
-
-      if (map.current.getSource('coffee-shops')) {
-        map.current.getSource('coffee-shops').setData({
-          type: 'FeatureCollection',
-          features
-        })
-      }
+    if (!map.current || !mapLoaded || !map.current.getSource('coffee-shops') || shops.length === 0) {
+      console.log("Cannot update GeoJSON data: map or shops not ready");
+      return;
     }
+
+    console.log("=== UPDATING GEOJSON DATA SOURCE ===");
+    console.log("Updating GeoJSON with shops:", shops.length);
+
+    // Create GeoJSON features from shops
+    const features = shops.map(shop => ({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [shop.lng, shop.lat]
+      },
+      properties: {
+        id: shop.id,
+        name: shop.name,
+        slug: shop.slug,
+        address: shop.address || '',
+        logo: shop.logo_url,
+        cover_photo: shop.cover_photo_url
+      }
+    }));
+
+    console.log("Created features:", features.length);
+    console.log("Sample feature:", features.length > 0 ? features[0] : "No features");
+
+    // Update the GeoJSON data
+    try {
+      map.current.getSource('coffee-shops').setData({
+        type: 'FeatureCollection',
+        features: features
+      });
+      console.log("GeoJSON data updated successfully");
+    } catch (error) {
+      console.error("Error updating GeoJSON data:", error);
+    }
+  }, [shops, mapLoaded]);
+
+  // Check for clusters whenever the map is idle
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return;
+
+    const checkForClusters = () => {
+      if (map.current) {
+        const clusters = map.current.queryRenderedFeatures({ layers: ['clusters'] });
+        console.log("Checking for clusters:", clusters.length);
+        setHasClusters(clusters.length > 0);
+      }
+    };
+
+    map.current.on('idle', checkForClusters);
+
+    // Initial check
+    checkForClusters();
+
+    return () => {
+      if (map.current) {
+        map.current.off('idle', checkForClusters);
+      }
+    };
+  }, [mapLoaded]);
+
+  useEffect(() => {
+    if (!map.current || !mapLoaded || loading || shops.length === 0) return
 
     // Fit the map to show all markers
     const source = map.current.getSource('coffee-shops');
@@ -351,30 +562,106 @@ export default function MapTab({
         padding: 50,
         maxZoom: 15
       })
-      
+
       // After fitting bounds, update visible shops based on what's in view
       setTimeout(() => {
+        console.log("=== INITIAL VISIBLE SHOPS UPDATE ===");
         if (map.current) {
+          // First try to get unclustered points
           const features = map.current.queryRenderedFeatures({ layers: ['unclustered-point'] });
-          const initialVisibleShops = features.map(feature => {
-            const props = feature.properties;
-            // Parse the properties - they might be strings due to GeoJSON serialization
-            const id = typeof props.id === 'string' ? parseInt(props.id, 10) : props.id;
-            
-            // Find the corresponding shop in our shops array to get all properties
-            const matchingShop = shops.find(shop => shop.id === id);
-            if (!matchingShop) return null;
-            
-            return matchingShop;
-          })
-          .filter(Boolean) // Remove any null values
-          .slice(0, 20); // Limit to 20 cards
-          
-          setVisibleShops(initialVisibleShops);
+          console.log("Initial unclustered features found:", features.length);
+
+          // If we have unclustered points, use those
+          if (features.length > 0) {
+            console.log("Sample initial feature properties:", features[0].properties);
+
+            const initialVisibleShops = features.map(feature => {
+              const props = feature.properties;
+              // Parse the properties - they might be strings due to GeoJSON serialization
+              const id = typeof props.id === 'string' ? parseInt(props.id, 10) : props.id;
+
+              // Find the corresponding shop in our shops array to get all properties
+              const matchingShop = shops.find(shop => shop.id === id);
+              if (!matchingShop) {
+                console.log("Could not find matching shop for initial ID:", id);
+                return null;
+              }
+
+              return matchingShop;
+            })
+              .filter(Boolean) // Remove any null values
+              .slice(0, 20); // Limit to 20 cards
+
+            console.log("Setting initial visible shops from unclustered points:", initialVisibleShops.length);
+            if (initialVisibleShops.length > 0) {
+              console.log("First initial shop:", initialVisibleShops[0]);
+              setVisibleShops(initialVisibleShops);
+              return;
+            }
+          }
+
+          // If no unclustered points, check if we have clusters
+          const clusters = map.current.queryRenderedFeatures({ layers: ['clusters'] });
+          console.log("Initial clusters found:", clusters.length);
+
+          // If we have clusters, use the current bounds to find shops
+          if (clusters.length > 0) {
+            const bounds = map.current.getBounds();
+
+            // Find shops within the current bounds
+            const shopsInBounds = shops.filter(shop => {
+              if (!shop.lat || !shop.lng) return false;
+
+              const lat = parseFloat(shop.lat);
+              const lng = parseFloat(shop.lng);
+
+              return lat >= bounds.getSouth() &&
+                lat <= bounds.getNorth() &&
+                lng >= bounds.getWest() &&
+                lng <= bounds.getEast();
+            });
+
+            // Sort by distance from center if possible
+            let sortedShops = [...shopsInBounds];
+            const mapCenter = map.current.getCenter();
+
+            sortedShops.sort((a, b) => {
+              const distA = Math.sqrt(
+                Math.pow(parseFloat(a.lat) - mapCenter.lat, 2) +
+                Math.pow(parseFloat(a.lng) - mapCenter.lng, 2)
+              );
+              const distB = Math.sqrt(
+                Math.pow(parseFloat(b.lat) - mapCenter.lat, 2) +
+                Math.pow(parseFloat(b.lng) - mapCenter.lng, 2)
+              );
+              return distA - distB;
+            });
+
+            const limitedShops = sortedShops.slice(0, 20);
+            console.log("Setting initial visible shops from bounds:", limitedShops.length);
+            setVisibleShops(limitedShops);
+            return;
+          }
+
+          // Fallback: just use the first 20 shops
+          console.log("No visible features found, using first 20 shops as fallback");
+          setVisibleShops(shops.slice(0, 20));
         }
       }, 500); // Small delay to ensure map has rendered
     }
   }, [shops, loading, mapLoaded])
+
+  // Use a more efficient way to force re-renders when needed
+  const [forceUpdateCounter, setForceUpdateCounter] = useState(0);
+
+  useEffect(() => {
+    // Force a re-render of the component when visibleShops changes
+    if (visibleShops.length > 0) {
+      console.log("=== FORCING COMPONENT UPDATE ===");
+      // Use a dedicated counter for forcing re-renders instead of changing zoom
+      setForceUpdateCounter(prev => prev + 1);
+    }
+  }, [visibleShops]);
 
   const clearMarkers = () => {
     markersRef.current.forEach(marker => marker.remove())
@@ -447,20 +734,6 @@ export default function MapTab({
     window.location.href = `/coffee_shops/${shop.slug}`;
   };
 
-  // Always use the first 20 shops if visibleShops is empty
-  const displayShops = visibleShops.length > 0 ? visibleShops : shops.slice(0, 20);
-
-  console.log("Render state:", { 
-    shopsLength: shops.length, 
-    visibleShopsLength: visibleShops.length,
-    displayShopsLength: displayShops.length,
-    loading,
-    mapInitializing,
-    firstShop: shops.length > 0 ? shops[0] : null,
-    firstVisibleShop: visibleShops.length > 0 ? visibleShops[0] : null,
-    firstDisplayShop: displayShops.length > 0 ? displayShops[0] : null
-  });
-
   return (
     <div className="col-span-3 relative">
       <MapStyles />
@@ -486,13 +759,22 @@ export default function MapTab({
         </div>
       )}
 
-      {displayShops.length > 0 && (
+      {visibleShops.length > 0 && (
         <MapCardList
-          visibleShops={displayShops}
+          visibleShops={visibleShops}
           selectedShopId={selectedShopId}
           highlightedShopId={highlightedShopId}
           onCardClick={handleCardClick}
+          hasClusters={hasClusters}
         />
+      )}
+
+      {/* Debug info */}
+      {process.env.NODE_ENV !== 'production' && (
+        <div className="absolute top-2 left-2 bg-white bg-opacity-75 p-2 rounded text-xs z-50">
+          <div>Clusters: {hasClusters ? 'Yes' : 'No'}</div>
+          <div>Visible shops: {visibleShops.length}</div>
+        </div>
       )}
     </div>
   )
