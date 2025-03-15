@@ -1,4 +1,15 @@
 module CoffeeShopDecorator
+  def links
+    [
+      {name: "Facebook", url: facebook_url},
+      {name: "Instagram", url: instagram_url},
+      {name: "Twitter", url: twitter_url},
+      {name: "TikTok", url: tiktok_url},
+      {name: "WhatsApp", url: whatsapp_url},
+      {name: "Google", url: google_map}
+    ].reject { |link| link[:url].blank? }
+  end
+
   def facebook_url
     return if facebook.blank?
 

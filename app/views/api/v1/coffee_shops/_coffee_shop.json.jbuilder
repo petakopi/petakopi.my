@@ -4,10 +4,7 @@ json.extract!(
   :slug,
   :name
 )
-json.links coffee_shop.urls.compact_blank do |name, url|
-  json.name name
-  json.url url
-end
+json.links coffee_shop.links
 json.lat coffee_shop.lat
 json.lng coffee_shop.lng
 json.district coffee_shop.district

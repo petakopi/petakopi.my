@@ -344,8 +344,8 @@ export default function Home() {
           onClick={onPrev}
           disabled={!hasPrev || loading}
           className={`px-4 py-2 rounded ${hasPrev && !loading
-              ? "bg-brown-500 text-white hover:bg-brown-600"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            ? "bg-brown-500 text-white hover:bg-brown-600"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
             }`}
         >
           Previous
@@ -354,8 +354,8 @@ export default function Home() {
           onClick={onNext}
           disabled={!hasNext || loading}
           className={`px-4 py-2 rounded ${hasNext && !loading
-              ? "bg-brown-500 text-white hover:bg-brown-600"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            ? "bg-brown-500 text-white hover:bg-brown-600"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
             }`}
         >
           Next
@@ -392,8 +392,8 @@ export default function Home() {
                 <button
                   onClick={() => setViewType("card")}
                   className={`flex items-center px-3 py-1.5 text-sm ${viewType === "card"
-                      ? "bg-brown-500 text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-100"
+                    ? "bg-brown-500 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
                     }`}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -404,8 +404,8 @@ export default function Home() {
                 <button
                   onClick={() => setViewType("list")}
                   className={`flex items-center px-3 py-1.5 text-sm ${viewType === "list"
-                      ? "bg-brown-500 text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-100"
+                    ? "bg-brown-500 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
                     }`}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -420,8 +420,8 @@ export default function Home() {
             <button
               onClick={() => setIsFilterSidebarOpen(true)}
               className={`flex items-center space-x-1 px-3 py-2 text-sm font-medium ${Object.keys(filters).length > 0
-                  ? "bg-brown-100 text-brown-700"
-                  : "text-gray-700 hover:text-brown-600"
+                ? "bg-brown-100 text-brown-700"
+                : "text-gray-700 hover:text-brown-600"
                 } rounded-md`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -1,6 +1,35 @@
 import React from "react"
+import {
+  FacebookIcon,
+  InstagramIcon,
+  TwitterIcon,
+  TikTokIcon,
+  WhatsAppIcon,
+  GoogleIcon
+} from "../Icons"
 
 const CoffeeShopCard = ({ coffee_shop }) => {
+  // Function to get the appropriate icon based on link name
+  const getLinkIcon = (linkName) => {
+    const name = linkName.toLowerCase();
+    switch (name) {
+      case 'facebook':
+        return <FacebookIcon />;
+      case 'instagram':
+        return <InstagramIcon />;
+      case 'twitter':
+        return <TwitterIcon />;
+      case 'tiktok':
+        return <TikTokIcon />;
+      case 'whatsapp':
+        return <WhatsAppIcon />;
+      case 'google':
+        return <GoogleIcon />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div
       key={`${coffee_shop.slug}`}
@@ -43,17 +72,20 @@ const CoffeeShopCard = ({ coffee_shop }) => {
           {coffee_shop.links && coffee_shop.links.length > 0 && (
             <div className="mt-3">
               <div className="flex flex-wrap gap-2">
-                {coffee_shop.links.map((link, i) => (
-                  <a
-                    key={i}
-                    href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs bg-gray-100 px-2 py-1 rounded hover:bg-gray-200"
-                  >
-                    {link.name}
-                  </a>
-                ))}
+                {coffee_shop.links
+                  .filter(link => link.url)
+                  .map((link, i) => (
+                    <span key={i}>
+                      <a
+                        href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-600 hover:text-gray-900"
+                      >
+                        {getLinkIcon(link.name)}
+                      </a>
+                    </span>
+                  ))}
               </div>
             </div>
           )}
