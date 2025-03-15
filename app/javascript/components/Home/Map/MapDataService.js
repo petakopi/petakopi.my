@@ -3,8 +3,18 @@
 const CACHE_KEY = 'petakopi_map_data';
 const CACHE_EXPIRY_MS = 60 * 60 * 1000; // 1 hour in milliseconds
 
+// Check if we're in development mode
+const isDevelopment = () => {
+  return process.env.NODE_ENV === 'development' ||
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1';
+};
+
 // Helper function to check if cached data is valid
 const isCacheValid = (cachedData) => {
+  // Don't use cache in development
+  if (isDevelopment()) return false;
+
   if (!cachedData || !cachedData.timestamp) return false;
 
   const now = new Date().getTime();
@@ -15,6 +25,12 @@ const isCacheValid = (cachedData) => {
 
 // Helper function to save data to local storage
 const saveToCache = (data, userLocationKey) => {
+  // Don't cache in development
+  if (isDevelopment()) {
+    console.log('Skipping cache in development environment');
+    return;
+  }
+
   const cacheData = {
     data: data,
     timestamp: new Date().getTime()
@@ -30,6 +46,12 @@ const saveToCache = (data, userLocationKey) => {
 
 // Helper function to get cached data
 const getFromCache = (userLocationKey) => {
+  // Don't use cache in development
+  if (isDevelopment()) {
+    console.log('Skipping cache in development environment');
+    return null;
+  }
+
   try {
     const cachedDataString = localStorage.getItem(`${CACHE_KEY}_${userLocationKey}`);
     if (!cachedDataString) return null;
