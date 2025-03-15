@@ -10,5 +10,9 @@ class Api::V1::MapsController < ApiController
       params: params,
       relation: @coffee_shops
     )
+
+    @cache_key = ["/api/v1/maps"]
+
+    response.headers["Cache-Control"] = "public, max-age=3600"
   end
 end
