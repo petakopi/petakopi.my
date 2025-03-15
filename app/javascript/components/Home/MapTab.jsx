@@ -45,6 +45,9 @@ export default function MapTab({
     // Add navigation controls
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right')
 
+    // Add fullscreen control
+    map.current.addControl(new mapboxgl.FullscreenControl(), 'top-right')
+
     // Add geocoder (search box)
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxAccessToken,
@@ -55,61 +58,7 @@ export default function MapTab({
     })
     map.current.addControl(geocoder, 'top-left')
 
-    // Create a custom "Locate Me" button
-    const locateMe = document.createElement('div');
-    locateMe.className = 'mapboxgl-ctrl mapboxgl-ctrl-group locate-me-button';
-    locateMe.innerHTML = `
-      <button type="button" title="Find my location">
-        <span class="mapboxgl-ctrl-icon" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <circle cx="12" cy="12" r="3"></circle>
-          </svg>
-        </span>
-      </button>
-    `;
-    locateMe.addEventListener('click', () => {
-      // Try to get user location
-      if (navigator.geolocation) {
-        setMapInitializing(true);
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            map.current.flyTo({
-              center: [longitude, latitude],
-              zoom: 14,
-              essential: true
-            });
-            setMapInitializing(false);
-          },
-          (error) => {
-            console.error("Error getting location:", error);
-            setMapInitializing(false);
-            // Show error message
-            const errorMsg = document.createElement('div');
-            errorMsg.className = 'map-error-message';
-            errorMsg.textContent = 'Could not access your location. Please check your browser settings.';
-            document.body.appendChild(errorMsg);
-            setTimeout(() => {
-              document.body.removeChild(errorMsg);
-            }, 3000);
-          },
-          { enableHighAccuracy: true }
-        );
-      }
-    });
-
-    // Add the custom locate button to the map
-    map.current.addControl({
-      onAdd: function() {
-        return locateMe;
-      },
-      onRemove: function() {
-        return locateMe.parentNode.removeChild(locateMe);
-      }
-    }, 'top-right');
-
-    // Add geolocation control (hidden but still functional)
+    // Add geolocation control
     map.current.addControl(
       new mapboxgl.GeolocateControl({
         positionOptions: {
@@ -118,7 +67,7 @@ export default function MapTab({
         trackUserLocation: true,
         showUserHeading: true
       }),
-      'bottom-right'
+      'top-right'
     )
 
     // Add zoom change listener
@@ -133,48 +82,6 @@ export default function MapTab({
       setMapLoaded(true)
       setMapInitializing(false)
       setCurrentZoom(map.current.getZoom());
-
-      // Add a filter control to the map
-      const filterControl = document.createElement('div');
-      filterControl.className = 'mapboxgl-ctrl mapboxgl-ctrl-group filter-control';
-
-      // Create a dropdown for filtering
-      const filterSelect = document.createElement('select');
-      filterSelect.className = 'filter-select';
-
-      // Add options
-      const options = [
-        { value: 'all', label: 'All Coffee Shops' },
-        { value: 'rating', label: 'Highest Rated' },
-        { value: 'newest', label: 'Newest Added' }
-      ];
-
-      options.forEach(option => {
-        const optionEl = document.createElement('option');
-        optionEl.value = option.value;
-        optionEl.textContent = option.label;
-        filterSelect.appendChild(optionEl);
-      });
-
-      // Add event listener
-      filterSelect.addEventListener('change', (e) => {
-        const value = e.target.value;
-        // Here you would implement the actual filtering logic
-        // For now, we'll just log the selected filter
-        console.log(`Filter selected: ${value}`);
-      });
-
-      filterControl.appendChild(filterSelect);
-
-      // Add the filter control to the map
-      map.current.addControl({
-        onAdd: function() {
-          return filterControl;
-        },
-        onRemove: function() {
-          return filterControl.parentNode.removeChild(filterControl);
-        }
-      }, 'top-left');
 
       // Add a source for clusters
       map.current.addSource('coffee-shops', {
@@ -507,10 +414,10 @@ export default function MapTab({
 
     return (
       <div className="absolute bottom-4 left-4 right-4 z-10 overflow-x-auto pb-2 max-h-[250px]">
-        <div 
-          className="flex space-x-4 px-2 py-2 rounded-lg" 
-          style={{ 
-            scrollbarWidth: 'thin', 
+        <div
+          className="flex space-x-4 px-2 py-2 rounded-lg"
+          style={{
+            scrollbarWidth: 'thin',
             scrollbarColor: '#6B4F4F #f5f5f5',
             cursor: 'grab'
           }}
