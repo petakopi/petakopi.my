@@ -3,6 +3,10 @@
   <meta name="title" content="petakopi.my — <%= content_for?(:page_title) ? yield(:page_title) : "Discover authentic coffee anywhere" %>">
   <meta name="description" content="<%= content_for?(:page_description) ? yield(:page_description) : "Discover and share new freshly brewed coffee places around you. Built by the community for everyone." %>">
 
+  <% if content_for?(:canonical_url) %>
+    <link rel="canonical" href="<%= request.base_url %><%= yield :canonical_url %>" />
+  <% end %>
+
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
