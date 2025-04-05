@@ -47,7 +47,7 @@ gem "sidekiq", "<= 7.3.6" # Background jobs
 gem "sidekiq-cron" # Sidekiq + Cron
 gem "sidekiq-failures" # Monitor failures in Sidekiq
 gem "sidekiq-throttled" # Throttle sidekiq jobs
-gem "sitemap_generator" # Generate sitemap for search engines
+gem "sitemap_generator", github: "kjvarga/sitemap_generator" # Generate sitemap for search engines
 gem "skylight" # Performance monitoring tool
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
