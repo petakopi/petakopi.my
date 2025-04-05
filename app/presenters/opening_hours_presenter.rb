@@ -21,6 +21,7 @@ class OpeningHoursPresenter
             display_day: display_day,
             start_day: opening_hour.start_day_name,
             start_time: opening_hour.start_time_formatted,
+            start_time_raw: opening_hour.start_time,
             close_day: opening_hour.close_day,
             close_time: opening_hour.close_time_formatted
           }
@@ -36,12 +37,18 @@ class OpeningHoursPresenter
         display_day: Date::DAYNAMES[day],
         start_day: Date::DAYNAMES[day],
         start_time: "-",
+        start_time_raw: 9999, # High value to ensure it sorts last
         close_day: nil,
         close_time: "-"
       }
     end
 
+    # Group by day, sort each group by time, then flatten
     formatted_opening_hours
-      .sort_by { |x| [Date::DAYNAMES.index(x[:start_day]), x[:start_time]] }
+      .group_by { |x| Date::DAYNAMES.index(x[:start_day]) }
+      .sort_by { |day_index, _| day_index }
+      .flat_map do |_, hours|
+        hours.sort_by { |hour| hour[:start_time_raw] }
+      end
   end
 end
