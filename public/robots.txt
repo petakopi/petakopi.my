@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: */reports/new
+Disallow: */tell_managers/new
 
 Sitemap: https://petakopi.my/sitemap.xml.gz

@@ -1,6 +1,7 @@
 <div class="flex flex-col space-y-4">
   <%= link_to new_coffee_shop_report_path(coffee_shop_id: coffee_shop.slug),
     data: { turbo_frame: "report" },
+    rel: "noindex nofollow",
     class: "-md rounded-lg bg-white px-3.5 py-4 text-md font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-700 hover:bg-gray-50 text-center" do
   %>
     Report
