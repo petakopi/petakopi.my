@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_24_000001) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_06_073356) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -195,6 +195,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_24_000001) do
     t.string "state"
     t.geography "location", limit: {srid: 4326, type: "st_point", geographic: true}
     t.string "google_place_id"
+    t.float "rating"
+    t.integer "rating_count"
     t.index ["location"], name: "index_coffee_shops_on_location", using: :gist
     t.index ["slug"], name: "index_coffee_shops_on_slug", unique: true
     t.index ["status"], name: "index_coffee_shops_on_status"

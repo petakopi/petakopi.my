@@ -5,7 +5,8 @@ import {
   TwitterIcon,
   TikTokIcon,
   WhatsAppIcon,
-  GoogleIcon
+  GoogleIcon,
+  StarIcon
 } from "../Icons"
 
 const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
@@ -42,6 +43,19 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
       return `${coffee_shop.distance_in_km} km away`;
     }
     return "Distance unavailable";
+  };
+
+  // Format rating and rating count if available
+  const formatRating = () => {
+    if (coffee_shop.rating) {
+      return (
+        <div className="flex items-center">
+          <StarIcon className="h-4 w-4 text-orange-500 mr-1" />
+          <span>{coffee_shop.rating} ({coffee_shop.rating_count})</span>
+        </div>
+      );
+    }
+    return "";
   };
 
   return (
@@ -127,7 +141,7 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
 
           <div className="mt-auto pt-3 border-t border-gray-100 flex justify-between items-center">
             <div className="text-sm text-gray-500">
-              100 views
+              {formatRating()}
             </div>
             {isNearbyTab && (
               <div className="text-xs text-gray-500">

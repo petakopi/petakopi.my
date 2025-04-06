@@ -57,19 +57,20 @@
       >
         Edit
       </a>
-      <a
-        data-turbo-method="post"
-        href="<%= update_locality_admin_coffee_shop_path(@coffee_shop) %>"
-        class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500"
-      >
-        Update Locality
-      </a>
 
       <a
         data-turbo-method="post"
         href="<%= duplicate_admin_coffee_shop_path(@coffee_shop) %>"
         class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
         Duplicate
+      </a>
+
+      <a
+        data-turbo-method="post"
+        href="<%= update_locality_admin_coffee_shop_path(@coffee_shop) %>"
+        class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500"
+      >
+        Update Locality
       </a>
 
       <a
@@ -86,6 +87,14 @@
         class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500"
       >
         Sync Cover Photo
+      </a>
+
+      <a
+        data-turbo-method="post"
+        href="<%= sync_ratings_admin_coffee_shop_path(@coffee_shop) %>"
+        class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500"
+      >
+        Sync Ratings
       </a>
     </div>
   </div>
@@ -228,6 +237,20 @@
           on <%= @coffee_shop.created_at.strftime("%B %-d, %Y") %>
         </dd>
       </div>
+
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Ratings
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <% if @coffee_shop.rating %>
+            <%= @coffee_shop.rating %> with <%= @coffee_shop.rating_count %> ratings
+          <% else %>
+            -
+          <% end %>
+        </dd>
+      </div>
+
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-sm font-medium text-gray-500">
           Created At
@@ -236,6 +259,7 @@
           <%= @coffee_shop.created_at.strftime("%Y-%m-%d %I:%M %p") %>
         </dd>
       </div>
+
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-sm font-medium text-gray-500">
           Updated At

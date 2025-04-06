@@ -13,9 +13,10 @@ Rails.application.routes.draw do
     resources :coffee_shops do
       member do
         post "duplicate"
-        post "sync_opening_hours"
         post "update_locality"
+        post "sync_opening_hours"
         post "sync_cover_photo"
+        post "sync_ratings"
       end
     end
     resources :coffee_shop_owners, only: [:index, :new, :create, :destroy]

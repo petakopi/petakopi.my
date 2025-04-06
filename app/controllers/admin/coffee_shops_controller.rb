@@ -1,6 +1,6 @@
 class Admin::CoffeeShopsController < AdminController
   before_action :set_coffee_shop,
-    only: %i[show edit update duplicate sync_opening_hours update_locality sync_cover_photo]
+    only: %i[show edit update duplicate update_locality sync_opening_hours sync_cover_photo sync_ratings]
 
   def index
     @coffee_shops =
@@ -50,19 +50,6 @@ class Admin::CoffeeShopsController < AdminController
     redirect_to edit_admin_coffee_shop_path(dup)
   end
 
-  def sync_opening_hours
-    GoogleApis::OpeningHours::Sync
-      .call(coffee_shop: @coffee_shop)
-      .on_success do |result|
-        redirect_to admin_coffee_shop_url(result[:coffee_shop]),
-          notice: "Coffee shop opening hours were successfully synced."
-      end
-      .on_failure do |result|
-        redirect_to admin_coffee_shop_url(result[:coffee_shop]),
-          alert: result[:msg]
-      end
-  end
-
   def update_locality
     result =
       GoogleApi::GoogleLocationSyncer.call(coffee_shop: @coffee_shop)
@@ -76,6 +63,19 @@ class Admin::CoffeeShopsController < AdminController
     end
   end
 
+  def sync_opening_hours
+    GoogleApis::OpeningHours::Sync
+      .call(coffee_shop: @coffee_shop)
+      .on_success do |result|
+        redirect_to admin_coffee_shop_url(result[:coffee_shop]),
+          notice: "Coffee shop opening hours were successfully synced."
+      end
+      .on_failure do |result|
+        redirect_to admin_coffee_shop_url(result[:coffee_shop]),
+          alert: result[:msg]
+      end
+  end
+
   def sync_cover_photo
     result =
       GoogleApi::GoogleCoverPhotoSyncer.call(coffee_shop: @coffee_shop)
@@ -83,6 +83,19 @@ class Admin::CoffeeShopsController < AdminController
     if result.success?
       redirect_to admin_coffee_shop_url(@coffee_shop),
         notice: "Coffee shop cover photo was successfully synced."
+    else
+      redirect_to admin_coffee_shop_url(@coffee_shop),
+        alert: result.failure
+    end
+  end
+
+  def sync_ratings
+    result =
+      GoogleApi::GoogleRatingSyncer.call(coffee_shop: @coffee_shop)
+
+    if result.success?
+      redirect_to admin_coffee_shop_url(@coffee_shop),
+        notice: "Coffee shop ratings were successfully synced."
     else
       redirect_to admin_coffee_shop_url(@coffee_shop),
         alert: result.failure

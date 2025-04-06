@@ -12,6 +12,8 @@ json.state coffee_shop.state
 json.url main_coffee_shop_url(id: coffee_shop.slug)
 json.logo optimized_blob_url(asset: coffee_shop.logo, options: ["width=200"])
 json.cover_photo optimized_blob_url(asset: coffee_shop.cover_photo, options: ["width=400"])
+json.rating coffee_shop.rating
+json.rating_count ActiveSupport::NumberHelper.number_to_delimited(coffee_shop.rating_count)
 json.updated_at coffee_shop.updated_at
 
 # Include distance if it was calculated (for nearby coffee shops)
