@@ -66,7 +66,7 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
     >
       <div className="flex flex-col h-full">
         {/* Cover photo - now touching the borders */}
-        <div className="w-full">
+        <div className="w-full relative">
           {coffee_shop.cover_photo ? (
             <div className="w-full h-48 overflow-hidden">
               <a href={`/${coffee_shop.slug}`}>
@@ -76,9 +76,22 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                   className="w-full h-full object-cover hover:opacity-90 transition-opacity duration-200"
                 />
               </a>
+              {/* Logo positioned at bottom left of cover image */}
+              {coffee_shop.logo && coffee_shop.logo !== "" && (
+                <div className="absolute bottom-2 left-2">
+                  <div className="h-10 w-10">
+                    <img
+                      src={coffee_shop.logo}
+                      alt={`${coffee_shop.name} logo`}
+                      className="h-10 w-10 rounded-full border border-white shadow-md"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
-            <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
+            <div className="w-full h-48 bg-gray-100 flex items-center justify-center relative">
               <a href={`/coffee_shops/${coffee_shop.slug}`} className="block w-full h-full flex items-center justify-center hover:bg-gray-200 transition-colors duration-200">
                 <div className="h-20 w-20 rounded-full flex items-center justify-center bg-gray-200">
                   <svg className="h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,6 +99,19 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                   </svg>
                 </div>
               </a>
+              {/* Logo positioned at bottom left of cover image */}
+              {coffee_shop.logo && coffee_shop.logo !== "" && (
+                <div className="absolute bottom-2 left-2">
+                  <div className="h-10 w-10">
+                    <img
+                      src={coffee_shop.logo}
+                      alt={`${coffee_shop.name} logo`}
+                      className="h-10 w-10 rounded-full border border-white shadow-md"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -94,22 +120,6 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
         <div className="p-4">
           <div className="flex-grow">
             <div className="flex items-center space-x-3 mb-2">
-              <div className="flex-shrink-0 h-10 w-10">
-                {coffee_shop.logo && coffee_shop.logo !== "" ? (
-                  <img
-                    src={coffee_shop.logo}
-                    alt={`${coffee_shop.name} logo`}
-                    className="h-10 w-10 rounded-full border border-brown"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="h-10 w-10 rounded-full flex items-center justify-center bg-gray-200">
-                    <svg className="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                )}
-              </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-900">{coffee_shop.name}</h3>
                 {hasLocation && (
