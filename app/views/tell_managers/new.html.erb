@@ -1,3 +1,8 @@
+<%= content_for(:page_title) { @coffee_shop.name } %>
+<%= content_for(:page_image) { rails_public_blob_url(@coffee_shop.logo) } if @coffee_shop.logo.attached? %>
+<%= content_for(:page_description) { "#{@coffee_shop.name} in #{@coffee_shop.district}, #{@coffee_shop.state}" } %>
+<%= content_for(:canonical_url) { main_coffee_shop_path(id: @coffee_shop.slug) } %>
+
 <%= turbo_frame_tag "tell_manager" do %>
   <div id="report" x-data="{show: true}" x-show="show">
     <div class="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
