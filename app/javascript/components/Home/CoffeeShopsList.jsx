@@ -107,8 +107,23 @@ const CoffeeShopsList = ({
                       </div>
                       {hasLocation && (
                         <p className="mt-1 truncate text-sm text-gray-500">
-                          {coffee_shop.district && <span>{coffee_shop.district}, </span>}
-                          {coffee_shop.state}
+                          {coffee_shop.district && coffee_shop.district_url ? (
+                            <span>
+                              <a href={coffee_shop.district_url} className="text-brown-600 hover:text-brown-900">
+                                {coffee_shop.district},
+                              </a>
+                            </span>
+                          ) : (
+                            <span>{coffee_shop.district}, </span>
+                          )}
+                          &nbsp;
+                          {coffee_shop.state && coffee_shop.state_url ? (
+                            <a href={coffee_shop.state_url} className="text-brown-600 hover:text-brown-900">
+                              {coffee_shop.state}
+                            </a>
+                          ) : (
+                            <span>{coffee_shop.state}</span>
+                          )}
                         </p>
                       )}
                     </div>
@@ -208,8 +223,23 @@ const CoffeeShopsList = ({
                           <td className="px-6 py-4 whitespace-nowrap">
                             {hasLocation && (
                               <div className="text-sm text-gray-900">
-                                {coffee_shop.district && <span>{coffee_shop.district}, </span>}
-                                {coffee_shop.state}
+                                {coffee_shop.district && coffee_shop.district_url ? (
+                                  <span>
+                                    <a href={coffee_shop.district_url} className="text-brown-600 hover:text-brown-900">
+                                      {coffee_shop.district},
+                                    </a>
+                                  </span>
+                                ) : (
+                                  <span>{coffee_shop.district}, </span>
+                                )}
+                                &nbsp;
+                                {coffee_shop.state && coffee_shop.state_url ? (
+                                  <a href={coffee_shop.state_url} className="text-brown-600 hover:text-brown-900">
+                                    {coffee_shop.state}
+                                  </a>
+                                ) : (
+                                  <span>{coffee_shop.state}</span>
+                                )}
                               </div>
                             )}
                           </td>

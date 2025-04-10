@@ -124,8 +124,23 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                 <h3 className="text-sm font-medium text-gray-900">{coffee_shop.name}</h3>
                 {hasLocation && (
                   <p className="text-sm text-gray-500">
-                    {coffee_shop.district && <span>{coffee_shop.district}, </span>}
-                    {coffee_shop.state}
+                    {coffee_shop.district && coffee_shop.district_url ? (
+                      <span>
+                        <a href={coffee_shop.district_url} className="text-brown-600 hover:text-brown-900">
+                          {coffee_shop.district},
+                        </a>
+                      </span>
+                    ) : (
+                      <span>{coffee_shop.district}, </span>
+                    )}
+                    &nbsp;
+                    {coffee_shop.state && coffee_shop.state_url ? (
+                      <a href={coffee_shop.state_url} className="text-brown-600 hover:text-brown-900">
+                        {coffee_shop.state}
+                      </a>
+                    ) : (
+                      <span>{coffee_shop.state}</span>
+                    )}
                   </p>
                 )}
               </div>

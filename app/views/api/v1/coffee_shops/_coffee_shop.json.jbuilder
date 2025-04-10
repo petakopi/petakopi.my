@@ -15,6 +15,13 @@ json.cover_photo optimized_blob_url(asset: coffee_shop.cover_photo, options: ["w
 json.rating coffee_shop.rating
 json.rating_count ActiveSupport::NumberHelper.number_to_delimited(coffee_shop.rating_count)
 json.updated_at coffee_shop.updated_at
+if coffee_shop.district && coffee_shop.state
+  json.district_url directories_path(state: coffee_shop.state.parameterize, district: coffee_shop.district.parameterize)
+  json.state_url directories_path(state: coffee_shop.state.parameterize)
+else
+  json.district_url nil
+  json.state_url nil
+end
 
 # Include distance if it was calculated (for nearby coffee shops)
 if @include_distance && coffee_shop.respond_to?(:distance_in_km)
