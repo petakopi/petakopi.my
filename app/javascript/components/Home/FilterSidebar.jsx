@@ -15,10 +15,12 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
   const [selectedMuslimTag, setSelectedMuslimTag] = useState(currentFilters.muslimTag || null)
   const [selectedState, setSelectedState] = useState(currentFilters.state || null)
   const [selectedDistrict, setSelectedDistrict] = useState(currentFilters.district || null)
+  const [isOpenNow, setIsOpenNow] = useState(currentFilters.opened === "true")
   const [isApplied, setIsApplied] = useState(false)
   const [muslimTagsOpen, setMuslimTagsOpen] = useState(true)
   const [otherTagsOpen, setOtherTagsOpen] = useState(true)
   const [locationOpen, setLocationOpen] = useState(true)
+  const [openingHoursOpen, setOpeningHoursOpen] = useState(true)
   const [showInfoPopover, setShowInfoPopover] = useState(false)
   const infoButtonRef = useRef(null)
 
@@ -46,6 +48,7 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
     setKeyword(currentFilters.keyword || "")
     setSelectedState(currentFilters.state || null)
     setSelectedDistrict(currentFilters.district || null)
+    setIsOpenNow(currentFilters.opened === "true")
 
     // Extract Muslim tags from the current filters
     const tags = currentFilters.tags || [];
@@ -105,6 +108,10 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
       filters.district = selectedDistrict
     }
 
+    if (isOpenNow) {
+      filters.opened = "true"
+    }
+
     // Apply filters immediately with a completely new object
     // Use a timestamp to ensure the object is always different
     onApplyFilters({
@@ -127,6 +134,7 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
     setSelectedMuslimTag(null)
     setSelectedState(null)
     setSelectedDistrict(null)
+    setIsOpenNow(false)
     onApplyFilters({})
     // Keep sidebar open to show the reset state
   }
@@ -182,6 +190,21 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
               selectedDistrict={selectedDistrict}
               onStateChange={setSelectedState}
               onDistrictChange={setSelectedDistrict}
+            />
+          </FilterCategory>
+
+          <FilterCategory
+            title="Opening Hours"
+            isOpen={openingHoursOpen}
+            setIsOpen={setOpeningHoursOpen}
+            count={isOpenNow ? 1 : 0}
+          >
+            <CheckboxFilterOption
+              id="open-now"
+              name="open-now"
+              checked={isOpenNow}
+              onChange={() => setIsOpenNow(!isOpenNow)}
+              label="Open Now"
             />
           </FilterCategory>
 
