@@ -131,8 +131,8 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                     {coffee_shop.name}
                   </a>
                 </h3>
-                {hasLocation && (
-                  <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 h-5">
+                  {hasLocation ? (
                     <span className="inline-flex items-center">
                       <PinIcon className="h-3.5 w-3.5 text-gray-400 mr-1" />
                       {coffee_shop.district && coffee_shop.district_url ? (
@@ -153,42 +153,42 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                         <span>{coffee_shop.state}</span>
                       )}
                     </span>
-                  </p>
-                )}
+                  ) : (
+                    <span>&nbsp;</span>
+                  )}
+                </p>
               </div>
             </div>
-
-            {coffee_shop.links && coffee_shop.links.length > 0 && (
-              <div className="mt-6 mb-4">
-                <div className="flex space-x-3.5 items-center">
-                  {coffee_shop.links
-                    .filter(link => link.url)
-                    .map((link, i) => (
-                      <span key={i}>
-                        <a
-                          href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-gray-600 hover:text-gray-900"
-                        >
-                          {getLinkIcon(link.name)}
-                        </a>
-                      </span>
-                    ))}
-                </div>
-              </div>
-            )}
           </div>
 
           <div className="mt-auto pt-3 border-t border-gray-100 flex justify-between items-center">
-            {isNearbyTab && (
-              <div className="text-xs text-gray-500">
-                <span>{formatDistance()}</span>
-              </div>
-            )}
+            <div className="flex space-x-2.5 items-center">
+              {coffee_shop.links && coffee_shop.links.length > 0 && 
+                coffee_shop.links
+                  .filter(link => link.url)
+                  .map((link, i) => (
+                    <span key={i}>
+                      <a
+                        href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-600 hover:text-gray-900"
+                      >
+                        {getLinkIcon(link.name)}
+                      </a>
+                    </span>
+                  ))
+              }
+              {isNearbyTab && (
+                <span className="text-xs text-gray-500 ml-2">
+                  {formatDistance()}
+                </span>
+              )}
+            </div>
+            
             <a
               href={`/${coffee_shop.slug}`}
-              className={`text-brown-600 text-sm hover:text-brown-900 ${isNearbyTab ? '' : 'ml-auto'}`}
+              className="text-brown-600 text-sm hover:text-brown-900"
             >
               View &rarr;
             </a>
