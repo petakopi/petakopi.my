@@ -121,7 +121,11 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
           <div className="flex-grow">
             <div className="flex items-center space-x-3 mb-2">
               <div>
-                <h3 className="text-sm font-medium text-gray-900">{coffee_shop.name}</h3>
+                <h3 className="text-sm font-medium text-gray-900">
+                  <a href={`/${coffee_shop.slug}`} className="hover:text-brown-600">
+                    {coffee_shop.name}
+                  </a>
+                </h3>
                 {hasLocation && (
                   <p className="text-sm text-gray-500">
                     {coffee_shop.district && coffee_shop.district_url ? (
