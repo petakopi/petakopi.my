@@ -5,16 +5,20 @@ import {
   RadioFilterOption,
   CheckboxFilterOption,
   FilterSearch,
-  FilterActions
+  FilterActions,
+  LocationFilter
 } from "./FilterComponents"
 
 const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} }) => {
   const [keyword, setKeyword] = useState(currentFilters.keyword || "")
   const [selectedTags, setSelectedTags] = useState(currentFilters.tags || [])
   const [selectedMuslimTag, setSelectedMuslimTag] = useState(currentFilters.muslimTag || null)
+  const [selectedState, setSelectedState] = useState(currentFilters.state || null)
+  const [selectedDistrict, setSelectedDistrict] = useState(currentFilters.district || null)
   const [isApplied, setIsApplied] = useState(false)
   const [muslimTagsOpen, setMuslimTagsOpen] = useState(true)
   const [otherTagsOpen, setOtherTagsOpen] = useState(true)
+  const [locationOpen, setLocationOpen] = useState(true)
   const [showInfoPopover, setShowInfoPopover] = useState(false)
   const infoButtonRef = useRef(null)
 
@@ -40,6 +44,8 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
   // Initialize state from current filters
   useEffect(() => {
     setKeyword(currentFilters.keyword || "")
+    setSelectedState(currentFilters.state || null)
+    setSelectedDistrict(currentFilters.district || null)
 
     // Extract Muslim tags from the current filters
     const tags = currentFilters.tags || [];
@@ -91,6 +97,14 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
       filters.tags = allTags
     }
 
+    if (selectedState) {
+      filters.state = selectedState
+    }
+
+    if (selectedDistrict) {
+      filters.district = selectedDistrict
+    }
+
     // Apply filters immediately with a completely new object
     // Use a timestamp to ensure the object is always different
     onApplyFilters({
@@ -111,6 +125,8 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
     setKeyword("")
     setSelectedTags([])
     setSelectedMuslimTag(null)
+    setSelectedState(null)
+    setSelectedDistrict(null)
     onApplyFilters({})
     // Keep sidebar open to show the reset state
   }
@@ -154,6 +170,20 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="Search coffee shops..."
           />
+
+          <FilterCategory
+            title="Location"
+            isOpen={locationOpen}
+            setIsOpen={setLocationOpen}
+            count={(selectedState ? 1 : 0) + (selectedDistrict ? 1 : 0)}
+          >
+            <LocationFilter
+              selectedState={selectedState}
+              selectedDistrict={selectedDistrict}
+              onStateChange={setSelectedState}
+              onDistrictChange={setSelectedDistrict}
+            />
+          </FilterCategory>
 
           <FilterCategory
             title="For Muslim"
