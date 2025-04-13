@@ -50,13 +50,13 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
   const formatRating = () => {
     if (coffee_shop.rating) {
       return (
-        <div className="flex items-center">
-          <StarIcon className="h-4 w-4 text-orange-500 mr-1" />
-          <span>{coffee_shop.rating} ({coffee_shop.rating_count})</span>
+        <div className="absolute top-2 right-2 bg-white bg-opacity-60 rounded-full px-2 py-1 flex items-center shadow-sm">
+          <StarIcon className="h-3.5 w-3.5 text-orange-500 mr-1" />
+          <span className="text-xs font-medium">{coffee_shop.rating} ({coffee_shop.rating_count})</span>
         </div>
       );
     }
-    return "";
+    return null;
   };
 
   return (
@@ -77,6 +77,8 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                   className="w-full h-full object-cover hover:opacity-90 transition-opacity duration-200"
                 />
               </a>
+              {/* Rating pill positioned at top right of cover image */}
+              {coffee_shop.rating && formatRating()}
               {/* Logo positioned at bottom left of cover image */}
               {coffee_shop.logo && coffee_shop.logo !== "" && (
                 <div className="absolute bottom-2 left-2">
@@ -100,6 +102,8 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                   </svg>
                 </div>
               </a>
+              {/* Rating pill positioned at top right of cover image */}
+              {coffee_shop.rating && formatRating()}
               {/* Logo positioned at bottom left of cover image */}
               {coffee_shop.logo && coffee_shop.logo !== "" && (
                 <div className="absolute bottom-2 left-2">
@@ -177,9 +181,6 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
           </div>
 
           <div className="mt-auto pt-3 border-t border-gray-100 flex justify-between items-center">
-            <div className="text-sm text-gray-500">
-              {formatRating()}
-            </div>
             {isNearbyTab && (
               <div className="text-xs text-gray-500">
                 <span>{formatDistance()}</span>
@@ -189,7 +190,7 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
               href={`/${coffee_shop.slug}`}
               className={`text-brown-600 text-sm hover:text-brown-900 ${isNearbyTab ? '' : 'ml-auto'}`}
             >
-              View
+              View &rarr;
             </a>
           </div>
         </div>
