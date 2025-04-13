@@ -155,9 +155,8 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
 
   return (
     <div
-      className={`fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
-        isOpen ? 'translate-x-0' : 'translate-x-[-100%]'
-      }`}
+      className={`fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-[-100%]'
+        }`}
     >
       <div className="p-4 border-b border-gray-200 flex justify-between items-center">
         <h2 className="text-sm font-medium">Filters</h2>
@@ -209,7 +208,7 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
           </FilterCategory>
 
           <FilterCategory
-            title="For Muslim"
+            title="For Muslims"
             isOpen={muslimTagsOpen}
             setIsOpen={setMuslimTagsOpen}
             count={selectedMuslimTag ? 1 : 0}
@@ -269,8 +268,8 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
           <InfoPopover
             isOpen={showInfoPopover}
             onClose={() => setShowInfoPopover(false)}
-            title="For Muslim"
-            content="Most of the coffee shops don't have this information yet. We're working on collecting more data."
+            title="For Muslims"
+            content="Most of the coffee shops don't have this information yet as we depends on the community to help us out."
           />
         </form>
       </div>

@@ -42,7 +42,7 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
   // Format distance if available
   const formatDistance = () => {
     if (coffee_shop.distance_in_km) {
-      return `(${coffee_shop.distance_in_km} km away)`;
+      return `(${coffee_shop.distance_in_km} km)`;
     }
     return "";
   };

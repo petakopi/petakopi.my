@@ -12,12 +12,12 @@ const MapCardInfo = ({ shop }) => {
           <h3 className="text-base font-medium text-gray-900">{shop.name}</h3>
           {shop.distance_in_km && (
             <p className="text-xs text-brown-600 mt-1">
-              {shop.distance_in_km} km away
+              {shop.distance_in_km} km
             </p>
           )}
         </div>
       </div>
-      
+
       {shop.address && (
         <p className="text-xs text-gray-600 mt-2 line-clamp-2">
           {shop.address}
