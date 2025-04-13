@@ -1,4 +1,12 @@
 import React, { useState, useEffect, useRef } from "react"
+import {
+  FilterCategory,
+  InfoPopover,
+  RadioFilterOption,
+  CheckboxFilterOption,
+  FilterSearch,
+  FilterActions
+} from "./FilterComponents"
 
 const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} }) => {
   const [keyword, setKeyword] = useState(currentFilters.keyword || "")
@@ -107,58 +115,6 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
     // Keep sidebar open to show the reset state
   }
 
-  // Helper function to render a category header with toggle and count indicator
-  const renderCategoryHeader = (title, isOpen, setIsOpen, count = 0, hasInfo = false) => {
-    return (
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center py-2 text-left"
-      >
-        <div className="flex items-center">
-          <span className="text-sm font-medium text-gray-900 flex items-center">
-            {title}
-            {hasInfo && (
-              <span className="inline-flex items-center ml-1">
-                <button
-                  ref={infoButtonRef}
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowInfoPopover(!showInfoPopover);
-                  }}
-                  className="text-gray-400 hover:text-gray-500 focus:outline-none inline-flex items-center"
-                  aria-label="Information"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </button>
-              </span>
-            )}
-          </span>
-
-          {count > 0 && (
-            <span className="ml-2 bg-brown-100 text-brown-800 text-xs font-medium px-2 py-0.5 rounded-full">
-              {count}
-            </span>
-          )}
-        </div>
-        <div className="flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className={`h-4 w-4 text-gray-500 transition-transform ${isOpen ? 'transform rotate-180' : ''}`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      </button>
-    )
-  }
-
   // Close popover when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -193,122 +149,58 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
 
       <div className="overflow-y-auto h-full pb-20">
         <form onSubmit={handleSubmit}>
-          <div className="p-4 border-b border-gray-200">
-            <label htmlFor="keyword" className="block text-xs font-medium text-gray-700 mb-1">
-              Name Search
-            </label>
-            <input
-              type="text"
-              id="keyword"
-              name="keyword"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              placeholder="Search coffee shops..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brown-500 focus:border-brown-500 text-sm"
+          <FilterSearch
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder="Search coffee shops..."
+          />
+
+          <FilterCategory
+            title="For Muslim"
+            isOpen={muslimTagsOpen}
+            setIsOpen={setMuslimTagsOpen}
+            count={selectedMuslimTag ? 1 : 0}
+            hasInfo={true}
+            infoButtonRef={infoButtonRef}
+            onInfoClick={() => setShowInfoPopover(!showInfoPopover)}
+          >
+            <RadioFilterOption
+              id="muslim-tag-none"
+              name="muslim-tag"
+              checked={selectedMuslimTag === null}
+              onChange={() => handleMuslimTagChange(null)}
+              label="No preference"
             />
-          </div>
 
-          <div className="p-4 border-b border-gray-200 relative">
-            {renderCategoryHeader("For Muslim", muslimTagsOpen, setMuslimTagsOpen, selectedMuslimTag ? 1 : 0, true)}
+            {muslimTags.map((tag) => (
+              <RadioFilterOption
+                key={tag.value}
+                id={`muslim-tag-${tag.value}`}
+                name="muslim-tag"
+                checked={selectedMuslimTag === tag.value}
+                onChange={() => handleMuslimTagChange(tag.value)}
+                label={tag.label}
+              />
+            ))}
+          </FilterCategory>
 
-            {showInfoPopover && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-25">
-                <div
-                  className="bg-white shadow-lg rounded-md border border-gray-200 p-4 m-4 max-w-xs w-full"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <h3 className="text-sm font-medium text-gray-900 mb-2">For Muslim</h3>
-                  <div className="text-xs text-gray-600">
-                    Most of the coffee shops don't have this information yet. We're working on collecting more data.
-                  </div>
-                  <div className="mt-4 flex justify-end">
-                    <button
-                      className="px-3 py-1 text-xs font-medium text-white bg-brown-500 border border-transparent rounded-md hover:bg-brown-600"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setShowInfoPopover(false);
-                      }}
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {muslimTagsOpen && (
-              <div className="mt-2 space-y-2">
-                {/* Clear option */}
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="muslim-tag-none"
-                      name="muslim-tag"
-                      type="radio"
-                      checked={selectedMuslimTag === null}
-                      onChange={() => handleMuslimTagChange(null)}
-                      className="focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300"
-                    />
-                  </div>
-                  <div className="ml-2 text-sm">
-                    <label htmlFor="muslim-tag-none" className="text-xs text-gray-700 cursor-pointer">
-                      No preference
-                    </label>
-                  </div>
-                </div>
-
-                {/* Muslim tags */}
-                {muslimTags.map((tag) => (
-                  <div key={tag.value} className="flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id={`muslim-tag-${tag.value}`}
-                        name="muslim-tag"
-                        type="radio"
-                        checked={selectedMuslimTag === tag.value}
-                        onChange={() => handleMuslimTagChange(tag.value)}
-                        className="focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300"
-                      />
-                    </div>
-                    <div className="ml-2 text-sm">
-                      <label htmlFor={`muslim-tag-${tag.value}`} className="text-xs text-gray-700 cursor-pointer">
-                        {tag.label}
-                      </label>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Other Tags Category */}
-          <div className="p-4 border-b border-gray-200">
-            {renderCategoryHeader("Other Tags", otherTagsOpen, setOtherTagsOpen, selectedTags.length)}
-
-            {otherTagsOpen && (
-              <div className="mt-2 space-y-2">
-                {otherTags.map((tag) => (
-                  <div key={tag.value} className="flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id={`tag-${tag.value}`}
-                        name={`tag-${tag.value}`}
-                        type="checkbox"
-                        checked={selectedTags.includes(tag.value)}
-                        onChange={() => handleTagToggle(tag.value)}
-                        className="focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-2 text-sm">
-                      <label htmlFor={`tag-${tag.value}`} className="text-xs text-gray-700 cursor-pointer">
-                        {tag.label}
-                      </label>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <FilterCategory
+            title="Other Tags"
+            isOpen={otherTagsOpen}
+            setIsOpen={setOtherTagsOpen}
+            count={selectedTags.length}
+          >
+            {otherTags.map((tag) => (
+              <CheckboxFilterOption
+                key={tag.value}
+                id={`tag-${tag.value}`}
+                name={`tag-${tag.value}`}
+                checked={selectedTags.includes(tag.value)}
+                onChange={() => handleTagToggle(tag.value)}
+                label={tag.label}
+              />
+            ))}
+          </FilterCategory>
 
           {isApplied && (
             <div className="p-4 bg-green-50 text-green-700 text-xs">
@@ -316,24 +208,17 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
             </div>
           )}
 
-          <div className="fixed bottom-0 left-0 w-80 p-4 bg-white border-t border-gray-200 flex justify-between items-center">
-            <button
-              type="button"
-              onClick={handleReset}
-              className="px-4 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-150"
-            >
-              Reset
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 text-xs font-medium text-white bg-brown-500 border border-transparent rounded-md hover:bg-brown-600 transition-colors duration-150 flex items-center"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-              Apply Filters
-            </button>
-          </div>
+          <FilterActions
+            onReset={handleReset}
+            isSubmitting={false}
+          />
+
+          <InfoPopover
+            isOpen={showInfoPopover}
+            onClose={() => setShowInfoPopover(false)}
+            title="For Muslim"
+            content="Most of the coffee shops don't have this information yet. We're working on collecting more data."
+          />
         </form>
       </div>
     </div>
