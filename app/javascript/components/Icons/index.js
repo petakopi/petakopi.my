@@ -7,3 +7,4 @@ export { default as WhatsAppIcon } from './WhatsAppIcon';
 export { default as GoogleIcon } from './GoogleIcon';
 export { default as StarIcon } from './StarIcon';
 export { default as PinIcon } from './PinIcon';
+export { default as VerifiedIcon } from './VerifiedIcon';

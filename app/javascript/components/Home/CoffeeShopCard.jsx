@@ -7,7 +7,8 @@ import {
   WhatsAppIcon,
   GoogleIcon,
   StarIcon,
-  PinIcon
+  PinIcon,
+  VerifiedIcon
 } from "../Icons"
 
 const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
@@ -130,6 +131,11 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                   <a href={`/${coffee_shop.slug}`} className="hover:text-brown-600">
                     {coffee_shop.name}
                   </a>
+                  {coffee_shop.has_owner && (
+                    <span className="ml-1 inline-block">
+                      <VerifiedIcon />
+                    </span>
+                  )}
                 </h3>
                 <p className="text-sm text-gray-500 h-5">
                   {hasLocation ? (
@@ -166,7 +172,7 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
 
           <div className="mt-auto pt-3 border-t border-gray-100 flex justify-between items-center">
             <div className="flex space-x-2.5 items-center">
-              {coffee_shop.links && coffee_shop.links.length > 0 && 
+              {coffee_shop.links && coffee_shop.links.length > 0 &&
                 coffee_shop.links
                   .filter(link => link.url)
                   .map((link, i) => (
@@ -183,7 +189,7 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                   ))
               }
             </div>
-            
+
             <a
               href={`/${coffee_shop.slug}`}
               className="text-brown-600 text-sm hover:text-brown-900"

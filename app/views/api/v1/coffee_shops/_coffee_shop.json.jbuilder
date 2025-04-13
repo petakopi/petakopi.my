@@ -22,6 +22,7 @@ else
   json.district_url nil
   json.state_url nil
 end
+json.has_owner coffee_shop.owners.size.positive?
 
 # Include distance if it was calculated (for nearby coffee shops)
 if @include_distance && coffee_shop.respond_to?(:distance_in_km)
