@@ -5,6 +5,14 @@ import MapTab from "./MapTab"
 import FilterSidebar from "./FilterSidebar"
 import DistanceSelector from "./DistanceSelector"
 
+// Geolocation configuration
+const GEOLOCATION_CONFIG = {
+  TIMEOUT_DURATION: 15000, // 15 seconds for our custom timeout
+  API_TIMEOUT: 10000, // 10 seconds for the geolocation API timeout
+  CACHE_DURATION: 30 * 60 * 1000, // 30 minutes in milliseconds
+  HIGH_ACCURACY: true
+}
+
 const initialTabs = [
   { name: "Explore", href: "#" },
   { name: "Nearby", href: "#" },
@@ -86,9 +94,19 @@ export default function Home() {
     // Set to prompt state to show loading indicator
     setLocationPermission("prompt")
 
+    // Set a timeout to handle cases where the geolocation request gets stuck
+    const locationTimeout = setTimeout(() => {
+      // If we're still in "prompt" state after the timeout, assume it failed
+      if (locationPermission === "prompt") {
+        console.error("Location request timed out")
+        setLocationPermission("timeout")
+      }
+    }, GEOLOCATION_CONFIG.TIMEOUT_DURATION)
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          clearTimeout(locationTimeout) // Clear the timeout on success
           setUserLocation({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
@@ -96,6 +114,7 @@ export default function Home() {
           setLocationPermission("granted")
         },
         (error) => {
+          clearTimeout(locationTimeout) // Clear the timeout on error
           console.error("Error getting location:", error)
           // PERMISSION_DENIED = 1
           if (error.code === 1) {
@@ -105,9 +124,14 @@ export default function Home() {
             setLocationPermission("denied")
           }
         },
-        { enableHighAccuracy: true }
+        {
+          enableHighAccuracy: GEOLOCATION_CONFIG.HIGH_ACCURACY,
+          timeout: GEOLOCATION_CONFIG.API_TIMEOUT,
+          maximumAge: GEOLOCATION_CONFIG.CACHE_DURATION
+        }
       )
     } else {
+      clearTimeout(locationTimeout) // Clear the timeout if geolocation is not supported
       console.error("Geolocation is not supported by this browser")
       setLocationPermission("denied")
     }
@@ -386,7 +410,7 @@ export default function Home() {
           ) : (
             <span className="page prev disabled">Prev</span>
           )}
-          
+
           {hasNext && !loading ? (
             <span className="page next">
               <a href="#" onClick={(e) => { e.preventDefault(); handleNext(); }}>Next</a>
