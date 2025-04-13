@@ -83,11 +83,11 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
               {/* Logo positioned at bottom left of cover image */}
               {coffee_shop.logo && coffee_shop.logo !== "" && (
                 <div className="absolute bottom-2 left-2">
-                  <div className="h-10 w-10">
+                  <div className="h-10 w-10 drop-shadow-xl">
                     <img
                       src={coffee_shop.logo}
                       alt={`${coffee_shop.name} logo`}
-                      className="h-10 w-10 rounded-full border border-white shadow-md"
+                      className="h-10 w-10 rounded-full border-2 border-white shadow-lg"
                       loading="lazy"
                     />
                   </div>
@@ -108,11 +108,11 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
               {/* Logo positioned at bottom left of cover image */}
               {coffee_shop.logo && coffee_shop.logo !== "" && (
                 <div className="absolute bottom-2 left-2">
-                  <div className="h-10 w-10">
+                  <div className="h-10 w-10 drop-shadow-xl">
                     <img
                       src={coffee_shop.logo}
                       alt={`${coffee_shop.name} logo`}
-                      className="h-10 w-10 rounded-full border border-white shadow-md"
+                      className="h-10 w-10 rounded-full border-2 border-white shadow-lg"
                       loading="lazy"
                     />
                   </div>
