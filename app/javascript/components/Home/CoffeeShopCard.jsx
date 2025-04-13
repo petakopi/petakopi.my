@@ -70,7 +70,7 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
         {/* Cover photo - now touching the borders */}
         <div className="w-full relative">
           {coffee_shop.cover_photo ? (
-            <div className="w-full h-48 overflow-hidden">
+            <div className="w-full aspect-[4/3] overflow-hidden">
               <a href={`/${coffee_shop.slug}`}>
                 <img
                   src={coffee_shop.cover_photo}
@@ -95,7 +95,7 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
               )}
             </div>
           ) : (
-            <div className="w-full h-48 bg-gray-100 flex items-center justify-center relative">
+            <div className="w-full aspect-[4/3] bg-gray-100 flex items-center justify-center relative">
               <a href={`/coffee_shops/${coffee_shop.slug}`} className="block w-full h-full flex items-center justify-center hover:bg-gray-200 transition-colors duration-200">
                 <div className="h-20 w-20 rounded-full flex items-center justify-center bg-gray-200">
                   <svg className="h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
