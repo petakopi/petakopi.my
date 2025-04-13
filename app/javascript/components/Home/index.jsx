@@ -451,16 +451,16 @@ export default function Home() {
       {/* Main navigation tabs */}
       <div className="border-b border-gray-200">
         <div className="flex justify-between items-center">
-          <nav className="-mb-px flex space-x-8">
+          <nav className="-mb-px flex space-x-6">
             {tabs.map((tab, index) => (
               <button
                 key={tab.name}
                 onClick={() => handleTabChange(index)}
                 className={classNames(
+                  "whitespace-nowrap px-3 py-4 text-sm font-medium transition-all",
                   tab.current
-                    ? "border-brown-500 text-brown-600"
-                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                  "whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium",
+                    ? "border-b-2 border-brown-500 text-brown-600"
+                    : "border-b-2 border-transparent text-gray-500 hover:text-gray-700"
                 )}
               >
                 {tab.name}
@@ -472,10 +472,10 @@ export default function Home() {
           {activeTab !== 2 && (
             <button
               onClick={() => setIsFilterSidebarOpen(true)}
-              className={`flex items-center justify-center h-10 w-10 rounded-full ${
+              className={`flex items-center justify-center h-10 w-10 rounded-lg transition-all relative ${
                 Object.keys(filters).length > 0
                   ? "bg-brown-100 text-brown-700"
-                  : "text-gray-700 hover:text-brown-600 hover:bg-gray-100"
+                  : "bg-gray-100 text-gray-700 hover:text-brown-600 hover:bg-brown-50"
               }`}
               aria-label="Filter"
             >
@@ -483,7 +483,7 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
               {Object.keys(filters).length > 0 && (
-                <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-brown-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-brown-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center shadow-sm">
                   {Object.keys(filters).length}
                 </span>
               )}
@@ -497,31 +497,33 @@ export default function Home() {
         <div className="mt-4">
           {/* View type controls */}
           <div className="flex justify-between items-center mb-4">
-            <div className="flex space-x-1 border border-gray-300 rounded-md overflow-hidden">
-              <button
-                onClick={() => setViewType("card")}
-                className={`flex items-center px-3 py-1.5 text-sm ${viewType === "card"
-                  ? "bg-brown-500 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
-                  }`}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-                Cards
-              </button>
-              <button
-                onClick={() => setViewType("list")}
-                className={`flex items-center px-3 py-1.5 text-sm ${viewType === "list"
-                  ? "bg-brown-500 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
-                  }`}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                List
-              </button>
+            <div className="flex items-center">
+              <div className="flex space-x-2 bg-gray-100 p-1 rounded-lg">
+                <button
+                  onClick={() => setViewType("card")}
+                  className={`flex items-center px-3 py-1.5 text-sm rounded-md transition-all ${viewType === "card"
+                    ? "bg-white text-brown-600 shadow-sm"
+                    : "text-gray-600 hover:bg-gray-200"
+                    }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                  Cards
+                </button>
+                <button
+                  onClick={() => setViewType("list")}
+                  className={`flex items-center px-3 py-1.5 text-sm rounded-md transition-all ${viewType === "list"
+                    ? "bg-white text-brown-600 shadow-sm"
+                    : "text-gray-600 hover:bg-gray-200"
+                    }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                  List
+                </button>
+              </div>
             </div>
             {activeTab === 1 && locationPermission === "granted" && (
               <div className="w-48 px-2">
