@@ -460,7 +460,7 @@ export default function Home() {
     <div>
       {/* Main navigation tabs */}
       <div className="border-b border-gray-200">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+        <div className="flex justify-between items-center">
           <nav className="-mb-px flex space-x-8">
             {tabs.map((tab, index) => (
               <button
