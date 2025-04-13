@@ -6,7 +6,8 @@ import {
   TikTokIcon,
   WhatsAppIcon,
   GoogleIcon,
-  StarIcon
+  StarIcon,
+  PinIcon
 } from "../Icons"
 
 const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
@@ -128,23 +129,26 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                 </h3>
                 {hasLocation && (
                   <p className="text-sm text-gray-500">
-                    {coffee_shop.district && coffee_shop.district_url ? (
-                      <span>
-                        <a href={coffee_shop.district_url} className="text-brown-600 hover:text-brown-900">
-                          {coffee_shop.district},
+                    <span className="inline-flex items-center">
+                      <PinIcon className="h-3.5 w-3.5 text-gray-400 mr-1" />
+                      {coffee_shop.district && coffee_shop.district_url ? (
+                        <span>
+                          <a href={coffee_shop.district_url} className="text-brown-600 hover:text-brown-900">
+                            {coffee_shop.district},
+                          </a>
+                        </span>
+                      ) : (
+                        <span>{coffee_shop.district}, </span>
+                      )}
+                      &nbsp;
+                      {coffee_shop.state && coffee_shop.state_url ? (
+                        <a href={coffee_shop.state_url} className="text-brown-600 hover:text-brown-900">
+                          {coffee_shop.state}
                         </a>
-                      </span>
-                    ) : (
-                      <span>{coffee_shop.district}, </span>
-                    )}
-                    &nbsp;
-                    {coffee_shop.state && coffee_shop.state_url ? (
-                      <a href={coffee_shop.state_url} className="text-brown-600 hover:text-brown-900">
-                        {coffee_shop.state}
-                      </a>
-                    ) : (
-                      <span>{coffee_shop.state}</span>
-                    )}
+                      ) : (
+                        <span>{coffee_shop.state}</span>
+                      )}
+                    </span>
                   </p>
                 )}
               </div>
