@@ -71,6 +71,33 @@ export default function Home() {
     return savedViewType || "card"; // Default to card view if not found
   });
 
+  // Helper function to add filters to URL
+  const applyFiltersToUrl = (url, filters) => {
+    // Add keyword filter if it exists
+    if (filters.keyword) {
+      url.searchParams.append('keyword', filters.keyword);
+    }
+
+    // Add tags filter if it exists (multiple tags)
+    if (filters.tags && filters.tags.length > 0) {
+      filters.tags.forEach(tag => {
+        url.searchParams.append('tags[]', tag);
+      });
+    }
+
+    // Add state filter if it exists
+    if (filters.state) {
+      url.searchParams.append('state', filters.state);
+    }
+
+    // Add district filter if it exists
+    if (filters.district) {
+      url.searchParams.append('district', filters.district);
+    }
+
+    return url;
+  };
+
   // Initial data loading for all tabs
   useEffect(() => {
     // Load explore data when component mounts or map tab is active
@@ -147,24 +174,11 @@ export default function Home() {
       url.searchParams.append('lng', userLocation.longitude);
       url.searchParams.append('distance', selectedDistance);
 
+      // Apply all filters
+      applyFiltersToUrl(url, filters);
+
       if (cursor) {
-        if (direction === 'next') {
-          url.searchParams.append('after', cursor);
-        } else if (direction === 'prev') {
-          url.searchParams.append('before', cursor);
-        }
-      }
-
-      // Add keyword filter if it exists
-      if (filters.keyword) {
-        url.searchParams.append('keyword', filters.keyword);
-      }
-
-      // Add tags filter if it exists (multiple tags)
-      if (filters.tags && filters.tags.length > 0) {
-        filters.tags.forEach(tag => {
-          url.searchParams.append('tags[]', tag);
-        });
+        url.searchParams.append(direction === 'next' ? 'after' : 'before', cursor);
       }
 
       console.log("Fetching nearby coffee shops with URL:", url.toString());
@@ -197,26 +211,14 @@ export default function Home() {
     try {
       const url = new URL('/api/v1/coffee_shops', window.location.origin);
 
+      // Apply all filters
+      applyFiltersToUrl(url, filters);
+
       if (cursor) {
-        if (direction === 'next') {
-          url.searchParams.append('after', cursor);
-        } else if (direction === 'prev') {
-          url.searchParams.append('before', cursor);
-        }
+        url.searchParams.append(direction === 'next' ? 'after' : 'before', cursor);
       }
 
-      // Add keyword filter if it exists
-      if (filters.keyword) {
-        url.searchParams.append('keyword', filters.keyword);
-      }
-
-      // Add tags filter if it exists (multiple tags)
-      if (filters.tags && filters.tags.length > 0) {
-        filters.tags.forEach(tag => {
-          url.searchParams.append('tags[]', tag);
-        });
-      }
-
+      console.log("Fetching explore coffee shops with URL:", url.toString());
       const response = await fetch(url);
       const data = await response.json()
       if (data.status === "success" && data.data && data.data.coffee_shops) {
@@ -263,17 +265,8 @@ export default function Home() {
       // Directly fetch data here instead of relying on fetchEverywhereShops
       const url = new URL('/api/v1/coffee_shops', window.location.origin);
 
-      // Add keyword filter if it exists
-      if (actualFilters.keyword) {
-        url.searchParams.append('keyword', actualFilters.keyword);
-      }
-
-      // Add tags filter if it exists (multiple tags)
-      if (actualFilters.tags && actualFilters.tags.length > 0) {
-        actualFilters.tags.forEach(tag => {
-          url.searchParams.append('tags[]', tag);
-        });
-      }
+      // Apply all filters
+      applyFiltersToUrl(url, actualFilters);
 
       console.log("Directly fetching explore with filters:", url.toString());
 
@@ -317,17 +310,8 @@ export default function Home() {
       url.searchParams.append('lng', userLocation.longitude);
       url.searchParams.append('distance', selectedDistance);
 
-      // Add keyword filter if it exists
-      if (actualFilters.keyword) {
-        url.searchParams.append('keyword', actualFilters.keyword);
-      }
-
-      // Add tags filter if it exists (multiple tags)
-      if (actualFilters.tags && actualFilters.tags.length > 0) {
-        actualFilters.tags.forEach(tag => {
-          url.searchParams.append('tags[]', tag);
-        });
-      }
+      // Apply all filters
+      applyFiltersToUrl(url, actualFilters);
 
       console.log("Directly fetching nearby with filters:", url.toString());
 
@@ -516,7 +500,7 @@ export default function Home() {
                   }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2zm-2 4a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
                 Cards
               </button>
