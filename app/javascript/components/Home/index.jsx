@@ -160,6 +160,13 @@ export default function Home() {
         url.searchParams.append('keyword', filters.keyword);
       }
 
+      // Add tags filter if it exists (multiple tags)
+      if (filters.tags && filters.tags.length > 0) {
+        filters.tags.forEach(tag => {
+          url.searchParams.append('tags[]', tag);
+        });
+      }
+
       console.log("Fetching nearby coffee shops with URL:", url.toString());
       const response = await fetch(url);
       const data = await response.json();
@@ -201,6 +208,13 @@ export default function Home() {
       // Add keyword filter if it exists
       if (filters.keyword) {
         url.searchParams.append('keyword', filters.keyword);
+      }
+
+      // Add tags filter if it exists (multiple tags)
+      if (filters.tags && filters.tags.length > 0) {
+        filters.tags.forEach(tag => {
+          url.searchParams.append('tags[]', tag);
+        });
       }
 
       const response = await fetch(url);
@@ -254,6 +268,13 @@ export default function Home() {
         url.searchParams.append('keyword', actualFilters.keyword);
       }
 
+      // Add tags filter if it exists (multiple tags)
+      if (actualFilters.tags && actualFilters.tags.length > 0) {
+        actualFilters.tags.forEach(tag => {
+          url.searchParams.append('tags[]', tag);
+        });
+      }
+
       console.log("Directly fetching explore with filters:", url.toString());
 
       fetch(url)
@@ -299,6 +320,13 @@ export default function Home() {
       // Add keyword filter if it exists
       if (actualFilters.keyword) {
         url.searchParams.append('keyword', actualFilters.keyword);
+      }
+
+      // Add tags filter if it exists (multiple tags)
+      if (actualFilters.tags && actualFilters.tags.length > 0) {
+        actualFilters.tags.forEach(tag => {
+          url.searchParams.append('tags[]', tag);
+        });
       }
 
       console.log("Directly fetching nearby with filters:", url.toString());
@@ -449,13 +477,35 @@ export default function Home() {
               </button>
             ))}
           </nav>
+
+          {/* Filter button moved to top right */}
+          {activeTab !== 2 && (
+            <button
+              onClick={() => setIsFilterSidebarOpen(true)}
+              className={`flex items-center justify-center h-10 w-10 rounded-full ${
+                Object.keys(filters).length > 0
+                  ? "bg-brown-100 text-brown-700"
+                  : "text-gray-700 hover:text-brown-600 hover:bg-gray-100"
+              }`}
+              aria-label="Filter"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+              {Object.keys(filters).length > 0 && (
+                <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-brown-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {Object.keys(filters).length}
+                </span>
+              )}
+            </button>
+          )}
         </div>
       </div>
 
       {/* Controls bar - moved below tabs for better mobile experience */}
       {activeTab !== 2 && (
         <div className="mt-4">
-          {/* View type and filter controls */}
+          {/* View type controls */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
             <div className="flex border border-gray-300 rounded-md overflow-hidden">
               <button
@@ -483,25 +533,6 @@ export default function Home() {
                 List
               </button>
             </div>
-
-            {/* Filter button */}
-            <button
-              onClick={() => setIsFilterSidebarOpen(true)}
-              className={`flex items-center space-x-1 px-3 py-2 text-sm font-medium ${Object.keys(filters).length > 0
-                ? "bg-brown-100 text-brown-700"
-                : "text-gray-700 hover:text-brown-600"
-                } rounded-md`}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-              <span>Filter</span>
-              {Object.keys(filters).length > 0 && (
-                <span className="ml-1 bg-brown-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {Object.keys(filters).length}
-                </span>
-              )}
-            </button>
           </div>
 
           {/* Distance selector in its own row - only show in Nearby tab */}
