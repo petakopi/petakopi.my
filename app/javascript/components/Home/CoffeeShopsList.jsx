@@ -10,6 +10,7 @@ import {
   WhatsAppIcon,
   GoogleIcon
 } from "../Icons"
+import VerifiedIcon from "../Icons/VerifiedIcon"
 
 const CoffeeShopsList = ({
   shops,
@@ -103,6 +104,11 @@ const CoffeeShopsList = ({
                           <a href={`/coffee_shops/${coffee_shop.slug}`}>
                             {coffee_shop.name}
                           </a>
+                          {coffee_shop.has_owner && (
+                            <span className="ml-1 inline-flex items-center">
+                              <VerifiedIcon className="w-4 h-4" />
+                            </span>
+                          )}
                         </h3>
                       </div>
                       {hasLocation && (
@@ -215,6 +221,11 @@ const CoffeeShopsList = ({
                                 <div className="text-sm font-medium text-gray-900 flex items-center">
                                   <a href={`/coffee_shops/${coffee_shop.slug}`}>
                                     {coffee_shop.name}
+                                    {coffee_shop.has_owner && (
+                                      <span className="ml-1 inline-flex items-center">
+                                        <VerifiedIcon className="w-4 h-4" />
+                                      </span>
+                                    )}
                                   </a>
                                 </div>
                               </div>
