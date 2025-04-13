@@ -380,6 +380,85 @@ export default function Home() {
     if (index === 1 && locationPermission !== "granted") {
       requestLocationPermission()
     }
+    // When switching to Nearby tab with location permission already granted
+    else if (index === 1 && locationPermission === "granted" && userLocation) {
+      // Apply existing filters when switching to Nearby tab
+      setNearbyLoading(true)
+
+      // Create URL with current filters
+      const url = new URL('/api/v1/coffee_shops', window.location.origin);
+      url.searchParams.append('lat', userLocation.latitude);
+      url.searchParams.append('lng', userLocation.longitude);
+      url.searchParams.append('distance', selectedDistance);
+
+      // Apply all current filters
+      applyFiltersToUrl(url, filters);
+
+      console.log("Fetching nearby with filters after tab change:", url.toString());
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success" && data.data && data.data.coffee_shops) {
+            setNearbyShops(data.data.coffee_shops)
+            setNearbyNextCursor(data.data.pages.next_cursor)
+            setNearbyPrevCursor(data.data.pages.prev_cursor)
+            setNearbyHasNext(data.data.pages.has_next)
+            setNearbyHasPrev(data.data.pages.has_prev)
+          } else {
+            console.error('Unexpected response format:', data)
+            setNearbyShops([])
+            setNearbyHasNext(false)
+            setNearbyHasPrev(false)
+          }
+          setNearbyLoading(false)
+        })
+        .catch(error => {
+          console.error('Error fetching nearby coffee shops:', error)
+          setNearbyShops([])
+          setNearbyHasNext(false)
+          setNearbyHasPrev(false)
+          setNearbyLoading(false)
+        });
+    }
+    // When switching to Explore tab
+    else if (index === 0) {
+      // Apply existing filters when switching to Explore tab
+      setEverywhereLoading(true)
+
+      // Create URL with current filters
+      const url = new URL('/api/v1/coffee_shops', window.location.origin);
+
+      // Apply all current filters
+      applyFiltersToUrl(url, filters);
+
+      console.log("Fetching explore with filters after tab change:", url.toString());
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success" && data.data && data.data.coffee_shops) {
+            setEverywhereShops(data.data.coffee_shops)
+            setEverywhereNextCursor(data.data.pages.next_cursor)
+            setEverywherePrevCursor(data.data.pages.prev_cursor)
+            setEverywhereHasNext(data.data.pages.has_next)
+            setEverywhereHasPrev(data.data.pages.has_prev)
+          } else {
+            console.error('Unexpected response format:', data)
+            setEverywhereShops([])
+            setEverywhereHasNext(false)
+            setEverywhereHasPrev(false)
+          }
+          setEverywhereLoading(false)
+        })
+        .catch(error => {
+          console.error('Error fetching explore coffee shops:', error)
+          setEverywhereShops([])
+          setEverywhereHasNext(false)
+          setEverywhereHasPrev(false)
+          setEverywhereLoading(false)
+        });
+    }
   }
 
   const handleDistanceChange = (distance) => {

@@ -12,10 +12,10 @@ const SliderDistanceSelector = ({ selectedDistance, handleDistanceChange, disabl
   const [localDistance, setLocalDistance] = useState(selectedDistance);
   const isUserInteractingRef = useRef(false);
   const lastAppliedValueRef = useRef(selectedDistance);
-  
+
   // Find the index of the current selected distance in our options
   const currentIndex = distanceOptions.findIndex(option => option.value === localDistance);
-  
+
   // Update local distance when the prop changes, but only if we're not in the middle of a user interaction
   useEffect(() => {
     if (!isUserInteractingRef.current && selectedDistance !== lastAppliedValueRef.current) {
@@ -23,7 +23,7 @@ const SliderDistanceSelector = ({ selectedDistance, handleDistanceChange, disabl
       lastAppliedValueRef.current = selectedDistance;
     }
   }, [selectedDistance]);
-  
+
   // Debounce the distance change handler
   const debouncedDistanceChange = useCallback(
     (() => {
@@ -31,7 +31,7 @@ const SliderDistanceSelector = ({ selectedDistance, handleDistanceChange, disabl
       return (value) => {
         // Skip if the value hasn't changed
         if (value === lastAppliedValueRef.current) return;
-        
+
         clearTimeout(timeout);
         timeout = setTimeout(() => {
           lastAppliedValueRef.current = value;
@@ -41,33 +41,33 @@ const SliderDistanceSelector = ({ selectedDistance, handleDistanceChange, disabl
     })(),
     [handleDistanceChange]
   );
-  
+
   // Handle slider change
   const handleSliderChange = (e) => {
     const value = parseInt(e.target.value, 10);
     const distanceValue = distanceOptions[value].value;
     setLocalDistance(distanceValue);
-    
+
     // If we're in the middle of a user interaction, we want to immediately update the UI
     // but debounce the actual API call
     if (isUserInteractingRef.current) {
       debouncedDistanceChange(distanceValue);
     }
   };
-  
+
   // Handle slider interactions
   const handleSliderStart = () => {
     isUserInteractingRef.current = true;
   };
-  
+
   const handleSliderEnd = () => {
     // We need to make sure the final value is applied
     const finalValue = localDistance;
-    
+
     // Small delay to ensure the final value is captured
     setTimeout(() => {
       isUserInteractingRef.current = false;
-      
+
       // Only trigger API call if the value has actually changed
       if (finalValue !== lastAppliedValueRef.current) {
         lastAppliedValueRef.current = finalValue;
@@ -75,7 +75,7 @@ const SliderDistanceSelector = ({ selectedDistance, handleDistanceChange, disabl
       }
     }, 50);
   };
-  
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between mb-1">
