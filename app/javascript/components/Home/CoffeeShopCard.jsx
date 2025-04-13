@@ -41,9 +41,9 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
   // Format distance if available
   const formatDistance = () => {
     if (coffee_shop.distance_in_km) {
-      return `${coffee_shop.distance_in_km} km away`;
+      return `(${coffee_shop.distance_in_km} km away)`;
     }
-    return "Distance unavailable";
+    return "";
   };
 
   // Format rating and rating count if available
@@ -152,6 +152,9 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                       ) : (
                         <span>{coffee_shop.state}</span>
                       )}
+                      {isNearbyTab && coffee_shop.distance_in_km && (
+                        <span className="text-gray-500 ml-1">{formatDistance()}</span>
+                      )}
                     </span>
                   ) : (
                     <span>&nbsp;</span>
@@ -179,11 +182,6 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                     </span>
                   ))
               }
-              {isNearbyTab && (
-                <span className="text-xs text-gray-500 ml-2">
-                  {formatDistance()}
-                </span>
-              )}
             </div>
             
             <a
