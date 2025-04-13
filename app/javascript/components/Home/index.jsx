@@ -3,6 +3,7 @@ import ExploreTab from "./ExploreTab"
 import NearbyTab from "./NearbyTab"
 import MapTab from "./MapTab"
 import FilterSidebar from "./FilterSidebar"
+import SliderDistanceSelector from "./SliderDistanceSelector"
 import DistanceSelector from "./DistanceSelector"
 
 // Geolocation configuration
@@ -495,8 +496,8 @@ export default function Home() {
       {activeTab !== 2 && (
         <div className="mt-4">
           {/* View type controls */}
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-            <div className="flex border border-gray-300 rounded-md overflow-hidden">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex space-x-1 border border-gray-300 rounded-md overflow-hidden">
               <button
                 onClick={() => setViewType("card")}
                 className={`flex items-center px-3 py-1.5 text-sm ${viewType === "card"
@@ -522,18 +523,16 @@ export default function Home() {
                 List
               </button>
             </div>
+            {activeTab === 1 && locationPermission === "granted" && (
+              <div className="w-48 px-2">
+                <SliderDistanceSelector
+                  selectedDistance={selectedDistance}
+                  handleDistanceChange={handleDistanceChange}
+                  disabled={nearbyLoading && nearbyShops.length === 0}
+                />
+              </div>
+            )}
           </div>
-
-          {/* Distance selector in its own row - only show in Nearby tab */}
-          {activeTab === 1 && locationPermission === "granted" && (
-            <div className="mb-3">
-              <DistanceSelector
-                selectedDistance={selectedDistance}
-                handleDistanceChange={handleDistanceChange}
-                disabled={nearbyLoading && nearbyShops.length === 0}
-              />
-            </div>
-          )}
         </div>
       )}
 
