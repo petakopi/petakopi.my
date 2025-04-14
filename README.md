@@ -6,7 +6,7 @@
 
 This is the source code for [petakopi.my](https://petakopi.my).
 
-Feel free to start a [discussion](https://github.com/amree/petakopi/discussions)
+Feel free to start a [discussion](https://github.com/petakopi/petakopi.my/discussions)
 before starting the work.
 
 ## Moderators
