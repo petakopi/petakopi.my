@@ -8,6 +8,7 @@ class Api::V1::CoffeeShopsController < ApiController
             CoffeeShop
               .includes(
                 :tags,
+                :owners,
                 logo_attachment: :blob,
                 cover_photo_attachment: :blob
               )
