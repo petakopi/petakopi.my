@@ -22,8 +22,8 @@ const MapCard = ({ shop, isSelected, isHighlighted, onClick }) => {
     <div
       id={`shop-${shop.id}`}
       className={`flex-shrink-0 w-64 bg-white rounded-lg overflow-hidden transition-all cursor-pointer relative
-        ${isSelected && !isHighlighted ? 'shadow-lg ring-2 ring-brown-500' : 'shadow-md hover:shadow-lg'}
-        ${isHighlighted ? 'card-highlight-animation' : ''}
+        ${isSelected ? 'shadow-lg ring-2 ring-brown-500' : 'shadow-md hover:shadow-lg'}
+        ${isHighlighted ? 'border-2 border-brown-500' : ''}
       `}
       onClick={onClick}
     >
