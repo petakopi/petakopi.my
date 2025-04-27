@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import MapStyles from "./Map/MapStyles"
-import MapCardList from "./Map/MapCardList"
 import { setupMapEventHandlers } from "./Map/MapEventHandler"
-import { initializeMap, highlightShopOnMap, updateMapSource } from "./Map/MapInitializer"
+import { initializeMap, updateMapSource } from "./Map/MapInitializer"
 import { fetchMapData } from "./Map/MapDataService"
 
 export default function MapTab({
@@ -14,13 +13,7 @@ export default function MapTab({
   const [mapLoaded, setMapLoaded] = useState(false)
   const [mapInitializing, setMapInitializing] = useState(true)
   const [currentZoom, setCurrentZoom] = useState(0)
-  const [visibleShops, setVisibleShops] = useState([])
-  const [selectedShopId, setSelectedShopId] = useState(null)
-  const [highlightedShopId, setHighlightedShopId] = useState(null)
   const [hasClusters, setHasClusters] = useState(false)
-  const highlightTimeoutRef = useRef(null)
-  const markersRef = useRef([])
-  const clustersRef = useRef(null)
   const [shops, setShops] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -33,12 +26,9 @@ export default function MapTab({
 
       if (result.success) {
         setShops(result.shops);
-        // Don't set visible shops here - we'll wait for the map to load and show markers first
-        // setVisibleShops will be called after the map loads and markers are displayed
       } else {
         console.error('Failed to fetch map data:', result.error);
         setShops([]);
-        setVisibleShops([]);
       }
 
       setLoading(false);
@@ -47,21 +37,6 @@ export default function MapTab({
     // Only fetch shops once when the component mounts or when userLocation changes
     loadMapData();
   }, [userLocation]); // Only re-fetch when userLocation changes
-
-  // Debug useEffect to track visibleShops changes
-  useEffect(() => {
-    console.log("=== VISIBLE SHOPS CHANGED ===");
-    console.log("visibleShops count:", visibleShops.length);
-    if (visibleShops.length > 0) {
-      console.log("First visible shop:", visibleShops[0]);
-      console.log("Visible shop IDs:", visibleShops.map(shop => shop.id));
-    }
-
-    // Debug the displayShops calculation
-    const displayShops = visibleShops.length > 0 ? visibleShops : shops.slice(0, 20);
-    console.log("displayShops count:", displayShops.length);
-    console.log("Are visibleShops being used for display?", visibleShops.length > 0);
-  }, [visibleShops, shops]);
 
   // Initialize the map using our extracted function
   const initMapInstance = () => {
@@ -74,32 +49,11 @@ export default function MapTab({
       setMapLoaded,
       setMapInitializing,
       setCurrentZoom,
-      setSelectedShopId,
-      animateHighlightShop,
       shops,
-      setVisibleShops,
       setHasClusters,
       mapLoaded
     });
   };
-
-  // Set up force update handler for map interactions
-  useEffect(() => {
-    if (!map.current || !mapLoaded) return;
-
-    const { setupForceUpdateHandler } = setupMapEventHandlers(
-      map.current,
-      shops,
-      setVisibleShops,
-      setHasClusters,
-      mapLoaded
-    );
-
-    // Setup and get cleanup function
-    const cleanup = setupForceUpdateHandler();
-
-    return cleanup;
-  }, [mapLoaded, shops, visibleShops]);
 
   // Setup cluster check
   useEffect(() => {
@@ -108,7 +62,6 @@ export default function MapTab({
     const { setupClusterCheck } = setupMapEventHandlers(
       map.current,
       shops,
-      setVisibleShops,
       setHasClusters,
       mapLoaded
     );
@@ -124,78 +77,12 @@ export default function MapTab({
 
     return () => {
       if (map.current) map.current.remove();
-      clearMarkers();
     };
   }, []);
 
   useEffect(() => {
     updateMapSource(map.current, shops);
   }, [shops, mapLoaded]);
-
-  // Use a more efficient way to force re-renders when needed
-  const [forceUpdateCounter, setForceUpdateCounter] = useState(0);
-
-  useEffect(() => {
-    // Force a re-render of the component when visibleShops changes
-    if (visibleShops.length > 0) {
-      console.log("=== FORCING COMPONENT UPDATE ===");
-      // Use a dedicated counter for forcing re-renders instead of changing zoom
-      setForceUpdateCounter(prev => prev + 1);
-    }
-  }, [visibleShops]);
-
-  const clearMarkers = () => {
-    markersRef.current.forEach(marker => marker.remove())
-    markersRef.current = []
-  }
-
-  // Function to highlight a shop on the map
-  const highlightShop = (shopId) => {
-    setSelectedShopId(shopId);
-    highlightShopOnMap(map.current, shopId);
-  }
-
-  // Function to temporarily highlight a shop card with animation
-  const animateHighlightShop = (shopId) => {
-    // Clear any existing timeout
-    if (highlightTimeoutRef.current) {
-      clearTimeout(highlightTimeoutRef.current);
-    }
-
-    // Set the highlighted shop
-    setHighlightedShopId(shopId);
-
-    // Find and scroll to the card
-    setTimeout(() => {
-      const cardElement = document.getElementById(`shop-${shopId}`);
-      if (cardElement) {
-        // Scroll the cards container to show the highlighted card
-        const cardsContainer = document.getElementById('map-cards-container');
-        if (cardsContainer) {
-          cardsContainer.scrollLeft = cardElement.offsetLeft - (cardsContainer.offsetWidth / 2) + (cardElement.offsetWidth / 2);
-        }
-      }
-    }, 100);
-
-    // Clear the highlight after 3 seconds
-    highlightTimeoutRef.current = setTimeout(() => {
-      setHighlightedShopId(null);
-    }, 3000);
-  }
-
-  // Handle card click
-  const handleCardClick = (shop) => {
-    highlightShop(shop.id);
-    window.open(`/coffee_shops/${shop.slug}`, '_blank');
-  };
-
-  useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log("=== DEBUG INFO ===");
-      console.log("Clusters:", hasClusters ? 'Yes' : 'No');
-      console.log("Visible shops:", visibleShops.length);
-    }
-  }, [hasClusters, visibleShops.length])
 
   return (
     <div className="col-span-3 relative">
@@ -220,16 +107,6 @@ export default function MapTab({
           <p className="text-gray-700 font-medium">No coffee shops found</p>
           <p className="text-gray-500 text-sm mt-1">Try searching in a different location</p>
         </div>
-      )}
-
-      {visibleShops.length > 0 && (
-        <MapCardList
-          visibleShops={visibleShops}
-          selectedShopId={selectedShopId}
-          highlightedShopId={highlightedShopId}
-          onCardClick={handleCardClick}
-          hasClusters={hasClusters}
-        />
       )}
     </div>
   )

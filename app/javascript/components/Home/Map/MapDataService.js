@@ -26,10 +26,7 @@ const isCacheValid = (cachedData) => {
 // Helper function to save data to local storage
 const saveToCache = (data, userLocationKey) => {
   // Don't cache in development
-  if (isDevelopment()) {
-    console.log('Skipping cache in development environment');
-    return;
-  }
+  if (isDevelopment()) return;
 
   const cacheData = {
     data: data,
@@ -38,19 +35,15 @@ const saveToCache = (data, userLocationKey) => {
 
   try {
     localStorage.setItem(`${CACHE_KEY}_${userLocationKey}`, JSON.stringify(cacheData));
-    console.log('Map data saved to local storage cache');
   } catch (error) {
-    console.warn('Failed to save map data to local storage:', error);
+    // Silent error handling
   }
 };
 
 // Helper function to get cached data
 const getFromCache = (userLocationKey) => {
   // Don't use cache in development
-  if (isDevelopment()) {
-    console.log('Skipping cache in development environment');
-    return null;
-  }
+  if (isDevelopment()) return null;
 
   try {
     const cachedDataString = localStorage.getItem(`${CACHE_KEY}_${userLocationKey}`);
@@ -59,16 +52,13 @@ const getFromCache = (userLocationKey) => {
     const cachedData = JSON.parse(cachedDataString);
 
     if (isCacheValid(cachedData)) {
-      console.log('Using cached map data from local storage');
       return cachedData.data;
     } else {
-      console.log('Cached map data expired');
       // Clean up expired cache
       localStorage.removeItem(`${CACHE_KEY}_${userLocationKey}`);
       return null;
     }
   } catch (error) {
-    console.warn('Error reading from cache:', error);
     return null;
   }
 };
@@ -109,15 +99,12 @@ export const fetchMapData = async (userLocation) => {
       url.searchParams.append('lng', userLocation.longitude);
     }
 
-    console.log("Fetching shops for map from:", url.toString());
     const response = await fetch(url);
     const data = await response.json();
-    console.log("API Response:", data);
 
     if (data && data.status === "success" && data.data && Array.isArray(data.data.coffee_shops)) {
       // Nested structure with status and data
       const fetchedShops = data.data.coffee_shops;
-      console.log("Received shops:", fetchedShops.length);
 
       // Save to cache
       saveToCache(fetchedShops, userLocationKey);
@@ -128,7 +115,6 @@ export const fetchMapData = async (userLocation) => {
         fromCache: false
       };
     } else {
-      console.error('Unexpected response format:', data);
       return {
         success: false,
         shops: [],
@@ -136,7 +122,6 @@ export const fetchMapData = async (userLocation) => {
       };
     }
   } catch (error) {
-    console.error('Error fetching shops for map:', error);
     return {
       success: false,
       shops: [],
