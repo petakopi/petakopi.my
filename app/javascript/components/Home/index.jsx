@@ -5,6 +5,7 @@ import MapTab from "./MapTab"
 import FilterSidebar from "./FilterSidebar"
 import SliderDistanceSelector from "./SliderDistanceSelector"
 import DistanceSelector from "./DistanceSelector"
+import FilterPills from "./FilterPills"
 
 // Geolocation configuration
 const GEOLOCATION_CONFIG = {
@@ -603,6 +604,8 @@ export default function Home() {
                   List
                 </button>
               </div>
+              {/* Filter pills */}
+              <FilterPills filters={filters} setFilters={setFilters} handleApplyFilters={handleApplyFilters} />
             </div>
             {activeTab === 1 && locationPermission === "granted" && (
               <div className="w-48 px-2">
