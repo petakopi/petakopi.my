@@ -88,6 +88,8 @@ class CoffeeShopsListQuery
       relation.order(:name)
     elsif params[:keyword].blank? && params[:state].present?
       relation.order(:district, :name)
+    else
+      relation.order(created_at: :desc)
     end
   end
 end

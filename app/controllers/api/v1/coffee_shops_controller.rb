@@ -15,7 +15,7 @@ class Api::V1::CoffeeShopsController < ApiController
         ).status_published
 
     # Default ordering
-    order_clause = {id: :desc}
+    order_clause = {created_at: :desc}
     @include_distance = false
 
     # Filter by distance if lat, lng, and distance parameters are provided
