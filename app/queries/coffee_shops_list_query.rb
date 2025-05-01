@@ -88,8 +88,6 @@ class CoffeeShopsListQuery
       relation.order(:name)
     elsif params[:keyword].blank? && params[:state].present?
       relation.order(:district, :name)
-    else
-      relation.order(approved_at: :desc)
     end
   end
 end
