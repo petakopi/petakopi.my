@@ -10,7 +10,8 @@ const ControlsBar = ({
   locationPermission,
   onRequestLocation,
   viewType,
-  setViewType
+  setViewType,
+  activeTab
 }) => {
   return (
     <div className="mt-4">
@@ -37,33 +38,35 @@ const ControlsBar = ({
             )}
           </button>
 
-          {/* View type controls */}
-          <div className="flex space-x-2 bg-gray-100 p-1 rounded-lg">
-            <button
-              onClick={() => setViewType("card")}
-              className={`flex items-center px-3 py-1.5 text-sm rounded-md transition-all ${viewType === "card"
-                ? "bg-white text-brown-600 shadow-sm"
-                : "text-gray-600 hover:bg-gray-200"
-                }`}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-              </svg>
-              Cards
-            </button>
-            <button
-              onClick={() => setViewType("list")}
-              className={`flex items-center px-3 py-1.5 text-sm rounded-md transition-all ${viewType === "list"
-                ? "bg-white text-brown-600 shadow-sm"
-                : "text-gray-600 hover:bg-gray-200"
-                }`}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-              List
-            </button>
-          </div>
+          {/* View type controls - only show when not in map view */}
+          {activeTab !== 1 && (
+            <div className="flex space-x-2 bg-gray-100 p-1 rounded-lg">
+              <button
+                onClick={() => setViewType("card")}
+                className={`flex items-center px-3 py-1.5 text-sm rounded-md transition-all ${viewType === "card"
+                  ? "bg-white text-brown-600 shadow-sm"
+                  : "text-gray-600 hover:bg-gray-200"
+                  }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                Cards
+              </button>
+              <button
+                onClick={() => setViewType("list")}
+                className={`flex items-center px-3 py-1.5 text-sm rounded-md transition-all ${viewType === "list"
+                  ? "bg-white text-brown-600 shadow-sm"
+                  : "text-gray-600 hover:bg-gray-200"
+                  }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                List
+              </button>
+            </div>
+          )}
 
           {/* Filter pills */}
           <FilterPills

@@ -16,7 +16,14 @@ const distanceOptions = [
   { value: 30, label: "30km" }
 ]
 
-const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {}, locationPermission }) => {
+const FilterSidebar = ({
+  isOpen,
+  onClose,
+  onApplyFilters,
+  currentFilters = {},
+  locationPermission,
+  activeTab
+}) => {
   const [keyword, setKeyword] = useState(currentFilters.keyword || "")
   const [selectedTags, setSelectedTags] = useState(currentFilters.tags || [])
   const [selectedMuslimTag, setSelectedMuslimTag] = useState(currentFilters.muslimTag || null)
@@ -150,8 +157,7 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {}, l
     setSelectedDistrict(null)
     setIsOpenNow(false)
     setSelectedDistance(null)
-    onApplyFilters({})
-    // Keep sidebar open to show the reset state
+    setIsApplied(false)
   }
 
   // Close popover when clicking outside
@@ -193,51 +199,57 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {}, l
             placeholder="Search coffee shops..."
           />
 
-          <FilterCategory
-            title="Distance"
-            isOpen={distanceOpen}
-            setIsOpen={setDistanceOpen}
-            count={selectedDistance !== null ? 1 : 0}
-          >
-            {locationPermission !== "granted" && (
-              <div className="mb-3 p-2 bg-yellow-50 text-yellow-800 text-xs rounded">
-                Enable location to use distance filter
-              </div>
-            )}
-            <RadioFilterOption
-              id="distance-none"
-              name="distance"
-              checked={selectedDistance === null}
-              onChange={() => setSelectedDistance(null)}
-              label="No preference"
-              disabled={locationPermission !== "granted"}
-            />
-            {distanceOptions.map((option) => (
+          {/* Distance filter - only show when not in map view */}
+          {activeTab !== 1 && (
+            <FilterCategory
+              title="Distance"
+              isOpen={distanceOpen}
+              setIsOpen={setDistanceOpen}
+              count={selectedDistance !== null ? 1 : 0}
+            >
+              {locationPermission !== "granted" && (
+                <div className="mb-3 p-2 bg-yellow-50 text-yellow-800 text-xs rounded">
+                  Enable location to use distance filter
+                </div>
+              )}
               <RadioFilterOption
-                key={option.value}
-                id={`distance-${option.value}`}
+                id="distance-none"
                 name="distance"
-                checked={selectedDistance === option.value}
-                onChange={() => setSelectedDistance(option.value)}
-                label={option.label}
+                checked={selectedDistance === null}
+                onChange={() => setSelectedDistance(null)}
+                label="No preference"
                 disabled={locationPermission !== "granted"}
               />
-            ))}
-          </FilterCategory>
+              {distanceOptions.map((option) => (
+                <RadioFilterOption
+                  key={option.value}
+                  id={`distance-${option.value}`}
+                  name="distance"
+                  checked={selectedDistance === option.value}
+                  onChange={() => setSelectedDistance(option.value)}
+                  label={option.label}
+                  disabled={locationPermission !== "granted"}
+                />
+              ))}
+            </FilterCategory>
+          )}
 
-          <FilterCategory
-            title="Location"
-            isOpen={locationOpen}
-            setIsOpen={setLocationOpen}
-            count={(selectedState ? 1 : 0) + (selectedDistrict ? 1 : 0)}
-          >
-            <LocationFilter
-              selectedState={selectedState}
-              selectedDistrict={selectedDistrict}
-              onStateChange={setSelectedState}
-              onDistrictChange={setSelectedDistrict}
-            />
-          </FilterCategory>
+          {/* Location filter - only show when not in map view */}
+          {activeTab !== 1 && (
+            <FilterCategory
+              title="Location"
+              isOpen={locationOpen}
+              setIsOpen={setLocationOpen}
+              count={(selectedState ? 1 : 0) + (selectedDistrict ? 1 : 0)}
+            >
+              <LocationFilter
+                selectedState={selectedState}
+                selectedDistrict={selectedDistrict}
+                onStateChange={setSelectedState}
+                onDistrictChange={setSelectedDistrict}
+              />
+            </FilterCategory>
+          )}
 
           <FilterCategory
             title="Opening Hours"
