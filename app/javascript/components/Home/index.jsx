@@ -254,14 +254,17 @@ export default function Home() {
       // Directly fetch data here instead of relying on fetchEverywhereShops
       const url = new URL('/api/v1/coffee_shops', window.location.origin);
 
-      // Apply all filters
-      applyFiltersToUrl(url, actualFilters);
+      // Only apply filters if they exist and have values
+      if (Object.keys(actualFilters).length > 0) {
+        // Apply all filters
+        applyFiltersToUrl(url, actualFilters);
 
-      // Add distance filter if set and location is available
-      if (actualFilters.distance !== null && userLocation && actualFilters.distance !== 0) {
-        url.searchParams.append('distance', actualFilters.distance);
-        url.searchParams.append('lat', userLocation.latitude);
-        url.searchParams.append('lng', userLocation.longitude);
+        // Add distance filter if set and location is available
+        if (actualFilters.distance !== null && userLocation && actualFilters.distance !== 0) {
+          url.searchParams.append('distance', actualFilters.distance);
+          url.searchParams.append('lat', userLocation.latitude);
+          url.searchParams.append('lng', userLocation.longitude);
+        }
       }
 
       console.log("Directly fetching explore with filters:", url.toString());
@@ -461,7 +464,7 @@ export default function Home() {
       />
 
       {/* Main content area */}
-      <div className={`${activeTab === 1 ? 'h-[calc(100vh-4rem)]' : 'mt-4'} bg-gray-50 rounded-lg`}>
+      <div className={`${activeTab === 1 ? 'h-[calc(100vh-4rem)] mt-4' : 'mt-4'} bg-gray-50 rounded-lg`}>
         {activeTab === 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-4">
