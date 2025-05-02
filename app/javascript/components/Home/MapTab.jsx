@@ -7,7 +7,8 @@ import mapboxgl from "mapbox-gl"
 
 export default function MapTab({
   userLocation,
-  mapboxAccessToken = "pk.eyJ1IjoiYW1yZWV6IiwiYSI6ImNsMDN3bW5rZDBidGYzZHBpdmZjMDVpbzkifQ.F8fdxihnLv9ZTuDjufmICQ"
+  mapboxAccessToken = "pk.eyJ1IjoiYW1yZWV6IiwiYSI6ImNsMDN3bW5rZDBidGYzZHBpdmZjMDVpbzkifQ.F8fdxihnLv9ZTuDjufmICQ",
+  activeTab
 }) {
   const mapContainer = useRef(null)
   const map = useRef(null)
@@ -83,6 +84,15 @@ export default function MapTab({
       if (map.current) map.current.remove();
     };
   }, [defaultCenter]); // Re-initialize map when default center changes
+
+  // Fix: Resize map when tab becomes visible
+  useEffect(() => {
+    if (activeTab === 1 && map.current) {
+      setTimeout(() => {
+        map.current.resize();
+      }, 100);
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     updateMapSource(map.current, shops);

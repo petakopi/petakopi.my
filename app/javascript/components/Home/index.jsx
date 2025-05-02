@@ -472,35 +472,30 @@ export default function Home() {
 
       {/* Main content area */}
       <div className={`${activeTab === 1 ? 'h-[calc(100vh-4rem)] mt-4' : 'mt-4'} bg-gray-50 rounded-lg`}>
-        {activeTab === 0 ? (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-4">
-              <ExploreTab
-                everywhereShops={everywhereShops}
-                everywhereLoading={everywhereLoading}
-                viewType={viewType}
-                userLocation={userLocation}
-              />
-            </div>
-
-            {/* Pagination controls - hide on map tab */}
-            {(everywhereHasNext || everywhereHasPrev) && (
-              <Pagination
-                hasNext={everywhereHasNext}
-                hasPrev={everywhereHasPrev}
-                onNext={handleNextPage}
-                onPrev={handlePrevPage}
-                loading={everywhereLoading}
-              />
-            )}
-          </>
-        ) : (
-          <div className="h-full">
-            <MapTab
+        {/* ExploreTab */}
+        <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-4">
+            <ExploreTab
+              everywhereShops={everywhereShops}
+              everywhereLoading={everywhereLoading}
+              viewType={viewType}
               userLocation={userLocation}
             />
           </div>
-        )}
+          {(everywhereHasNext || everywhereHasPrev) && (
+            <Pagination
+              hasNext={everywhereHasNext}
+              hasPrev={everywhereHasPrev}
+              onNext={handleNextPage}
+              onPrev={handlePrevPage}
+              loading={everywhereLoading}
+            />
+          )}
+        </div>
+        {/* MapTab */}
+        <div style={{ display: activeTab === 1 ? 'block' : 'none', height: '100%' }}>
+          <MapTab userLocation={userLocation} activeTab={activeTab} />
+        </div>
       </div>
 
       {/* Floating Map button - only show when not in map view */}
