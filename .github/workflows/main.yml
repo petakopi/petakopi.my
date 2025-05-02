@@ -41,5 +41,8 @@ jobs:
       - name: Set up database schema
         run: bin/rails db:schema:load
 
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.8.0
+
       - name: Run RSpec tests
         run: bundle exec rspec
