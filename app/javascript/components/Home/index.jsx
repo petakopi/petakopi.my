@@ -479,6 +479,7 @@ export default function Home() {
                 everywhereShops={everywhereShops}
                 everywhereLoading={everywhereLoading}
                 viewType={viewType}
+                userLocation={userLocation}
               />
             </div>
 

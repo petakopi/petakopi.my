@@ -2,6 +2,7 @@ import React from "react"
 import CoffeeShopCard from "./CoffeeShopCard"
 import LoadingIndicator from "./LoadingIndicator"
 import SkeletonCard from "../SkeletonCard"
+import { calculateDistance } from "../../utils/distance"
 import {
   FacebookIcon,
   InstagramIcon,
@@ -16,7 +17,8 @@ const CoffeeShopsList = ({
   shops,
   loading,
   viewType = "card", // Default to card view
-  tab = "explore" // Default to explore tab
+  tab = "explore", // Default to explore tab
+  userLocation = null // Add userLocation prop
 }) => {
   // Function to get the appropriate icon based on link name
   const getLinkIcon = (linkName) => {
@@ -37,6 +39,18 @@ const CoffeeShopsList = ({
       default:
         return null;
     }
+  };
+
+  // Function to calculate and format distance
+  const getDistance = (coffee_shop) => {
+    if (!userLocation || !coffee_shop.lat || !coffee_shop.lng) return null;
+    const distance = calculateDistance(
+      userLocation.latitude,
+      userLocation.longitude,
+      coffee_shop.lat,
+      coffee_shop.lng
+    );
+    return `${distance}km`;
   };
 
   if (loading && shops.length === 0) {
@@ -94,6 +108,7 @@ const CoffeeShopsList = ({
             {shops.map((coffee_shop, index) => {
               // Check if location exists
               const hasLocation = coffee_shop.district || coffee_shop.state;
+              const distance = getDistance(coffee_shop);
 
               return (
                 <li key={`${coffee_shop.slug}-${index}`} className="px-4 py-4 sm:px-6 bg-white">
@@ -111,27 +126,32 @@ const CoffeeShopsList = ({
                           )}
                         </h3>
                       </div>
-                      {hasLocation && (
-                        <p className="mt-1 truncate text-sm text-gray-500">
-                          {coffee_shop.district && coffee_shop.district_url ? (
-                            <span>
-                              <a href={coffee_shop.district_url} className="text-brown-600 hover:text-brown-900">
-                                {coffee_shop.district},
+                      <p className="mt-1 truncate text-sm text-gray-500">
+                        {hasLocation && (
+                          <>
+                            {coffee_shop.district && coffee_shop.district_url ? (
+                              <span>
+                                <a href={coffee_shop.district_url} className="text-brown-600 hover:text-brown-900">
+                                  {coffee_shop.district},
+                                </a>
+                              </span>
+                            ) : (
+                              <span>{coffee_shop.district}, </span>
+                            )}
+                            &nbsp;
+                            {coffee_shop.state && coffee_shop.state_url ? (
+                              <a href={coffee_shop.state_url} className="text-brown-600 hover:text-brown-900">
+                                {coffee_shop.state}
                               </a>
-                            </span>
-                          ) : (
-                            <span>{coffee_shop.district}, </span>
-                          )}
-                          &nbsp;
-                          {coffee_shop.state && coffee_shop.state_url ? (
-                            <a href={coffee_shop.state_url} className="text-brown-600 hover:text-brown-900">
-                              {coffee_shop.state}
-                            </a>
-                          ) : (
-                            <span>{coffee_shop.state}</span>
-                          )}
-                        </p>
-                      )}
+                            ) : (
+                              <span>{coffee_shop.state}</span>
+                            )}
+                            {distance && (
+                              <span className="text-gray-500 ml-1">({distance})</span>
+                            )}
+                          </>
+                        )}
+                      </p>
                     </div>
                     <a href={`/coffee_shops/${coffee_shop.slug}`}>
                       {coffee_shop.logo && coffee_shop.logo !== "" ? (
@@ -299,6 +319,7 @@ const CoffeeShopsList = ({
             key={`${coffee_shop.slug}-${index}`}
             coffee_shop={coffee_shop}
             tab={tab}
+            userLocation={userLocation}
           />
         ))}
       </>

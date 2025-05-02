@@ -10,8 +10,9 @@ import {
   PinIcon,
   VerifiedIcon
 } from "../Icons"
+import { calculateDistance } from "../../utils/distance"
 
-const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
+const CoffeeShopCard = ({ coffee_shop, tab = "explore", userLocation = null }) => {
   // Function to get the appropriate icon based on link name
   const getLinkIcon = (linkName) => {
     const name = linkName.toLowerCase();
@@ -39,12 +40,16 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
   // Check if we're in the nearby tab
   const isNearbyTab = tab === "nearby";
 
-  // Format distance if available
-  const formatDistance = () => {
-    if (coffee_shop.distance_in_km) {
-      return `(${coffee_shop.distance_in_km} km)`;
-    }
-    return "";
+  // Calculate and format distance
+  const getDistance = () => {
+    if (!userLocation || !coffee_shop.lat || !coffee_shop.lng) return null;
+    const distance = calculateDistance(
+      userLocation.latitude,
+      userLocation.longitude,
+      coffee_shop.lat,
+      coffee_shop.lng
+    );
+    return `${distance}km`;
   };
 
   // Format rating and rating count if available
@@ -160,8 +165,8 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore" }) => {
                       ) : (
                         <span>{coffee_shop.state}</span>
                       )}
-                      {isNearbyTab && coffee_shop.distance_in_km && (
-                        <span className="text-gray-500 ml-1">{formatDistance()}</span>
+                      {userLocation && coffee_shop.lat && coffee_shop.lng && (
+                        <span className="text-gray-500 ml-1">({getDistance()})</span>
                       )}
                     </span>
                   ) : (
