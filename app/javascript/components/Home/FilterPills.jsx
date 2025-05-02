@@ -121,8 +121,8 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters, l
 
   return (
     <div className="flex flex-wrap gap-2">
-      {/* Render Location pill first if enabled */}
-      {locationPermission && renderFilterPill('location', locationPermission, FILTER_CONFIGS.location)}
+      {/* Always render Location pill */}
+      {renderFilterPill('location', locationPermission, FILTER_CONFIGS.location)}
 
       {/* Render other filter pills */}
       {Object.entries(filters)
