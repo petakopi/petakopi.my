@@ -92,13 +92,22 @@ const MapStyles = () => {
         z-index: 9999;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
       }
-      
+
       @keyframes highlight-pulse {
         0% { box-shadow: 0 0 0 0 rgba(139, 69, 19, 0.7); border: none; }
         50% { box-shadow: 0 0 0 10px rgba(139, 69, 19, 0.4); border: none; }
         100% { box-shadow: 0 0 0 0 rgba(139, 69, 19, 0); border: none; }
       }
-      
+
+      @keyframes jump {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+
+      .jump-dot {
+        animation: jump 0.6s infinite;
+      }
+
       .card-highlight-animation {
         animation: highlight-pulse 1.5s ease-out;
         animation-iteration-count: 2;

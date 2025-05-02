@@ -96,7 +96,11 @@ export default function MapTab({
 
       {(loading || mapInitializing) && (
         <div className="absolute inset-0 bg-white bg-opacity-70 flex flex-col justify-center items-center rounded-lg z-10">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brown-500 mb-4"></div>
+          <div className="flex space-x-2 mb-4">
+            <div className="w-2 h-2 bg-brown-500 rounded-full jump-dot" style={{ animationDelay: '0ms' }}></div>
+            <div className="w-2 h-2 bg-brown-500 rounded-full jump-dot" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-2 h-2 bg-brown-500 rounded-full jump-dot" style={{ animationDelay: '300ms' }}></div>
+          </div>
           <p className="text-brown-700 font-medium">
             {mapInitializing ? 'Initializing map...' : 'Loading coffee shops...'}
           </p>
