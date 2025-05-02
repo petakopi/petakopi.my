@@ -18,164 +18,229 @@
   </div>
 </div>
 
-<div id="map" style="<%= turbo_native_app? ? "position: absolute; top: 0; bottom: 0; width: 100%" : "height: 500px" %>"></div>
+<div class="h-full">
+  <div id="map" class="w-full h-full rounded-lg shadow-md"></div>
+</div>
 
 <%= content_for :js do %>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
   <script>
-    mapboxgl.accessToken = "<%= ENV['MAPBOX_API_KEY'] %>"
+    document.addEventListener('DOMContentLoaded', function() {
+      const mapContainer = document.getElementById('map');
+      let map = null;
+      let defaultCenter = null;
 
-    var map = new mapboxgl.Map({
-      container: "map",
-      style: "mapbox://styles/mapbox/light-v10?optimize=true",
-      center: [101.7121498580279, 3.1578064758309883],
-      zoom: 10
-    })
-
-    var geolocate =
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        // When active the map will receive updates to the device's location as it changes.
-        trackUserLocation: true,
-        // Draw an arrow next to the location dot to indicate which direction the device is heading.
-        showUserHeading: true
-      })
-
-    map.addControl(new mapboxgl.NavigationControl())
-    map.addControl(new mapboxgl.FullscreenControl())
-    map.addControl(geolocate)
-
-    map.on("load", () => {
-      geolocate.trigger()
-
-      // Add a new source from our GeoJSON data and
-      // set the "cluster" option to true. GL-JS will
-      // add the point_count property to your source data.
-      map.addSource("coffee_shops", {
-        type: "geojson",
-        data: "<%= mapbox_path(type: 'geojson', tags: params[:tags]).html_safe %>",
-        cluster: true,
-        clusterMaxZoom: 14, // Max zoom to cluster points on
-        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
-      })
-
-      map.addLayer({
-        id: "clusters",
-        type: "circle",
-        source: "coffee_shops",
-        filter: ["has", "point_count"],
-        paint: {
-          // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-          // with three steps to implement three types of circles:
-          //   * Blue, 20px circles when point count is less than 50
-          //   * Yellow, 30px circles when point count is between 50 and 100
-          //   * Pink, 40px circles when point count is greater than or equal to 100
-          "circle-color": [
-            "step",
-            ["get", "point_count"],
-            "#51bbd6",
-            50,
-            "#f1f075",
-            100,
-            "#f28cb1"
-          ],
-          "circle-radius": [
-            "step",
-            ["get", "point_count"],
-            20,
-            50,
-            30,
-            100,
-            40
-          ]
-        }
-      })
-
-      map.addLayer({
-        id: "cluster-count",
-        type: "symbol",
-        source: "coffee_shops",
-        filter: ["has", "point_count"],
-        layout: {
-          "text-field": "{point_count_abbreviated}",
-          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-          "text-size": 12
-        }
-      })
-
-      map.addLayer({
-        id: "unclustered-point",
-        type: "circle",
-        source: "coffee_shops",
-        filter: ["!", ["has", "point_count"]],
-        paint: {
-          "circle-color": "#11b4da",
-          "circle-radius": 10,
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "#fff"
-        }
-      })
-
-      // inspect a cluster on click
-      map.on("click", "clusters", (e) => {
-        const features = map.queryRenderedFeatures(e.point, {
-          layers: ["clusters"]
+      // Fetch map data from the API
+      fetch('/api/v1/maps')
+        .then(response => response.json())
+        .then(data => {
+          defaultCenter = data.default_center;
+          initializeMap(data.shops);
         })
-        const clusterId = features[0].properties.cluster_id
-        map.getSource("coffee_shops").getClusterExpansionZoom(
-          clusterId,
-          (err, zoom) => {
-            if (err) return
+        .catch(error => {
+          console.error('Error fetching map data:', error);
+          // Initialize map with default KLCC coordinates if API fails
+          defaultCenter = { latitude: 3.1390, longitude: 101.6869 };
+          initializeMap([]);
+        });
 
-            map.easeTo({
-              center: features[0].geometry.coordinates,
-              zoom: zoom
-            })
+      function initializeMap(shops) {
+        map = new mapboxgl.Map({
+          container: 'map',
+          style: 'mapbox://styles/amreez/cl03wqg0e000014o0j1q8j0j8',
+          center: [defaultCenter.longitude, defaultCenter.latitude],
+          zoom: 13,
+          attributionControl: false,
+          accessToken: '<%= ENV["MAPBOX_ACCESS_TOKEN"] %>'
+        });
+
+        // Add navigation control
+        map.addControl(
+          new mapboxgl.NavigationControl({
+            showCompass: false
+          }),
+          'top-right'
+        );
+
+        // Add attribution control
+        map.addControl(
+          new mapboxgl.AttributionControl({
+            compact: true
+          })
+        );
+
+        // Add geolocation control
+        map.addControl(
+          new mapboxgl.GeolocateControl({
+            positionOptions: {
+              enableHighAccuracy: true
+            },
+            trackUserLocation: true,
+            showUserHeading: true
+          }),
+          'top-right'
+        );
+
+        // Add scale control
+        map.addControl(
+          new mapboxgl.ScaleControl({
+            maxWidth: 100,
+            unit: 'metric'
+          }),
+          'bottom-left'
+        );
+
+        // Add fullscreen control
+        map.addControl(
+          new mapboxgl.FullscreenControl(),
+          'top-right'
+        );
+
+        map.on('load', () => {
+          // Add shops to the map
+          if (shops.length > 0) {
+            map.addSource('shops', {
+              type: 'geojson',
+              data: {
+                type: 'FeatureCollection',
+                features: shops.map(shop => ({
+                  type: 'Feature',
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [shop.longitude, shop.latitude]
+                  },
+                  properties: {
+                    id: shop.id,
+                    name: shop.name,
+                    address: shop.address,
+                    rating: shop.rating
+                  }
+                }))
+              },
+              cluster: true,
+              clusterMaxZoom: 14,
+              clusterRadius: 50
+            });
+
+            // Add shop clusters layer
+            map.addLayer({
+              id: 'clusters',
+              type: 'circle',
+              source: 'shops',
+              filter: ['has', 'point_count'],
+              paint: {
+                'circle-color': [
+                  'step',
+                  ['get', 'point_count'],
+                  '#51bbd6',
+                  100,
+                  '#f1f075',
+                  750,
+                  '#f28cb1'
+                ],
+                'circle-radius': [
+                  'step',
+                  ['get', 'point_count'],
+                  20,
+                  100,
+                  30,
+                  750,
+                  40
+                ]
+              }
+            });
+
+            // Add cluster count layer
+            map.addLayer({
+              id: 'cluster-count',
+              type: 'symbol',
+              source: 'shops',
+              filter: ['has', 'point_count'],
+              layout: {
+                'text-field': '{point_count_abbreviated}',
+                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                'text-size': 12
+              }
+            });
+
+            // Add unclustered point layer
+            map.addLayer({
+              id: 'unclustered-point',
+              type: 'circle',
+              source: 'shops',
+              filter: ['!', ['has', 'point_count']],
+              paint: {
+                'circle-color': '#11b4da',
+                'circle-radius': 8,
+                'circle-stroke-width': 1,
+                'circle-stroke-color': '#fff'
+              }
+            });
+
+            // Add click handler for clusters
+            map.on('click', 'clusters', (e) => {
+              const features = map.queryRenderedFeatures(e.point, {
+                layers: ['clusters']
+              });
+              const clusterId = features[0].properties.cluster_id;
+              map.getSource('shops').getClusterExpansionZoom(
+                clusterId,
+                (err, zoom) => {
+                  if (err) return;
+
+                  map.easeTo({
+                    center: features[0].geometry.coordinates,
+                    zoom: zoom
+                  });
+                }
+              );
+            });
+
+            // Add click handler for unclustered points
+            map.on('click', 'unclustered-point', (e) => {
+              const coordinates = e.features[0].geometry.coordinates.slice();
+              const { name, address, rating } = e.features[0].properties;
+
+              // Ensure that if the map is zoomed out such that multiple
+              // copies of the feature are visible, the popup appears
+              // over the copy being pointed to.
+              while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+              }
+
+              new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(`
+                  <h3 class="font-bold text-lg">${name}</h3>
+                  <p class="text-gray-600">${address}</p>
+                  <p class="text-yellow-500">★ ${rating}</p>
+                `)
+                .addTo(map);
+            });
+
+            // Change the cursor to a pointer when the mouse is over the clusters layer
+            map.on('mouseenter', 'clusters', () => {
+              map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves
+            map.on('mouseleave', 'clusters', () => {
+              map.getCanvas().style.cursor = '';
+            });
+
+            // Change the cursor to a pointer when the mouse is over the unclustered point layer
+            map.on('mouseenter', 'unclustered-point', () => {
+              map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves
+            map.on('mouseleave', 'unclustered-point', () => {
+              map.getCanvas().style.cursor = '';
+            });
           }
-        )
-      })
-
-      // When a click event occurs on a feature in
-      // the unclustered-point layer, open a popup at
-      // the location of the feature, with
-      // description HTML from its properties.
-      map.on("click", "unclustered-point", (e) => {
-        const coordinates = e.features[0].geometry.coordinates.slice()
-        const name = e.features[0].properties.name
-        const url = e.features[0].properties.url
-        const logo = e.features[0].properties.logo
-        const popupText = `
-           <div class="flex items-center font-semibold space-x-3">
-             <img src="${logo}" class="h-10 w-10 rounded-full border border-brown">
-             <a href="${url}" target="_blank">${name} &rarr;</a>
-           </div>
-        `
-
-        // Ensure that if the map is zoomed out such that
-        // multiple copies of the feature are visible, the
-        // popup appears over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
-        }
-
-        new mapboxgl.Popup()
-          .setLngLat(coordinates)
-          .setHTML(popupText)
-          .addTo(map)
-      })
-
-      map.on("mouseenter", "clusters", () => {
-        map.getCanvas().style.cursor = "pointer"
-      })
-      map.on("mouseleave", "clusters", () => {
-        map.getCanvas().style.cursor = ""
-      })
-
-
-      setTimeout(() => this.map.resize(), 0);
-    })
+        });
+      }
+    });
   </script>
 
 <% end %>

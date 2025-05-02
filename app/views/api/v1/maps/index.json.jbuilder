@@ -1,6 +1,11 @@
 json.status "success"
 
 json.data do
+  json.default_center do
+    json.lat @default_center[:lat]
+    json.lng @default_center[:lng]
+  end
+
   json.coffee_shops @coffee_shops do |shop|
     json.extract! shop, :id, :name, :slug, :lat, :lng
     # Exclude created_at and updated_at

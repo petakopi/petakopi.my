@@ -17,6 +17,7 @@ export default function MapTab({
   const [hasClusters, setHasClusters] = useState(false)
   const [shops, setShops] = useState([])
   const [loading, setLoading] = useState(true)
+  const [defaultCenter, setDefaultCenter] = useState(null)
 
   // Fetch shops from the maps endpoint - only once
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function MapTab({
 
       if (result.success) {
         setShops(result.shops);
+        setDefaultCenter(result.default_center);
       } else {
         console.error('Failed to fetch map data:', result.error);
         setShops([]);
@@ -47,6 +49,7 @@ export default function MapTab({
       mapContainer,
       mapboxAccessToken,
       userLocation,
+      defaultCenter,
       setMapLoaded,
       setMapInitializing,
       setCurrentZoom,
@@ -79,7 +82,7 @@ export default function MapTab({
     return () => {
       if (map.current) map.current.remove();
     };
-  }, []);
+  }, [defaultCenter]); // Re-initialize map when default center changes
 
   useEffect(() => {
     updateMapSource(map.current, shops);

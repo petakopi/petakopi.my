@@ -1,16 +1,24 @@
 class Api::V1::MapsController < ApiController
+  KLCC_COORDINATES = {
+    lat: 3.1578,
+    lng: 101.7117
+  }.freeze
+
   def index
-    @coffee_shops = CoffeeShop
-      .includes(logo_attachment: :blob, cover_photo_attachment: :blob)
-      .status_published
-      .where.not(location: nil)
-      .order(approved_at: :desc)
+    coffee_shops =
+      CoffeeShopsListQuery
+        .call(
+          params: params,
+          relation:
+            CoffeeShop
+              .includes(
+                logo_attachment: :blob,
+                cover_photo_attachment: :blob
+              )
+              .where.not(location: nil)
+        ).status_published
 
-    @coffee_shops = CoffeeShopsListQuery.call(
-      params: params,
-      relation: @coffee_shops
-    )
-
-    sleep 3
+    @coffee_shops = coffee_shops
+    @default_center = KLCC_COORDINATES
   end
 end
