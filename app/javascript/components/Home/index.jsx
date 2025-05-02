@@ -50,6 +50,7 @@ export default function Home() {
   const [everywhereHasNext, setEverywhereHasNext] = useState(false)
   const [everywhereHasPrev, setEverywhereHasPrev] = useState(false)
   const [everywhereLoading, setEverywhereLoading] = useState(true)
+  const [everywhereDistance, setEverywhereDistance] = useState(null)
 
   // Nearby tab state
   const [nearbyShops, setNearbyShops] = useState([])
@@ -221,13 +222,18 @@ export default function Home() {
       // Apply all filters
       applyFiltersToUrl(url, filters);
 
+      // Add distance filter if set
+      if (everywhereDistance !== null) {
+        url.searchParams.append('distance', everywhereDistance);
+      }
+
       if (cursor) {
         url.searchParams.append(direction === 'next' ? 'after' : 'before', cursor);
       }
 
       console.log("Fetching explore coffee shops with URL:", url.toString());
       const response = await fetch(url);
-      const data = await response.json()
+      const data = await response.json();
       if (data.status === "success" && data.data && data.data.coffee_shops) {
         setEverywhereShops(data.data.coffee_shops)
         setEverywhereNextCursor(data.data.pages.next_cursor)
@@ -258,6 +264,11 @@ export default function Home() {
 
     // Set filters state with a new object to ensure React detects the change
     setFilters({ ...actualFilters })
+
+    // Update distance filter if present
+    if (actualFilters.distance !== undefined) {
+      setEverywhereDistance(actualFilters.distance);
+    }
 
     // Force immediate re-render by setting loading state
     if (activeTab === 0) {
@@ -301,7 +312,6 @@ export default function Home() {
           setEverywhereHasPrev(false)
           setEverywhereLoading(false)
         });
-
     } else if (activeTab === 1 && locationPermission === "granted") {
       // Reset pagination and fetch with new filters
       setNearbyShops([])

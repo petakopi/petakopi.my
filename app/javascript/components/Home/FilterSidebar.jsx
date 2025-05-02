@@ -9,6 +9,13 @@ import {
   LocationFilter
 } from "./FilterComponents"
 
+const distanceOptions = [
+  { value: 5, label: "5km" },
+  { value: 10, label: "10km" },
+  { value: 20, label: "20km" },
+  { value: 30, label: "30km" }
+]
+
 const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} }) => {
   const [keyword, setKeyword] = useState(currentFilters.keyword || "")
   const [selectedTags, setSelectedTags] = useState(currentFilters.tags || [])
@@ -16,11 +23,13 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
   const [selectedState, setSelectedState] = useState(currentFilters.state || null)
   const [selectedDistrict, setSelectedDistrict] = useState(currentFilters.district || null)
   const [isOpenNow, setIsOpenNow] = useState(currentFilters.opened === "true")
+  const [selectedDistance, setSelectedDistance] = useState(currentFilters.distance || null)
   const [isApplied, setIsApplied] = useState(false)
   const [muslimTagsOpen, setMuslimTagsOpen] = useState(true)
   const [otherTagsOpen, setOtherTagsOpen] = useState(true)
   const [locationOpen, setLocationOpen] = useState(true)
   const [openingHoursOpen, setOpeningHoursOpen] = useState(true)
+  const [distanceOpen, setDistanceOpen] = useState(true)
   const [showInfoPopover, setShowInfoPopover] = useState(false)
   const infoButtonRef = useRef(null)
 
@@ -49,6 +58,7 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
     setSelectedState(currentFilters.state || null)
     setSelectedDistrict(currentFilters.district || null)
     setIsOpenNow(currentFilters.opened === "true")
+    setSelectedDistance(currentFilters.distance || null)
 
     // Extract Muslim tags from the current filters
     const tags = currentFilters.tags || [];
@@ -112,6 +122,10 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
       filters.opened = "true"
     }
 
+    if (selectedDistance !== null) {
+      filters.distance = selectedDistance
+    }
+
     // Apply filters immediately with a completely new object
     // Use a timestamp to ensure the object is always different
     onApplyFilters({
@@ -135,6 +149,7 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
     setSelectedState(null)
     setSelectedDistrict(null)
     setIsOpenNow(false)
+    setSelectedDistance(null)
     onApplyFilters({})
     // Keep sidebar open to show the reset state
   }
@@ -177,6 +192,31 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="Search coffee shops..."
           />
+
+          <FilterCategory
+            title="Distance"
+            isOpen={distanceOpen}
+            setIsOpen={setDistanceOpen}
+            count={selectedDistance !== null ? 1 : 0}
+          >
+            <RadioFilterOption
+              id="distance-none"
+              name="distance"
+              checked={selectedDistance === null}
+              onChange={() => setSelectedDistance(null)}
+              label="No preference"
+            />
+            {distanceOptions.filter(option => option.value !== null).map((option) => (
+              <RadioFilterOption
+                key={option.value}
+                id={`distance-${option.value}`}
+                name="distance"
+                checked={selectedDistance === option.value}
+                onChange={() => setSelectedDistance(option.value)}
+                label={option.label}
+              />
+            ))}
+          </FilterCategory>
 
           <FilterCategory
             title="Location"
