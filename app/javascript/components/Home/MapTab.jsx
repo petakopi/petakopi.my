@@ -3,6 +3,7 @@ import MapStyles from "./Map/MapStyles"
 import { setupMapEventHandlers } from "./Map/MapEventHandler"
 import { initializeMap, updateMapSource } from "./Map/MapInitializer"
 import { fetchMapData } from "./Map/MapDataService"
+import mapboxgl from "mapbox-gl"
 
 export default function MapTab({
   userLocation,
@@ -52,6 +53,20 @@ export default function MapTab({
       shops,
       setHasClusters,
       mapLoaded
+    });
+
+    // Add a one-time load event listener to trigger geolocate
+    map.current.once('load', () => {
+      if (userLocation && map.current) {
+        // Find the geolocate control in the map's controls
+        const geolocateControl = map.current._controls.find(control =>
+          control instanceof mapboxgl.GeolocateControl
+        );
+
+        if (geolocateControl) {
+          geolocateControl.trigger();
+        }
+      }
     });
   };
 

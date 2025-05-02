@@ -381,8 +381,15 @@ export default function Home() {
 
   const handleLocationPillClick = () => {
     if (locationPermission === "granted") {
-      setShowLocationRefreshPrompt(true);
+      if (userLocation) {
+        // If we already have location, just show the refresh prompt
+        setShowLocationRefreshPrompt(true);
+      } else {
+        // If we have permission but no location, request it
+        requestLocationPermission();
+      }
     } else {
+      // If we don't have permission, request it
       requestLocationPermission();
     }
   };
