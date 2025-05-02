@@ -40,7 +40,7 @@ const FILTER_CONFIGS = {
   }
 };
 
-export default function FilterPills({ filters, setFilters, handleApplyFilters, locationPermission, onRequestLocation }) {
+export default function FilterPills({ filters, setFilters, handleApplyFilters, locationPermission, onRequestLocation, activeTab }) {
   // Handler to remove a filter or tag
   const handleRemove = (removeKey, removeValue = null) => {
     setFilters(prev => {
@@ -90,6 +90,7 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters, l
     }
 
     if (key === 'location') {
+      if (activeTab === 1) return null;
       return <LocationPill key="location-pill" locationPermission={locationPermission} onRequestLocation={onRequestLocation} />;
     }
 
@@ -121,8 +122,8 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters, l
 
   return (
     <div className="flex flex-wrap gap-2">
-      {/* Always render Location pill */}
-      {renderFilterPill('location', locationPermission, FILTER_CONFIGS.location)}
+      {/* Only render Location pill if not in map view */}
+      {activeTab !== 1 && renderFilterPill('location', locationPermission, FILTER_CONFIGS.location)}
 
       {/* Render other filter pills */}
       {Object.entries(filters)

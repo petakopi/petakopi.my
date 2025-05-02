@@ -7,6 +7,7 @@ import LocationRequiredPrompt from "./LocationRequiredPrompt"
 import LocationBlockedPrompt from "./LocationBlockedPrompt"
 import LocationRefreshPrompt from "./LocationRefreshPrompt"
 import ControlsBar from "./ControlsBar"
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 // Geolocation configuration
 const GEOLOCATION_CONFIG = {
