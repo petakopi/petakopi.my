@@ -176,6 +176,63 @@ RSpec.describe CoffeeShopsListQuery do
       end
     end
 
+    describe "filter_by_distance" do
+      before do
+        # Set up locations for coffee shops
+        # coffee_shop1: Near KLCC (3.1578, 101.7117)
+        # coffee_shop2: Near Bukit Bintang (3.1478, 101.7117)
+        # coffee_shop3: Near Klang (3.0333, 101.4500)
+        coffee_shop1.update(location: "POINT(101.7117 3.1578)")
+        coffee_shop2.update(location: "POINT(101.7117 3.1478)")
+        coffee_shop3.update(location: "POINT(101.4500 3.0333)")
+      end
+
+      it "returns all coffee shops when no distance filters are applied" do
+        result = described_class.call(params: {}).status_published
+
+        expect(result).to include(coffee_shop1, coffee_shop2, coffee_shop3)
+        expect(result).not_to include(unpublished_shop)
+      end
+
+      it "filters coffee shops within specified distance" do
+        # Search from KLCC (3.1578, 101.7117) with 2km radius
+        result = described_class.call(params: {
+          lat: 3.1578,
+          lng: 101.7117,
+          distance: 2
+        }).status_published
+
+        expect(result).to include(coffee_shop1, coffee_shop2) # Both within 2km of KLCC
+        expect(result).not_to include(coffee_shop3) # Too far from KLCC
+        expect(result).not_to include(unpublished_shop)
+      end
+
+      it "orders results by distance when distance filter is applied" do
+        result = described_class.call(params: {
+          lat: 3.1578,
+          lng: 101.7117,
+          distance: 50 # Increased radius to include Klang
+        }).status_published
+
+        # Should be ordered by distance from KLCC
+        # coffee_shop1 is at KLCC (0km)
+        # coffee_shop2 is near Bukit Bintang (~1.1km)
+        # coffee_shop3 is in Klang (~25km)
+        expect(result.to_a).to eq([coffee_shop1, coffee_shop2, coffee_shop3])
+      end
+
+      it "includes distance in the result when distance filter is applied" do
+        result = described_class.call(params: {
+          lat: 3.1578,
+          lng: 101.7117,
+          distance: 5
+        }).status_published
+
+        expect(result.first.distance_in_km).to be_present
+        expect(result.first.distance_in_km).to be_a(Float)
+      end
+    end
+
     describe "combining filters" do
       let!(:tag1) { create(:tag, slug: "work-friendly") }
 
@@ -189,6 +246,11 @@ RSpec.describe CoffeeShopsListQuery do
         create(:opening_hour, :same_day, coffee_shop: coffee_shop1)
         create(:opening_hour, :overnight, coffee_shop: coffee_shop2)
         create(:opening_hour, :weekend, coffee_shop: coffee_shop3)
+
+        # Set up locations
+        coffee_shop1.update(location: "POINT(101.7117 3.1578)")
+        coffee_shop2.update(location: "POINT(101.7117 3.1478)")
+        coffee_shop3.update(location: "POINT(101.4500 3.0333)")
       end
 
       after { travel_back }
@@ -208,6 +270,31 @@ RSpec.describe CoffeeShopsListQuery do
         result = described_class.call(params: {
           keyword: "Awesome",
           opened: "true"
+        }).status_published
+
+        expect(result).to include(coffee_shop1)
+        expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)
+      end
+
+      it "combines distance, tag, and opening hour filters" do
+        result = described_class.call(params: {
+          lat: 3.1578,
+          lng: 101.7117,
+          distance: 2,
+          tags: "work-friendly",
+          opened: "true"
+        }).status_published
+
+        expect(result).to include(coffee_shop1)
+        expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)
+      end
+
+      it "combines distance and keyword filters" do
+        result = described_class.call(params: {
+          lat: 3.1578,
+          lng: 101.7117,
+          distance: 2,
+          keyword: "Awesome"
         }).status_published
 
         expect(result).to include(coffee_shop1)

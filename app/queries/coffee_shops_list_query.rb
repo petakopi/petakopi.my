@@ -11,6 +11,7 @@ class CoffeeShopsListQuery
     @relation = filter_by_keyword
     @relation = filter_by_tags
     @relation = filter_by_opening_status
+    @relation = filter_by_distance
 
     @relation = reorder
   end
@@ -81,8 +82,34 @@ class CoffeeShopsListQuery
     ).distinct
   end
 
+  def filter_by_distance
+    return relation unless params[:lat].present? && params[:lng].present? && params[:distance].present?
+
+    lat = params[:lat].to_f
+    lng = params[:lng].to_f
+    distance_in_km = params[:distance].to_i
+
+    # Create a point from the provided coordinates
+    point = "POINT(#{lng} #{lat})"
+
+    # Filter coffee shops within the specified distance
+    filtered = relation.where(
+      "ST_DWithin(location, ST_SetSRID(ST_GeomFromText(?), 4326), ?)",
+      point,
+      distance_in_km * 1000 # Convert km to meters for ST_DWithin
+    )
+
+    # Calculate distance in kilometers and add it to the select clause
+    distance_sql = "ST_Distance(location, ST_SetSRID(ST_GeomFromText('#{point}'), 4326)) / 1000"
+    filtered.select("coffee_shops.*, #{distance_sql} as distance_in_km")
+  end
+
   def reorder
-    if params[:keyword].present? && params[:state].present?
+    if params[:lat].present? && params[:lng].present? && params[:distance].present?
+      point = "POINT(#{params[:lng].to_f} #{params[:lat].to_f})"
+      distance_sql = "ST_Distance(location, ST_SetSRID(ST_GeomFromText('#{point}'), 4326)) / 1000"
+      relation.order(Arel.sql(distance_sql))
+    elsif params[:keyword].present? && params[:state].present?
       relation.order(:name, :district)
     elsif params[:keyword].present?
       relation.order(:name)
