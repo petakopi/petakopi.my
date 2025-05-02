@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react"
 import ExploreTab from "./ExploreTab"
-import NearbyTab from "./NearbyTab"
 import MapTab from "./MapTab"
 import FilterSidebar from "./FilterSidebar"
-import DistanceSelector from "./DistanceSelector"
 import FilterPills from "./FilterPills"
 import LocationRequiredPrompt from "./LocationRequiredPrompt"
 import LocationBlockedPrompt from "./LocationBlockedPrompt"
@@ -19,7 +17,6 @@ const GEOLOCATION_CONFIG = {
 
 const initialTabs = [
   { name: "Explore", href: "#" },
-  { name: "Nearby", href: "#" },
   { name: "Map", href: "#" },
 ]
 
@@ -54,16 +51,10 @@ export default function Home() {
   const [everywhereLoading, setEverywhereLoading] = useState(true)
   const [everywhereDistance, setEverywhereDistance] = useState(null)
 
-  // Nearby tab state
-  const [nearbyShops, setNearbyShops] = useState([])
-  const [nearbyNextCursor, setNearbyNextCursor] = useState(null)
-  const [nearbyPrevCursor, setNearbyPrevCursor] = useState(null)
-  const [nearbyHasNext, setNearbyHasNext] = useState(false)
-  const [nearbyHasPrev, setNearbyHasPrev] = useState(false)
-  const [nearbyLoading, setNearbyLoading] = useState(false)
+  // Location state
   const [userLocation, setUserLocation] = useState(null)
-  const [locationPermission, setLocationPermission] = useState("") // Changed from "prompt" to empty string
-  const [selectedDistance, setSelectedDistance] = useState(5) // Default to 5km
+  const [locationPermission, setLocationPermission] = useState("")
+  const [selectedDistance, setSelectedDistance] = useState(5)
 
   // Filter sidebar state
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false)
@@ -115,19 +106,9 @@ export default function Home() {
   // Initial data loading for all tabs
   useEffect(() => {
     // Load explore data when component mounts or map tab is active
-    if ((activeTab === 0 || (activeTab === 2 && locationPermission !== "granted")) && everywhereShops.length === 0) {
+    if ((activeTab === 0 || (activeTab === 1 && locationPermission !== "granted")) && everywhereShops.length === 0) {
       setEverywhereLoading(true)
       fetchEverywhereShops()
-    }
-
-    // Load nearby data when tab is active and we have location
-    if (activeTab === 1 || (activeTab === 2 && locationPermission === "granted")) {
-      if (locationPermission === "granted" && userLocation && nearbyShops.length === 0) {
-        setNearbyLoading(true)
-        fetchNearbyShops()
-      } else if (locationPermission === "prompt") {
-        requestLocationPermission()
-      }
     }
   }, [activeTab, locationPermission, userLocation, selectedDistance])
 
@@ -192,48 +173,6 @@ export default function Home() {
       clearTimeout(locationTimeout) // Clear the timeout if geolocation is not supported
       console.error("Geolocation is not supported by this browser")
       setLocationPermission("denied")
-    }
-  }
-
-  const fetchNearbyShops = async (cursor = null, direction = 'next') => {
-    if (!userLocation) return;
-
-    setNearbyLoading(true)
-    try {
-      const url = new URL('/api/v1/coffee_shops', window.location.origin);
-      url.searchParams.append('lat', userLocation.latitude);
-      url.searchParams.append('lng', userLocation.longitude);
-      url.searchParams.append('distance', selectedDistance);
-
-      // Apply all filters
-      applyFiltersToUrl(url, filters);
-
-      if (cursor) {
-        url.searchParams.append(direction === 'next' ? 'after' : 'before', cursor);
-      }
-
-      console.log("Fetching nearby coffee shops with URL:", url.toString());
-      const response = await fetch(url);
-      const data = await response.json();
-      if (data.status === "success" && data.data && data.data.coffee_shops) {
-        setNearbyShops(data.data.coffee_shops)
-        setNearbyNextCursor(data.data.pages.next_cursor)
-        setNearbyPrevCursor(data.data.pages.prev_cursor)
-        setNearbyHasNext(data.data.pages.has_next)
-        setNearbyHasPrev(data.data.pages.has_prev)
-      } else {
-        console.error('Unexpected response format:', data)
-        setNearbyShops([])
-        setNearbyHasNext(false)
-        setNearbyHasPrev(false)
-      }
-    } catch (error) {
-      console.error('Error fetching nearby coffee shops:', error)
-      setNearbyShops([])
-      setNearbyHasNext(false)
-      setNearbyHasPrev(false)
-    } finally {
-      setNearbyLoading(false)
     }
   }
 
@@ -341,66 +280,18 @@ export default function Home() {
           setEverywhereHasPrev(false)
           setEverywhereLoading(false)
         });
-    } else if (activeTab === 1 && locationPermission === "granted") {
-      // Reset pagination and fetch with new filters
-      setNearbyShops([])
-      setNearbyNextCursor(null)
-      setNearbyPrevCursor(null)
-      setNearbyHasNext(false)
-      setNearbyHasPrev(false)
-      setNearbyLoading(true)
-
-      // Directly fetch data here instead of relying on fetchNearbyShops
-      const url = new URL('/api/v1/coffee_shops', window.location.origin);
-      url.searchParams.append('lat', userLocation.latitude);
-      url.searchParams.append('lng', userLocation.longitude);
-      url.searchParams.append('distance', selectedDistance);
-
-      // Apply all filters
-      applyFiltersToUrl(url, actualFilters);
-
-      console.log("Directly fetching nearby with filters:", url.toString());
-
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === "success" && data.data && data.data.coffee_shops) {
-            setNearbyShops(data.data.coffee_shops)
-            setNearbyNextCursor(data.data.pages.next_cursor)
-            setNearbyPrevCursor(data.data.pages.prev_cursor)
-            setNearbyHasNext(data.data.pages.has_next)
-            setNearbyHasPrev(data.data.pages.has_prev)
-          } else {
-            console.error('Unexpected response format:', data)
-            setNearbyShops([])
-            setNearbyHasNext(false)
-            setNearbyHasPrev(false)
-          }
-          setNearbyLoading(false)
-        })
-        .catch(error => {
-          console.error('Error fetching nearby coffee shops:', error)
-          setNearbyShops([])
-          setNearbyHasNext(false)
-          setNearbyHasPrev(false)
-          setNearbyLoading(false)
-        });
     }
   }
 
   const handleNextPage = () => {
     if (activeTab === 0 && everywhereHasNext) {
       fetchEverywhereShops(everywhereNextCursor, 'next')
-    } else if (activeTab === 1 && nearbyHasNext) {
-      fetchNearbyShops(nearbyNextCursor, 'next')
     }
   }
 
   const handlePrevPage = () => {
     if (activeTab === 0 && everywhereHasPrev) {
       fetchEverywhereShops(everywherePrevCursor, 'prev')
-    } else if (activeTab === 1 && nearbyHasPrev) {
-      fetchNearbyShops(nearbyPrevCursor, 'prev')
     }
   }
 
@@ -416,53 +307,8 @@ export default function Home() {
     // Save the active tab index to localStorage
     localStorage.setItem('petakopi_active_tab', index.toString());
 
-    // Request location permission when switching to Nearby tab
-    if (index === 1 && locationPermission !== "granted") {
-      requestLocationPermission()
-    }
-    // When switching to Nearby tab with location permission already granted
-    else if (index === 1 && locationPermission === "granted" && userLocation) {
-      // Apply existing filters when switching to Nearby tab
-      setNearbyLoading(true)
-
-      // Create URL with current filters
-      const url = new URL('/api/v1/coffee_shops', window.location.origin);
-      url.searchParams.append('lat', userLocation.latitude);
-      url.searchParams.append('lng', userLocation.longitude);
-      url.searchParams.append('distance', selectedDistance);
-
-      // Apply all current filters
-      applyFiltersToUrl(url, filters);
-
-      console.log("Fetching nearby with filters after tab change:", url.toString());
-
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === "success" && data.data && data.data.coffee_shops) {
-            setNearbyShops(data.data.coffee_shops)
-            setNearbyNextCursor(data.data.pages.next_cursor)
-            setNearbyPrevCursor(data.data.pages.prev_cursor)
-            setNearbyHasNext(data.data.pages.has_next)
-            setNearbyHasPrev(data.data.pages.has_prev)
-          } else {
-            console.error('Unexpected response format:', data)
-            setNearbyShops([])
-            setNearbyHasNext(false)
-            setNearbyHasPrev(false)
-          }
-          setNearbyLoading(false)
-        })
-        .catch(error => {
-          console.error('Error fetching nearby coffee shops:', error)
-          setNearbyShops([])
-          setNearbyHasNext(false)
-          setNearbyHasPrev(false)
-          setNearbyLoading(false)
-        });
-    }
     // When switching to Explore tab
-    else if (index === 0) {
+    if (index === 0) {
       // Apply existing filters when switching to Explore tab
       setEverywhereLoading(true)
 
@@ -505,13 +351,13 @@ export default function Home() {
     setSelectedDistance(distance)
     if (userLocation && locationPermission === "granted") {
       // Refetch shops with new distance
-      setNearbyShops([])
-      setNearbyNextCursor(null)
-      setNearbyPrevCursor(null)
-      setNearbyHasNext(false)
-      setNearbyHasPrev(false)
-      setNearbyLoading(true)
-      fetchNearbyShops()
+      setEverywhereShops([])
+      setEverywhereNextCursor(null)
+      setEverywherePrevCursor(null)
+      setEverywhereHasNext(false)
+      setEverywhereHasPrev(false)
+      setEverywhereLoading(true)
+      fetchEverywhereShops()
     }
   }
 
@@ -611,7 +457,7 @@ export default function Home() {
           </nav>
 
           {/* Filter button moved to top right */}
-          {activeTab !== 2 && (
+          {activeTab !== 1 && (
             <button
               onClick={() => setIsFilterSidebarOpen(true)}
               className={`flex items-center justify-center h-10 w-10 rounded-lg transition-all relative ${
@@ -635,7 +481,7 @@ export default function Home() {
       </div>
 
       {/* Controls bar - moved below tabs for better mobile experience */}
-      {activeTab !== 2 && (
+      {activeTab !== 1 && (
         <div className="mt-4">
           {/* View type controls */}
           <div className="flex justify-between items-center mb-4">
@@ -690,16 +536,6 @@ export default function Home() {
           )}
 
           {activeTab === 1 && (
-            <NearbyTab
-              nearbyShops={nearbyShops}
-              nearbyLoading={nearbyLoading}
-              locationPermission={locationPermission}
-              requestLocationPermission={requestLocationPermission}
-              viewType={viewType}
-            />
-          )}
-
-          {activeTab === 2 && (
             <MapTab
               userLocation={userLocation}
             />
@@ -714,16 +550,6 @@ export default function Home() {
             onNext={handleNextPage}
             onPrev={handlePrevPage}
             loading={everywhereLoading}
-          />
-        )}
-
-        {activeTab === 1 && locationPermission === "granted" && (nearbyHasNext || nearbyHasPrev) && (
-          <Pagination
-            hasNext={nearbyHasNext}
-            hasPrev={nearbyHasPrev}
-            onNext={handleNextPage}
-            onPrev={handlePrevPage}
-            loading={nearbyLoading}
           />
         )}
       </div>
