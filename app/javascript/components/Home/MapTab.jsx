@@ -85,12 +85,12 @@ export default function MapTab({
   }, [shops, mapLoaded]);
 
   return (
-    <div className="col-span-3 relative">
+    <div className="h-full">
       <MapStyles />
 
       <div
         ref={mapContainer}
-        className="w-full h-[600px] rounded-lg shadow-md"
+        className="w-full h-full rounded-lg shadow-md"
       />
 
       {(loading || mapInitializing) && (

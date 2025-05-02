@@ -436,7 +436,7 @@ export default function Home() {
   }, [viewType]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Controls bar - show in both views */}
       <ControlsBar
         isFilterSidebarOpen={isFilterSidebarOpen}
@@ -451,32 +451,35 @@ export default function Home() {
         activeTab={activeTab}
       />
 
-      <div className="mt-4 bg-gray-50 rounded-lg">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-4">
-          {activeTab === 0 && (
-            <ExploreTab
-              everywhereShops={everywhereShops}
-              everywhereLoading={everywhereLoading}
-              viewType={viewType}
-            />
-          )}
+      {/* Main content area */}
+      <div className={`${activeTab === 1 ? 'h-[calc(100vh-4rem)]' : 'mt-4'} bg-gray-50 rounded-lg`}>
+        {activeTab === 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-4">
+              <ExploreTab
+                everywhereShops={everywhereShops}
+                everywhereLoading={everywhereLoading}
+                viewType={viewType}
+              />
+            </div>
 
-          {activeTab === 1 && (
+            {/* Pagination controls - hide on map tab */}
+            {(everywhereHasNext || everywhereHasPrev) && (
+              <Pagination
+                hasNext={everywhereHasNext}
+                hasPrev={everywhereHasPrev}
+                onNext={handleNextPage}
+                onPrev={handlePrevPage}
+                loading={everywhereLoading}
+              />
+            )}
+          </>
+        ) : (
+          <div className="h-full">
             <MapTab
               userLocation={userLocation}
             />
-          )}
-        </div>
-
-        {/* Pagination controls - hide on map tab */}
-        {activeTab === 0 && (everywhereHasNext || everywhereHasPrev) && (
-          <Pagination
-            hasNext={everywhereHasNext}
-            hasPrev={everywhereHasPrev}
-            onNext={handleNextPage}
-            onPrev={handlePrevPage}
-            loading={everywhereLoading}
-          />
+          </div>
         )}
       </div>
 
