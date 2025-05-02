@@ -5,32 +5,38 @@ import LocationPill from "./LocationPill";
 const FILTER_CONFIGS = {
   location: {
     label: "Location",
-    shouldShow: (value) => true
+    shouldShow: (value) => true,
+    order: 0
   },
   distance: {
     label: "Distance",
     formatValue: (value) => `${value}km`,
-    shouldShow: (value) => value !== null && value !== undefined
+    shouldShow: (value) => value !== null && value !== undefined,
+    order: 1
   },
   opened: {
     label: "Opening Hours",
     formatValue: (value) => value === "true" ? "Open Now" : value,
-    shouldShow: (value) => value === "true"
+    shouldShow: (value) => value === "true",
+    order: 2
   },
   state: {
     label: "State",
-    formatValue: (value) => value,
-    shouldShow: (value) => value !== null && value !== undefined
+    formatValue: (value) => value.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' '),
+    shouldShow: (value) => value !== null && value !== undefined,
+    order: 3
   },
   district: {
     label: "District",
-    formatValue: (value) => value,
-    shouldShow: (value) => value !== null && value !== undefined
+    formatValue: (value) => value.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' '),
+    shouldShow: (value) => value !== null && value !== undefined,
+    order: 3
   },
   tags: {
     label: "Tags",
-    formatValue: (value) => value.replace(/[-_]/g, ' '),
-    shouldShow: (value) => Array.isArray(value) && value.length > 0
+    formatValue: (value) => value.split(/[-_]/).map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' '),
+    shouldShow: (value) => Array.isArray(value) && value.length > 0,
+    order: 4
   }
 };
 
@@ -39,17 +45,27 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters, l
   const handleRemove = (removeKey, removeValue = null) => {
     setFilters(prev => {
       const updated = { ...prev };
-      if (removeKey === 'state') {
-        // Also remove district if state is removed
-        delete updated['district'];
-      }
+
+      // Handle array values (like tags)
       if (Array.isArray(updated[removeKey]) && removeValue !== null) {
         updated[removeKey] = updated[removeKey].filter(v => v !== removeValue);
-        if (updated[removeKey].length === 0) delete updated[removeKey];
+        if (updated[removeKey].length === 0) {
+          delete updated[removeKey];
+        }
       } else {
+        // Handle non-array values
         delete updated[removeKey];
       }
-      // Re-apply filters
+
+      // If removing state, also remove district
+      if (removeKey === 'state') {
+        delete updated['district'];
+      }
+
+      // Remove timestamp to force a fresh fetch
+      delete updated['_timestamp'];
+
+      // Re-apply filters with the updated state
       handleApplyFilters(updated);
       return updated;
     });
@@ -77,13 +93,18 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters, l
       return <LocationPill key="location-pill" locationPermission={locationPermission} onRequestLocation={onRequestLocation} />;
     }
 
+    // Custom styling for distance filter
+    const pillStyle = key === 'distance'
+      ? "bg-green-100 text-green-700"
+      : "bg-gray-200 text-gray-700";
+
     return (
-      <span key={`${key}-${value}`} className="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700">
+      <span key={`${key}-${value}`} className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${pillStyle}`}>
         {config.formatValue(value)}
         <button
           type="button"
           aria-label={`Remove ${value}`}
-          className="ml-1 text-gray-400 hover:text-gray-600 focus:outline-none"
+          className={`ml-1 ${key === 'distance' ? 'text-green-500 hover:text-green-700' : 'text-gray-400 hover:text-gray-600'} focus:outline-none`}
           onClick={() => handleRemove(key)}
         >
           ×
@@ -100,11 +121,20 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters, l
 
   return (
     <div className="flex flex-wrap gap-2">
-      {Object.entries(filtersWithLocation)
+      {/* Render Location pill first if enabled */}
+      {locationPermission && renderFilterPill('location', locationPermission, FILTER_CONFIGS.location)}
+
+      {/* Render other filter pills */}
+      {Object.entries(filters)
         .filter(([key, value]) => {
           if (key === "_timestamp") return false;
           const config = FILTER_CONFIGS[key];
           return config && config.shouldShow(value);
+        })
+        .sort(([keyA], [keyB]) => {
+          const orderA = FILTER_CONFIGS[keyA]?.order || 999;
+          const orderB = FILTER_CONFIGS[keyB]?.order || 999;
+          return orderA - orderB;
         })
         .map(([key, value]) => {
           const config = FILTER_CONFIGS[key];
