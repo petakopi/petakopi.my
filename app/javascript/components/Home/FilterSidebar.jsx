@@ -16,7 +16,7 @@ const distanceOptions = [
   { value: 30, label: "30km" }
 ]
 
-const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} }) => {
+const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {}, locationPermission }) => {
   const [keyword, setKeyword] = useState(currentFilters.keyword || "")
   const [selectedTags, setSelectedTags] = useState(currentFilters.tags || [])
   const [selectedMuslimTag, setSelectedMuslimTag] = useState(currentFilters.muslimTag || null)
@@ -199,14 +199,20 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
             setIsOpen={setDistanceOpen}
             count={selectedDistance !== null ? 1 : 0}
           >
+            {locationPermission !== "granted" && (
+              <div className="mb-3 p-2 bg-yellow-50 text-yellow-800 text-xs rounded">
+                Enable location to use distance filter
+              </div>
+            )}
             <RadioFilterOption
               id="distance-none"
               name="distance"
               checked={selectedDistance === null}
               onChange={() => setSelectedDistance(null)}
               label="No preference"
+              disabled={locationPermission !== "granted"}
             />
-            {distanceOptions.filter(option => option.value !== null).map((option) => (
+            {distanceOptions.map((option) => (
               <RadioFilterOption
                 key={option.value}
                 id={`distance-${option.value}`}
@@ -214,6 +220,7 @@ const FilterSidebar = ({ isOpen, onClose, onApplyFilters, currentFilters = {} })
                 checked={selectedDistance === option.value}
                 onChange={() => setSelectedDistance(option.value)}
                 label={option.label}
+                disabled={locationPermission !== "granted"}
               />
             ))}
           </FilterCategory>

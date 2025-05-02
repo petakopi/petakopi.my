@@ -1,7 +1,12 @@
 import React from "react";
+import LocationPill from "./LocationPill";
 
 // Filter configurations
 const FILTER_CONFIGS = {
+  location: {
+    label: "Location",
+    shouldShow: (value) => true
+  },
   distance: {
     label: "Distance",
     formatValue: (value) => `${value}km`,
@@ -29,7 +34,7 @@ const FILTER_CONFIGS = {
   }
 };
 
-export default function FilterPills({ filters, setFilters, handleApplyFilters }) {
+export default function FilterPills({ filters, setFilters, handleApplyFilters, locationPermission, onRequestLocation }) {
   // Handler to remove a filter or tag
   const handleRemove = (removeKey, removeValue = null) => {
     setFilters(prev => {
@@ -54,7 +59,7 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters })
   const renderFilterPill = (key, value, config) => {
     if (Array.isArray(value)) {
       return value.map((v) => (
-        <span key={key + v} className="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700">
+        <span key={`${key}-${v}`} className="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700">
           {config.formatValue(v)}
           <button
             type="button"
@@ -68,8 +73,12 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters })
       ));
     }
 
+    if (key === 'location') {
+      return <LocationPill key="location-pill" locationPermission={locationPermission} onRequestLocation={onRequestLocation} />;
+    }
+
     return (
-      <span key={key} className="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700">
+      <span key={`${key}-${value}`} className="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700">
         {config.formatValue(value)}
         <button
           type="button"
@@ -83,9 +92,15 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters })
     );
   };
 
+  // Create a new filters object that includes location status
+  const filtersWithLocation = {
+    location: locationPermission,
+    ...filters
+  };
+
   return (
     <div className="flex flex-wrap gap-2 ml-4">
-      {Object.entries(filters)
+      {Object.entries(filtersWithLocation)
         .filter(([key, value]) => {
           if (key === "_timestamp") return false;
           const config = FILTER_CONFIGS[key];

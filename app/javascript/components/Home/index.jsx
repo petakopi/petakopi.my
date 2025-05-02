@@ -3,9 +3,11 @@ import ExploreTab from "./ExploreTab"
 import NearbyTab from "./NearbyTab"
 import MapTab from "./MapTab"
 import FilterSidebar from "./FilterSidebar"
-import SliderDistanceSelector from "./SliderDistanceSelector"
 import DistanceSelector from "./DistanceSelector"
 import FilterPills from "./FilterPills"
+import LocationRequiredPrompt from "./LocationRequiredPrompt"
+import LocationBlockedPrompt from "./LocationBlockedPrompt"
+import LocationRefreshPrompt from "./LocationRefreshPrompt"
 
 // Geolocation configuration
 const GEOLOCATION_CONFIG = {
@@ -60,7 +62,7 @@ export default function Home() {
   const [nearbyHasPrev, setNearbyHasPrev] = useState(false)
   const [nearbyLoading, setNearbyLoading] = useState(false)
   const [userLocation, setUserLocation] = useState(null)
-  const [locationPermission, setLocationPermission] = useState("prompt") // "granted", "denied", "blocked", "prompt"
+  const [locationPermission, setLocationPermission] = useState("") // Changed from "prompt" to empty string
   const [selectedDistance, setSelectedDistance] = useState(5) // Default to 5km
 
   // Filter sidebar state
@@ -73,6 +75,10 @@ export default function Home() {
     const savedViewType = localStorage.getItem('petakopi_view_type');
     return savedViewType || "card"; // Default to card view if not found
   });
+
+  const [showLocationPrompt, setShowLocationPrompt] = useState(false)
+  const [showLocationBlockedPrompt, setShowLocationBlockedPrompt] = useState(false)
+  const [showLocationRefreshPrompt, setShowLocationRefreshPrompt] = useState(false)
 
   // Helper function to add filters to URL
   const applyFiltersToUrl = (url, filters) => {
@@ -125,6 +131,20 @@ export default function Home() {
     }
   }, [activeTab, locationPermission, userLocation, selectedDistance])
 
+  // Add initial location permission check
+  useEffect(() => {
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions.query({ name: 'geolocation' }).then((permissionStatus) => {
+        if (permissionStatus.state === 'granted') {
+          setLocationPermission('granted')
+          requestLocationPermission()
+        } else if (permissionStatus.state === 'denied') {
+          setLocationPermission('denied')
+        }
+      })
+    }
+  }, [])
+
   const requestLocationPermission = () => {
     // Set to prompt state to show loading indicator
     setLocationPermission("prompt")
@@ -142,10 +162,12 @@ export default function Home() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           clearTimeout(locationTimeout) // Clear the timeout on success
-          setUserLocation({
+          const newLocation = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
-          })
+          }
+          console.log("New location received:", newLocation)
+          setUserLocation(newLocation)
           setLocationPermission("granted")
         },
         (error) => {
@@ -154,7 +176,8 @@ export default function Home() {
           // PERMISSION_DENIED = 1
           if (error.code === 1) {
             // Permission was denied
-            setLocationPermission("blocked")
+            setLocationPermission("denied")
+            setShowLocationBlockedPrompt(true)
           } else {
             setLocationPermission("denied")
           }
@@ -261,6 +284,12 @@ export default function Home() {
 
     // Remove the timestamp if it exists (used just to force updates)
     const { _timestamp, ...actualFilters } = newFilters
+
+    // Check if distance filter is selected but location is not available
+    if (actualFilters.distance && !userLocation && locationPermission !== "granted") {
+      setShowLocationPrompt(true)
+      return
+    }
 
     // Set filters state with a new object to ensure React detects the change
     setFilters({ ...actualFilters })
@@ -486,6 +515,29 @@ export default function Home() {
     }
   }
 
+  const handleLocationRequest = () => {
+    setShowLocationPrompt(false)
+    requestLocationPermission()
+  }
+
+  const handleLocationPillClick = () => {
+    if (locationPermission === "granted") {
+      setShowLocationRefreshPrompt(true);
+    } else {
+      requestLocationPermission();
+    }
+  };
+
+  const handleLocationRefresh = () => {
+    setShowLocationRefreshPrompt(false);
+    // Set loading state immediately
+    setLocationPermission("prompt");
+    // Clear current location
+    setUserLocation(null);
+    // Request new location
+    requestLocationPermission();
+  };
+
   // Pagination component
   const Pagination = ({ hasNext, hasPrev, onNext, onPrev, loading }) => {
     const handleNext = () => {
@@ -537,7 +589,7 @@ export default function Home() {
   }, [viewType]);
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       {/* Main navigation tabs */}
       <div className="border-b border-gray-200">
         <div className="flex justify-between items-center">
@@ -615,17 +667,14 @@ export default function Home() {
                 </button>
               </div>
               {/* Filter pills */}
-              <FilterPills filters={filters} setFilters={setFilters} handleApplyFilters={handleApplyFilters} />
+              <FilterPills
+                filters={filters}
+                setFilters={setFilters}
+                handleApplyFilters={handleApplyFilters}
+                locationPermission={locationPermission}
+                onRequestLocation={handleLocationPillClick}
+              />
             </div>
-            {activeTab === 1 && locationPermission === "granted" && (
-              <div className="w-48 px-2">
-                <SliderDistanceSelector
-                  selectedDistance={selectedDistance}
-                  handleDistanceChange={handleDistanceChange}
-                  disabled={nearbyLoading && nearbyShops.length === 0}
-                />
-              </div>
-            )}
           </div>
         </div>
       )}
@@ -685,6 +734,7 @@ export default function Home() {
         onClose={() => setIsFilterSidebarOpen(false)}
         onApplyFilters={handleApplyFilters}
         currentFilters={filters}
+        locationPermission={locationPermission}
       />
 
       {/* Overlay when sidebar is open */}
@@ -692,6 +742,25 @@ export default function Home() {
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setIsFilterSidebarOpen(false)}
+        />
+      )}
+
+      {showLocationPrompt && (
+        <LocationRequiredPrompt onRequestLocation={handleLocationRequest} />
+      )}
+
+      {showLocationBlockedPrompt && (
+        <LocationBlockedPrompt
+          onClose={() => setShowLocationBlockedPrompt(false)}
+          onRequestLocation={requestLocationPermission}
+        />
+      )}
+
+      {/* Location Refresh Prompt */}
+      {showLocationRefreshPrompt && (
+        <LocationRefreshPrompt
+          onClose={() => setShowLocationRefreshPrompt(false)}
+          onConfirm={handleLocationRefresh}
         />
       )}
     </div>
