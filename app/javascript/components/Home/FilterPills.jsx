@@ -99,7 +99,7 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters, l
   };
 
   return (
-    <div className="flex flex-wrap gap-2 ml-4">
+    <div className="flex flex-wrap gap-2">
       {Object.entries(filtersWithLocation)
         .filter(([key, value]) => {
           if (key === "_timestamp") return false;
