@@ -185,9 +185,11 @@ export default function Home() {
       // Apply all filters
       applyFiltersToUrl(url, filters);
 
-      // Add distance filter if set
-      if (everywhereDistance !== null) {
+      // Add distance filter if set and location is available
+      if (everywhereDistance !== null && userLocation && everywhereDistance !== 0) {
         url.searchParams.append('distance', everywhereDistance);
+        url.searchParams.append('lat', userLocation.latitude);
+        url.searchParams.append('lng', userLocation.longitude);
       }
 
       if (cursor) {
@@ -254,6 +256,13 @@ export default function Home() {
 
       // Apply all filters
       applyFiltersToUrl(url, actualFilters);
+
+      // Add distance filter if set and location is available
+      if (actualFilters.distance !== null && userLocation && actualFilters.distance !== 0) {
+        url.searchParams.append('distance', actualFilters.distance);
+        url.searchParams.append('lat', userLocation.latitude);
+        url.searchParams.append('lng', userLocation.longitude);
+      }
 
       console.log("Directly fetching explore with filters:", url.toString());
 
