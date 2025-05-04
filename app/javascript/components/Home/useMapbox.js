@@ -121,23 +121,47 @@ export default function useMapbox(mapContainer, height = '60vh') {
         const coordinates = feature.geometry.coordinates.slice();
         const { name, url, logo } = feature.properties;
         const popupText = `
-          <div style="min-width:200px;max-width:260px;padding:20px 18px 18px 18px;background:white;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.10);display:flex;flex-direction:column;align-items:center;position:relative;">
-            <button onclick="this.closest('.mapboxgl-popup-content').parentElement._popup.remove()" style="position:absolute;top:10px;right:10px;background:none;border:none;cursor:pointer;font-size:1.5rem;line-height:1;color:#6B4F4F;font-weight:bold;">&times;</button>
-            <img src="${logo}" alt="${name} logo" style="width:64px;height:64px;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.10);object-fit:cover;margin-bottom:16px;" />
+          <div style="min-width:200px;max-width:260px;padding:20px 18px 18px 18px;background:white;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.10);display:flex;flex-direction:column;align-items:center;">
+            <img src="${logo}" alt="${name} logo" style="width:64px;height:64px;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.10);object-fit:cover;margin-bottom:16px;border:2px solid #6B4F4F;" />
             <div style="font-weight:700;font-size:1.15rem;color:#3d2c2c;text-align:center;margin-bottom:18px;">${name}</div>
-            <a href="${url}" style="display:block;width:100%;padding:12px 0;background:#6B4F4F;color:white;border-radius:8px;text-align:center;text-decoration:none;font-weight:600;font-size:1rem;transition:background 0.2s;box-shadow:0 1px 2px rgba(0,0,0,0.04);">View Details &rarr;</a>
+            <a href="${url}" style="display:block;width:100%;padding:12px 0;background:white;color:#6B4F4F;border:2px solid #6B4F4F;border-radius:8px;text-align:center;text-decoration:none;font-weight:600;font-size:1rem;transition:all 0.2s;box-shadow:0 1px 2px rgba(0,0,0,0.04);">View Details &rarr;</a>
           </div>
         `;
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
         new mapboxgl.Popup({
-          closeButton: false,
-          className: 'custom-popup'
+          closeButton: true,
+          closeOnClick: false,
+          className: 'custom-popup',
+          maxWidth: '300px'
         })
           .setLngLat(coordinates)
           .setHTML(popupText)
           .addTo(map.current);
+
+        // Add custom styles for the close button and popup
+        const popupElement = document.querySelector('.mapboxgl-popup');
+        if (popupElement) {
+          const closeButton = popupElement.querySelector('.mapboxgl-popup-close-button');
+          if (closeButton) {
+            closeButton.style.fontSize = '24px';
+            closeButton.style.padding = '8px';
+            closeButton.style.color = '#6B4F4F';
+            closeButton.style.fontWeight = 'bold';
+            closeButton.style.lineHeight = '1';
+            closeButton.style.right = '8px';
+            closeButton.style.top = '8px';
+          }
+
+          // Remove default popup border and adjust content padding
+          const popupContent = popupElement.querySelector('.mapboxgl-popup-content');
+          if (popupContent) {
+            popupContent.style.padding = '0';
+            popupContent.style.borderRadius = '18px';
+            popupContent.style.overflow = 'hidden';
+          }
+        }
       });
 
       map.current.on("mouseenter", "clusters", () => {
