@@ -472,7 +472,7 @@ export default function Home() {
       />
 
       {/* Main content area */}
-      <div className={`${activeTab === 1 ? 'h-[calc(100vh-4rem)] mt-4' : 'mt-4'} bg-gray-50 rounded-lg`}>
+      <div className={`${activeTab === 1 ? 'h-[calc(100vh-4rem)]' : 'mt-4'} bg-gray-50 rounded-lg relative`}>
         {/* ExploreTab */}
         <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-4">
@@ -494,7 +494,15 @@ export default function Home() {
           )}
         </div>
         {/* MapTab */}
-        <div style={{ display: activeTab === 1 ? 'block' : 'none', height: '100%' }}>
+        <div style={{
+          display: activeTab === 1 ? 'block' : 'none',
+          position: 'relative',
+          height: 'calc(100vh - 4.5rem)',
+          width: '100%',
+          margin: 0,
+          padding: 0,
+          zIndex: 0
+        }}>
           <MapTab userLocation={userLocation} activeTab={activeTab} />
         </div>
       </div>

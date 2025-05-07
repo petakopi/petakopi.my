@@ -14,8 +14,8 @@ const ControlsBar = ({
   activeTab
 }) => {
   return (
-    <div className="mt-4">
-      <div className="flex flex-col space-y-4">
+    <div className="mt-1">
+      <div className="flex flex-col space-y-2">
         {/* Top row: Filter button and view type controls */}
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-4">

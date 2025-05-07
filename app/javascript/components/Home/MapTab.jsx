@@ -1,12 +1,23 @@
 import React, { useRef } from "react";
 import useMapbox from "./useMapbox";
 
-export default function MapTab({ activeTab, height = '60vh' }) {
+export default function MapTab({ activeTab, userLocation, height = '100vh' }) {
   const mapContainer = useRef(null);
   const { loading, mapLoaded } = useMapbox(mapContainer, height);
 
   return (
-    <div style={{ width: '100%', height, position: 'relative' }}>
+    <div style={{
+      width: '100%',
+      height: 'calc(100vh - 4.5rem)',
+      position: 'fixed',
+      top: '4.5rem',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 0,
+      pointerEvents: 'auto',
+      marginTop: '0'
+    }}>
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
       {loading && (
         <div className="absolute inset-0 bg-white bg-opacity-70 flex flex-col justify-center items-center rounded-lg z-10">
