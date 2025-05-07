@@ -457,19 +457,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Controls bar - show in both views */}
-      <ControlsBar
-        isFilterSidebarOpen={isFilterSidebarOpen}
-        setIsFilterSidebarOpen={setIsFilterSidebarOpen}
-        filters={filters}
-        setFilters={setFilters}
-        handleApplyFilters={handleApplyFilters}
-        locationPermission={locationPermission}
-        onRequestLocation={handleLocationPillClick}
-        viewType={viewType}
-        setViewType={setViewType}
-        activeTab={activeTab}
-      />
+      {/* Controls bar - show in explore view only */}
+      {activeTab !== 1 && (
+        <ControlsBar
+          isFilterSidebarOpen={isFilterSidebarOpen}
+          setIsFilterSidebarOpen={setIsFilterSidebarOpen}
+          filters={filters}
+          setFilters={setFilters}
+          handleApplyFilters={handleApplyFilters}
+          locationPermission={locationPermission}
+          onRequestLocation={handleLocationPillClick}
+          viewType={viewType}
+          setViewType={setViewType}
+          activeTab={activeTab}
+        />
+      )}
 
       {/* Main content area */}
       <div className={`${activeTab === 1 ? 'h-[calc(100vh-4rem)]' : 'mt-4'} bg-gray-50 rounded-lg relative`}>
@@ -503,7 +505,12 @@ export default function Home() {
           padding: 0,
           zIndex: 0
         }}>
-          <MapTab userLocation={userLocation} activeTab={activeTab} />
+          <MapTab 
+            userLocation={userLocation} 
+            activeTab={activeTab} 
+            setIsFilterSidebarOpen={setIsFilterSidebarOpen} 
+            filters={filters}
+          />
         </div>
       </div>
 
