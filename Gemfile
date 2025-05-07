@@ -74,6 +74,7 @@ group :development do
   gem "rack-mini-profiler" # Profiler for your development and production Ruby rack apps
   gem "memory_profiler" # Memory profiling
   gem "stackprof" # Stackprof profiling
+  gem "tidewave" # MCP for Rails
 end
 
 group :test do
