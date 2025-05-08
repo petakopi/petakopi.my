@@ -112,12 +112,12 @@ export default function Home() {
 
   // Initial data loading for all tabs
   useEffect(() => {
-    // Load explore data when component mounts or map tab is active
-    if ((activeTab === 0 || (activeTab === 1 && locationPermission !== "granted")) && everywhereShops.length === 0) {
+    // Load explore data only when component mounts and data is empty
+    if (everywhereShops.length === 0) {
       setEverywhereLoading(true)
       fetchEverywhereShops()
     }
-  }, [activeTab, locationPermission, userLocation, selectedDistance])
+  }, []) // Empty dependency array - only run once on mount
 
   // Add initial location permission check
   useEffect(() => {
@@ -325,45 +325,6 @@ export default function Home() {
 
     // Save the active tab index to localStorage
     localStorage.setItem('petakopi_active_tab', index.toString());
-
-    // When switching to Explore tab
-    if (index === 0) {
-      // Apply existing list filters when switching to Explore tab
-      setEverywhereLoading(true)
-
-      // Create URL with current filters
-      const url = new URL('/api/v1/coffee_shops', window.location.origin);
-
-      // Apply all current filters
-      applyFiltersToUrl(url, listFilters);
-
-      console.log("Fetching explore with filters after tab change:", url.toString());
-
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === "success" && data.data && data.data.coffee_shops) {
-            setEverywhereShops(data.data.coffee_shops)
-            setEverywhereNextCursor(data.data.pages.next_cursor)
-            setEverywherePrevCursor(data.data.pages.prev_cursor)
-            setEverywhereHasNext(data.data.pages.has_next)
-            setEverywhereHasPrev(data.data.pages.has_prev)
-          } else {
-            console.error('Unexpected response format:', data)
-            setEverywhereShops([])
-            setEverywhereHasNext(false)
-            setEverywhereHasPrev(false)
-          }
-          setEverywhereLoading(false)
-        })
-        .catch(error => {
-          console.error('Error fetching explore coffee shops:', error)
-          setEverywhereShops([])
-          setEverywhereHasNext(false)
-          setEverywhereHasPrev(false)
-          setEverywhereLoading(false)
-        });
-    }
   }
 
   const handleDistanceChange = (distance) => {

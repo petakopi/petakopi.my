@@ -14,10 +14,14 @@ export default function useMapbox(mapContainer, height = "100vh", shouldInitiali
   const [loading, setLoading] = useState(true);
   const [mapLoaded, setMapLoaded] = useState(false);
   const initialized = useRef(false);
+  const lastFilters = useRef(filters);
 
   // Function to update map data with filters
   const updateMapData = async () => {
-    if (!map.current || !map.current.getSource('coffee_shops')) return;
+    if (!map.current || !map.current.getSource('coffee_shops') || !shouldInitialize) return;
+
+    // Skip if filters haven't changed
+    if (JSON.stringify(lastFilters.current) === JSON.stringify(filters)) return;
 
     setLoading(true);
     try {
@@ -54,6 +58,9 @@ export default function useMapbox(mapContainer, height = "100vh", shouldInitiali
       if (source) {
         source.setData(geojson);
       }
+
+      // Update last filters
+      lastFilters.current = filters;
     } catch (error) {
       console.error('Error updating map data:', error);
     } finally {
@@ -61,10 +68,11 @@ export default function useMapbox(mapContainer, height = "100vh", shouldInitiali
     }
   };
 
+  // Initialize map only when shouldInitialize is true
   useEffect(() => {
     if (!mapContainer.current || !shouldInitialize) return;
 
-    // Only initialize the map if it hasn't been initialized yet
+    // Only initialize if not already initialized
     if (!initialized.current) {
       // Initialize map
       map.current = initializeMap(mapContainer);
@@ -84,6 +92,8 @@ export default function useMapbox(mapContainer, height = "100vh", shouldInitiali
         // Setup map layers
         setupMapLayers(map.current).then(() => {
           setLoading(false);
+          // Initial data load
+          updateMapData();
         });
 
         // Setup map events
@@ -91,30 +101,28 @@ export default function useMapbox(mapContainer, height = "100vh", shouldInitiali
       });
 
       initialized.current = true;
-    } else {
-      // If map is already initialized, just update the container
-      if (map.current) {
-        map.current.resize();
-      }
+    } else if (map.current) {
+      // If already initialized, just resize
+      map.current.resize();
     }
 
     // Cleanup function
     return () => {
-      // Only remove the map when the component is unmounted
       if (map.current && !shouldInitialize) {
         map.current.remove();
         map.current = null;
         initialized.current = false;
+        setMapLoaded(false);
       }
     };
-  }, [shouldInitialize]); // Only re-run when shouldInitialize changes
+  }, [shouldInitialize]); // Re-run when shouldInitialize changes
 
   // Update map data when filters change
   useEffect(() => {
-    if (mapLoaded) {
+    if (mapLoaded && shouldInitialize) {
       updateMapData();
     }
-  }, [filters, mapLoaded]);
+  }, [filters, mapLoaded, shouldInitialize]);
 
   return { loading, mapLoaded };
 }
