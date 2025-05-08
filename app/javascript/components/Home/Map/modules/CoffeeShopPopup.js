@@ -1,6 +1,6 @@
 import mapboxgl from "mapbox-gl";
 
-export const createCoffeeShopPopup = (map, coordinates, { name, url, logo }) => {
+export const createCoffeeShopPopup = (map, coordinates, { name, url, logo, rating, rating_count }) => {
   const popup = new mapboxgl.Popup({
     closeButton: true,
     closeOnClick: false,
@@ -15,9 +15,9 @@ export const createCoffeeShopPopup = (map, coordinates, { name, url, logo }) => 
         <div style="font-weight:700;font-size:1rem;color:#3d2c2c;text-align:center;margin-bottom:8px;">${name}</div>
         <div style="font-size:0.875rem;color:#6B4F4F;text-align:center;margin-bottom:18px;">
           <span style="color:#F59E0B;margin-right:4px;">★</span>
-          <span style="font-weight:600;">4.5</span>
+          <span style="font-weight:600;">${rating?.toFixed(1) || 'N/A'}</span>
           <span style="color:#9CA3AF;margin:0 4px;">•</span>
-          <span>120 reviews</span>
+          <span>${rating_count || 0} reviews</span>
         </div>
         <a href="${url}" style="display:inline-block;padding:8px 16px;background:white;color:#6B4F4F;border:1px solid #6B4F4F;border-radius:6px;text-decoration:none;font-weight:600;font-size:0.875rem;transition:all 0.2s;box-shadow:0 1px 2px rgba(0,0,0,0.04);">View →</a>
       </div>

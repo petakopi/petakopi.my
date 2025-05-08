@@ -1,33 +1,28 @@
 const MAPS_API_URL = "/api/v1/maps";
 
 export const setupMapLayers = (map) => {
+  // Ensure map is loaded before proceeding
+  if (!map.loaded()) {
+    map.once('load', () => setupMapLayers(map));
+    return;
+  }
+
   return fetch(MAPS_API_URL)
     .then((res) => res.json())
     .then((response) => {
-      // Get the data from the response
       const { data } = response;
 
-      // Convert the data to GeoJSON format
-      const geojson = {
-        type: 'FeatureCollection',
-        features: data.coffee_shops.map(shop => ({
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [shop.lng, shop.lat]
-          },
-          properties: {
-            id: shop.id,
-            name: shop.name,
-            url: shop.url,
-            logo: shop.logo_url
-          }
-        }))
-      };
+      // Remove existing source and layers if they exist
+      if (map.getSource('coffee_shops')) {
+        map.removeLayer('unclustered-point');
+        map.removeLayer('cluster-count');
+        map.removeLayer('clusters');
+        map.removeSource('coffee_shops');
+      }
 
       map.addSource("coffee_shops", {
         type: "geojson",
-        data: geojson,
+        data: data.geojson,
         cluster: true,
         clusterMaxZoom: 14,
         clusterRadius: 50,

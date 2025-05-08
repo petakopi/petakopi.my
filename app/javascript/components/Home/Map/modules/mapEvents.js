@@ -29,12 +29,12 @@ export const setupMapEvents = (map) => {
 
     const feature = e.features[0];
     const coordinates = feature.geometry.coordinates.slice();
-    const { name, url, logo } = feature.properties;
+    const { name, url, logo, rating, rating_count } = feature.properties;
     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
 
-    createCoffeeShopPopup(map, coordinates, { name, url, logo });
+    createCoffeeShopPopup(map, coordinates, { name, url, logo, rating, rating_count });
   });
 
   // Change cursor on hover

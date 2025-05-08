@@ -6,36 +6,25 @@ json.data do
     json.lng @default_center[:lng]
   end
 
-  json.coffee_shops @coffee_shops do |shop|
-    json.extract! shop, :id, :name, :slug, :lat, :lng
-    # Exclude created_at and updated_at
-    # Add any other attributes you want to include
-
-    json.logo_url shop.logo.attached? ? optimized_blob_url(asset: shop.logo, options: ["width=200"]) : nil
-    json.cover_photo_url shop.cover_photo.attached? ? optimized_blob_url(asset: shop.cover_photo, options: ["width=600"]) : nil
-  end
-
   json.geojson do
     json.type "FeatureCollection"
 
-    json.features @coffee_shops.map do |shop|
-      if shop.lat.present? && shop.lng.present?
-        {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [shop.lng.to_f, shop.lat.to_f]
-          },
-          properties: {
-            id: shop.id,
-            name: shop.name,
-            slug: shop.slug,
-            url: main_coffee_shop_url(id: shop.slug),
-            logo: shop.logo.attached? ? optimized_blob_url(asset: shop.logo, options: ["width=200"]) : nil,
-            cover_photo: shop.cover_photo.attached? ? optimized_blob_url(asset: shop.cover_photo, options: ["width=600"]) : nil
-          }
-        }
+    json.features @coffee_shops do |shop|
+      json.type "Feature"
+      json.geometry do
+        json.type "Point"
+        json.coordinates [shop.lng.to_f, shop.lat.to_f]
       end
-    end.compact
+      json.properties do
+        json.id shop.id
+        json.name shop.name
+        json.slug shop.slug
+        json.url main_coffee_shop_url(id: shop.slug)
+        json.logo shop.logo.attached? ? optimized_blob_url(asset: shop.logo, options: ["width=200"]) : nil
+        json.cover_photo shop.cover_photo.attached? ? optimized_blob_url(asset: shop.cover_photo, options: ["width=600"]) : nil
+        json.rating shop.rating
+        json.rating_count shop.rating_count
+      end
+    end
   end
 end
