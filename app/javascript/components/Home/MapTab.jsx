@@ -1,15 +1,15 @@
 import React, { useRef, useState } from "react";
 import useMapbox from "./useMapbox";
 
-export default function MapTab({ 
-  activeTab, 
-  userLocation, 
+export default function MapTab({
+  activeTab,
+  userLocation,
   height = '100vh',
   setIsFilterSidebarOpen,
-  filters = {} 
+  filters = {}
 }) {
   const mapContainer = useRef(null);
-  const { loading, mapLoaded } = useMapbox(mapContainer, height);
+  const { loading, mapLoaded } = useMapbox(mapContainer, height, activeTab === 1);
 
   return (
     <div style={{
@@ -48,14 +48,8 @@ export default function MapTab({
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
       {loading && (
         <div className="absolute inset-0 bg-white bg-opacity-70 flex flex-col justify-center items-center rounded-lg z-10">
-          <div className="flex space-x-2 mb-4">
-            <div className="w-2 h-2 bg-brown-500 rounded-full jump-dot" style={{ animationDelay: '0ms' }}></div>
-            <div className="w-2 h-2 bg-brown-500 rounded-full jump-dot" style={{ animationDelay: '150ms' }}></div>
-            <div className="w-2 h-2 bg-brown-500 rounded-full jump-dot" style={{ animationDelay: '300ms' }}></div>
-          </div>
-          <p className="text-brown-700 font-medium">
-            {mapLoaded ? 'Loading coffee shops...' : 'Initializing map...'}
-          </p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brown-600"></div>
+          <p className="mt-4 text-brown-600 font-medium">Loading map...</p>
         </div>
       )}
     </div>
