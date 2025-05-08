@@ -16,165 +16,16 @@ const distanceOptions = [
   { value: 30, label: "30km" }
 ]
 
-// Configuration for filter visibility and behavior
-const FILTER_CONFIG = {
-  search: {
-    title: "Search",
-    component: FilterSearch,
-    showInMapView: false,
-    props: (state, handlers) => ({
-      value: state.keyword,
-      onChange: (e) => handlers.setKeyword(e.target.value),
-      placeholder: "Search coffee shops..."
-    })
-  },
-  distance: {
-    title: "Distance",
-    component: FilterCategory,
-    showInMapView: false,
-    props: (state, handlers) => ({
-      title: "Distance",
-      isOpen: state.distanceOpen,
-      setIsOpen: handlers.setDistanceOpen,
-      count: state.selectedDistance !== null ? 1 : 0,
-      children: (
-        <>
-          {state.locationPermission !== "granted" && (
-            <div className="mb-3 p-2 bg-yellow-50 text-yellow-800 text-xs rounded">
-              Enable location to use distance filter
-            </div>
-          )}
-          <RadioFilterOption
-            id="distance-none"
-            name="distance"
-            checked={state.selectedDistance === null}
-            onChange={() => handlers.setSelectedDistance(null)}
-            label="No preference"
-            disabled={state.locationPermission !== "granted"}
-          />
-          {distanceOptions.map((option) => (
-            <RadioFilterOption
-              key={option.value}
-              id={`distance-${option.value}`}
-              name="distance"
-              checked={state.selectedDistance === option.value}
-              onChange={() => handlers.setSelectedDistance(option.value)}
-              label={option.label}
-              disabled={state.locationPermission !== "granted"}
-            />
-          ))}
-        </>
-      )
-    })
-  },
-  location: {
-    title: "Location",
-    component: FilterCategory,
-    showInMapView: false,
-    props: (state, handlers) => ({
-      title: "Location",
-      isOpen: state.locationOpen,
-      setIsOpen: handlers.setLocationOpen,
-      count: (state.selectedState ? 1 : 0) + (state.selectedDistrict ? 1 : 0),
-      children: (
-        <LocationFilter
-          selectedState={state.selectedState}
-          selectedDistrict={state.selectedDistrict}
-          onStateChange={handlers.setSelectedState}
-          onDistrictChange={handlers.setSelectedDistrict}
-        />
-      )
-    })
-  },
-  openingHours: {
-    title: "Opening Hours",
-    component: FilterCategory,
-    showInMapView: true,
-    props: (state, handlers) => ({
-      title: "Opening Hours",
-      isOpen: state.openingHoursOpen,
-      setIsOpen: handlers.setOpeningHoursOpen,
-      count: state.isOpenNow ? 1 : 0,
-      children: (
-        <CheckboxFilterOption
-          id="open-now"
-          name="open-now"
-          checked={state.isOpenNow}
-          onChange={() => handlers.setIsOpenNow(!state.isOpenNow)}
-          label="Open Now"
-        />
-      )
-    })
-  },
-  muslimTags: {
-    title: "For Muslims",
-    component: FilterCategory,
-    showInMapView: true,
-    props: (state, handlers) => ({
-      title: "For Muslims",
-      isOpen: state.muslimTagsOpen,
-      setIsOpen: handlers.setMuslimTagsOpen,
-      count: state.selectedMuslimTag ? 1 : 0,
-      hasInfo: true,
-      infoButtonRef: state.infoButtonRef,
-      onInfoClick: () => handlers.setShowInfoPopover(!state.showInfoPopover),
-      children: (
-        <>
-          <RadioFilterOption
-            id="muslim-tag-none"
-            name="muslim-tag"
-            checked={state.selectedMuslimTag === null}
-            onChange={() => handlers.handleMuslimTagChange(null)}
-            label="No preference"
-          />
-          {state.muslimTags.map((tag) => (
-            <RadioFilterOption
-              key={tag.value}
-              id={`muslim-tag-${tag.value}`}
-              name="muslim-tag"
-              checked={state.selectedMuslimTag === tag.value}
-              onChange={() => handlers.handleMuslimTagChange(tag.value)}
-              label={tag.label}
-            />
-          ))}
-        </>
-      )
-    })
-  },
-  otherTags: {
-    title: "Other Tags",
-    component: FilterCategory,
-    showInMapView: true,
-    props: (state, handlers) => ({
-      title: "Other Tags",
-      isOpen: state.otherTagsOpen,
-      setIsOpen: handlers.setOtherTagsOpen,
-      count: state.selectedTags.length,
-      children: (
-        <>
-          {state.otherTags.map((tag) => (
-            <CheckboxFilterOption
-              key={tag.value}
-              id={`tag-${tag.value}`}
-              name={`tag-${tag.value}`}
-              checked={state.selectedTags.includes(tag.value)}
-              onChange={() => handlers.handleTagToggle(tag.value)}
-              label={tag.label}
-            />
-          ))}
-        </>
-      )
-    })
-  }
-}
-
 const FilterSidebar = ({
   isOpen,
   onClose,
   onApplyFilters,
   currentFilters = {},
   locationPermission,
-  activeTab
+  activeTab,
+  states,
+  isLoadingStates,
+  stateError
 }) => {
   const [keyword, setKeyword] = useState(currentFilters.keyword || "")
   const [selectedTags, setSelectedTags] = useState(currentFilters.tags || [])
@@ -210,6 +61,161 @@ const FilterSidebar = ({
     { value: "home", label: "🏡 Home" },
     { value: "tourism-malaysia", label: "🏝️ Tourism Malaysia" }
   ]
+
+  // Configuration for filter visibility and behavior
+  const FILTER_CONFIG = {
+    search: {
+      title: "Search",
+      component: FilterSearch,
+      showInMapView: false,
+      props: (state, handlers) => ({
+        value: state.keyword,
+        onChange: (e) => handlers.setKeyword(e.target.value),
+        placeholder: "Search coffee shops..."
+      })
+    },
+    distance: {
+      title: "Distance",
+      component: FilterCategory,
+      showInMapView: false,
+      props: (state, handlers) => ({
+        title: "Distance",
+        isOpen: state.distanceOpen,
+        setIsOpen: handlers.setDistanceOpen,
+        count: state.selectedDistance !== null ? 1 : 0,
+        children: (
+          <>
+            {state.locationPermission !== "granted" && (
+              <div className="mb-3 p-2 bg-yellow-50 text-yellow-800 text-xs rounded">
+                Enable location to use distance filter
+              </div>
+            )}
+            <RadioFilterOption
+              id="distance-none"
+              name="distance"
+              checked={state.selectedDistance === null}
+              onChange={() => handlers.setSelectedDistance(null)}
+              label="No preference"
+              disabled={state.locationPermission !== "granted"}
+            />
+            {distanceOptions.map((option) => (
+              <RadioFilterOption
+                key={option.value}
+                id={`distance-${option.value}`}
+                name="distance"
+                checked={state.selectedDistance === option.value}
+                onChange={() => handlers.setSelectedDistance(option.value)}
+                label={option.label}
+                disabled={state.locationPermission !== "granted"}
+              />
+            ))}
+          </>
+        )
+      })
+    },
+    location: {
+      title: "Location",
+      component: FilterCategory,
+      showInMapView: false,
+      props: (state, handlers) => ({
+        title: "Location",
+        isOpen: state.locationOpen,
+        setIsOpen: handlers.setLocationOpen,
+        count: (state.selectedState ? 1 : 0) + (state.selectedDistrict ? 1 : 0),
+        children: (
+          <LocationFilter
+            selectedState={state.selectedState}
+            selectedDistrict={state.selectedDistrict}
+            onStateChange={handlers.setSelectedState}
+            onDistrictChange={handlers.setSelectedDistrict}
+            states={states}
+            isLoadingStates={isLoadingStates}
+            stateError={stateError}
+          />
+        )
+      })
+    },
+    openingHours: {
+      title: "Opening Hours",
+      component: FilterCategory,
+      showInMapView: true,
+      props: (state, handlers) => ({
+        title: "Opening Hours",
+        isOpen: state.openingHoursOpen,
+        setIsOpen: handlers.setOpeningHoursOpen,
+        count: state.isOpenNow ? 1 : 0,
+        children: (
+          <CheckboxFilterOption
+            id="open-now"
+            name="open-now"
+            checked={state.isOpenNow}
+            onChange={() => handlers.setIsOpenNow(!state.isOpenNow)}
+            label="Open Now"
+          />
+        )
+      })
+    },
+    muslimTags: {
+      title: "For Muslims",
+      component: FilterCategory,
+      showInMapView: true,
+      props: (state, handlers) => ({
+        title: "For Muslims",
+        isOpen: state.muslimTagsOpen,
+        setIsOpen: handlers.setMuslimTagsOpen,
+        count: state.selectedMuslimTag ? 1 : 0,
+        hasInfo: true,
+        infoButtonRef: state.infoButtonRef,
+        onInfoClick: () => handlers.setShowInfoPopover(!state.showInfoPopover),
+        children: (
+          <>
+            <RadioFilterOption
+              id="muslim-tag-none"
+              name="muslim-tag"
+              checked={state.selectedMuslimTag === null}
+              onChange={() => handlers.handleMuslimTagChange(null)}
+              label="No preference"
+            />
+            {state.muslimTags.map((tag) => (
+              <RadioFilterOption
+                key={tag.value}
+                id={`muslim-tag-${tag.value}`}
+                name="muslim-tag"
+                checked={state.selectedMuslimTag === tag.value}
+                onChange={() => handlers.handleMuslimTagChange(tag.value)}
+                label={tag.label}
+              />
+            ))}
+          </>
+        )
+      })
+    },
+    otherTags: {
+      title: "Other Tags",
+      component: FilterCategory,
+      showInMapView: true,
+      props: (state, handlers) => ({
+        title: "Other Tags",
+        isOpen: state.otherTagsOpen,
+        setIsOpen: handlers.setOtherTagsOpen,
+        count: state.selectedTags.length,
+        children: (
+          <>
+            {state.otherTags.map((tag) => (
+              <CheckboxFilterOption
+                key={tag.value}
+                id={`tag-${tag.value}`}
+                name={`tag-${tag.value}`}
+                checked={state.selectedTags.includes(tag.value)}
+                onChange={() => handlers.handleTagToggle(tag.value)}
+                label={tag.label}
+              />
+            ))}
+          </>
+        )
+      })
+    }
+  }
 
   // Initialize state from current filters
   useEffect(() => {

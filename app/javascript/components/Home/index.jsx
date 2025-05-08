@@ -8,6 +8,7 @@ import LocationBlockedPrompt from "./LocationBlockedPrompt"
 import LocationRefreshPrompt from "./LocationRefreshPrompt"
 import ControlsBar from "./ControlsBar"
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { fetchStates } from "../../services/filterService"
 
 // Geolocation configuration
 const GEOLOCATION_CONFIG = {
@@ -421,6 +422,29 @@ export default function Home() {
     localStorage.setItem('petakopi_view_type', viewType);
   }, [viewType]);
 
+  const [states, setStates] = useState([])
+  const [isLoadingStates, setIsLoadingStates] = useState(false)
+  const [stateError, setStateError] = useState(null)
+
+  // Fetch states on component mount
+  useEffect(() => {
+    const loadStates = async () => {
+      setIsLoadingStates(true)
+      setStateError(null)
+      try {
+        const statesData = await fetchStates()
+        setStates(statesData)
+      } catch (error) {
+        console.error("Failed to load states:", error)
+        setStateError("Failed to load states. Please try again later.")
+      } finally {
+        setIsLoadingStates(false)
+      }
+    }
+
+    loadStates()
+  }, [])
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Controls bar - show in explore view only */}
@@ -512,6 +536,9 @@ export default function Home() {
         currentFilters={getCurrentFilters()}
         locationPermission={locationPermission}
         activeTab={activeTab}
+        states={states}
+        isLoadingStates={isLoadingStates}
+        stateError={stateError}
       />
 
       {/* Overlay when sidebar is open */}

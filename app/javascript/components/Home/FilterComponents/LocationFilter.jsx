@@ -1,60 +1,44 @@
 import React, { useState, useEffect } from "react"
-import { fetchStates, fetchDistricts } from "../../../services/filterService"
+import { fetchDistricts } from "../../../services/filterService"
 
-const LocationFilter = ({ selectedState, selectedDistrict, onStateChange, onDistrictChange }) => {
+const LocationFilter = ({
+  selectedState,
+  selectedDistrict,
+  onStateChange,
+  onDistrictChange,
+  states,
+  isLoadingStates,
+  stateError
+}) => {
   const [isStateOpen, setIsStateOpen] = useState(false)
   const [isDistrictOpen, setIsDistrictOpen] = useState(false)
-  const [states, setStates] = useState([])
   const [districts, setDistricts] = useState([])
-  const [isLoadingStates, setIsLoadingStates] = useState(false)
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(false)
-  const [stateError, setStateError] = useState(null)
   const [districtError, setDistrictError] = useState(null)
-
-  // Fetch states on component mount
-  useEffect(() => {
-    // This function will be used when we're ready to connect to the API
-    const loadStates = async () => {
-      setIsLoadingStates(true);
-      setStateError(null);
-      try {
-        const statesData = await fetchStates();
-        setStates(statesData);
-      } catch (error) {
-        console.error("Failed to load states:", error);
-        setStateError("Failed to load states. Please try again later.");
-      } finally {
-        setIsLoadingStates(false);
-      }
-    };
-
-    loadStates();
-  }, []);
 
   // Fetch districts when state changes
   useEffect(() => {
-    // This function will be used when we're ready to connect to the API
     const loadDistricts = async () => {
       if (!selectedState) {
-        setDistricts([]);
-        return;
+        setDistricts([])
+        return
       }
 
-      setIsLoadingDistricts(true);
-      setDistrictError(null);
+      setIsLoadingDistricts(true)
+      setDistrictError(null)
       try {
-        const districtsData = await fetchDistricts(selectedState);
-        setDistricts(districtsData);
+        const districtsData = await fetchDistricts(selectedState)
+        setDistricts(districtsData)
       } catch (error) {
-        console.error(`Failed to load districts for ${selectedState}:`, error);
-        setDistrictError("Failed to load districts. Please try again later.");
+        console.error(`Failed to load districts for ${selectedState}:`, error)
+        setDistrictError("Failed to load districts. Please try again later.")
       } finally {
-        setIsLoadingDistricts(false);
+        setIsLoadingDistricts(false)
       }
-    };
+    }
 
-    loadDistricts();
-  }, [selectedState]);
+    loadDistricts()
+  }, [selectedState])
 
   return (
     <div className="space-y-4">
@@ -87,9 +71,9 @@ const LocationFilter = ({ selectedState, selectedDistrict, onStateChange, onDist
                   <div
                     className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-gray-100"
                     onClick={() => {
-                      onStateChange(null);
-                      onDistrictChange(null);
-                      setIsStateOpen(false);
+                      onStateChange(null)
+                      onDistrictChange(null)
+                      setIsStateOpen(false)
                     }}
                   >
                     No preference
@@ -101,9 +85,9 @@ const LocationFilter = ({ selectedState, selectedDistrict, onStateChange, onDist
                         state === selectedState ? 'bg-brown-100 text-brown-900' : ''
                       }`}
                       onClick={() => {
-                        onStateChange(state);
-                        onDistrictChange(null);
-                        setIsStateOpen(false);
+                        onStateChange(state)
+                        onDistrictChange(null)
+                        setIsStateOpen(false)
                       }}
                     >
                       {state}
@@ -150,8 +134,8 @@ const LocationFilter = ({ selectedState, selectedDistrict, onStateChange, onDist
                     <div
                       className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-gray-100"
                       onClick={() => {
-                        onDistrictChange(null);
-                        setIsDistrictOpen(false);
+                        onDistrictChange(null)
+                        setIsDistrictOpen(false)
                       }}
                     >
                       No preference
@@ -163,8 +147,8 @@ const LocationFilter = ({ selectedState, selectedDistrict, onStateChange, onDist
                           district === selectedDistrict ? 'bg-brown-100 text-brown-900' : ''
                         }`}
                         onClick={() => {
-                          onDistrictChange(district);
-                          setIsDistrictOpen(false);
+                          onDistrictChange(district)
+                          setIsDistrictOpen(false)
                         }}
                       >
                         {district}
