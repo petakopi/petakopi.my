@@ -3,110 +3,64 @@ import { setupMapControls } from "./mapControls";
 import { setupMapLayers } from "./mapLayers";
 import { setupMapEvents } from "./mapEvents";
 
-export const initializeMap = ({
-  mapContainer,
-  mapboxAccessToken,
-  userLocation,
-  defaultCenter,
-  setMapLoaded,
-  setMapInitializing,
-  setCurrentZoom,
-  shops,
-  setHasClusters,
-  mapLoaded
-}) => {
+const DEFAULT_CENTER = [101.7117, 3.1578]; // KLCC coordinates
+const MAPBOX_ACCESS_TOKEN =
+  "pk.eyJ1IjoiYW1yZWV6IiwiYSI6ImNsMDN3bW5rZDBidGYzZHBpdmZjMDVpbzkifQ.F8fdxihnLv9ZTuDjufmICQ";
+
+export const initializeMap = (mapContainer) => {
   if (!mapContainer.current) return null;
 
-  mapboxgl.accessToken = mapboxAccessToken;
-
+  mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
   const map = new mapboxgl.Map({
     container: mapContainer.current,
-    style: "mapbox://styles/mapbox/light-v11",
-    center: userLocation
-      ? [userLocation.longitude, userLocation.latitude]
-      : defaultCenter
-        ? [defaultCenter.longitude, defaultCenter.latitude]
-        : [101.6869, 3.1390],
-    zoom: 13,
-    attributionControl: false,
-    accessToken: mapboxAccessToken
+    style: "mapbox://styles/mapbox/light-v10?optimize=true",
+    center: DEFAULT_CENTER,
+    zoom: 10,
   });
 
-  // Add navigation control
-  map.addControl(
-    new mapboxgl.NavigationControl({
-      showCompass: false
-    }),
-    "top-right"
-  );
-
-  // Add attribution control
-  map.addControl(
-    new mapboxgl.AttributionControl({
-      compact: true
-    })
-  );
-
-  // Add geolocation control
-  const geolocate = new mapboxgl.GeolocateControl({
-    positionOptions: {
-      enableHighAccuracy: true
-    },
-    trackUserLocation: true,
-    showUserHeading: true
-  });
-  map.addControl(geolocate, "top-right");
-
-  // Add scale control
-  map.addControl(
-    new mapboxgl.ScaleControl({
-      maxWidth: 100,
-      unit: "metric"
-    }),
-    "bottom-left"
-  );
-
-  // Add fullscreen control
-  map.addControl(
-    new mapboxgl.FullscreenControl(),
-    "top-right"
-  );
-
-  // Add zoom control
-  map.addControl(
-    new mapboxgl.NavigationControl({
-      showCompass: false
-    }),
-    "top-right"
-  );
-
-  // Add zoom level indicator
-  map.on("zoom", () => {
-    setCurrentZoom(map.getZoom());
-  });
-
-  // Add map load handler
-  map.on("load", () => {
-    setMapLoaded(true);
-    setMapInitializing(false);
-
-    // Setup map layers
-    setupMapLayers(map);
-
-    // Setup map events
-    setupMapEvents(map, setCurrentZoom, setHasClusters);
-
-    // Automatically trigger geolocation
-    geolocate.trigger();
-  });
-
-  // Add map error handler
-  map.on("error", (e) => {
-    console.error("Map error:", e);
-    setMapInitializing(false);
-  });
+  // Set container styles
+  if (mapContainer.current) {
+    mapContainer.current.style.width = "100%";
+    mapContainer.current.style.height = "100%";
+    mapContainer.current.style.margin = "0";
+    mapContainer.current.style.padding = "0";
+    mapContainer.current.style.overflow = "hidden";
+  }
 
   return map;
+};
+
+export const addMapControls = (map) => {
+  map.addControl(new mapboxgl.NavigationControl(), "top-right");
+  map.addControl(new mapboxgl.FullscreenControl(), "top-right");
+  const geolocate = new mapboxgl.GeolocateControl({
+    positionOptions: { enableHighAccuracy: true },
+    trackUserLocation: true,
+    showUserHeading: true,
+  });
+  map.addControl(geolocate, "top-right");
+  return geolocate;
+};
+
+export const addMapStyles = () => {
+  const style = document.createElement("style");
+  style.textContent = `
+    .mapboxgl-map {
+      width: 100% !important;
+      height: 100% !important;
+      overflow: hidden !important;
+    }
+
+    .mapboxgl-ctrl-top-right {
+      top: 10px !important; /* Move map controls below header */
+    }
+
+    /* Ensure popups appear above all other content */
+    .mapboxgl-popup {
+      z-index: 10 !important;
+    }
+  `;
+  document.head.appendChild(style);
 };
 
 export const initializeMapOnlyClusters = ({
