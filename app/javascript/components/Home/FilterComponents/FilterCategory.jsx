@@ -1,6 +1,6 @@
 import React from "react"
 
-const FilterCategory = ({ title, isOpen, setIsOpen, count = 0, hasInfo = false, infoButtonRef, onInfoClick, children }) => {
+const FilterCategory = ({ title, isOpen, setIsOpen, count = 0, hasInfo = false, infoButtonRef, onInfoClick, children, badgeColor = "bg-brown-100 text-brown-800" }) => {
   return (
     <div className="p-4 border-b border-gray-200 relative">
       <button
@@ -33,7 +33,7 @@ const FilterCategory = ({ title, isOpen, setIsOpen, count = 0, hasInfo = false, 
           </span>
 
           {count > 0 && (
-            <span className="ml-2 bg-brown-100 text-brown-800 text-xs font-medium px-2 py-0.5 rounded-full">
+            <span className={`ml-2 ${badgeColor} text-xs font-medium px-2 py-0.5 rounded-full`}>
               {count}
             </span>
           )}

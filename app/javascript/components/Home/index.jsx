@@ -60,7 +60,12 @@ export default function Home() {
 
   // Filter sidebar state
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false)
-  const [filters, setFilters] = useState({})
+  const [listFilters, setListFilters] = useState({})
+  const [mapFilters, setMapFilters] = useState({})
+
+  // Helper function to get current filters based on active tab
+  const getCurrentFilters = () => activeTab === 0 ? listFilters : mapFilters
+  const setCurrentFilters = (filters) => activeTab === 0 ? setListFilters(filters) : setMapFilters(filters)
 
   // View type state (card or list)
   const [viewType, setViewType] = useState(() => {
@@ -75,8 +80,8 @@ export default function Home() {
 
   // Helper function to add filters to URL
   const applyFiltersToUrl = (url, filters) => {
-    // Add keyword filter if it exists
-    if (filters.keyword) {
+    // Add keyword filter if it exists (only for list view)
+    if (activeTab === 0 && filters.keyword) {
       url.searchParams.append('keyword', filters.keyword);
     }
 
@@ -87,13 +92,13 @@ export default function Home() {
       });
     }
 
-    // Add state filter if it exists
-    if (filters.state) {
+    // Add state filter if it exists (only for list view)
+    if (activeTab === 0 && filters.state) {
       url.searchParams.append('state', filters.state);
     }
 
-    // Add district filter if it exists
-    if (filters.district) {
+    // Add district filter if it exists (only for list view)
+    if (activeTab === 0 && filters.district) {
       url.searchParams.append('district', filters.district);
     }
 
@@ -184,7 +189,7 @@ export default function Home() {
       const url = new URL('/api/v1/coffee_shops', window.location.origin);
 
       // Apply all filters
-      applyFiltersToUrl(url, filters);
+      applyFiltersToUrl(url, getCurrentFilters());
 
       // Add distance filter if set and location is available
       if (everywhereDistance !== null && userLocation && everywhereDistance !== 0) {
@@ -235,7 +240,7 @@ export default function Home() {
     }
 
     // Set filters state with a new object to ensure React detects the change
-    setFilters({ ...actualFilters })
+    setCurrentFilters({ ...actualFilters })
 
     // Update distance filter if present
     if (actualFilters.distance !== undefined) {
@@ -323,14 +328,14 @@ export default function Home() {
 
     // When switching to Explore tab
     if (index === 0) {
-      // Apply existing filters when switching to Explore tab
+      // Apply existing list filters when switching to Explore tab
       setEverywhereLoading(true)
 
       // Create URL with current filters
       const url = new URL('/api/v1/coffee_shops', window.location.origin);
 
       // Apply all current filters
-      applyFiltersToUrl(url, filters);
+      applyFiltersToUrl(url, listFilters);
 
       console.log("Fetching explore with filters after tab change:", url.toString());
 
@@ -462,8 +467,8 @@ export default function Home() {
         <ControlsBar
           isFilterSidebarOpen={isFilterSidebarOpen}
           setIsFilterSidebarOpen={setIsFilterSidebarOpen}
-          filters={filters}
-          setFilters={setFilters}
+          filters={getCurrentFilters()}
+          setFilters={setCurrentFilters}
           handleApplyFilters={handleApplyFilters}
           locationPermission={locationPermission}
           onRequestLocation={handleLocationPillClick}
@@ -507,7 +512,7 @@ export default function Home() {
             userLocation={userLocation}
             activeTab={activeTab}
             setIsFilterSidebarOpen={setIsFilterSidebarOpen}
-            filters={filters}
+            filters={getCurrentFilters()}
           />
         </div>
       </div>
@@ -543,7 +548,7 @@ export default function Home() {
         isOpen={isFilterSidebarOpen}
         onClose={() => setIsFilterSidebarOpen(false)}
         onApplyFilters={handleApplyFilters}
-        currentFilters={filters}
+        currentFilters={getCurrentFilters()}
         locationPermission={locationPermission}
         activeTab={activeTab}
       />

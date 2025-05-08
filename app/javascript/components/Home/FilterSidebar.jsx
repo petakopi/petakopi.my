@@ -365,6 +365,20 @@ const FilterSidebar = ({
     handleMuslimTagChange
   }
 
+  // Get badge color based on active tab
+  const getBadgeColor = () => {
+    return activeTab === 0
+      ? "bg-brown-100 text-brown-800" // List view - brown
+      : "bg-blue-100 text-blue-800"   // Map view - blue
+  }
+
+  // Get button color based on active tab
+  const getButtonColor = () => {
+    return activeTab === 0
+      ? "bg-brown-500 hover:bg-brown-600" // List view - brown
+      : "bg-blue-500 hover:bg-blue-600"   // Map view - blue
+  }
+
   return (
     <div
       className={`fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-[-100%]'
@@ -391,7 +405,7 @@ const FilterSidebar = ({
             const Component = config.component;
             const props = config.props(state, handlers);
 
-            return <Component key={key} {...props} />;
+            return <Component key={key} {...props} badgeColor={getBadgeColor()} />;
           })}
 
           {isApplied && (
@@ -403,6 +417,7 @@ const FilterSidebar = ({
           <FilterActions
             onReset={handleReset}
             isSubmitting={false}
+            badgeColor={getButtonColor()}
           />
 
           <InfoPopover
