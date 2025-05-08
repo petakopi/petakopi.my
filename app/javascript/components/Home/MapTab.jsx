@@ -10,7 +10,7 @@ export default function MapTab({
   filters = {}
 }) {
   const mapContainer = useRef(null);
-  const { loading, mapLoaded } = useMapbox(mapContainer, height, activeTab === 1);
+  const { loading, mapLoaded } = useMapbox(mapContainer, height, activeTab === 1, filters);
 
   return (
     <div style={{

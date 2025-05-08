@@ -30,6 +30,7 @@ json.data do
             id: shop.id,
             name: shop.name,
             slug: shop.slug,
+            url: main_coffee_shop_url(id: shop.slug),
             logo: shop.logo.attached? ? optimized_blob_url(asset: shop.logo, options: ["width=200"]) : nil,
             cover_photo: shop.cover_photo.attached? ? optimized_blob_url(asset: shop.cover_photo, options: ["width=600"]) : nil
           }

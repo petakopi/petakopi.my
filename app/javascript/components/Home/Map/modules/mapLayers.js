@@ -1,9 +1,30 @@
-const GEOJSON_URL = "/mapbox?type=geojson";
+const MAPS_API_URL = "/api/v1/maps";
 
 export const setupMapLayers = (map) => {
-  return fetch(GEOJSON_URL)
+  return fetch(MAPS_API_URL)
     .then((res) => res.json())
-    .then((geojson) => {
+    .then((response) => {
+      // Get the data from the response
+      const { data } = response;
+
+      // Convert the data to GeoJSON format
+      const geojson = {
+        type: 'FeatureCollection',
+        features: data.coffee_shops.map(shop => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [shop.lng, shop.lat]
+          },
+          properties: {
+            id: shop.id,
+            name: shop.name,
+            url: shop.url,
+            logo: shop.logo_url
+          }
+        }))
+      };
+
       map.addSource("coffee_shops", {
         type: "geojson",
         data: geojson,
