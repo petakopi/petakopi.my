@@ -13,7 +13,8 @@ const FilterSearch = ({ value, onChange, placeholder }) => {
         value={value}
         onChange={onChange}
         placeholder={placeholder || "Search coffee shops..."}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brown-500 focus:border-brown-500 text-sm"
+        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brown-500 focus:border-brown-500 text-sm text-base"
+        style={{ fontSize: '16px' }}
       />
     </div>
   )

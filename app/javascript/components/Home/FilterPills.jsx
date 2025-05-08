@@ -3,40 +3,46 @@ import LocationPill from "./LocationPill";
 
 // Filter configurations
 const FILTER_CONFIGS = {
+  keyword: {
+    label: "Search",
+    formatValue: (value) => value,
+    shouldShow: (value) => value !== null && value !== undefined && value.trim() !== '',
+    order: 0
+  },
   location: {
     label: "Location",
     shouldShow: (value) => true,
-    order: 0
+    order: 1
   },
   distance: {
     label: "Distance",
     formatValue: (value) => `${value}km`,
     shouldShow: (value) => value !== null && value !== undefined,
-    order: 1
+    order: 2
   },
   opened: {
     label: "Opening Hours",
     formatValue: (value) => value === "true" ? "Open Now" : value,
     shouldShow: (value) => value === "true",
-    order: 2
+    order: 3
   },
   state: {
     label: "State",
     formatValue: (value) => value.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' '),
     shouldShow: (value) => value !== null && value !== undefined,
-    order: 3
+    order: 4
   },
   district: {
     label: "District",
     formatValue: (value) => value.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' '),
     shouldShow: (value) => value !== null && value !== undefined,
-    order: 3
+    order: 4
   },
   tags: {
     label: "Tags",
     formatValue: (value) => value.split(/[-_]/).map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' '),
     shouldShow: (value) => Array.isArray(value) && value.length > 0,
-    order: 4
+    order: 5
   }
 };
 

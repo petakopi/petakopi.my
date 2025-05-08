@@ -66,12 +66,20 @@ const FilterSidebar = ({
   const FILTER_CONFIG = {
     search: {
       title: "Search",
-      component: FilterSearch,
+      component: FilterCategory,
       showInMapView: false,
       props: (state, handlers) => ({
-        value: state.keyword,
-        onChange: (e) => handlers.setKeyword(e.target.value),
-        placeholder: "Search coffee shops..."
+        title: "Search",
+        isOpen: true,
+        setIsOpen: () => {},
+        count: state.keyword.trim() !== '' ? 1 : 0,
+        children: (
+          <FilterSearch
+            value={state.keyword}
+            onChange={(e) => handlers.setKeyword(e.target.value)}
+            placeholder="Search coffee shops..."
+          />
+        )
       })
     },
     distance: {
@@ -411,7 +419,13 @@ const FilterSidebar = ({
             const Component = config.component;
             const props = config.props(state, handlers);
 
-            return <Component key={key} {...props} badgeColor={getBadgeColor()} />;
+            return (
+              <Component
+                key={key}
+                {...props}
+                badgeColor={activeTab === 0 ? "bg-brown-100 text-brown-800" : "bg-blue-100 text-blue-800"}
+              />
+            );
           })}
 
           {isApplied && (

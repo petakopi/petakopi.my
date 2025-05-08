@@ -34,3 +34,23 @@ export const applyFiltersToUrl = (url, filters) => {
 
   return url;
 };
+
+export const getActiveFilterCount = (filters, activeTab = 0) => {
+  let count = 0;
+
+  // Common filters for both tabs
+  if (filters.opened) count++;
+  if (filters.tags && filters.tags.length > 0) {
+    count += filters.tags.length;
+  }
+
+  // Explore tab specific filters (activeTab === 0)
+  if (activeTab === 0) {
+    if (filters.keyword) count++;
+    if (filters.state) count++;
+    if (filters.district) count++;
+    if (filters.distance) count++;
+  }
+
+  return count;
+};

@@ -35,23 +35,8 @@ export default function useMapbox(mapContainer, height = "100vh", shouldInitiali
       const response = await fetch(url);
       const { data } = await response.json();
 
-      // Convert the data to GeoJSON format
-      const geojson = {
-        type: 'FeatureCollection',
-        features: data.coffee_shops.map(shop => ({
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [shop.lng, shop.lat]
-          },
-          properties: {
-            id: shop.id,
-            name: shop.name,
-            url: shop.url,
-            logo: shop.logo_url
-          }
-        }))
-      };
+      // Use the GeoJSON data directly from the response
+      const geojson = data.geojson;
 
       // Update map source
       const source = map.current.getSource('coffee_shops');

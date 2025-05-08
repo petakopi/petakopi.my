@@ -1,5 +1,6 @@
 import React from "react"
 import FilterPills from "./FilterPills"
+import { getActiveFilterCount } from "../../utils/filters"
 
 const ControlsBar = ({
   isFilterSidebarOpen,
@@ -13,6 +14,8 @@ const ControlsBar = ({
   setViewType,
   activeTab
 }) => {
+  const activeFilterCount = getActiveFilterCount(filters);
+
   return (
     <div className="mt-1">
       <div className="flex flex-col space-y-4">
@@ -23,7 +26,7 @@ const ControlsBar = ({
             <button
               onClick={() => setIsFilterSidebarOpen(true)}
               className={`flex items-center justify-center h-10 w-10 rounded-lg transition-all relative ${
-                Object.keys(filters).length > 0
+                activeFilterCount > 0
                   ? "bg-brown-100 text-brown-700"
                   : "bg-gray-100 text-gray-700 hover:text-brown-600 hover:bg-brown-50"
               }`}
@@ -32,9 +35,9 @@ const ControlsBar = ({
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
-              {Object.keys(filters).length > 0 && (
+              {activeFilterCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-brown-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center shadow-sm">
-                  {Object.keys(filters).length}
+                  {activeFilterCount}
                 </span>
               )}
             </button>
