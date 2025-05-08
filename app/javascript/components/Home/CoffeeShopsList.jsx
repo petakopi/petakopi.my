@@ -310,33 +310,28 @@ const CoffeeShopsList = ({
     );
   };
 
-  // Render card view (original view)
-  const renderCardView = () => {
-    return (
-      <>
-        {shops.map((coffee_shop, index) => (
-          <CoffeeShopCard
-            key={`${coffee_shop.slug}-${index}`}
-            coffee_shop={coffee_shop}
-            tab={tab}
-            userLocation={userLocation}
-          />
-        ))}
-      </>
-    );
-  };
-
   return (
     <>
       {shops.length > 0 ? (
         viewType === "list" ? (
-          <>
+          <div className="col-span-full mt-4">
             <div className="sm:hidden">{renderListView()}</div>
             {renderDesktopTableView()}
-          </>
-        ) : renderCardView()
+          </div>
+        ) : (
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {shops.map((coffee_shop, index) => (
+              <CoffeeShopCard
+                key={`${coffee_shop.slug}-${index}`}
+                coffee_shop={coffee_shop}
+                tab={tab}
+                userLocation={userLocation}
+              />
+            ))}
+          </div>
+        )
       ) : (
-        <div className="col-span-full">
+        <div className="col-span-full mt-4">
           <div className="bg-white rounded-lg shadow-sm p-8 text-center">
             <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />

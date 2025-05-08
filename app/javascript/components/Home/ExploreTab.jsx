@@ -1,21 +1,23 @@
 import React from "react"
 import CoffeeShopsList from "./CoffeeShopsList"
 
-const EverywhereTab = ({
+const ExploreTab = ({
   everywhereShops,
   everywhereLoading,
   viewType,
   userLocation
 }) => {
   return (
-    <CoffeeShopsList
-      shops={everywhereShops}
-      loading={everywhereLoading}
-      viewType={viewType}
-      tab="explore"
-      userLocation={userLocation}
-    />
+    <div>
+      <CoffeeShopsList
+        shops={everywhereShops}
+        loading={everywhereLoading}
+        viewType={viewType}
+        tab="explore"
+        userLocation={userLocation}
+      />
+    </div>
   )
 }
 
-export default EverywhereTab
+export default ExploreTab

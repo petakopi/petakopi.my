@@ -474,17 +474,15 @@ export default function Home() {
       )}
 
       {/* Main content area */}
-      <div className={`${activeTab === 1 ? 'h-[calc(100vh-4rem)]' : 'mt-4'} bg-gray-50 rounded-lg relative`}>
+      <div className={`${activeTab === 1 ? 'h-[calc(100vh-4rem)]' : ''} bg-gray-50 rounded-lg relative`}>
         {/* ExploreTab */}
         <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-4">
-            <ExploreTab
-              everywhereShops={everywhereShops}
-              everywhereLoading={everywhereLoading}
-              viewType={viewType}
-              userLocation={userLocation}
-            />
-          </div>
+          <ExploreTab
+            everywhereShops={everywhereShops}
+            everywhereLoading={everywhereLoading}
+            viewType={viewType}
+            userLocation={userLocation}
+          />
           {(everywhereHasNext || everywhereHasPrev) && (
             <Pagination
               hasNext={everywhereHasNext}
@@ -505,10 +503,10 @@ export default function Home() {
           padding: 0,
           zIndex: 0
         }}>
-          <MapTab 
-            userLocation={userLocation} 
-            activeTab={activeTab} 
-            setIsFilterSidebarOpen={setIsFilterSidebarOpen} 
+          <MapTab
+            userLocation={userLocation}
+            activeTab={activeTab}
+            setIsFilterSidebarOpen={setIsFilterSidebarOpen}
             filters={filters}
           />
         </div>

@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import useMapbox from "./useMapbox";
+import LoadingIndicator from "./Map/LoadingIndicator";
 
 export default function MapTab({
   activeTab,
@@ -45,13 +46,8 @@ export default function MapTab({
           )}
         </button>
       </div>
+      {loading && <LoadingIndicator />}
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
-      {loading && (
-        <div className="absolute inset-0 bg-white bg-opacity-70 flex flex-col justify-center items-center rounded-lg z-10">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brown-600"></div>
-          <p className="mt-4 text-brown-600 font-medium">Loading map...</p>
-        </div>
-      )}
     </div>
   );
 }
