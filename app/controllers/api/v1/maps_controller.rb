@@ -18,9 +18,6 @@ class Api::V1::MapsController < ApiController
               .where.not(location: nil)
         ).status_published
 
-    Rails.logger.debug "Coffee shops count: #{coffee_shops.count}"
-    Rails.logger.debug "First coffee shop: #{coffee_shops.first&.attributes&.slice('id', 'name', 'lat', 'lng', 'location')}" if coffee_shops.any?
-
     @coffee_shops = coffee_shops
     @default_center = KLCC_COORDINATES
   end

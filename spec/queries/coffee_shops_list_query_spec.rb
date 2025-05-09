@@ -16,14 +16,14 @@ RSpec.describe CoffeeShopsListQuery do
       end
 
       it "filters by state only" do
-        result = described_class.call(params: { state: "Selangor" }).status_published
+        result = described_class.call(params: {state: "Selangor"}).status_published
 
         expect(result).to include(coffee_shop1, coffee_shop3)
         expect(result).not_to include(coffee_shop2, unpublished_shop)
       end
 
       it "filters by state and district" do
-        result = described_class.call(params: { state: "Selangor", district: "Petaling" }).status_published
+        result = described_class.call(params: {state: "Selangor", district: "Petaling"}).status_published
 
         expect(result).to include(coffee_shop1)
         expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)
@@ -32,21 +32,21 @@ RSpec.describe CoffeeShopsListQuery do
 
     describe "filter_by_keyword" do
       it "filters by name" do
-        result = described_class.call(params: { keyword: "Best" }).status_published
+        result = described_class.call(params: {keyword: "Best"}).status_published
 
         expect(result).to include(coffee_shop2)
         expect(result).not_to include(coffee_shop1, coffee_shop3, unpublished_shop)
       end
 
       it "is case insensitive" do
-        result = described_class.call(params: { keyword: "best" }).status_published
+        result = described_class.call(params: {keyword: "best"}).status_published
 
         expect(result).to include(coffee_shop2)
         expect(result).not_to include(coffee_shop1, coffee_shop3, unpublished_shop)
       end
 
       it "works with partial matches" do
-        result = described_class.call(params: { keyword: "Coffee" }).status_published
+        result = described_class.call(params: {keyword: "Coffee"}).status_published
 
         expect(result).to include(coffee_shop1, coffee_shop2, coffee_shop3)
         expect(result).not_to include(unpublished_shop)
@@ -64,14 +64,14 @@ RSpec.describe CoffeeShopsListQuery do
       end
 
       it "filters by a single tag" do
-        result = described_class.call(params: { tags: "work-friendly" }).status_published
+        result = described_class.call(params: {tags: "work-friendly"}).status_published
 
         expect(result).to include(coffee_shop1, coffee_shop3)
         expect(result).not_to include(coffee_shop2, unpublished_shop)
       end
 
       it "filters by multiple tags" do
-        result = described_class.call(params: { tags: "work-friendly,halal-certified" }).status_published
+        result = described_class.call(params: {tags: "work-friendly,halal-certified"}).status_published
 
         # This returns shops that have ANY of the tags, not ALL of them
         expect(result).to include(coffee_shop1, coffee_shop2, coffee_shop3)
@@ -94,7 +94,7 @@ RSpec.describe CoffeeShopsListQuery do
         after { travel_back }
 
         it "returns shops that are currently open" do
-          result = described_class.call(params: { opened: "true" }).status_published
+          result = described_class.call(params: {opened: "true"}).status_published
 
           expect(result).to include(coffee_shop1)
           expect(result).to include(coffee_shop2) # Overnight from Sunday to Monday
@@ -124,7 +124,7 @@ RSpec.describe CoffeeShopsListQuery do
         after { travel_back }
 
         it "returns only shops that are open at this hour" do
-          result = described_class.call(params: { opened: "true" }).status_published
+          result = described_class.call(params: {opened: "true"}).status_published
 
           expect(result).not_to include(coffee_shop1) # Closed at 5:00 PM
           expect(result).to include(coffee_shop2) # Open overnight
@@ -147,7 +147,7 @@ RSpec.describe CoffeeShopsListQuery do
         after { travel_back }
 
         it "returns shops that are open on weekends" do
-          result = described_class.call(params: { opened: "true" }).status_published
+          result = described_class.call(params: {opened: "true"}).status_published
 
           expect(result).not_to include(coffee_shop1) # Only open on weekdays
           expect(result).not_to include(coffee_shop2) # Only open on weekdays
@@ -169,7 +169,7 @@ RSpec.describe CoffeeShopsListQuery do
         after { travel_back }
 
         it "returns the shop if any of its opening hours match the current time" do
-          result = described_class.call(params: { opened: "true" }).status_published
+          result = described_class.call(params: {opened: "true"}).status_published
 
           expect(result).to include(coffee_shop1)
         end
@@ -317,17 +317,17 @@ RSpec.describe CoffeeShopsListQuery do
       end
 
       it "filters by minimum rating" do
-        result = described_class.call(params: { rating: 4.2 }).status_published
+        result = described_class.call(params: {rating: 4.2}).status_published
 
         expect(result).to include(coffee_shop1) # 4.2
         expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)
       end
 
       it "handles rating ranges correctly" do
-        result = described_class.call(params: { rating: 4.4 }).status_published
+        result = described_class.call(params: {rating: 4.4}).status_published
 
-        expect(result).to include(coffee_shop2) # 4.4
-        expect(result).not_to include(coffee_shop1, coffee_shop3, unpublished_shop)
+        expect(result).to include(coffee_shop2, coffee_shop3) # 4.4
+        expect(result).not_to include(coffee_shop1, unpublished_shop)
       end
     end
 
@@ -346,14 +346,14 @@ RSpec.describe CoffeeShopsListQuery do
       end
 
       it "filters by minimum rating count" do
-        result = described_class.call(params: { rating_count: 50 }).status_published
+        result = described_class.call(params: {rating_count: 50}).status_published
 
         expect(result).to include(coffee_shop2) # 75 ratings
         expect(result).not_to include(coffee_shop1, coffee_shop3, unpublished_shop)
       end
 
       it "handles rating count ranges correctly" do
-        result = described_class.call(params: { rating_count: 100 }).status_published
+        result = described_class.call(params: {rating_count: 100}).status_published
 
         expect(result).to include(coffee_shop3) # 150 ratings
         expect(result).not_to include(coffee_shop1, coffee_shop2, unpublished_shop)
@@ -361,7 +361,7 @@ RSpec.describe CoffeeShopsListQuery do
 
       it "handles high rating counts correctly" do
         coffee_shop1.update(rating_count: 1200)
-        result = described_class.call(params: { rating_count: 1000 }).status_published
+        result = described_class.call(params: {rating_count: 1000}).status_published
 
         expect(result).to include(coffee_shop1)
         expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)

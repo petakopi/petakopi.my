@@ -126,11 +126,13 @@ class CoffeeShopsListQuery
       when 100..199 then 200
       when 200..299 then 300
       when 300..499 then 500
-      when 500..999 then 1000
-      else Float::INFINITY
       end
 
-    relation.where("rating_count >= ? AND rating_count < ?", count, next_count)
+    if next_count.nil?
+      relation.where("rating_count >= ?", count)
+    else
+      relation.where("rating_count >= ? AND rating_count < ?", count, next_count)
+    end
   end
 
   def reorder
