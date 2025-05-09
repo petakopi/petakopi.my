@@ -422,6 +422,20 @@ export default function Home() {
     localStorage.setItem('petakopi_view_type', viewType);
   }, [viewType]);
 
+  // Add effect to control body scrolling when sidebar is open
+  useEffect(() => {
+    if (isFilterSidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    // Cleanup function to restore scrolling when component unmounts
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isFilterSidebarOpen]);
+
   const [states, setStates] = useState([])
   const [isLoadingStates, setIsLoadingStates] = useState(false)
   const [stateError, setStateError] = useState(null)
