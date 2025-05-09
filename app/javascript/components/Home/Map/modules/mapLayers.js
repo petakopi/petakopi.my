@@ -82,5 +82,28 @@ export const setupMapLayers = (map) => {
           "circle-stroke-color": "#fff",
         },
       });
+
+      // Add coffee shop names layer
+      map.addLayer({
+        id: "coffee-shop-names",
+        type: "symbol",
+        source: "coffee_shops",
+        filter: ["!", ["has", "point_count"]],
+        layout: {
+          "text-field": ["get", "name"],
+          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+          "text-size": 12,
+          "text-offset": [0, 1.5],
+          "text-anchor": "top",
+          "text-allow-overlap": false,
+          "text-ignore-placement": false,
+          "text-optional": true
+        },
+        paint: {
+          "text-color": "#4A3528",
+          "text-halo-color": "#ffffff",
+          "text-halo-width": 1
+        }
+      });
     });
 };
