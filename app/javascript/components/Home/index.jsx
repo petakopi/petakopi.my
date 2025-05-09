@@ -108,6 +108,16 @@ export default function Home() {
       url.searchParams.append('opened', filters.opened);
     }
 
+    // Add rating filter if it exists
+    if (filters.rating) {
+      url.searchParams.append('rating', filters.rating);
+    }
+
+    // Add rating count filter if it exists
+    if (filters.rating_count) {
+      url.searchParams.append('rating_count', filters.rating_count);
+    }
+
     return url;
   };
 

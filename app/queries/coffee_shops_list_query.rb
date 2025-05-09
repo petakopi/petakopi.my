@@ -12,6 +12,8 @@ class CoffeeShopsListQuery
     @relation = filter_by_tags
     @relation = filter_by_opening_status
     @relation = filter_by_distance
+    @relation = filter_by_rating
+    @relation = filter_by_rating_count
 
     @relation = reorder
   end
@@ -102,6 +104,33 @@ class CoffeeShopsListQuery
     # Calculate distance in kilometers and add it to the select clause
     distance_sql = "ST_Distance(location, ST_SetSRID(ST_GeomFromText('#{point}'), 4326)) / 1000"
     filtered.select("coffee_shops.*, #{distance_sql} as distance_in_km")
+  end
+
+  def filter_by_rating
+    return relation if params[:rating].blank?
+
+    rating = params[:rating].to_f
+    next_rating = rating + 0.2
+
+    relation.where("rating >= ? AND rating < ?", rating, next_rating)
+  end
+
+  def filter_by_rating_count
+    return relation if params[:rating_count].blank?
+
+    count = params[:rating_count].to_i
+    next_count =
+      case count
+      when 0..49 then 50
+      when 50..99 then 100
+      when 100..199 then 200
+      when 200..299 then 300
+      when 300..499 then 500
+      when 500..999 then 1000
+      else Float::INFINITY
+      end
+
+    relation.where("rating_count >= ? AND rating_count < ?", count, next_count)
   end
 
   def reorder

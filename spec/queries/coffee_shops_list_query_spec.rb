@@ -301,5 +301,71 @@ RSpec.describe CoffeeShopsListQuery do
         expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)
       end
     end
+
+    describe "filter_by_rating" do
+      before do
+        coffee_shop1.update(rating: 4.2)
+        coffee_shop2.update(rating: 4.4)
+        coffee_shop3.update(rating: 4.6)
+      end
+
+      it "returns all coffee shops when no rating filter is applied" do
+        result = described_class.call(params: {}).status_published
+
+        expect(result).to include(coffee_shop1, coffee_shop2, coffee_shop3)
+        expect(result).not_to include(unpublished_shop)
+      end
+
+      it "filters by minimum rating" do
+        result = described_class.call(params: { rating: 4.2 }).status_published
+
+        expect(result).to include(coffee_shop1) # 4.2
+        expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)
+      end
+
+      it "handles rating ranges correctly" do
+        result = described_class.call(params: { rating: 4.4 }).status_published
+
+        expect(result).to include(coffee_shop2) # 4.4
+        expect(result).not_to include(coffee_shop1, coffee_shop3, unpublished_shop)
+      end
+    end
+
+    describe "filter_by_rating_count" do
+      before do
+        coffee_shop1.update(rating_count: 45)
+        coffee_shop2.update(rating_count: 75)
+        coffee_shop3.update(rating_count: 150)
+      end
+
+      it "returns all coffee shops when no rating count filter is applied" do
+        result = described_class.call(params: {}).status_published
+
+        expect(result).to include(coffee_shop1, coffee_shop2, coffee_shop3)
+        expect(result).not_to include(unpublished_shop)
+      end
+
+      it "filters by minimum rating count" do
+        result = described_class.call(params: { rating_count: 50 }).status_published
+
+        expect(result).to include(coffee_shop2) # 75 ratings
+        expect(result).not_to include(coffee_shop1, coffee_shop3, unpublished_shop)
+      end
+
+      it "handles rating count ranges correctly" do
+        result = described_class.call(params: { rating_count: 100 }).status_published
+
+        expect(result).to include(coffee_shop3) # 150 ratings
+        expect(result).not_to include(coffee_shop1, coffee_shop2, unpublished_shop)
+      end
+
+      it "handles high rating counts correctly" do
+        coffee_shop1.update(rating_count: 1200)
+        result = described_class.call(params: { rating_count: 1000 }).status_published
+
+        expect(result).to include(coffee_shop1)
+        expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)
+      end
+    end
   end
 end

@@ -18,12 +18,12 @@ const distanceOptions = [
 ]
 
 const ratingOptions = [
-  { value: 4.0, label: "4.0+" },
-  { value: 4.2, label: "4.2+" },
-  { value: 4.4, label: "4.4+" },
-  { value: 4.6, label: "4.6+" },
-  { value: 4.8, label: "4.8+" },
-  { value: 5.0, label: "5.0" }
+  { value: "4.0", label: "4.0+" },
+  { value: "4.2", label: "4.2+" },
+  { value: "4.4", label: "4.4+" },
+  { value: "4.6", label: "4.6+" },
+  { value: "4.8", label: "4.8+" },
+  { value: "5.0", label: "5.0" }
 ]
 
 const ratingCountOptions = [
@@ -54,7 +54,7 @@ const FilterSidebar = ({
   const [isOpenNow, setIsOpenNow] = useState(currentFilters.opened === "true")
   const [selectedDistance, setSelectedDistance] = useState(currentFilters.distance || null)
   const [selectedRating, setSelectedRating] = useState(currentFilters.rating || null)
-  const [selectedRatingCount, setSelectedRatingCount] = useState(currentFilters.ratingCount || null)
+  const [selectedRatingCount, setSelectedRatingCount] = useState(currentFilters.rating_count || null)
   const [isApplied, setIsApplied] = useState(false)
   const [muslimTagsOpen, setMuslimTagsOpen] = useState(true)
   const [otherTagsOpen, setOtherTagsOpen] = useState(true)
@@ -199,8 +199,8 @@ const FilterSidebar = ({
             <SelectFilterOption
               id="rating-select"
               name="rating"
-              value={state.selectedRating}
-              onChange={(e) => handlers.setSelectedRating(e.target.value ? parseFloat(e.target.value) : null)}
+              value={state.selectedRating || ""}
+              onChange={(e) => handlers.setSelectedRating(e.target.value || null)}
               options={[
                 { value: "", label: "No preference" },
                 ...ratingOptions
@@ -209,9 +209,9 @@ const FilterSidebar = ({
             />
             <SelectFilterOption
               id="rating-count-select"
-              name="rating-count"
-              value={state.selectedRatingCount}
-              onChange={(e) => handlers.setSelectedRatingCount(e.target.value ? parseInt(e.target.value) : null)}
+              name="rating_count"
+              value={state.selectedRatingCount || ""}
+              onChange={(e) => handlers.setSelectedRatingCount(e.target.value || null)}
               options={[
                 { value: "", label: "No preference" },
                 ...ratingCountOptions
@@ -292,7 +292,7 @@ const FilterSidebar = ({
     setIsOpenNow(currentFilters.opened === "true")
     setSelectedDistance(currentFilters.distance || null)
     setSelectedRating(currentFilters.rating || null)
-    setSelectedRatingCount(currentFilters.ratingCount || null)
+    setSelectedRatingCount(currentFilters.rating_count || null)
 
     // Extract Muslim tags from the current filters
     const tags = currentFilters.tags || [];
@@ -364,8 +364,8 @@ const FilterSidebar = ({
       filters.rating = selectedRating
     }
 
-    if (selectedRatingCount !== null) {
-      filters.ratingCount = selectedRatingCount
+    if (selectedRatingCount !== null && selectedRatingCount !== "") {
+      filters.rating_count = parseInt(selectedRatingCount)
     }
 
     // Apply filters immediately with a completely new object

@@ -44,7 +44,7 @@ const FILTER_CONFIGS = {
     shouldShow: (value) => value !== null && value !== undefined,
     order: 5
   },
-  ratingCount: {
+  rating_count: {
     label: "Rating Count",
     formatValue: (value) => value === 0 ? "Rating: Any" : value >= 1000 ? "Rating: 1k+" : `Rating: ${value}+`,
     shouldShow: (value) => value !== null && value !== undefined,

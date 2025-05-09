@@ -32,6 +32,16 @@ export const applyFiltersToUrl = (url, filters) => {
     url.searchParams.append('distance', filters.distance);
   }
 
+  // Add rating filter if it exists
+  if (filters.rating) {
+    url.searchParams.append('rating', filters.rating);
+  }
+
+  // Add rating count filter if it exists
+  if (filters.rating_count) {
+    url.searchParams.append('rating_count', filters.rating_count);
+  }
+
   return url;
 };
 
@@ -44,7 +54,7 @@ export const getActiveFilterCount = (filters, activeTab = 0) => {
     count += filters.tags.length;
   }
   if (filters.rating) count++;
-  if (filters.ratingCount) count++;
+  if (filters.rating_count) count++;
 
   // Explore tab specific filters (activeTab === 0)
   if (activeTab === 0) {
