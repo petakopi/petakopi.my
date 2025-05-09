@@ -51,7 +51,7 @@ const LocationFilter = ({
           <button
             type="button"
             onClick={() => setIsStateOpen(!isStateOpen)}
-            className="w-full px-3 py-2 text-left text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brown-500 focus:border-brown-500"
+            className="w-full px-3 py-2 text-left text-xs bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brown-500 focus:border-brown-500"
             disabled={isLoadingStates}
           >
             {isLoadingStates ? "Loading states..." : selectedState || "Select a state"}
@@ -63,7 +63,7 @@ const LocationFilter = ({
           </button>
 
           {isStateOpen && (
-            <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-sm ring-1 ring-black ring-opacity-5 overflow-auto">
+            <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-xs ring-1 ring-black ring-opacity-5 overflow-auto">
               {stateError ? (
                 <div className="text-red-500 p-2 text-center">{stateError}</div>
               ) : (
@@ -110,7 +110,7 @@ const LocationFilter = ({
             <button
               type="button"
               onClick={() => setIsDistrictOpen(!isDistrictOpen)}
-              className="w-full px-3 py-2 text-left text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brown-500 focus:border-brown-500"
+              className="w-full px-3 py-2 text-left text-xs bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brown-500 focus:border-brown-500"
               disabled={isLoadingDistricts || districts.length === 0}
             >
               {isLoadingDistricts
@@ -124,7 +124,7 @@ const LocationFilter = ({
             </button>
 
             {isDistrictOpen && (
-              <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-sm ring-1 ring-black ring-opacity-5 overflow-auto">
+              <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-xs ring-1 ring-black ring-opacity-5 overflow-auto">
                 {districtError ? (
                   <div className="text-red-500 p-2 text-center">{districtError}</div>
                 ) : districts.length === 0 ? (
