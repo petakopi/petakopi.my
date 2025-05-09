@@ -38,11 +38,23 @@ const FILTER_CONFIGS = {
     shouldShow: (value) => value !== null && value !== undefined,
     order: 4
   },
+  rating: {
+    label: "Rating",
+    formatValue: (value) => `Rating: ${value}+`,
+    shouldShow: (value) => value !== null && value !== undefined,
+    order: 5
+  },
+  ratingCount: {
+    label: "Rating Count",
+    formatValue: (value) => value === 0 ? "Rating: Any" : value >= 1000 ? "Rating: 1k+" : `Rating: ${value}+`,
+    shouldShow: (value) => value !== null && value !== undefined,
+    order: 6
+  },
   tags: {
     label: "Tags",
     formatValue: (value) => value.split(/[-_]/).map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' '),
     shouldShow: (value) => Array.isArray(value) && value.length > 0,
-    order: 5
+    order: 7
   }
 };
 

@@ -6,7 +6,8 @@ import {
   CheckboxFilterOption,
   FilterSearch,
   FilterActions,
-  LocationFilter
+  LocationFilter,
+  SelectFilterOption
 } from "./FilterComponents"
 
 const distanceOptions = [
@@ -14,6 +15,24 @@ const distanceOptions = [
   { value: 10, label: "10km" },
   { value: 20, label: "20km" },
   { value: 30, label: "30km" }
+]
+
+const ratingOptions = [
+  { value: 4.0, label: "4.0+" },
+  { value: 4.2, label: "4.2+" },
+  { value: 4.4, label: "4.4+" },
+  { value: 4.6, label: "4.6+" },
+  { value: 4.8, label: "4.8+" },
+  { value: 5.0, label: "5.0" }
+]
+
+const ratingCountOptions = [
+  { value: 50, label: "50+" },
+  { value: 100, label: "100+" },
+  { value: 200, label: "200+" },
+  { value: 300, label: "300+" },
+  { value: 500, label: "500+" },
+  { value: 1000, label: "1,000+" }
 ]
 
 const FilterSidebar = ({
@@ -34,12 +53,15 @@ const FilterSidebar = ({
   const [selectedDistrict, setSelectedDistrict] = useState(currentFilters.district || null)
   const [isOpenNow, setIsOpenNow] = useState(currentFilters.opened === "true")
   const [selectedDistance, setSelectedDistance] = useState(currentFilters.distance || null)
+  const [selectedRating, setSelectedRating] = useState(currentFilters.rating || null)
+  const [selectedRatingCount, setSelectedRatingCount] = useState(currentFilters.ratingCount || null)
   const [isApplied, setIsApplied] = useState(false)
   const [muslimTagsOpen, setMuslimTagsOpen] = useState(true)
   const [otherTagsOpen, setOtherTagsOpen] = useState(true)
   const [locationOpen, setLocationOpen] = useState(true)
   const [openingHoursOpen, setOpeningHoursOpen] = useState(true)
   const [distanceOpen, setDistanceOpen] = useState(true)
+  const [ratingOpen, setRatingOpen] = useState(true)
   const [showInfoPopover, setShowInfoPopover] = useState(false)
   const infoButtonRef = useRef(null)
 
@@ -163,6 +185,43 @@ const FilterSidebar = ({
         )
       })
     },
+    rating: {
+      title: "Rating",
+      component: FilterCategory,
+      showInMapView: true,
+      props: (state, handlers) => ({
+        title: "Rating",
+        isOpen: state.ratingOpen,
+        setIsOpen: handlers.setRatingOpen,
+        count: (state.selectedRating !== null ? 1 : 0) + (state.selectedRatingCount !== null ? 1 : 0),
+        children: (
+          <>
+            <SelectFilterOption
+              id="rating-select"
+              name="rating"
+              value={state.selectedRating}
+              onChange={(e) => handlers.setSelectedRating(e.target.value ? parseFloat(e.target.value) : null)}
+              options={[
+                { value: "", label: "No preference" },
+                ...ratingOptions
+              ]}
+              label="Minimum rating"
+            />
+            <SelectFilterOption
+              id="rating-count-select"
+              name="rating-count"
+              value={state.selectedRatingCount}
+              onChange={(e) => handlers.setSelectedRatingCount(e.target.value ? parseInt(e.target.value) : null)}
+              options={[
+                { value: "", label: "No preference" },
+                ...ratingCountOptions
+              ]}
+              label="Minimum rating count"
+            />
+          </>
+        )
+      })
+    },
     muslimTags: {
       title: "For Muslims",
       component: FilterCategory,
@@ -232,6 +291,8 @@ const FilterSidebar = ({
     setSelectedDistrict(currentFilters.district || null)
     setIsOpenNow(currentFilters.opened === "true")
     setSelectedDistance(currentFilters.distance || null)
+    setSelectedRating(currentFilters.rating || null)
+    setSelectedRatingCount(currentFilters.ratingCount || null)
 
     // Extract Muslim tags from the current filters
     const tags = currentFilters.tags || [];
@@ -299,6 +360,14 @@ const FilterSidebar = ({
       filters.distance = selectedDistance
     }
 
+    if (selectedRating !== null) {
+      filters.rating = selectedRating
+    }
+
+    if (selectedRatingCount !== null) {
+      filters.ratingCount = selectedRatingCount
+    }
+
     // Apply filters immediately with a completely new object
     // Use a timestamp to ensure the object is always different
     onApplyFilters({
@@ -323,6 +392,8 @@ const FilterSidebar = ({
     setSelectedDistrict(null)
     setIsOpenNow(false)
     setSelectedDistance(null)
+    setSelectedRating(null)
+    setSelectedRatingCount(null)
     setIsApplied(false)
   }
 
@@ -349,11 +420,14 @@ const FilterSidebar = ({
     selectedDistrict,
     isOpenNow,
     selectedDistance,
+    selectedRating,
+    selectedRatingCount,
     muslimTagsOpen,
     otherTagsOpen,
     locationOpen,
     openingHoursOpen,
     distanceOpen,
+    ratingOpen,
     showInfoPopover,
     infoButtonRef,
     locationPermission,
@@ -369,11 +443,14 @@ const FilterSidebar = ({
     setSelectedDistrict,
     setIsOpenNow,
     setSelectedDistance,
+    setSelectedRating,
+    setSelectedRatingCount,
     setMuslimTagsOpen,
     setOtherTagsOpen,
     setLocationOpen,
     setOpeningHoursOpen,
     setDistanceOpen,
+    setRatingOpen,
     setShowInfoPopover,
     handleTagToggle,
     handleMuslimTagChange

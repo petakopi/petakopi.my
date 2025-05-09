@@ -43,6 +43,8 @@ export const getActiveFilterCount = (filters, activeTab = 0) => {
   if (filters.tags && filters.tags.length > 0) {
     count += filters.tags.length;
   }
+  if (filters.rating) count++;
+  if (filters.ratingCount) count++;
 
   // Explore tab specific filters (activeTab === 0)
   if (activeTab === 0) {
