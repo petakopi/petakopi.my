@@ -27,7 +27,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
 }
 
-export default function Home() {
+export default function Home({
+  initialFilters = {},
+  initialViewType = "card",
+  initialActiveTab = 0,
+  collections = []
+}) {
   const [tabs, setTabs] = useState(() => {
     // Try to get the saved tab index from localStorage
     const savedTabIndex = localStorage.getItem('petakopi_active_tab');
@@ -101,6 +106,11 @@ export default function Home() {
     // Add district filter if it exists (only for list view)
     if (activeTab === 0 && filters.district) {
       url.searchParams.append('district', filters.district);
+    }
+
+    // Add collection filter if it exists
+    if (filters.collection_id) {
+      url.searchParams.append('collection_id', filters.collection_id);
     }
 
     // Add opened filter if it exists
@@ -199,8 +209,11 @@ export default function Home() {
     try {
       const url = new URL('/api/v1/coffee_shops', window.location.origin);
 
+      // Get current filters
+      const currentFilters = getCurrentFilters();
+
       // Apply all filters
-      applyFiltersToUrl(url, getCurrentFilters());
+      applyFiltersToUrl(url, currentFilters);
 
       // Add distance filter if set and location is available
       if (everywhereDistance !== null && userLocation && everywhereDistance !== 0) {
@@ -213,7 +226,6 @@ export default function Home() {
         url.searchParams.append(direction === 'next' ? 'after' : 'before', cursor);
       }
 
-      console.log("Fetching explore coffee shops with URL:", url.toString());
       const response = await fetch(url);
       const data = await response.json();
       if (data.status === "success" && data.data && data.data.coffee_shops) {
@@ -239,8 +251,6 @@ export default function Home() {
   }
 
   const handleApplyFilters = (newFilters) => {
-    console.log("Applying filters:", newFilters)
-
     // Remove the timestamp if it exists (used just to force updates)
     const { _timestamp, ...actualFilters } = newFilters
 
@@ -283,8 +293,6 @@ export default function Home() {
           url.searchParams.append('lng', userLocation.longitude);
         }
       }
-
-      console.log("Directly fetching explore with filters:", url.toString());
 
       fetch(url)
         .then(response => response.json())
@@ -484,6 +492,7 @@ export default function Home() {
           viewType={viewType}
           setViewType={setViewType}
           activeTab={activeTab}
+          collections={collections}
         />
       )}
 
@@ -563,6 +572,7 @@ export default function Home() {
         states={states}
         isLoadingStates={isLoadingStates}
         stateError={stateError}
+        collections={collections}
       />
 
       {/* Overlay when sidebar is open */}

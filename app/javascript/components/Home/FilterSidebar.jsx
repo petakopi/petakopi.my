@@ -44,13 +44,15 @@ const FilterSidebar = ({
   activeTab,
   states,
   isLoadingStates,
-  stateError
+  stateError,
+  collections = []
 }) => {
   const [keyword, setKeyword] = useState(currentFilters.keyword || "")
   const [selectedTags, setSelectedTags] = useState(currentFilters.tags || [])
   const [selectedMuslimTag, setSelectedMuslimTag] = useState(currentFilters.muslimTag || null)
   const [selectedState, setSelectedState] = useState(currentFilters.state || null)
   const [selectedDistrict, setSelectedDistrict] = useState(currentFilters.district || null)
+  const [selectedCollection, setSelectedCollection] = useState(currentFilters.collection_id || null)
   const [isOpenNow, setIsOpenNow] = useState(currentFilters.opened === "true")
   const [selectedDistance, setSelectedDistance] = useState(currentFilters.distance || null)
   const [selectedRating, setSelectedRating] = useState(currentFilters.rating || null)
@@ -162,6 +164,45 @@ const FilterSidebar = ({
             isLoadingStates={isLoadingStates}
             stateError={stateError}
           />
+        )
+      })
+    },
+    collections: {
+      title: "Collections",
+      component: FilterCategory,
+      showInMapView: true,
+      props: (state, handlers) => ({
+        title: "Collections",
+        isOpen: true,
+        setIsOpen: () => {},
+        count: state.selectedCollection ? 1 : 0,
+        badgeLabel: state.selectedCollection
+          ? state.collections.find(c => c.id === state.selectedCollection)?.name
+          : null,
+        children: (
+          <>
+            <RadioFilterOption
+              id="collection-none"
+              name="collection"
+              checked={state.selectedCollection === null}
+              onChange={() => handlers.setSelectedCollection(null)}
+              label="No preference"
+            />
+            {state.collections.map((collection) => (
+              <RadioFilterOption
+                key={collection.id}
+                id={`collection-${collection.id}`}
+                name="collection"
+                checked={state.selectedCollection === collection.id}
+                onChange={() => handlers.setSelectedCollection(collection.id)}
+                label={
+                  <span className="truncate block" title={collection.name}>
+                    {collection.name}
+                  </span>
+                }
+              />
+            ))}
+          </>
         )
       })
     },
@@ -289,6 +330,7 @@ const FilterSidebar = ({
     setKeyword(currentFilters.keyword || "")
     setSelectedState(currentFilters.state || null)
     setSelectedDistrict(currentFilters.district || null)
+    setSelectedCollection(currentFilters.collection_id || null)
     setIsOpenNow(currentFilters.opened === "true")
     setSelectedDistance(currentFilters.distance || null)
     setSelectedRating(currentFilters.rating || null)
@@ -332,8 +374,6 @@ const FilterSidebar = ({
       allTags.push(selectedMuslimTag);
     }
 
-    console.log("Submitting filter form with keyword:", keyword, "and tags:", allTags);
-
     // Only include filters if they're not empty
     const filters = {}
     if (keyword && keyword.trim() !== '') {
@@ -350,6 +390,10 @@ const FilterSidebar = ({
 
     if (selectedDistrict) {
       filters.district = selectedDistrict
+    }
+
+    if (selectedCollection !== null) {
+      filters.collection_id = selectedCollection
     }
 
     if (isOpenNow) {
@@ -390,6 +434,7 @@ const FilterSidebar = ({
     setSelectedMuslimTag(null)
     setSelectedState(null)
     setSelectedDistrict(null)
+    setSelectedCollection(null)
     setIsOpenNow(false)
     setSelectedDistance(null)
     setSelectedRating(null)
@@ -418,6 +463,7 @@ const FilterSidebar = ({
     selectedMuslimTag,
     selectedState,
     selectedDistrict,
+    selectedCollection,
     isOpenNow,
     selectedDistance,
     selectedRating,
@@ -432,7 +478,8 @@ const FilterSidebar = ({
     infoButtonRef,
     locationPermission,
     muslimTags,
-    otherTags
+    otherTags,
+    collections
   }
 
   const handlers = {
@@ -441,6 +488,7 @@ const FilterSidebar = ({
     setSelectedMuslimTag,
     setSelectedState,
     setSelectedDistrict,
+    setSelectedCollection,
     setIsOpenNow,
     setSelectedDistance,
     setSelectedRating,

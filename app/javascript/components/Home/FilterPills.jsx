@@ -55,10 +55,20 @@ const FILTER_CONFIGS = {
     formatValue: (value) => value.split(/[-_]/).map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' '),
     shouldShow: (value) => Array.isArray(value) && value.length > 0,
     order: 7
+  },
+  collection_id: {
+    label: "Collection",
+    formatValue: (value, filters) => {
+      if (!filters?.collections) return value;
+      const collection = filters.collections.find(c => c.id === parseInt(value));
+      return collection ? collection.name : value;
+    },
+    shouldShow: (value) => value !== null && value !== undefined,
+    order: 3
   }
 };
 
-export default function FilterPills({ filters, setFilters, handleApplyFilters, locationPermission, onRequestLocation, activeTab }) {
+export default function FilterPills({ filters = {}, setFilters, handleApplyFilters, locationPermission, onRequestLocation, activeTab }) {
   // Handler to remove a filter or tag
   const handleRemove = (removeKey, removeValue = null) => {
     setFilters(prev => {
@@ -119,7 +129,7 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters, l
 
     return (
       <span key={`${key}-${value}`} className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${pillStyle}`}>
-        {config.formatValue(value)}
+        {config.formatValue(value, filters)}
         <button
           type="button"
           aria-label={`Remove ${value}`}
@@ -146,7 +156,7 @@ export default function FilterPills({ filters, setFilters, handleApplyFilters, l
       {/* Render other filter pills */}
       {Object.entries(filters)
         .filter(([key, value]) => {
-          if (key === "_timestamp") return false;
+          if (key === "_timestamp" || key === "collections") return false;
           const config = FILTER_CONFIGS[key];
           return config && config.shouldShow(value);
         })

@@ -1,1 +1,1 @@
-<%= turbo_mount("Home/index") %>
+<%= turbo_mount("Home/index", props: { collections: @collections.as_json(only: [:id, :name]) }) %>

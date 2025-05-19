@@ -1,9 +1,10 @@
 class CoffeeShopsListQuery
   include Callable
 
-  def initialize(params: {}, relation: CoffeeShop)
+  def initialize(params: {}, relation: CoffeeShop, current_user: nil)
     @params = params
     @relation = relation
+    @current_user = current_user
   end
 
   def call
@@ -14,6 +15,7 @@ class CoffeeShopsListQuery
     @relation = filter_by_distance
     @relation = filter_by_rating
     @relation = filter_by_rating_count
+    @relation = filter_by_collection
 
     @relation = reorder
   end
@@ -22,7 +24,8 @@ class CoffeeShopsListQuery
 
   attr_reader(
     :params,
-    :relation
+    :relation,
+    :current_user
   )
 
   def filter_by_locations
@@ -133,6 +136,22 @@ class CoffeeShopsListQuery
     else
       relation.where("rating_count >= ? AND rating_count < ?", count, next_count)
     end
+  end
+
+  def filter_by_collection
+    return relation if params[:collection_id].blank?
+    return relation unless current_user # Return all if no user is logged in
+
+    # Join with bookmarks and bookmark_collections to find coffee shops in the selected collection
+    # Only show collections that belong to the current user
+    relation.joins(bookmarks: :bookmark_collections)
+           .where(
+             bookmark_collections: {
+               collection_id: params[:collection_id],
+               user_id: current_user.id
+             }
+           )
+           .distinct
   end
 
   def reorder

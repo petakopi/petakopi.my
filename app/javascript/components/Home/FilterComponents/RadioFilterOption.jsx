@@ -2,7 +2,7 @@ import React from "react"
 
 const RadioFilterOption = ({ id, name, value, checked, onChange, label, disabled = false }) => {
   return (
-    <div className="flex items-start">
+    <div className="flex items-center">
       <div className="flex items-center h-5">
         <input
           id={id}
@@ -12,12 +12,12 @@ const RadioFilterOption = ({ id, name, value, checked, onChange, label, disabled
           checked={checked}
           onChange={onChange}
           disabled={disabled}
-          className={`focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300 ${
+          className={`focus:ring-2 focus:ring-brown-500 h-4 w-4 text-brown-600 border-gray-300 rounded-full ${
             disabled ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         />
       </div>
-      <div className="ml-2 text-sm">
+      <div className="ml-2">
         <label
           htmlFor={id}
           className={`text-xs text-gray-700 ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}

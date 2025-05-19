@@ -42,6 +42,11 @@ export const applyFiltersToUrl = (url, filters) => {
     url.searchParams.append('rating_count', filters.rating_count);
   }
 
+  // Add collection filter if it exists
+  if (filters.collection_id) {
+    url.searchParams.append('collection_id', filters.collection_id);
+  }
+
   return url;
 };
 
@@ -55,6 +60,7 @@ export const getActiveFilterCount = (filters, activeTab = 0) => {
   }
   if (filters.rating) count++;
   if (filters.rating_count) count++;
+  if (filters.collection_id) count++;
 
   // Explore tab specific filters (activeTab === 0)
   if (activeTab === 0) {

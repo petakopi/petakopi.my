@@ -12,7 +12,8 @@ const ControlsBar = ({
   onRequestLocation,
   viewType,
   setViewType,
-  activeTab
+  activeTab,
+  collections = []
 }) => {
   const activeFilterCount = getActiveFilterCount(filters);
 
@@ -76,7 +77,7 @@ const ControlsBar = ({
 
         {/* Bottom row: Filter pills */}
         <FilterPills
-          filters={filters}
+          filters={{ ...filters, collections }}
           setFilters={setFilters}
           handleApplyFilters={handleApplyFilters}
           locationPermission={locationPermission}

@@ -11,7 +11,8 @@ class Api::V1::CoffeeShopsController < ApiController
                 :owners,
                 logo_attachment: :blob,
                 cover_photo_attachment: :blob
-              )
+              ),
+          current_user: current_user
         ).status_published
 
     # Default ordering
