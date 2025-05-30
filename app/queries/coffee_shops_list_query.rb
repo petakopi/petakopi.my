@@ -18,6 +18,8 @@ class CoffeeShopsListQuery
     @relation = filter_by_collection
 
     @relation = reorder
+
+    @relation
   end
 
   private
@@ -97,16 +99,15 @@ class CoffeeShopsListQuery
     # Create a point from the provided coordinates
     point = "POINT(#{lng} #{lat})"
 
-    # Filter coffee shops within the specified distance
-    filtered = relation.where(
+    # Filter coffee shops within the specified distance and calculate distance in one go
+    relation.where(
       "ST_DWithin(location, ST_SetSRID(ST_GeomFromText(?), 4326), ?)",
       point,
       distance_in_km * 1000 # Convert km to meters for ST_DWithin
+    ).select(
+      "coffee_shops.*, " \
+      "ST_Distance(location, ST_SetSRID(ST_GeomFromText('#{point}'), 4326)) / 1000 as distance_in_km"
     )
-
-    # Calculate distance in kilometers and add it to the select clause
-    distance_sql = "ST_Distance(location, ST_SetSRID(ST_GeomFromText('#{point}'), 4326)) / 1000"
-    filtered.select("coffee_shops.*, #{distance_sql} as distance_in_km")
   end
 
   def filter_by_rating
@@ -145,21 +146,22 @@ class CoffeeShopsListQuery
     # Join with bookmarks and bookmark_collections to find coffee shops in the selected collection
     # Only show collections that belong to the current user
     relation.joins(bookmarks: :bookmark_collections)
-           .where(
-             bookmark_collections: {
-               collection_id: params[:collection_id],
-               user_id: current_user.id
-             }
-           )
-           .distinct
+      .where(
+        bookmark_collections: {
+          collection_id: params[:collection_id],
+          user_id: current_user.id
+        }
+      )
+      .distinct
   end
 
   def reorder
     if params[:lat].present? && params[:lng].present? && params[:distance].present?
-      point = "POINT(#{params[:lng].to_f} #{params[:lat].to_f})"
-      distance_sql = "ST_Distance(location, ST_SetSRID(ST_GeomFromText('#{point}'), 4326)) / 1000"
-      relation.order(Arel.sql(distance_sql))
+      # When distance filtering is active, order by the calculated distance_in_km column
+      # Use Arel.sql to ensure the column name is properly quoted
+      relation.order(Arel.sql("distance_in_km ASC"))
     elsif params[:keyword].present? && params[:state].present?
+      # Default ordering for other cases
       relation.order(:name, :district)
     elsif params[:keyword].present?
       relation.order(:name)
