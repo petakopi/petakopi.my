@@ -12,10 +12,10 @@ import { fetchStates } from "../../services/filterService"
 
 // Geolocation configuration
 const GEOLOCATION_CONFIG = {
-  TIMEOUT_DURATION: 15000, // 15 seconds for our custom timeout
-  API_TIMEOUT: 10000, // 10 seconds for the geolocation API timeout
-  CACHE_DURATION: 30 * 60 * 1000, // 30 minutes in milliseconds
-  HIGH_ACCURACY: true
+  TIMEOUT_DURATION: 30000, // Increase to 30 seconds for our custom timeout
+  API_TIMEOUT: 20000, // Increase to 20 seconds for the geolocation API timeout
+  CACHE_DURATION: 5 * 60 * 1000, // Reduce cache duration to 5 minutes to get fresher locations
+  HIGH_ACCURACY: false // Set to false to allow less accurate but faster results
 }
 
 const initialTabs = [
@@ -182,13 +182,41 @@ export default function Home({
         (error) => {
           clearTimeout(locationTimeout) // Clear the timeout on error
           console.error("Error getting location:", error)
-          // PERMISSION_DENIED = 1
-          if (error.code === 1) {
-            // Permission was denied
-            setLocationPermission("denied")
-            setShowLocationBlockedPrompt(true)
-          } else {
-            setLocationPermission("denied")
+          // PERMISSION_DENIED = 1, POSITION_UNAVAILABLE = 2, TIMEOUT = 3
+          switch (error.code) {
+            case 1:
+              setLocationPermission("denied")
+              setShowLocationBlockedPrompt(true)
+              break
+            case 2:
+              // For POSITION_UNAVAILABLE, try again with lower accuracy
+              console.log("Position unavailable, retrying with lower accuracy...")
+              navigator.geolocation.getCurrentPosition(
+                (position) => {
+                  const newLocation = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                  }
+                  console.log("New location received with lower accuracy:", newLocation)
+                  setUserLocation(newLocation)
+                  setLocationPermission("granted")
+                },
+                (retryError) => {
+                  console.error("Error getting location on retry:", retryError)
+                  setLocationPermission("denied")
+                },
+                {
+                  enableHighAccuracy: false,
+                  timeout: GEOLOCATION_CONFIG.API_TIMEOUT,
+                  maximumAge: GEOLOCATION_CONFIG.CACHE_DURATION
+                }
+              )
+              break
+            case 3:
+              setLocationPermission("timeout")
+              break
+            default:
+              setLocationPermission("denied")
           }
         },
         {
