@@ -1,4 +1,6 @@
 class Api::V1::CoffeeShopsController < ApiController
+  include Pagy::Backend
+
   def index
     coffee_shops =
       CoffeeShopsListQuery
@@ -15,26 +17,19 @@ class Api::V1::CoffeeShopsController < ApiController
           current_user: current_user
         ).status_published
 
-    # When distance filtering is active, return all results without pagination
-    if params[:lat].present? && params[:lng].present? && params[:distance].present?
-      @page = OpenStruct.new(
-        records: coffee_shops.to_a,
-        previous_cursor: nil,
-        next_cursor: nil,
-        has_previous?: false,
-        has_next?: false,
-        empty?: coffee_shops.empty?
-      )
-    else
-      @page =
-        coffee_shops
-          .cursor_paginate(
-            before: params[:before],
-            after: params[:after],
-            limit: DEFAULT_ITEMS_PER_PAGE
-          )
-          .fetch
-    end
+    # Use Pagy for all cases, including distance filtering
+    @pagy, @page = pagy(
+      coffee_shops,
+      page: params[:page] || 1
+    )
+
+    @page = OpenStruct.new(
+      records: @page,
+      total_pages: @pagy.pages,
+      current_page: @pagy.page,
+      total_count: @pagy.count,
+      empty?: @page.empty?
+    )
   end
 
   def show

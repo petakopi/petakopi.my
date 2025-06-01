@@ -1,10 +1,9 @@
 json.status "success"
 json.data do
   json.pages do
-    json.prev_cursor @page.previous_cursor
-    json.next_cursor @page.next_cursor
-    json.has_prev @page.has_previous?
-    json.has_next @page.has_next?
+    json.current_page @page.current_page
+    json.total_pages @page.total_pages
+    json.total_count @page.total_count
     json.is_empty @page.empty?
   end
   json.coffee_shops do

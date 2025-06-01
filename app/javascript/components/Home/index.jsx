@@ -52,11 +52,10 @@ export default function Home({
 
   // Explore tab state
   const [everywhereShops, setEverywhereShops] = useState([])
-  const [everywhereNextCursor, setEverywhereNextCursor] = useState(null)
-  const [everywherePrevCursor, setEverywherePrevCursor] = useState(null)
-  const [everywhereHasNext, setEverywhereHasNext] = useState(false)
-  const [everywhereHasPrev, setEverywhereHasPrev] = useState(false)
-  const [everywhereLoading, setEverywhereLoading] = useState(true)
+  const [everywhereLoading, setEverywhereLoading] = useState(false)
+  const [everywhereCurrentPage, setEverywhereCurrentPage] = useState(1)
+  const [everywhereTotalPages, setEverywhereTotalPages] = useState(1)
+  const [everywhereTotalCount, setEverywhereTotalCount] = useState(0)
   const [everywhereDistance, setEverywhereDistance] = useState(null)
 
   // Location state
@@ -232,7 +231,7 @@ export default function Home({
     }
   }
 
-  const fetchEverywhereShops = async (cursor = null, direction = 'next') => {
+  const fetchEverywhereShops = async (page = 1) => {
     setEverywhereLoading(true)
     try {
       const url = new URL('/api/v1/coffee_shops', window.location.origin);
@@ -250,29 +249,29 @@ export default function Home({
         url.searchParams.append('lng', userLocation.longitude);
       }
 
-      if (cursor) {
-        url.searchParams.append(direction === 'next' ? 'after' : 'before', cursor);
-      }
+      // Add page parameter
+      url.searchParams.append('page', page);
 
       const response = await fetch(url);
       const data = await response.json();
       if (data.status === "success" && data.data && data.data.coffee_shops) {
         setEverywhereShops(data.data.coffee_shops)
-        setEverywhereNextCursor(data.data.pages.next_cursor)
-        setEverywherePrevCursor(data.data.pages.prev_cursor)
-        setEverywhereHasNext(data.data.pages.has_next)
-        setEverywhereHasPrev(data.data.pages.has_prev)
+        setEverywhereCurrentPage(data.data.pages.current_page)
+        setEverywhereTotalPages(data.data.pages.total_pages)
+        setEverywhereTotalCount(data.data.pages.total_count)
       } else {
         console.error('Unexpected response format:', data)
         setEverywhereShops([])
-        setEverywhereHasNext(false)
-        setEverywhereHasPrev(false)
+        setEverywhereCurrentPage(1)
+        setEverywhereTotalPages(1)
+        setEverywhereTotalCount(0)
       }
     } catch (error) {
       console.error('Error fetching explore coffee shops:', error)
       setEverywhereShops([])
-      setEverywhereHasNext(false)
-      setEverywhereHasPrev(false)
+      setEverywhereCurrentPage(1)
+      setEverywhereTotalPages(1)
+      setEverywhereTotalCount(0)
     } finally {
       setEverywhereLoading(false)
     }
@@ -300,10 +299,9 @@ export default function Home({
     if (activeTab === 0) {
       // Reset pagination and fetch with new filters
       setEverywhereShops([])
-      setEverywhereNextCursor(null)
-      setEverywherePrevCursor(null)
-      setEverywhereHasNext(false)
-      setEverywhereHasPrev(false)
+      setEverywhereCurrentPage(1)
+      setEverywhereTotalPages(1)
+      setEverywhereTotalCount(0)
       setEverywhereLoading(true)
 
       // Directly fetch data here instead of relying on fetchEverywhereShops
@@ -322,42 +320,46 @@ export default function Home({
         }
       }
 
+      // Add page parameter
+      url.searchParams.append('page', 1);
+
       fetch(url)
         .then(response => response.json())
         .then(data => {
           if (data.status === "success" && data.data && data.data.coffee_shops) {
             setEverywhereShops(data.data.coffee_shops)
-            setEverywhereNextCursor(data.data.pages.next_cursor)
-            setEverywherePrevCursor(data.data.pages.prev_cursor)
-            setEverywhereHasNext(data.data.pages.has_next)
-            setEverywhereHasPrev(data.data.pages.has_prev)
+            setEverywhereCurrentPage(data.data.pages.current_page)
+            setEverywhereTotalPages(data.data.pages.total_pages)
+            setEverywhereTotalCount(data.data.pages.total_count)
           } else {
             console.error('Unexpected response format:', data)
             setEverywhereShops([])
-            setEverywhereHasNext(false)
-            setEverywhereHasPrev(false)
+            setEverywhereCurrentPage(1)
+            setEverywhereTotalPages(1)
+            setEverywhereTotalCount(0)
           }
           setEverywhereLoading(false)
         })
         .catch(error => {
           console.error('Error fetching explore coffee shops:', error)
           setEverywhereShops([])
-          setEverywhereHasNext(false)
-          setEverywhereHasPrev(false)
+          setEverywhereCurrentPage(1)
+          setEverywhereTotalPages(1)
+          setEverywhereTotalCount(0)
           setEverywhereLoading(false)
         });
     }
   }
 
   const handleNextPage = () => {
-    if (activeTab === 0 && everywhereHasNext) {
-      fetchEverywhereShops(everywhereNextCursor, 'next')
+    if (activeTab === 0 && !everywhereLoading && everywhereCurrentPage < everywhereTotalPages) {
+      fetchEverywhereShops(everywhereCurrentPage + 1)
     }
   }
 
   const handlePrevPage = () => {
-    if (activeTab === 0 && everywhereHasPrev) {
-      fetchEverywhereShops(everywherePrevCursor, 'prev')
+    if (activeTab === 0 && !everywhereLoading && everywhereCurrentPage > 1) {
+      fetchEverywhereShops(everywhereCurrentPage - 1)
     }
   }
 
@@ -379,10 +381,9 @@ export default function Home({
     if (userLocation && locationPermission === "granted") {
       // Refetch shops with new distance
       setEverywhereShops([])
-      setEverywhereNextCursor(null)
-      setEverywherePrevCursor(null)
-      setEverywhereHasNext(false)
-      setEverywhereHasPrev(false)
+      setEverywhereCurrentPage(1)
+      setEverywhereTotalPages(1)
+      setEverywhereTotalCount(0)
       setEverywhereLoading(true)
       fetchEverywhereShops()
     }
@@ -419,9 +420,10 @@ export default function Home({
   };
 
   // Pagination component
-  const Pagination = ({ hasNext, hasPrev, onNext, onPrev, loading }) => {
-    const handleNext = () => {
-      if (hasNext && !loading) {
+  const Pagination = ({ currentPage, totalPages, onNext, onPrev, loading }) => {
+    const handleNext = (e) => {
+      e.preventDefault();
+      if (currentPage < totalPages && !loading) {
         onNext();
         // Scroll to top after data loads
         setTimeout(() => {
@@ -430,8 +432,9 @@ export default function Home({
       }
     };
 
-    const handlePrev = () => {
-      if (hasPrev && !loading) {
+    const handlePrev = (e) => {
+      e.preventDefault();
+      if (currentPage > 1 && !loading) {
         onPrev();
         // Scroll to top after data loads
         setTimeout(() => {
@@ -441,23 +444,34 @@ export default function Home({
     };
 
     return (
-      <div className="py-3 flex justify-end">
+      <div className="py-3 flex justify-between items-center">
+        <div className="text-sm text-gray-700">
+          {loading ? (
+            <span>Loading...</span>
+          ) : (
+            <span>Page {currentPage} of {totalPages}</span>
+          )}
+        </div>
         <nav className="pagy-nav pagination" role="navigation">
-          {hasPrev && !loading ? (
-            <span className="page prev">
-              <a href="#" onClick={(e) => { e.preventDefault(); handlePrev(); }}>Prev</a>
-            </span>
-          ) : (
-            <span className="page prev disabled">Prev</span>
-          )}
+          <span className={`page prev ${currentPage <= 1 || loading ? 'disabled' : ''}`}>
+            <a
+              href="#"
+              onClick={handlePrev}
+              className={currentPage <= 1 || loading ? 'cursor-not-allowed opacity-50' : 'hover:text-brown-600'}
+            >
+              Prev
+            </a>
+          </span>
 
-          {hasNext && !loading ? (
-            <span className="page next">
-              <a href="#" onClick={(e) => { e.preventDefault(); handleNext(); }}>Next</a>
-            </span>
-          ) : (
-            <span className="page next disabled">Next</span>
-          )}
+          <span className={`page next ${currentPage >= totalPages || loading ? 'disabled' : ''}`}>
+            <a
+              href="#"
+              onClick={handleNext}
+              className={currentPage >= totalPages || loading ? 'cursor-not-allowed opacity-50' : 'hover:text-brown-600'}
+            >
+              Next
+            </a>
+          </span>
         </nav>
       </div>
     );
@@ -534,10 +548,10 @@ export default function Home({
             viewType={viewType}
             userLocation={userLocation}
           />
-          {(everywhereHasNext || everywhereHasPrev) && (
+          {everywhereTotalPages > 1 && (
             <Pagination
-              hasNext={everywhereHasNext}
-              hasPrev={everywhereHasPrev}
+              currentPage={everywhereCurrentPage}
+              totalPages={everywhereTotalPages}
               onNext={handleNextPage}
               onPrev={handlePrevPage}
               loading={everywhereLoading}
