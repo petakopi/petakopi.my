@@ -69,7 +69,9 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore", userLocation = null }) =
     <div
       key={`${coffee_shop.slug}`}
       id={`coffee-shop-${coffee_shop.slug}`}
-      className="mb-4 border border-gray-200 rounded-lg bg-white overflow-hidden"
+      className={`mb-4 border border-gray-200 rounded-lg overflow-hidden ${
+        coffee_shop.is_premium ? "bg-yellow-50" : "bg-white"
+      }`}
     >
       <div className="flex flex-col h-full">
         {/* Cover photo - now touching the borders */}
@@ -139,7 +141,10 @@ const CoffeeShopCard = ({ coffee_shop, tab = "explore", userLocation = null }) =
                     </a>
                     {coffee_shop.has_owner && (
                       <span className="ml-1 inline-flex items-center">
-                        <VerifiedIcon className="w-4 h-4" />
+                        <VerifiedIcon
+                          className="w-4 h-4"
+                          isPremium={coffee_shop.is_premium}
+                        />
                       </span>
                     )}
                   </span>

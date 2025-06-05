@@ -24,6 +24,15 @@ class CoffeeShop < ApplicationRecord
     prefix: :status
   )
 
+  scope :with_details, -> {
+    includes(
+      :tags,
+      :owners,
+      logo_attachment: :blob,
+      cover_photo_attachment: :blob
+    )
+  }
+
   belongs_to :submitter, class_name: "User", foreign_key: "submitter_user_id", optional: true
 
   has_many :bookmarks

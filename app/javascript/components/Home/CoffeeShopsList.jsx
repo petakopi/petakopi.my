@@ -111,7 +111,12 @@ const CoffeeShopsList = ({
               const distance = getDistance(coffee_shop);
 
               return (
-                <li key={`${coffee_shop.slug}-${index}`} className="px-4 py-4 sm:px-6 bg-white">
+                <li
+                  key={`${coffee_shop.slug}-${index}`}
+                  className={`px-4 py-4 sm:px-6 ${
+                    coffee_shop.is_premium ? "bg-yellow-50" : "bg-white"
+                  }`}
+                >
                   <div className="flex w-full items-center justify-between space-x-6">
                     <div className="flex-1 truncate">
                       <div className="flex items-center space-x-3">
@@ -121,7 +126,10 @@ const CoffeeShopsList = ({
                           </a>
                           {coffee_shop.has_owner && (
                             <span className="ml-1 inline-flex items-center">
-                              <VerifiedIcon className="w-4 h-4" />
+                              <VerifiedIcon
+                                className="w-4 h-4"
+                                isPremium={coffee_shop.is_premium}
+                              />
                             </span>
                           )}
                         </h3>
@@ -216,7 +224,10 @@ const CoffeeShopsList = ({
                       const hasLocation = coffee_shop.district || coffee_shop.state;
 
                       return (
-                        <tr key={`desktop-${coffee_shop.slug}-${index}`} className="bg-white">
+                        <tr
+                          key={`desktop-${coffee_shop.slug}-${index}`}
+                          className={coffee_shop.is_premium ? "bg-yellow-50" : "bg-white"}
+                        >
                           <td className="px-6 py-4 sticky sm:static left-0 z-0 min-w-[220px]">
                             <div className="flex items-center">
                               <div className="flex-shrink-0 h-10 w-10">
@@ -243,7 +254,10 @@ const CoffeeShopsList = ({
                                     {coffee_shop.name}
                                     {coffee_shop.has_owner && (
                                       <span className="ml-1 inline-flex items-center">
-                                        <VerifiedIcon className="w-4 h-4" />
+                                        <VerifiedIcon
+                                          className="w-4 h-4"
+                                          isPremium={coffee_shop.is_premium}
+                                        />
                                       </span>
                                     )}
                                   </a>
