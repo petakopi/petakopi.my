@@ -36,10 +36,12 @@ class Api::V1::CoffeeShopsController < ApiController
     return CoffeeShop.none if @premium_slugs.blank?
     return CoffeeShop.none if params.presence[:page] != "1"
 
-    CoffeeShopsListQuery.call(
+    shops = CoffeeShopsListQuery.call(
       relation: CoffeeShop.with_details.where(
         coffee_shops: {slug: @premium_slugs}
       )
     )
+
+    shops.sort_by { |shop| @premium_slugs.index(shop.slug) }
   end
 end
