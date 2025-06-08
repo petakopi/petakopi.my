@@ -129,6 +129,7 @@ const CoffeeShopsList = ({
                               <VerifiedIcon
                                 className="w-4 h-4"
                                 isPremium={coffee_shop.is_premium}
+                                uniqueId={`badge-${coffee_shop.slug}-${Math.random().toString(36).substr(2, 6)}`}
                               />
                             </span>
                           )}
@@ -257,6 +258,7 @@ const CoffeeShopsList = ({
                                         <VerifiedIcon
                                           className="w-4 h-4"
                                           isPremium={coffee_shop.is_premium}
+                                          uniqueId={`badge-${coffee_shop.slug}-${Math.random().toString(36).substr(2, 6)}`}
                                         />
                                       </span>
                                     )}
