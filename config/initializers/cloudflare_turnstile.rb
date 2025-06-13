@@ -10,7 +10,8 @@ end
 
 module RailsCloudflareTurnstileTurboPatch
   def cloudflare_turnstile_script_tag(async: true, defer: true)
-    super.sub("></script>", " data-turbo-track=\"reload\" data-turbo-temporary=\"true\"></script>").html_safe
+    # Remove turbo attributes to prevent script reloading
+    super.html_safe
   end
 end
 

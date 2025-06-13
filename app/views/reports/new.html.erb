@@ -8,9 +8,7 @@
     <div class="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
       <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-      <%= form_for :report,
-        url: coffee_shop_reports_path(coffee_shop_id: @coffee_shop.slug, return_to: @return_path) do |f|
-      %>
+      <%= form_for :report, url: coffee_shop_reports_path(@coffee_shop), data: { turbo: false } do |f| %>
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
           <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
@@ -36,21 +34,15 @@
                   </div>
 
                   <div class="mt-2">
-                    <div class="mt-4 space-y-4 border-b border-gray-900/10 pb-6">
-
+                    <div class="space-y-4">
                       <div class="sm:col-span-2">
-                        <label for="email" class="block text-sm font-semibold leading-6 text-gray-900">Contact</label>
+                        <label for="email" class="block text-sm font-semibold leading-6 text-gray-900">Email</label>
                         <div class="mt-2.5">
-                          <%= text_field_tag :email,
+                          <%= email_field_tag :email,
                             nil,
-                            placeholder: "Email",
                             class: "block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brown-600 text-sm sm:leading-6"
                           %>
                         </div>
-                        <p class="mt-2 text-sm text-gray-500" id="email-description">
-                          Leave a way for me to contact you back (only if you want to).
-                          I will never share your email with anyone.
-                        </p>
                       </div>
 
                       <div class="sm:col-span-2">
@@ -72,9 +64,23 @@
                 </div>
               </div>
 
-              <div class="mt-6 flex items-center justify-end gap-x-6">
-                <button type="button" @click="show = false" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-                <button type="submit" class="rounded-md bg-brown-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brown-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brown-600">Submit</button>
+              <div class="mt-6 flex items-center justify-between gap-x-6">
+                <div class="flex items-center gap-x-4">
+                  <%= button_tag type: "submit",
+                    name: "report_action",
+                    value: "telegram",
+                    class: "rounded-md bg-[#0088cc] px-3 py-2 text-sm text-white shadow-sm ring-1 ring-inset ring-[#0088cc] hover:bg-[#0077b3]" do
+                  %>
+                    Report in Telegram
+                  <% end %>
+                </div>
+                <%= button_tag type: "submit",
+                  name: "report_action",
+                  value: "report",
+                  class: "rounded-md bg-brown-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brown-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brown-600" do
+                %>
+                  Submit Report
+                <% end %>
               </div>
             </div>
           </div>
