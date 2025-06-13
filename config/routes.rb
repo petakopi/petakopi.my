@@ -96,7 +96,8 @@ Rails.application.routes.draw do
     resources :coffee_shops, path: "", only: [:show], as: "main_coffee_shop"
   end
 
+  get "v1", to: "home#index"
   get "v2", to: "home_v2#index"
 
-  root "home#index"
+  root "home_v2#index"
 end
