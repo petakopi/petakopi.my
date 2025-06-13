@@ -11,6 +11,7 @@ class CoffeeShopsController < ApplicationController
     @opening_hours = OpeningHoursPresenter.new(@coffee_shop.opening_hours).list
     @bookmark = Bookmark.find_by(coffee_shop: @coffee_shop, user: current_user)
     @bookmark_count = Bookmark.where(coffee_shop: @coffee_shop).count
+    @premium_slugs = Rails.cache.read("ads/gold")&.split(",") || []
 
     ahoy.track "View Coffee Shop", id: @coffee_shop.id, name: @coffee_shop.name
   end
