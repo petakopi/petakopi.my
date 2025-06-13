@@ -1,24 +1,59 @@
-<table class="min-w-full divide-y divide-gray-300">
-  <thead>
-    <tr class="divide-x divide-gray-200">
-      <th scope="col" class="py-3.5 px-4 pr-4 text-left text-sm font-semibold text-gray-900">Day</th>
-      <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Open</th>
-      <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Close</th>
-    </tr>
-  </thead>
-  <tbody class="divide-y divide-gray-200 bg-white">
-    <% opening_hours.each_with_index do |opening_hour, i| %>
-      <tr class="divide-x divide-gray-200 <%= opening_hour[:start_day] == Date::DAYNAMES[Date.today.wday] ? "font-bold text-brown-500" : "text-gray-500"  %>">
-        <td class="whitespace-nowrap p-4 text-sm">
-          <%= opening_hour[:display_day] %>
-        </td>
-        <td class="whitespace-nowrap p-4 text-sm">
-          <%= opening_hour[:start_time] %>
-        </td>
-        <td class="whitespace-nowrap p-4 text-sm">
-          <%= opening_hour[:close_time] %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%# Today's hours %>
+<div class="bg-white rounded-lg shadow-sm ring-1 ring-inset ring-gray-300" data-controller="opening-hours">
+  <%# Header with today's hours %>
+  <div class="flex items-center justify-between px-3.5 py-4">
+    <div class="flex items-center space-x-3">
+      <div class="flex-shrink-0">
+        <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium <%= @coffee_shop.open_status[:classes] %>">
+          <%= @coffee_shop.open_status[:text] %>
+        </span>
+      </div>
+      <div class="text-sm font-medium text-gray-900">
+        <%= @coffee_shop.today_hours_display %>
+      </div>
+    </div>
+    <button type="button"
+            class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900"
+            data-action="opening-hours#toggle"
+            data-opening-hours-target="button">
+      <span>All hours</span>
+      <svg class="ml-2 h-5 w-5 text-gray-400 transition-transform duration-200"
+           xmlns="http://www.w3.org/2000/svg"
+           viewBox="0 0 20 20"
+           fill="currentColor"
+           data-opening-hours-target="icon">
+        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+
+  <%# Full schedule (hidden by default with CSS) %>
+  <div class="hidden" data-opening-hours-target="content">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-t border-gray-200 divide-x divide-gray-200">
+            <th scope="col" class="py-3.5 px-4 pr-4 text-left text-sm font-semibold text-gray-900">Day</th>
+            <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Open</th>
+            <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Close</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% opening_hours.each_with_index do |opening_hour, i| %>
+            <tr class="border-t border-gray-200 divide-x divide-gray-200 <%= opening_hour[:start_day] == Date::DAYNAMES[Date.today.wday] ? "font-bold text-brown-500" : "text-gray-500"  %>">
+              <td class="whitespace-nowrap p-4 text-sm">
+                <%= opening_hour[:display_day] %>
+              </td>
+              <td class="whitespace-nowrap p-4 text-sm">
+                <%= opening_hour[:start_time] %>
+              </td>
+              <td class="whitespace-nowrap p-4 text-sm">
+                <%= opening_hour[:close_time] %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

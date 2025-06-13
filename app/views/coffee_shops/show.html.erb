@@ -57,19 +57,9 @@
     <% end %>
 
     <% if @coffee_shop.opening_hours.exists? %>
-      <div class="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-        <div class="mt-2 bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-4 pt-5 sm:p-6">
-            <div class="mt-2 flow-root">
-              <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full align-middle sm:px-6 lg:px-8">
-                  <%= render partial: "coffee_shops/opening_hours",
-                    locals: { opening_hours: @opening_hours } %>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <%= render partial: "coffee_shops/opening_hours",
+          locals: { opening_hours: @opening_hours } %>
       </div>
     <% end %>
 
