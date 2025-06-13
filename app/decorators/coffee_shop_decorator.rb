@@ -77,7 +77,12 @@ module CoffeeShopDecorator
   def today_hours
     @today_hours ||= begin
       current_day = Date.today.wday
-      opening_hours.select { |h| h.start_day == current_day }.sort_by(&:start_time)
+      opening_hours.select do |h|
+        # Include hours that either:
+        # 1. Start today (regular hours)
+        # 2. End today (overnight hours from previous day)
+        h.start_day == current_day || h.close_day == current_day
+      end.sort_by(&:start_time)
     end
   end
 
