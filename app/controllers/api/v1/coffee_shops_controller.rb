@@ -2,7 +2,12 @@ class Api::V1::CoffeeShopsController < ApiController
   include Pagy::Backend
 
   def index
-    @premium_slugs = Rails.cache.read("ads/gold")&.split(",") || []
+    @premium_slugs =
+      if params.blank?
+        Rails.cache.read("ads/gold")&.split(",") || []
+      else
+        []
+      end
 
     coffee_shops =
       CoffeeShopsListQuery
@@ -34,7 +39,7 @@ class Api::V1::CoffeeShopsController < ApiController
 
   def premium_coffee_shops
     return CoffeeShop.none if @premium_slugs.blank?
-    return CoffeeShop.none if params.presence[:page] != "1"
+    return CoffeeShop.none if params.present?
 
     shops = CoffeeShopsListQuery.call(
       relation: CoffeeShop.with_details.where(
