@@ -56,6 +56,10 @@
       </div>
     <% end %>
 
+    <% if @coffee_shop.instagram_url.present? %>
+      <%= render partial: "coffee_shops/instagram_embed", locals: { instagram_url: @coffee_shop.instagram_url } %>
+    <% end %>
+
     <% if @coffee_shop.opening_hours.exists? %>
       <div class="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
         <div class="mt-2 bg-white overflow-hidden shadow rounded-lg">
@@ -75,7 +79,7 @@
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <div class="flex flex-col space-y-4">
-        <% [:google_map, :instagram_url, :facebook_url, :twitter_url, :tiktok_url, :whatsapp_url].each do |link| %>
+        <% [:google_map, :facebook_url, :twitter_url, :tiktok_url, :whatsapp_url].each do |link| %>
           <% next if @coffee_shop.public_send(link).blank? %>
 
           <%= link_to @coffee_shop.public_send(link),
