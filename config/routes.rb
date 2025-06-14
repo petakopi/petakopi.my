@@ -99,5 +99,7 @@ Rails.application.routes.draw do
   get "v1", to: "home#index"
   get "v2", to: "home_v2#index"
 
+  resources :telegram, only: [:new, :create]
+
   root "home_v2#index"
 end

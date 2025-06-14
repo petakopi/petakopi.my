@@ -11,9 +11,9 @@
       <strong class="font-semibold">Version 2 has just launched! 🎉</strong><svg viewBox="0 0 2 2" class="mx-2 inline size-0.5 fill-current" aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg>
       Join us on our Telegram group to give us feedback and suggestions!
     </p>
-    <a target="_blank" href="https://t.me/petakopi" rel="noopener noreferrer" class="flex-none rounded-full bg-gray-900 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900" onclick="gtag('event', 'banner_click', { 'event_category': 'Telegram', 'event_label': 'Header Banner' })">
+    <%= link_to new_telegram_path, class: "flex-none rounded-full bg-gray-900 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900", onclick: "gtag('event', 'banner_click', { 'event_category': 'Telegram', 'event_label': 'Header Banner' })" do %>
       Let's chat!<span aria-hidden="true">&rarr;</span>
-    </a>
+    <% end %>
   </div>
   <div class="flex flex-1 justify-end">
     <button type="button" class="-m-3 p-3 focus-visible:-outline-offset-4" data-action="click->banner-dismiss#dismiss" onclick="gtag('event', 'banner_dismiss', { 'event_category': 'Telegram', 'event_label': 'Header Banner' })">
