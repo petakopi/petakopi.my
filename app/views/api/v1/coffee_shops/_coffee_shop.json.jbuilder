@@ -23,7 +23,7 @@ else
   json.state_url nil
 end
 json.has_owner coffee_shop.owners.size.positive?
-json.is_premium @premium_slugs.include?(coffee_shop.slug)
+json.is_premium @premium_coffee_shops.pluck(:slug).include?(coffee_shop.slug)
 
 # Include distance if it was calculated (for nearby coffee shops)
 if @include_distance && coffee_shop.respond_to?(:distance_in_km)
