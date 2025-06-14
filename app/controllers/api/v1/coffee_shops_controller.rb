@@ -2,8 +2,9 @@ class Api::V1::CoffeeShopsController < ApiController
   include Pagy::Backend
 
   def index
+    binding.pry
     @premium_slugs =
-      if params.except(:controller, :action, :format, :page).blank? && params[:page] != "1"
+      if params.except(:controller, :action, :format, :page).blank? && params[:page] == "1"
         Rails.cache.read("ads/gold")&.split(",") || []
       else
         []
