@@ -1,7 +1,7 @@
-<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+<div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-      Join our Telegram group
+    <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+      Join Our Telegram Group
     </h2>
     <p class="mt-2 text-center text-sm text-gray-600">
       Please verify that you are not a robot to join our Telegram group.
@@ -10,9 +10,9 @@
 
   <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
     <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-      <%= form_with url: telegram_index_path, method: :post, data: { turbo: false } do |f| %>
+      <%= form_with url: telegram_index_path, method: :post, data: { turbo: false, controller: "cloudflare-turnstile" } do |f| %>
         <div class="flex justify-center">
-          <%= render "shared/turnstile" %>
+          <%= cloudflare_turnstile %>
         </div>
 
         <div class="mt-6">
