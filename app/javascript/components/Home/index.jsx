@@ -444,7 +444,7 @@ export default function Home({
     };
 
     return (
-      <div className="py-3 flex justify-between items-center">
+      <div className="py-3 px-4 mb-20 md:mb-0 flex justify-between items-center">
         <div className="text-sm text-gray-700">
           {loading ? (
             <span>Loading...</span>
@@ -581,9 +581,9 @@ export default function Home({
       {activeTab !== 1 && (
         <button
           onClick={() => handleTabChange(1)}
-          className="fixed bottom-6 right-6 bg-brown-600 text-white px-4 py-3 rounded-full shadow-lg hover:bg-brown-700 transition-colors flex items-center space-x-2 z-50"
+          className="fixed bottom-6 right-6 bg-brown-600 text-white px-6 py-4 rounded-full shadow-lg hover:bg-brown-700 transition-colors flex items-center space-x-3 z-50 text-lg"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
           </svg>
           <span>Map</span>
@@ -594,9 +594,9 @@ export default function Home({
       {activeTab === 1 && (
         <button
           onClick={() => handleTabChange(0)}
-          className="fixed bottom-6 right-6 bg-brown-600 text-white px-4 py-3 rounded-full shadow-lg hover:bg-brown-700 transition-colors flex items-center space-x-2 z-50"
+          className="fixed bottom-6 right-6 bg-brown-600 text-white px-6 py-4 rounded-full shadow-lg hover:bg-brown-700 transition-colors flex items-center space-x-3 z-50 text-lg"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
           <span>List</span>
