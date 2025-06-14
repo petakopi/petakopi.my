@@ -3,7 +3,7 @@ class Api::V1::CoffeeShopsController < ApiController
 
   def index
     @premium_slugs =
-      if params.blank?
+      if params.except(:controller, :action, :format, :page).blank? && params[:page] != "1"
         Rails.cache.read("ads/gold")&.split(",") || []
       else
         []
