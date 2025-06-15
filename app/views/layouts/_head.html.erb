@@ -41,8 +41,6 @@
   <%= render "layouts/social_meta_tags" %>
 
   <% if Rails.env.production? && current_user&.role.nil? %>
-    <script defer data-domain="petakopi.my" src="https://plausible.amree.dev/js/script.js"></script>
-
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-14JBBQZVQR"></script>
     <script>
