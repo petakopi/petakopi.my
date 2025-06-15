@@ -90,7 +90,7 @@ class CoffeeShopsListQuery
   end
 
   def filter_by_distance
-    return relation unless params[:lat].present? && params[:lng].present? && params[:distance].present?
+    return relation if missing_location_params?
 
     lat = params[:lat].to_f
     lng = params[:lng].to_f
@@ -156,7 +156,7 @@ class CoffeeShopsListQuery
   end
 
   def reorder
-    if params[:lat].present? && params[:lng].present? && params[:distance].present?
+    if !missing_location_params?
       # When distance filtering is active, order by the calculated distance_in_km column
       # Use Arel.sql to ensure the column name is properly quoted
       relation.order(Arel.sql("distance_in_km ASC"))
@@ -170,5 +170,12 @@ class CoffeeShopsListQuery
     else
       relation.order(created_at: :desc)
     end
+  end
+
+  def missing_location_params?
+    params[:lat].blank? ||
+      params[:lng].blank? ||
+      params[:distance].blank? ||
+      params[:distance] == "undefined"
   end
 end
