@@ -27,6 +27,8 @@ class Api::V1::CoffeeShopsController < ApiController
   end
 
   def show
+    @premium_coffee_shops = premium_coffee_shops
+
     @coffee_shop = CoffeeShop.find_by!(uuid: params[:id])
   end
 
