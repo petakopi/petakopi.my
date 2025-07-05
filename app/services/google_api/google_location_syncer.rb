@@ -4,6 +4,7 @@ class GoogleApi::GoogleLocationSyncer
 
   NORMALIZED_STATE_NAMES = {
     "Federal Territory of Kuala Lumpur" => "Kuala Lumpur",
+    "Johor Darul Ta'zim" => "Johor",
     "Labuan Federal Territory" => "Labuan",
     "Malacca" => "Melaka",
     "Penang" => "Pulau Pinang",

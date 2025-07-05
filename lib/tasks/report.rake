@@ -1,7 +1,7 @@
 namespace :report do
-  # tomo run -- petakopi:tasks report:closed_coffee_shops
-  # https://console.cloud.google.com/google/maps-apis/quotas
-  # - Increase the daily and minutely quota based on the number of coffee shops
+  # kamal deploy && kamal app exec --interactive "bin/rails report:closed_coffee_shops"
+  # Increase the limit of Places API
+  # https://console.cloud.google.com/google/maps-apis/quotas?inv=1&invt=Ab16Lg&project=petakopi&api=places-backend.googleapis.com
   desc "Generate report for closed businesses"
   task closed_coffee_shops: :environment do
     require "google/apis/sheets_v4"
