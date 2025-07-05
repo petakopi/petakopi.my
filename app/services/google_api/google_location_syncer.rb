@@ -2,6 +2,16 @@ class GoogleApi::GoogleLocationSyncer
   include Callable
   include Dry::Monads[:result, :do]
 
+  NORMALIZED_STATE_NAMES = {
+    "Federal Territory of Kuala Lumpur" => "Kuala Lumpur",
+    "Labuan Federal Territory" => "Labuan",
+    "Malacca" => "Melaka",
+    "Penang" => "Pulau Pinang",
+    "Wilayah Persekutuan Kuala Lumpur" => "Kuala Lumpur",
+    "Wilayah Persekutuan Labuan" => "Labuan",
+    "Wilayah Persekutuan Putrajaya" => "Putrajaya"
+  }
+
   ValidationSchema = Dry::Schema.Params do
     optional(:google_place_id).maybe(:string)
     optional(:location)
@@ -23,10 +33,10 @@ class GoogleApi::GoogleLocationSyncer
     yield validate_params
 
     if @coffee_shop.google_place_id.present?
-      yield refresh_location_from_google
+      yield get_location_from_google_place
+    else
+      yield get_location_from_coordinates
     end
-
-    yield reverse_geocoding
 
     save_coffee_shop
   end
@@ -47,7 +57,7 @@ class GoogleApi::GoogleLocationSyncer
     end
   end
 
-  def refresh_location_from_google
+  def get_location_from_google_place
     response = HTTP.get("https://maps.googleapis.com/maps/api/geocode/json?place_id=#{@coffee_shop.google_place_id}&key=#{api_key}")
 
     if response.status.success? && response.parse["error_message"].blank?
@@ -57,25 +67,52 @@ class GoogleApi::GoogleLocationSyncer
       # Create PostGIS point
       @coffee_shop.location = "POINT(#{lng} #{lat})"
 
+      # Update address
+      address_components = response.parse.dig("results")[0]["address_components"]
+
+      # Extract district (locality)
+      district_component = address_components.find { |comp| comp["types"].include?("locality") }
+      district = district_component ? district_component["long_name"] : nil
+
+      # Extract state/province (administrative_area_level_1)
+      state_component = address_components.find { |comp| comp["types"].include?("administrative_area_level_1") }
+      state = state_component ? state_component["long_name"] : nil
+
+      @coffee_shop.assign_attributes(
+        district: district,
+        state: NORMALIZED_STATE_NAMES[state] || state
+      )
+
       Success(nil)
     else
       Failure("Error refreshing location from Google: #{@coffee_shop.google_place_id} - #{response.parse["error_message"]}")
     end
   end
 
-  def reverse_geocoding
-    state_geo = GeoLocation.by_point.find_state_by_point(@coffee_shop.lng, @coffee_shop.lat)
-    district_geo = GeoLocation.by_point.find_district_by_point(@coffee_shop.lng, @coffee_shop.lat)
+  def get_location_from_coordinates
+    latlng = [@coffee_shop.lat, @coffee_shop.lng].join(",")
 
-    if state_geo || district_geo
+    response = HTTP.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=#{latlng}&key=#{api_key}")
+
+    if response.status.success? && response.parse["error_message"].blank?
+      address_components = response.parse.dig("results", 0, "address_components")
+
+      # Extract district (locality)
+      district_component = address_components.find { |comp| comp["types"].include?("locality") }
+      district = district_component ? district_component["long_name"] : nil
+
+      # Extract state (administrative_area_level_1)
+      state_component = address_components.find { |comp| comp["types"].include?("administrative_area_level_1") }
+      state = state_component ? state_component["long_name"] : nil
+
       @coffee_shop.assign_attributes(
-        state: state_geo&.name,
-        district: district_geo&.name
+        district: district,
+        state: NORMALIZED_STATE_NAMES[state] || state
       )
 
       Success(nil)
     else
-      Failure("Could not find state or district for coordinates: #{@coffee_shop.lat}, #{@coffee_shop.lng}")
+      Failure("Error refreshing location from coordinates: #{@coffee_shop.lat}, #{@coffee_shop.lng} - #{response.parse["error_message"]}")
     end
   end
 
