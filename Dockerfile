@@ -37,10 +37,11 @@ RUN apt-get update -qq && \
 
 # Install Node.js and pnpm
 ARG NODE_VERSION=22.11.0
+ARG PNPM_VERSION=10.13.1
 ENV PATH=/usr/local/node/bin:$PATH
 RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
     /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
-    npm install -g pnpm && \
+    npm install -g pnpm@${PNPM_VERSION} && \
     rm -rf /tmp/node-build-master
 
 # Install application gems
