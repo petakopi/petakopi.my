@@ -25,6 +25,10 @@ end
 json.has_owner coffee_shop.owners.size.positive?
 json.is_premium @premium_coffee_shops.pluck(:slug).include?(coffee_shop.slug)
 
+# Opening hours using presenter - all logic handled in presenter
+presenter = OpeningHoursPresenter.new(coffee_shop.opening_hours)
+json.opening_hours presenter.api_format
+
 # Include distance if it was calculated (for nearby coffee shops)
 if @include_distance && coffee_shop.respond_to?(:distance_in_km)
   json.distance_in_km coffee_shop.distance_in_km.round(1)

@@ -82,14 +82,15 @@ class LatLngExtractor
     page_url = url
     call_count = 0
 
-    begin
+    loop do
       break if call_count == 2
 
       response = Net::HTTP.get_response(URI.parse(page_url))
       page_url = response["location"] if response["location"].present?
 
       call_count += 1
-    end while response.is_a?(Net::HTTPRedirection)
+      break unless response.is_a?(Net::HTTPRedirection)
+    end
 
     @cid =
       page_url

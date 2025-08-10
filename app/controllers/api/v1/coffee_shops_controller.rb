@@ -29,7 +29,7 @@ class Api::V1::CoffeeShopsController < ApiController
   def show
     @premium_coffee_shops = premium_coffee_shops
 
-    @coffee_shop = CoffeeShop.find_by!(uuid: params[:id])
+    @coffee_shop = CoffeeShop.includes(:opening_hours).find_by!(uuid: params[:id])
   end
 
   private
