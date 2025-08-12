@@ -76,6 +76,7 @@ const FilterSidebar = ({
   ]
 
   const otherTags = [
+    { value: "roastery", label: "🔥 Roastery" },
     { value: "work-friendly", label: "🧑‍💻 Work Friendly" },
     { value: "early-bird", label: "☀️ Early Bird" },
     { value: "night-owl", label: "🌖 Night Owl" },
@@ -83,7 +84,6 @@ const FilterSidebar = ({
     { value: "mobile", label: "🚗 Mobile" },
     { value: "stall", label: "⛱ Stall" },
     { value: "home", label: "🏡 Home" },
-    { value: "tourism-malaysia", label: "🏝️ Tourism Malaysia" }
   ]
 
   // Configuration for filter visibility and behavior
@@ -95,7 +95,7 @@ const FilterSidebar = ({
       props: (state, handlers) => ({
         title: "Search",
         isOpen: true,
-        setIsOpen: () => {},
+        setIsOpen: () => { },
         count: state.keyword.trim() !== '' ? 1 : 0,
         children: (
           <FilterSearch
@@ -174,7 +174,7 @@ const FilterSidebar = ({
       props: (state, handlers) => ({
         title: "Collections",
         isOpen: true,
-        setIsOpen: () => {},
+        setIsOpen: () => { },
         count: state.selectedCollection ? 1 : 0,
         badgeLabel: state.selectedCollection
           ? state.collections.find(c => c.id === state.selectedCollection)?.name
