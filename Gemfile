@@ -39,6 +39,7 @@ gem "omniauth-facebook" # login using Facebook
 gem "omniauth-google-oauth2" # login using Google
 gem "omniauth-twitter" # login using Twitter
 gem "omniauth-rails_csrf_protection" # Migitate against CSRF in OmniAuth gem
+gem "rack-cors" # Enable CORS for API access
 gem "rails", "~> 8.0.1"
 gem "rails_cloudflare_turnstile", github: "petakopi/rails-cloudflare-turnstile", branch: "rails-v8" # Cloudflare Turnstile (captcha)
 gem "redis", "~> 5.0" # Use Redis adapter to run Action Cable in production

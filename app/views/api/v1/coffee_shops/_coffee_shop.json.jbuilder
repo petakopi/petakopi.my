@@ -33,3 +33,8 @@ json.opening_hours presenter.api_format
 if @include_distance && coffee_shop.respond_to?(:distance_in_km)
   json.distance_in_km coffee_shop.distance_in_km.round(1)
 end
+
+# Include tags
+json.tags coffee_shop.tags do |tag|
+  json.extract! tag, :id, :name, :slug
+end

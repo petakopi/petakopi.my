@@ -468,6 +468,9 @@ GEM
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.1.11)
+    rack-cors (3.0.0)
+      logger
+      rack (>= 3.0.14)
     rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
     rack-protection (4.1.1)
@@ -768,6 +771,7 @@ DEPENDENCIES
   pg (~> 1.1)
   pry
   puma (~> 6.0)
+  rack-cors
   rack-mini-profiler
   rails (~> 8.0.1)
   rails_cloudflare_turnstile!
