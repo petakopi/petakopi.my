@@ -10,8 +10,8 @@ json.lng coffee_shop.lng
 json.district coffee_shop.district
 json.state coffee_shop.state
 json.url main_coffee_shop_url(id: coffee_shop.slug)
-json.logo optimized_blob_url(asset: coffee_shop.logo, options: ["width=200"])
-json.cover_photo optimized_blob_url(asset: coffee_shop.cover_photo, options: ["width=400"])
+json.logo coffee_shop.logo.attached? ? optimized_blob_url(asset: coffee_shop.logo, options: ["width=200"]) : nil
+json.cover_photo coffee_shop.cover_photo.attached? ? optimized_blob_url(asset: coffee_shop.cover_photo, options: ["width=400"]) : nil
 json.rating coffee_shop.rating
 json.rating_count ActiveSupport::NumberHelper.number_to_delimited(coffee_shop.rating_count)
 json.updated_at coffee_shop.updated_at
@@ -25,9 +25,10 @@ end
 json.has_owner coffee_shop.owners.size.positive?
 json.is_premium @premium_coffee_shops.pluck(:slug).include?(coffee_shop.slug)
 
-# Opening hours using presenter - all logic handled in presenter
+# Business hours using presenter - Google My Business API compatible format
 presenter = OpeningHoursPresenter.new(coffee_shop.opening_hours)
-json.opening_hours presenter.api_format
+api_data = presenter.api_format
+json.business_hours api_data[:business_hours]
 
 # Include distance if it was calculated (for nearby coffee shops)
 if @include_distance && coffee_shop.respond_to?(:distance_in_km)

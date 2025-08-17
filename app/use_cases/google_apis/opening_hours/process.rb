@@ -38,15 +38,27 @@ class GoogleApis::OpeningHours::Process < Micro::Case
         {
           coffee_shop_id: coffee_shop.id,
           start_day: oh["open"]["day"],
-          start_time: oh["open"]["time"],
+          start_time: normalize_time_format(oh["open"]["time"]),
           close_day: oh["close"]["day"],
-          close_time: oh["close"]["time"]
+          close_time: normalize_time_format(oh["close"]["time"])
         }
       end
 
     return if hours.blank?
 
     OpeningHour.insert_all(hours)
+  end
+
+  # Convert Google time format to database integer format
+  # Examples: "0730" -> 730, "1730" -> 1730, "07:30" -> 730
+  def normalize_time_format(time_str)
+    return nil if time_str.nil?
+
+    # Remove any colons from the time string
+    normalized = time_str.to_s.delete(":")
+
+    # Convert to integer, removing leading zeros
+    normalized.to_i
   end
 
   def record_opening_hours_sync
