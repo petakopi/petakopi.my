@@ -66,7 +66,7 @@ group :development, :test do
   gem "dotenv-rails" # Load environment variables from .env file
   gem "factory_bot_rails" # Fixtures replacement
   gem "pry" # Debugging tool
-  gem "rspec-rails", "~> 6.1" # Test framework
+  gem "rspec-rails", "~> 8.0" # Test framework
   gem "standard" # ruby code linting
 end
 
