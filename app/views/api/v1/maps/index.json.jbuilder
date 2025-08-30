@@ -16,7 +16,7 @@ json.data do
         json.coordinates [shop.lng.to_f, shop.lat.to_f]
       end
       json.properties do
-        json.id shop.id
+        json.uuid shop.uuid
         json.name shop.name
         json.slug shop.slug
         json.url main_coffee_shop_url(id: shop.slug)

@@ -35,7 +35,7 @@ export const createGeoJSONFeatures = (shops) => {
       coordinates: [parseFloat(shop.lng), parseFloat(shop.lat)]
     },
     properties: {
-      id: shop.id,
+      uuid: shop.uuid,
       name: shop.name,
       address: shop.address || '',
       logo: shop.logo_url,

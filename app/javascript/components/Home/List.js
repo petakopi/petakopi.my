@@ -43,7 +43,7 @@ export default function List({ filters = {} }) {
     <div className="space-y-4">
       {coffeeShops.map((shop) => (
         <Link
-          key={shop.id}
+          key={shop.uuid}
           href={shop.url}
           className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
         >
