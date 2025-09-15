@@ -27,6 +27,18 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
 }
 
+// Helper function to check if distance value is valid for API requests
+function isValidDistance(distance) {
+  const isValid = distance !== null && distance !== undefined && distance !== 0 && !isNaN(distance) && distance > 0
+
+  // Debug logging to catch any invalid distance values
+  if (!isValid && distance !== null && distance !== undefined) {
+    console.warn('Invalid distance value detected:', distance, typeof distance)
+  }
+
+  return isValid
+}
+
 export default function Home({
   initialFilters = {},
   initialViewType = "card",
@@ -243,10 +255,10 @@ export default function Home({
       applyFiltersToUrl(url, currentFilters);
 
       // Add distance filter if set and location is available
-      if (everywhereDistance !== null && userLocation && everywhereDistance !== 0) {
-        url.searchParams.append('distance', everywhereDistance);
-        url.searchParams.append('lat', userLocation.latitude);
-        url.searchParams.append('lng', userLocation.longitude);
+      if (isValidDistance(everywhereDistance) && userLocation) {
+        url.searchParams.append('distance', String(everywhereDistance));
+        url.searchParams.append('lat', String(userLocation.latitude));
+        url.searchParams.append('lng', String(userLocation.longitude));
       }
 
       // Add page parameter
@@ -290,7 +302,7 @@ export default function Home({
     // Set filters state with a new object to ensure React detects the change
     setCurrentFilters({ ...actualFilters })
 
-    // Update distance filter if present
+    // Update distance filter if present and valid
     if (actualFilters.distance !== undefined) {
       setEverywhereDistance(actualFilters.distance);
     }
@@ -313,10 +325,10 @@ export default function Home({
         applyFiltersToUrl(url, actualFilters);
 
         // Add distance filter if set and location is available
-        if (actualFilters.distance !== null && userLocation && actualFilters.distance !== 0) {
-          url.searchParams.append('distance', actualFilters.distance);
-          url.searchParams.append('lat', userLocation.latitude);
-          url.searchParams.append('lng', userLocation.longitude);
+        if (isValidDistance(actualFilters.distance) && userLocation) {
+          url.searchParams.append('distance', String(actualFilters.distance));
+          url.searchParams.append('lat', String(userLocation.latitude));
+          url.searchParams.append('lng', String(userLocation.longitude));
         }
       }
 
