@@ -277,6 +277,5 @@ RSpec.describe "Api::V1::Reports", type: :request do
         }.not_to change(TelegramNotifierWorker.jobs, :size)
       end
     end
-
   end
 end

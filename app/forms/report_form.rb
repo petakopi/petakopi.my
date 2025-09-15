@@ -67,4 +67,3 @@ class ReportForm
     ].join("\n")
   end
 end
-

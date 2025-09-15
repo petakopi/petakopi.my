@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": ["message", "uuid"],
+  "properties": {
+    "message": {
+      "type": "string",
+      "description": "Success message confirming the coffee shop was submitted"
+    },
+    "uuid": {
+      "type": "string",
+      "description": "The coffee shop's UUID for reference"
+    }
+  },
+  "additionalProperties": false
+}

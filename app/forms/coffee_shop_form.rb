@@ -1,6 +1,10 @@
 class CoffeeShopForm < CoffeeShop
+  after_initialize :ensure_urls_initialized
   before_validation :set_location
+  before_validation :set_defaults, on: :create
   validate :check_for_duplicate_coffee_shop, on: :create
+
+  validates :name, presence: true, length: {minimum: 3}
 
   attr_accessor :tmp_lat, :tmp_lng
 
@@ -22,6 +26,19 @@ class CoffeeShopForm < CoffeeShop
     return if tmp_lat.blank? || tmp_lng.blank?
 
     self.location = "POINT(#{tmp_lng} #{tmp_lat})"
+  end
+
+  def ensure_urls_initialized
+    self.urls = {} if urls.nil?
+  end
+
+  def set_defaults
+    # Also populate the store accessor fields
+    self.facebook ||= ""
+    self.instagram ||= ""
+    self.tiktok ||= ""
+    self.twitter ||= ""
+    self.whatsapp ||= ""
   end
 
   def check_for_duplicate_coffee_shop

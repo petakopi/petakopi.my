@@ -30,9 +30,9 @@ RSpec::Matchers.define :match_json_schema do |schema_name|
   end
 
   failure_message do |response|
-    "Expected response to match JSON schema '#{schema_name}':\n" +
-    "Validation errors:\n#{@validation_errors.join("\n")}\n\n" +
-    "Response body:\n#{JSON.pretty_generate(JSON.parse(response.body))}"
+    "Expected response to match JSON schema '#{schema_name}':\n" \
+      "Validation errors:\n#{@validation_errors.join("\n")}\n\n" \
+      "Response body:\n#{JSON.pretty_generate(JSON.parse(response.body))}"
   end
 
   failure_message_when_negated do |response|

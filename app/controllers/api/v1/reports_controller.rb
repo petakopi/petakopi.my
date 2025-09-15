@@ -22,17 +22,4 @@ class Api::V1::ReportsController < ApiController
   def report_params
     params.permit(:coffee_shop_id, :email, :message)
   end
-
-  # Format errors following Rails API conventions
-  # Supports both field-specific errors and base errors
-  def format_errors(errors)
-    formatted = {}
-
-    # Group errors by field
-    errors.group_by(&:attribute).each do |field, field_errors|
-      formatted[field] = field_errors.map(&:message)
-    end
-
-    formatted
-  end
 end
