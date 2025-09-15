@@ -80,6 +80,8 @@ GEM
       activemodel (= 8.0.1)
       activesupport (= 8.0.1)
       timeout (>= 0.4.0)
+    activerecord-cte (0.4.0)
+      activerecord
     activerecord_cursor_paginate (0.3.0)
       activerecord (>= 7.0)
     activestorage (8.0.1)
@@ -730,6 +732,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_decorator
+  activerecord-cte
   activerecord-postgis-adapter!
   activerecord_cursor_paginate
   ahoy_matey

@@ -16,7 +16,7 @@ class CoffeeShopsListQuery
     @relation = filter_by_rating
     @relation = filter_by_rating_count
     @relation = filter_by_collection
-
+    @relation = apply_distinct_if_needed
     @relation = reorder
 
     @relation
@@ -57,7 +57,6 @@ class CoffeeShopsListQuery
     return relation if params[:tags].blank?
 
     slugs = params[:tags].split(",")
-
     relation.joins(:tags).where(tags: {slug: slugs})
   end
 
@@ -86,27 +85,17 @@ class CoffeeShopsListQuery
       current_day, current_day, current_time_db_format, current_time_db_format,
       current_day, current_day, current_time_db_format,
       current_day, current_day, current_time_db_format
-    ).distinct
+    )
   end
 
   def filter_by_distance
-    return relation if missing_location_params?
+    return relation unless has_location_params?
 
-    lat = params[:lat].to_f
-    lng = params[:lng].to_f
-    distance_in_km = params[:distance].to_i
-
-    # Create a point from the provided coordinates
-    point = "POINT(#{lng} #{lat})"
-
-    # Filter coffee shops within the specified distance and calculate distance in one go
-    relation.where(
-      "ST_DWithin(location, ST_SetSRID(ST_GeomFromText(?), 4326), ?)",
-      point,
-      distance_in_km * 1000 # Convert km to meters for ST_DWithin
-    ).select(
-      "coffee_shops.*, " \
-      "ST_Distance(location, ST_SetSRID(ST_GeomFromText('#{point}'), 4326)) / 1000 as distance_in_km"
+    DistanceFilterQuery.call(
+      relation: relation,
+      lat: params[:lat],
+      lng: params[:lng],
+      distance_in_km: params[:distance]
     )
   end
 
@@ -141,10 +130,8 @@ class CoffeeShopsListQuery
 
   def filter_by_collection
     return relation if params[:collection_id].blank?
-    return relation unless current_user # Return all if no user is logged in
+    return relation unless current_user
 
-    # Join with bookmarks and bookmark_collections to find coffee shops in the selected collection
-    # Only show collections that belong to the current user
     relation.joins(bookmarks: :bookmark_collections)
       .where(
         bookmark_collections: {
@@ -152,16 +139,12 @@ class CoffeeShopsListQuery
           user_id: current_user.id
         }
       )
-      .distinct
   end
 
   def reorder
-    if !missing_location_params?
-      # When distance filtering is active, order by the calculated distance_in_km column
-      # Use Arel.sql to ensure the column name is properly quoted
+    if has_location_params?
       relation.order(Arel.sql("distance_in_km ASC"))
     elsif params[:keyword].present? && params[:state].present?
-      # Default ordering for other cases
       relation.order(:name, :district)
     elsif params[:keyword].present?
       relation.order(:name)
@@ -172,10 +155,27 @@ class CoffeeShopsListQuery
     end
   end
 
-  def missing_location_params?
-    params[:lat].blank? ||
-      params[:lng].blank? ||
-      params[:distance].blank? ||
-      params[:distance] == "undefined"
+  def apply_distinct_if_needed
+    # Apply distinct only if we have joins and no distance filtering
+    # Distance filtering always handles its own distinct logic via CTE
+    if relation.respond_to?(:joins_values) && relation.joins_values.any? && !has_location_params?
+      relation.distinct
+    else
+      relation
+    end
+  end
+
+  def has_location_params?
+    params[:lat].present? &&
+      params[:lng].present? &&
+      params[:distance].present? &&
+      valid_distance?
+  end
+
+  def valid_distance?
+    return false unless params[:distance].present?
+
+    distance = params[:distance].to_i
+    distance > 0
   end
 end

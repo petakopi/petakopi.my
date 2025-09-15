@@ -5,6 +5,7 @@ ruby "3.4.1"
 
 gem "active_decorator" # Decorator
 gem "activerecord_cursor_paginate" # Cursor pagination
+gem "activerecord-cte" # CTE support for ActiveRecord
 gem "activerecord-postgis-adapter", github: "rgeo/activerecord-postgis-adapter", branch: "master" # PostGIS adapter for ActiveRecord
 gem "ahoy_matey" # analytics
 gem "bugsnag" # Error monitoring

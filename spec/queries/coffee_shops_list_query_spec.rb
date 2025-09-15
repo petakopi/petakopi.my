@@ -1,12 +1,39 @@
 require "rails_helper"
 
 RSpec.describe CoffeeShopsListQuery do
-  describe "#call" do
-    let!(:coffee_shop1) { create(:coffee_shop, name: "Awesome Coffee", state: "Selangor", district: "Petaling") }
-    let!(:coffee_shop2) { create(:coffee_shop, name: "Best Coffee", state: "Kuala Lumpur", district: "Bukit Bintang") }
-    let!(:coffee_shop3) { create(:coffee_shop, name: "Cool Coffee", state: "Selangor", district: "Klang") }
-    let!(:unpublished_shop) { create(:coffee_shop, name: "Hidden Coffee", status: :unpublished) }
+  let!(:coffee_shop1) do
+    create(
+      :coffee_shop,
+      name: "Awesome Coffee",
+      state: "Selangor",
+      district: "Petaling"
+    )
+  end
+  let!(:coffee_shop2) do
+    create(
+      :coffee_shop,
+      name: "Best Coffee",
+      state: "Kuala Lumpur",
+      district: "Bukit Bintang"
+    )
+  end
+  let!(:coffee_shop3) do
+    create(
+      :coffee_shop,
+      name: "Cool Coffee",
+      state: "Selangor",
+      district: "Klang"
+    )
+  end
+  let!(:unpublished_shop) do
+    create(
+      :coffee_shop,
+      name: "Hidden Coffee",
+      status: :unpublished
+    )
+  end
 
+  describe "#call" do
     describe "filter_by_locations" do
       it "returns all coffee shops when no location filters are applied" do
         result = described_class.call(params: {}).status_published
@@ -299,6 +326,46 @@ RSpec.describe CoffeeShopsListQuery do
 
         expect(result).to include(coffee_shop1)
         expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)
+      end
+
+      it "handles the problematic query with tags, distance, and opening hours without errors" do
+        # This test case reproduces the issue where combining tags + distance caused
+        # "column distance_in_km does not exist" error due to pagination DISTINCT operations
+        result = described_class.call(params: {
+          tags: "work-friendly",
+          opened: "true",
+          distance: 20,
+          lat: 3.1578,
+          lng: 101.7117
+        }).status_published
+
+        # Should not raise an error and should return correct results
+        expect { result.to_a }.not_to raise_error
+        expect(result).to include(coffee_shop1)
+        expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)
+
+        # Verify distance_in_km is available
+        expect(result.first.distance_in_km).to be_present
+      end
+
+      it "preserves distance ordering when combined with multiple filters" do
+        # Set up another coffee shop with the tag but further away
+        coffee_shop2.tags << tag1
+        coffee_shop2.update(location: "POINT(101.7117 3.1478)") # ~1.1km from search point
+        create(:opening_hour, :same_day, coffee_shop: coffee_shop2)
+
+        result = described_class.call(params: {
+          tags: "work-friendly",
+          opened: "true",
+          distance: 20,
+          lat: 3.1578,
+          lng: 101.7117
+        }).status_published
+
+        # Both shops should be included and ordered by distance
+        shops = result.to_a
+        expect(shops).to eq([coffee_shop1, coffee_shop2])
+        expect(shops.first.distance_in_km).to be < shops.second.distance_in_km
       end
     end
 
