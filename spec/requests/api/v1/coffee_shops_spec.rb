@@ -378,6 +378,31 @@ RSpec.describe "API::V1::CoffeeShops", type: :request do
       end
     end
 
+    context "when checking query performance" do
+      it "loads coffee shops with opening hours successfully" do
+        # Create coffee shops with opening hours
+        3.times do |i|
+          shop = create(:coffee_shop, name: "Test Shop #{i}", status: :published)
+          create(:opening_hour, :same_day, coffee_shop: shop)
+        end
+
+        # Test that the API works correctly with opening hours
+        get "/api/v1/coffee_shops"
+
+        expect(response).to have_http_status(:ok)
+        json_response = JSON.parse(response.body)
+
+        expect(json_response["data"]["coffee_shops"]).to be_present
+
+        # Verify that business hours are included in the response
+        json_response["data"]["coffee_shops"].each do |coffee_shop|
+          expect(coffee_shop).to have_key("business_hours")
+          expect(coffee_shop["business_hours"]).to be_a(Hash)
+          expect(coffee_shop["business_hours"]).to have_key("periods")
+        end
+      end
+    end
+
     context "when handling invalid distance parameters" do
       it "handles distance=undefined without errors" do
         get "/api/v1/coffee_shops", params: {

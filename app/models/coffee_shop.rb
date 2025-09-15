@@ -28,6 +28,7 @@ class CoffeeShop < ApplicationRecord
     includes(
       :tags,
       :owners,
+      :opening_hours,
       logo_attachment: :blob,
       cover_photo_attachment: :blob
     )
