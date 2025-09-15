@@ -330,6 +330,9 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.10.1)
+    json-schema (6.0.0)
+      addressable (~> 2.8)
+      bigdecimal (~> 3.1)
     jwt (2.10.1)
       base64
     kamal (2.7.0)
@@ -759,6 +762,7 @@ DEPENDENCIES
   image_optim_pack
   image_processing (>= 1.2)
   jbuilder
+  json-schema
   kamal
   lograge
   memory_profiler

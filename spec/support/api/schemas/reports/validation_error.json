@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "required": ["errors"],
+  "properties": {
+    "errors": {
+      "type": "object",
+      "description": "Validation errors grouped by field",
+      "patternProperties": {
+        "^[a-z_]+$": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

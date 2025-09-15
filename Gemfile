@@ -66,6 +66,7 @@ gem "uuid7" # UUID generator
 group :development, :test do
   gem "dotenv-rails" # Load environment variables from .env file
   gem "factory_bot_rails" # Fixtures replacement
+  gem "json-schema" # JSON schema validation for API testing
   gem "pry" # Debugging tool
   gem "rspec-rails", "~> 6.1" # Test framework
   gem "standard" # ruby code linting

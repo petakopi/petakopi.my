@@ -15,5 +15,13 @@ FactoryBot.define do
         whatsapp: ""
       }
     }
+
+    trait :published do
+      status { :published }
+    end
+
+    trait :closed do
+      status { :closed }
+    end
   end
 end

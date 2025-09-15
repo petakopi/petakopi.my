@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "required": ["message"],
+  "properties": {
+    "message": {
+      "type": "string",
+      "description": "Success message confirming the report was received"
+    }
+  },
+  "additionalProperties": false
+}

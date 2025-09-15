@@ -48,6 +48,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :coffee_shops, only: [:index, :show]
       resources :maps, only: [:index]
+      resources :reports, only: [:create]
       get "filters", to: "filters#index"
     end
   end
