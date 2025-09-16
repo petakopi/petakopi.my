@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_16_225452) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_16_230614) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -233,16 +233,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_16_225452) do
     t.index ["name", "kind"], name: "index_geo_locations_on_name_and_kind"
   end
 
-  create_table "google_locations", force: :cascade do |t|
-    t.bigint "coffee_shop_id", null: false
-    t.string "place_id"
-    t.float "lat"
-    t.float "lng"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["coffee_shop_id"], name: "index_google_locations_on_coffee_shop_id"
-  end
-
   create_table "locations", force: :cascade do |t|
     t.string "country"
     t.string "state"
@@ -331,6 +321,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_16_225452) do
   add_foreign_key "favourites", "users"
   add_foreign_key "feedbacks", "coffee_shops"
   add_foreign_key "feedbacks", "users"
-  add_foreign_key "google_locations", "coffee_shops"
   add_foreign_key "opening_hours", "coffee_shops"
 end

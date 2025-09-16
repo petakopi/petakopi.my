@@ -50,7 +50,6 @@ class CoffeeShop < ApplicationRecord
 
   has_one_attached :logo
   has_one_attached :cover_photo
-  has_one :google_location, dependent: :destroy
 
   validates :slug, presence: true
   validates :slug, uniqueness: true
