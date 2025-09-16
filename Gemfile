@@ -36,6 +36,7 @@ gem "paper_trail" # Track changes to the model
 gem "pg", "~> 1.1" # Use postgresql as the database for Active Record
 gem "puma", "~> 6.0" # Use the Puma web server [https://github.com/puma/puma]
 gem "omniauth" # multi-provider authentication
+gem "omniauth-apple", github: "bvogel/omniauth-apple", branch: "fix/apple-session-handling" # Login using Apple
 gem "omniauth-facebook" # login using Facebook
 gem "omniauth-google-oauth2" # login using Google
 gem "omniauth-twitter" # login using Twitter
@@ -64,6 +65,7 @@ gem "vite_rails" # Vite integration
 gem "uuid7" # UUID generator
 
 group :development, :test do
+  gem "climate_control" # Manage environment variables in tests
   gem "dotenv-rails" # Load environment variables from .env file
   gem "factory_bot_rails" # Fixtures replacement
   gem "json-schema" # JSON schema validation for API testing

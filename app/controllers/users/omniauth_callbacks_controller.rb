@@ -1,6 +1,8 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  skip_before_action :verify_authenticity_token
+
   def failure
-    redirect_to root_path
+    redirect_to root_path, alert: "Authentication failed, please try again."
   end
 
   def omniauth
@@ -14,16 +16,15 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         set_flash_message(:notice, :success, kind: provider)
       end
     else
-      session["devise.twitter_data"] = request.env["omniauth.auth"].except("extra")
-
       redirect_to(
-        new_user_registration_path,
+        root_path,
         alert: @user.errors.full_messages.join("\n")
       )
     end
+  rescue
+    redirect_to root_path, alert: "Authentication failed, please try again."
   end
 
-  alias_method :facebook, :omniauth
-  alias_method :twitter, :omniauth
+  alias_method :apple, :omniauth
   alias_method :google_oauth2, :omniauth
 end

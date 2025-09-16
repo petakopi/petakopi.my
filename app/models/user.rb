@@ -5,7 +5,7 @@ class User < ApplicationRecord
     :registerable,
     :rememberable,
     :validatable,
-    omniauth_providers: %i[facebook twitter google_oauth2]
+    omniauth_providers: %i[apple google_oauth2]
 
   has_one_attached :avatar
 

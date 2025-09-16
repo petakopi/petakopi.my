@@ -1,4 +1,13 @@
 GIT
+  remote: https://github.com/bvogel/omniauth-apple.git
+  revision: 6d227a268b68bb50fedd227b3f6449c7ddd0f3de
+  branch: fix/apple-session-handling
+  specs:
+    omniauth-apple (1.3.0)
+      json-jwt
+      omniauth-oauth2
+
+GIT
   remote: https://github.com/kjvarga/sitemap_generator.git
   revision: fecf7d2da6e222895a8076422e0442d40397dba7
   specs:
@@ -105,6 +114,7 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    aes_key_wrap (1.1.0)
     ahoy_matey (5.3.0)
       activesupport (>= 7)
       device_detector (>= 1)
@@ -131,6 +141,7 @@ GEM
     bcrypt_pbkdf (1.1.1)
     benchmark (0.4.1)
     bigdecimal (3.2.2)
+    bindata (2.5.1)
     bindex (0.8.1)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
@@ -149,6 +160,7 @@ GEM
     celluloid (0.18.0)
       timers (~> 4)
     chartkick (5.1.4)
+    climate_control (1.2.0)
     coderay (1.1.3)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.3)
@@ -233,6 +245,8 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
+    faraday-follow_redirects (0.3.0)
+      faraday (>= 1, < 3)
     faraday-multipart (1.1.0)
       multipart-post (~> 2.0)
     faraday-net_http (3.4.0)
@@ -330,6 +344,13 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.10.1)
+    json-jwt (1.17.0)
+      activesupport (>= 4.2)
+      aes_key_wrap
+      base64
+      bindata
+      faraday (~> 2.0)
+      faraday-follow_redirects
     json-schema (6.0.0)
       addressable (~> 2.8)
       bigdecimal (~> 3.1)
@@ -746,6 +767,7 @@ DEPENDENCIES
   capybara
   celluloid
   chartkick
+  climate_control
   connection_pool
   devise
   dotenv-rails
@@ -769,6 +791,7 @@ DEPENDENCIES
   newrelic_rpm
   nokogiri
   omniauth
+  omniauth-apple!
   omniauth-facebook
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
