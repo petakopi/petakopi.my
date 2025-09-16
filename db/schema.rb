@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_06_073356) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_16_225452) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -149,17 +149,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_06_073356) do
     t.datetime "updated_at", null: false
     t.index ["coffee_shop_id"], name: "index_bookmarks_on_coffee_shop_id"
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
-  end
-
-  create_table "check_ins", force: :cascade do |t|
-    t.bigint "coffee_shop_id", null: false
-    t.bigint "user_id", null: false
-    t.decimal "lat"
-    t.decimal "lng"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["coffee_shop_id"], name: "index_check_ins_on_coffee_shop_id"
-    t.index ["user_id"], name: "index_check_ins_on_user_id"
   end
 
   create_table "coffee_shop_owners", force: :cascade do |t|
@@ -332,8 +321,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_06_073356) do
   add_foreign_key "bookmark_collections", "collections"
   add_foreign_key "bookmarks", "coffee_shops"
   add_foreign_key "bookmarks", "users"
-  add_foreign_key "check_ins", "coffee_shops"
-  add_foreign_key "check_ins", "users"
   add_foreign_key "coffee_shop_owners", "coffee_shops"
   add_foreign_key "coffee_shop_owners", "users"
   add_foreign_key "coffee_shop_tags", "coffee_shops"

@@ -16,7 +16,6 @@ class User < ApplicationRecord
   has_many :submitted_coffee_shops, class_name: "CoffeeShop", foreign_key: "submitter_user_id"
   has_many :coffee_shop_owners
   has_many :coffee_shops, through: :coffee_shop_owners
-  has_many :check_ins, dependent: :destroy
   has_many :feedbacks
 
   validates :username, uniqueness: true
@@ -46,14 +45,5 @@ class User < ApplicationRecord
     return if avatar.filename.to_s.match?(/#{id}-[0-9]+/)
 
     ProcessAvatarWorker.perform_in(2.minutes, id)
-  end
-
-  def checked_in?(coffee_shop)
-    check_ins
-      .where(
-        coffee_shop: coffee_shop,
-        created_at: Time.current.beginning_of_day..Time.current.end_of_day
-      )
-      .exists?
   end
 end

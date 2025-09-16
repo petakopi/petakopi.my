@@ -58,22 +58,6 @@ module CoffeeShopDecorator
     raw "#{district_link}, #{state_link}"
   end
 
-  def check_ins
-    last_7_days_check_ins =
-      CheckIn.includes(:user).where(created_at: 7.days.ago.., coffee_shop: self)
-
-    {
-      count:
-        last_7_days_check_ins.count,
-      users:
-        last_7_days_check_ins
-          .order(created_at: :desc)
-          .limit(4)
-          .map(&:user)
-          .uniq { |u| u.id }
-    }
-  end
-
   def today_hours
     @today_hours ||= begin
       current_day = Date.today.wday
