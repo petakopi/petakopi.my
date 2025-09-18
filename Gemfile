@@ -14,11 +14,13 @@ gem "celluloid" # Actor-based concurrent object framework for Ruby
 gem "connection_pool" # redis connection pooling
 gem "chartkick" # create js charts
 gem "devise" # authentication
+gem "devise-jwt" # JWT integration for Devise
 gem "dry-validation" # validation
 gem "dry-monads" # monads
 gem "foreman" # process manager
 gem "geocoder" # geocoding for ahoy
 gem "google-apis-sheets_v4", require: false # Google API client for Sheets
+gem "google-id-token" # Google ID token verification
 gem "groupdate" # active record helper to group by date/time
 gem "hiredis" # redis adapter
 gem "http" # http client
@@ -27,6 +29,7 @@ gem "image_optim" # Image optimization
 gem "image_optim_pack" # Image optimization
 gem "image_processing", ">= 1.2" # Image processor
 gem "jbuilder" # Build JSON APIs with ease [https://github.com/rails/jbuilder]
+gem "jwt" # JWT implementation for Ruby
 gem "kamal", require: false # Deploy with docker
 gem "lograge" # Log formatter
 gem "newrelic_rpm" # New Relic monitoring

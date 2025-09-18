@@ -1,10 +1,12 @@
 class User < ApplicationRecord
   devise :database_authenticatable,
+    :jwt_authenticatable,
     :omniauthable,
     :recoverable,
     :registerable,
     :rememberable,
     :validatable,
+    jwt_revocation_strategy: JwtDenylist,
     omniauth_providers: %i[apple google_oauth2]
 
   has_one_attached :avatar
@@ -23,6 +25,8 @@ class User < ApplicationRecord
   validates :username,
     format: {with: /\A[a-z0-9]+\z/, message: "'%{value}' should only contain alphabets (lower case) and numbers"}
   validates :username, length: {minimum: 5}
+
+  before_validation :set_uuid
 
   after_save :process_avatar
 
@@ -45,5 +49,13 @@ class User < ApplicationRecord
     return if avatar.filename.to_s.match?(/#{id}-[0-9]+/)
 
     ProcessAvatarWorker.perform_in(2.minutes, id)
+  end
+
+  private
+
+  def set_uuid
+    return if uuid.present?
+
+    self.uuid = UUID7.generate
   end
 end

@@ -50,6 +50,13 @@ Rails.application.routes.draw do
       resources :maps, only: [:index]
       resources :reports, only: [:create]
       get "filters", to: "filters#index"
+
+      # Mobile authentication endpoints
+      post "auth/login", to: "authentication#login"
+      delete "auth/logout", to: "authentication#logout"
+
+      # Protected user endpoints
+      get "account/profile", to: "users#profile"
     end
   end
 

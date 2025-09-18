@@ -21,7 +21,7 @@ RSpec.describe OmniauthHandler do
 
         user = User.last
         expect(user.email).to eq("test@example.com")
-        expect(user.username).to start_with("user")
+        expect(user.username).to eq("test12345")
       end
 
       it "creates an auth provider record" do

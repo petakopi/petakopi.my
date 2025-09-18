@@ -319,4 +319,16 @@ Devise.setup do |config|
   end
 
   config.remember_for = 1.year
+
+  # ==> Configuration for JWT
+  config.jwt do |jwt|
+    jwt.secret = ENV["SECRET_KEY_BASE"]
+    jwt.dispatch_requests = [
+      ["POST", %r{^/api/v1/auth}]
+    ]
+    jwt.revocation_requests = [
+      ["DELETE", %r{^/api/v1/auth/logout}]
+    ]
+    jwt.expiration_time = 30.days.to_i
+  end
 end

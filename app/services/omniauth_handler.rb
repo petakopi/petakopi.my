@@ -40,7 +40,7 @@ class OmniauthHandler
       User.create(
         email: email,
         password: Devise.friendly_token[0, 20],
-        username: "user#{Time.current.to_i}"
+        username: UsernameGeneratorService.call(email: email)
       )
   end
 
