@@ -134,8 +134,8 @@ class CoffeeShopsListQuery
 
     relation.joins(bookmarks: :bookmark_collections)
       .where(
-        bookmarks: { user_id: current_user.id },
-        bookmark_collections: { collection_id: params[:collection_id] }
+        bookmarks: {user_id: current_user.id},
+        bookmark_collections: {collection_id: params[:collection_id]}
       )
   end
 

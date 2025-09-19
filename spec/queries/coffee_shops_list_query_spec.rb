@@ -466,7 +466,7 @@ RSpec.describe CoffeeShopsListQuery do
 
       it "returns only coffee shops in the specified collection for the current user" do
         result = described_class.call(
-          params: { collection_id: collection.id },
+          params: {collection_id: collection.id},
           current_user: user
         ).status_published
 
@@ -477,7 +477,7 @@ RSpec.describe CoffeeShopsListQuery do
       it "returns empty when collection doesn't belong to current user" do
         other_user = create(:user)
         result = described_class.call(
-          params: { collection_id: collection.id },
+          params: {collection_id: collection.id},
           current_user: other_user
         ).status_published
 
@@ -486,7 +486,7 @@ RSpec.describe CoffeeShopsListQuery do
 
       it "returns empty when collection_id doesn't exist" do
         result = described_class.call(
-          params: { collection_id: 99999 },
+          params: {collection_id: 99999},
           current_user: user
         ).status_published
 
@@ -495,7 +495,7 @@ RSpec.describe CoffeeShopsListQuery do
 
       it "returns all coffee shops when no current_user is provided" do
         result = described_class.call(
-          params: { collection_id: collection.id },
+          params: {collection_id: collection.id},
           current_user: nil
         ).status_published
 
@@ -525,14 +525,14 @@ RSpec.describe CoffeeShopsListQuery do
           # This test ensures we fixed the "column bookmark_collections.user_id does not exist" error
           expect {
             described_class.call(
-              params: { collection_id: collection.id },
+              params: {collection_id: collection.id},
               current_user: user
             ).status_published.to_a
           }.not_to raise_error
 
           # And verify the correct data is returned
           result = described_class.call(
-            params: { collection_id: collection.id },
+            params: {collection_id: collection.id},
             current_user: user
           ).status_published
 

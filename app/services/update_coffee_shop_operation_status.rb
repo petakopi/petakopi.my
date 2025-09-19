@@ -39,7 +39,7 @@ class UpdateCoffeeShopOperationStatus
   private
 
   def sheet_name
-    Date.today.iso8601
+    Time.current.to_date.iso8601
   end
 
   def place_id

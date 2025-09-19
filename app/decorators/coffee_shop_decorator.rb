@@ -60,7 +60,7 @@ module CoffeeShopDecorator
 
   def today_hours
     @today_hours ||= begin
-      current_day = Date.today.wday
+      current_day = Time.current.wday
       opening_hours.select do |h|
         h.start_day == current_day
       end.sort_by(&:start_time)
