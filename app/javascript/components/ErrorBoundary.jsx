@@ -1,5 +1,5 @@
-import React from 'react'
-import { useQueryErrorResetBoundary } from '@tanstack/react-query'
+import React from "react"
+import { useQueryErrorResetBoundary } from "@tanstack/react-query"
 
 /**
  * Error boundary component for React Query errors
@@ -17,13 +17,18 @@ class ErrorBoundaryClass extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('Error boundary caught error:', error, errorInfo)
+    console.error("Error boundary caught error:", error, errorInfo)
   }
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback?.(this.state.error, this.props.reset) || (
-        <DefaultErrorFallback error={this.state.error} reset={this.props.reset} />
+      return (
+        this.props.fallback?.(this.state.error, this.props.reset) || (
+          <DefaultErrorFallback
+            error={this.state.error}
+            reset={this.props.reset}
+          />
+        )
       )
     }
 
@@ -43,7 +48,12 @@ class ErrorBoundaryClass extends React.Component {
 const DefaultErrorFallback = ({ error, reset }) => (
   <div className="p-8 text-center bg-red-50 border border-red-200 rounded-lg">
     <div className="text-red-600 mb-4">
-      <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg
+        className="mx-auto h-12 w-12"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -58,7 +68,7 @@ const DefaultErrorFallback = ({ error, reset }) => (
     </h3>
 
     <p className="text-gray-600 mb-4">
-      {error?.message || 'An unexpected error occurred'}
+      {error?.message || "An unexpected error occurred"}
     </p>
 
     {reset && (
@@ -88,10 +98,12 @@ export const QueryErrorBoundary = ({ children, fallback }) => {
 /**
  * Simple error message component for query errors
  */
-export const QueryError = ({ error, retry, className = '' }) => (
-  <div className={`p-4 text-center bg-red-50 border border-red-200 rounded ${className}`}>
+export const QueryError = ({ error, retry, className = "" }) => (
+  <div
+    className={`p-4 text-center bg-red-50 border border-red-200 rounded ${className}`}
+  >
     <p className="text-red-600 mb-2">
-      {error?.message || 'Failed to load data'}
+      {error?.message || "Failed to load data"}
     </p>
 
     {retry && (
@@ -108,16 +120,18 @@ export const QueryError = ({ error, retry, className = '' }) => (
 /**
  * Loading spinner component
  */
-export const QuerySpinner = ({ size = 'medium', className = '' }) => {
+export const QuerySpinner = ({ size = "medium", className = "" }) => {
   const sizeClasses = {
-    small: 'h-4 w-4',
-    medium: 'h-8 w-8',
-    large: 'h-12 w-12',
+    small: "h-4 w-4",
+    medium: "h-8 w-8",
+    large: "h-12 w-12",
   }
 
   return (
     <div className={`flex justify-center items-center ${className}`}>
-      <div className={`animate-spin rounded-full border-2 border-brown-200 border-t-brown-600 ${sizeClasses[size]}`} />
+      <div
+        className={`animate-spin rounded-full border-2 border-brown-200 border-t-brown-600 ${sizeClasses[size]}`}
+      />
     </div>
   )
 }

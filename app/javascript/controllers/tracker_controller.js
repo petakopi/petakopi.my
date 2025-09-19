@@ -9,6 +9,10 @@ export default class extends Controller {
   }
 
   track(event) {
-    ahoy.track("Click Link", {id: this.idValue, type: this.typeValue, url: this.urlValue})
+    ahoy.track("Click Link", {
+      id: this.idValue,
+      type: this.typeValue,
+      url: this.urlValue,
+    })
   }
 }

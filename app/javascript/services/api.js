@@ -3,16 +3,16 @@
  * Separated from React Query hooks for better testability
  */
 
-const API_BASE = '/api/v1'
+const API_BASE = "/api/v1"
 
 // Helper to build URLs with query parameters
 const buildApiUrl = (endpoint, params = {}) => {
   const url = new URL(`${API_BASE}${endpoint}`, window.location.origin)
 
   Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null && value !== "") {
       if (Array.isArray(value)) {
-        value.forEach(v => url.searchParams.append(`${key}[]`, String(v)))
+        value.forEach((v) => url.searchParams.append(`${key}[]`, String(v)))
       } else {
         url.searchParams.append(key, String(value))
       }
@@ -26,7 +26,7 @@ const buildApiUrl = (endpoint, params = {}) => {
 const apiCall = async (url, options = {}) => {
   const response = await fetch(url, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...options.headers,
     },
     ...options,
@@ -53,12 +53,12 @@ const apiCall = async (url, options = {}) => {
 // ==================== COFFEE SHOPS ====================
 
 export const fetchCoffeeShops = async (params = {}) => {
-  const url = buildApiUrl('/coffee_shops', params)
+  const url = buildApiUrl("/coffee_shops", params)
   const data = await apiCall(url)
 
   // Validate response structure
   if (!data.data?.coffee_shops) {
-    throw new Error('Invalid response format: missing coffee_shops data')
+    throw new Error("Invalid response format: missing coffee_shops data")
   }
 
   return data.data // Return the nested data object
@@ -70,9 +70,9 @@ export const fetchCoffeeShop = async (id) => {
 }
 
 export const createCoffeeShop = async (coffeeShopData) => {
-  const url = buildApiUrl('/coffee_shops')
+  const url = buildApiUrl("/coffee_shops")
   return apiCall(url, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(coffeeShopData),
   })
 }
@@ -80,28 +80,28 @@ export const createCoffeeShop = async (coffeeShopData) => {
 // ==================== FILTERS ====================
 
 export const fetchStates = async () => {
-  const url = buildApiUrl('/filters', { section: 'states' })
+  const url = buildApiUrl("/filters", { section: "states" })
   return apiCall(url)
 }
 
 export const fetchDistricts = async (state) => {
   if (!state) return []
 
-  const url = buildApiUrl('/filters', { section: 'districts', state })
+  const url = buildApiUrl("/filters", { section: "districts", state })
   return apiCall(url)
 }
 
 export const fetchTags = async () => {
-  const url = buildApiUrl('/filters', { section: 'tags' })
+  const url = buildApiUrl("/filters", { section: "tags" })
   return apiCall(url)
 }
 
 // ==================== REPORTS ====================
 
 export const submitReport = async (reportData) => {
-  const url = buildApiUrl('/reports')
+  const url = buildApiUrl("/reports")
   return apiCall(url, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(reportData),
   })
 }

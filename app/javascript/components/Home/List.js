@@ -1,42 +1,42 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "@inertiajs/inertia-react";
-import { applyFiltersToUrl } from "../../utils/filters";
+import React, { useState, useEffect } from "react"
+import { Link } from "@inertiajs/inertia-react"
+import { applyFiltersToUrl } from "../../utils/filters"
 
-const MAPS_API_URL = "/api/v1/maps";
+const MAPS_API_URL = "/api/v1/maps"
 
 export default function List({ filters = {} }) {
-  const [coffeeShops, setCoffeeShops] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [coffeeShops, setCoffeeShops] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchCoffeeShops = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
         // Build URL with filters
-        const url = new URL(MAPS_API_URL, window.location.origin);
+        const url = new URL(MAPS_API_URL, window.location.origin)
 
         // Apply filters using the shared function
-        applyFiltersToUrl(url, filters);
+        applyFiltersToUrl(url, filters)
 
-        const response = await fetch(url);
-        const { data } = await response.json();
-        setCoffeeShops(data.coffee_shops);
+        const response = await fetch(url)
+        const { data } = await response.json()
+        setCoffeeShops(data.coffee_shops)
       } catch (error) {
-        console.error("Error fetching coffee shops:", error);
+        console.error("Error fetching coffee shops:", error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchCoffeeShops();
-  }, [filters]);
+    fetchCoffeeShops()
+  }, [filters])
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
       </div>
-    );
+    )
   }
 
   return (
@@ -56,12 +56,14 @@ export default function List({ filters = {} }) {
               />
             )}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">{shop.name}</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                {shop.name}
+              </h3>
               <p className="text-sm text-gray-600">{shop.address}</p>
             </div>
           </div>
         </Link>
       ))}
     </div>
-  );
+  )
 }

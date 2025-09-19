@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { queryKeys } from '../lib/queryKeys'
-import { fetchStates, fetchDistricts, fetchTags } from '../services/api'
+import { useQuery } from "@tanstack/react-query"
+import { queryKeys } from "../lib/queryKeys"
+import { fetchStates, fetchDistricts, fetchTags } from "../services/api"
 
 /**
  * Hook for fetching states

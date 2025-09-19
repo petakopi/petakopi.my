@@ -9,7 +9,7 @@ import {
   TwitterIcon,
   TikTokIcon,
   WhatsAppIcon,
-  GoogleIcon
+  GoogleIcon,
 } from "../Icons"
 import VerifiedIcon from "../Icons/VerifiedIcon"
 
@@ -18,40 +18,40 @@ const CoffeeShopsList = ({
   loading,
   viewType = "card", // Default to card view
   tab = "explore", // Default to explore tab
-  userLocation = null // Add userLocation prop
+  userLocation = null, // Add userLocation prop
 }) => {
   // Function to get the appropriate icon based on link name
   const getLinkIcon = (linkName) => {
-    const name = linkName.toLowerCase();
+    const name = linkName.toLowerCase()
     switch (name) {
-      case 'facebook':
-        return <FacebookIcon />;
-      case 'instagram':
-        return <InstagramIcon />;
-      case 'twitter':
-        return <TwitterIcon />;
-      case 'tiktok':
-        return <TikTokIcon />;
-      case 'whatsapp':
-        return <WhatsAppIcon />;
-      case 'google':
-        return <GoogleIcon />;
+      case "facebook":
+        return <FacebookIcon />
+      case "instagram":
+        return <InstagramIcon />
+      case "twitter":
+        return <TwitterIcon />
+      case "tiktok":
+        return <TikTokIcon />
+      case "whatsapp":
+        return <WhatsAppIcon />
+      case "google":
+        return <GoogleIcon />
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   // Function to calculate and format distance
   const getDistance = (coffee_shop) => {
-    if (!userLocation || !coffee_shop.lat || !coffee_shop.lng) return null;
+    if (!userLocation || !coffee_shop.lat || !coffee_shop.lng) return null
     const distance = calculateDistance(
       userLocation.latitude,
       userLocation.longitude,
       coffee_shop.lat,
       coffee_shop.lng
-    );
-    return `${distance}km`;
-  };
+    )
+    return `${distance}km`
+  }
 
   if (loading && shops.length === 0) {
     if (viewType === "list") {
@@ -86,7 +86,7 @@ const CoffeeShopsList = ({
             </ul>
           </div>
         </div>
-      );
+      )
     } else {
       // Card view skeleton
       return (
@@ -95,7 +95,7 @@ const CoffeeShopsList = ({
             <SkeletonCard key={`skeleton-card-${index}`} />
           ))}
         </>
-      );
+      )
     }
   }
 
@@ -107,8 +107,8 @@ const CoffeeShopsList = ({
           <ul className="divide-y divide-gray-200">
             {shops.map((coffee_shop, index) => {
               // Check if location exists
-              const hasLocation = coffee_shop.district || coffee_shop.state;
-              const distance = getDistance(coffee_shop);
+              const hasLocation = coffee_shop.district || coffee_shop.state
+              const distance = getDistance(coffee_shop)
 
               return (
                 <li
@@ -138,9 +138,13 @@ const CoffeeShopsList = ({
                       <p className="mt-1 truncate text-sm text-gray-500">
                         {hasLocation && (
                           <>
-                            {coffee_shop.district && coffee_shop.district_url ? (
+                            {coffee_shop.district &&
+                            coffee_shop.district_url ? (
                               <span>
-                                <a href={coffee_shop.district_url} className="text-brown-600 hover:text-brown-900">
+                                <a
+                                  href={coffee_shop.district_url}
+                                  className="text-brown-600 hover:text-brown-900"
+                                >
                                   {coffee_shop.district},
                                 </a>
                               </span>
@@ -149,14 +153,19 @@ const CoffeeShopsList = ({
                             )}
                             &nbsp;
                             {coffee_shop.state && coffee_shop.state_url ? (
-                              <a href={coffee_shop.state_url} className="text-brown-600 hover:text-brown-900">
+                              <a
+                                href={coffee_shop.state_url}
+                                className="text-brown-600 hover:text-brown-900"
+                              >
                                 {coffee_shop.state}
                               </a>
                             ) : (
                               <span>{coffee_shop.state}</span>
                             )}
                             {distance && (
-                              <span className="text-gray-500 ml-1">({distance})</span>
+                              <span className="text-gray-500 ml-1">
+                                ({distance})
+                              </span>
                             )}
                           </>
                         )}
@@ -172,8 +181,19 @@ const CoffeeShopsList = ({
                         />
                       ) : (
                         <div className="h-10 w-10 rounded-full flex items-center justify-center bg-gray-200">
-                          <svg className="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          <svg
+                            className="h-6 w-6 text-gray-400"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
                           </svg>
                         </div>
                       )}
@@ -184,11 +204,15 @@ const CoffeeShopsList = ({
                     <div className="text-sm text-gray-500 mt-8">
                       <div className="flex space-x-3.5 items-center">
                         {coffee_shop.links
-                          .filter(link => link.url)
+                          .filter((link) => link.url)
                           .map((link, i) => (
                             <span key={i} onClick={(e) => e.stopPropagation()}>
                               <a
-                                href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
+                                href={
+                                  link.url.startsWith("http")
+                                    ? link.url
+                                    : `https://${link.url}`
+                                }
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-gray-600 hover:text-gray-900"
@@ -202,13 +226,13 @@ const CoffeeShopsList = ({
                     </div>
                   )}
                 </li>
-              );
+              )
             })}
           </ul>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   // Render desktop table view
   const renderDesktopTableView = () => {
@@ -222,18 +246,22 @@ const CoffeeShopsList = ({
                   <tbody className="bg-white divide-y divide-gray-200">
                     {shops.map((coffee_shop, index) => {
                       // Check if location exists
-                      const hasLocation = coffee_shop.district || coffee_shop.state;
+                      const hasLocation =
+                        coffee_shop.district || coffee_shop.state
 
                       return (
                         <tr
                           key={`desktop-${coffee_shop.slug}-${index}`}
-                          className={coffee_shop.is_premium ? "bg-yellow-50" : "bg-white"}
+                          className={
+                            coffee_shop.is_premium ? "bg-yellow-50" : "bg-white"
+                          }
                         >
                           <td className="px-6 py-4 sticky sm:static left-0 z-0 min-w-[220px]">
                             <div className="flex items-center">
                               <div className="flex-shrink-0 h-10 w-10">
                                 <a href={`/coffee_shops/${coffee_shop.slug}`}>
-                                  {coffee_shop.logo && coffee_shop.logo !== "" ? (
+                                  {coffee_shop.logo &&
+                                  coffee_shop.logo !== "" ? (
                                     <img
                                       src={coffee_shop.logo}
                                       alt={`${coffee_shop.name} logo`}
@@ -242,8 +270,19 @@ const CoffeeShopsList = ({
                                     />
                                   ) : (
                                     <div className="h-10 w-10 rounded-full flex items-center justify-center bg-gray-200">
-                                      <svg className="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                      <svg
+                                        className="h-6 w-6 text-gray-400"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                        />
                                       </svg>
                                     </div>
                                   )}
@@ -270,9 +309,13 @@ const CoffeeShopsList = ({
                           <td className="px-6 py-4 whitespace-nowrap">
                             {hasLocation && (
                               <div className="text-sm text-gray-900">
-                                {coffee_shop.district && coffee_shop.district_url ? (
+                                {coffee_shop.district &&
+                                coffee_shop.district_url ? (
                                   <span>
-                                    <a href={coffee_shop.district_url} className="text-brown-600 hover:text-brown-900">
+                                    <a
+                                      href={coffee_shop.district_url}
+                                      className="text-brown-600 hover:text-brown-900"
+                                    >
                                       {coffee_shop.district},
                                     </a>
                                   </span>
@@ -281,7 +324,10 @@ const CoffeeShopsList = ({
                                 )}
                                 &nbsp;
                                 {coffee_shop.state && coffee_shop.state_url ? (
-                                  <a href={coffee_shop.state_url} className="text-brown-600 hover:text-brown-900">
+                                  <a
+                                    href={coffee_shop.state_url}
+                                    className="text-brown-600 hover:text-brown-900"
+                                  >
                                     {coffee_shop.state}
                                   </a>
                                 ) : (
@@ -292,29 +338,37 @@ const CoffeeShopsList = ({
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             <div className="flex space-x-2 items-center">
-                              {coffee_shop.links && coffee_shop.links
-                                .filter(link => link.url)
-                                .map((link, i) => (
-                                  <span key={i}>
-                                    <a
-                                      href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-gray-600 hover:text-gray-900"
-                                    >
-                                      {getLinkIcon(link.name)}
-                                    </a>
-                                  </span>
-                                ))}
+                              {coffee_shop.links &&
+                                coffee_shop.links
+                                  .filter((link) => link.url)
+                                  .map((link, i) => (
+                                    <span key={i}>
+                                      <a
+                                        href={
+                                          link.url.startsWith("http")
+                                            ? link.url
+                                            : `https://${link.url}`
+                                        }
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-gray-600 hover:text-gray-900"
+                                      >
+                                        {getLinkIcon(link.name)}
+                                      </a>
+                                    </span>
+                                  ))}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href={`/coffee_shops/${coffee_shop.slug}`} className="text-brown-600 hover:text-brown-900">
+                            <a
+                              href={`/coffee_shops/${coffee_shop.slug}`}
+                              className="text-brown-600 hover:text-brown-900"
+                            >
                               View
                             </a>
                           </td>
                         </tr>
-                      );
+                      )
                     })}
                   </tbody>
                 </table>
@@ -323,8 +377,8 @@ const CoffeeShopsList = ({
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <>
@@ -349,11 +403,26 @@ const CoffeeShopsList = ({
       ) : (
         <div className="col-span-full mt-4">
           <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-            <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            <svg
+              className="mx-auto h-12 w-12 text-gray-400"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+              />
             </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No coffee shops found</h3>
-            <p className="mt-1 text-sm text-gray-500">Try adjusting your filters or search criteria</p>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              No coffee shops found
+            </h3>
+            <p className="mt-1 text-sm text-gray-500">
+              Try adjusting your filters or search criteria
+            </p>
           </div>
         </div>
       )}

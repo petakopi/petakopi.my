@@ -7,7 +7,7 @@ export default class extends Controller {
     "keyword",
     "district",
     "state",
-    "tags"
+    "tags",
   ]
 
   count = 0
@@ -32,14 +32,14 @@ export default class extends Controller {
       this.keywordTarget,
       this.districtTarget,
       this.stateTarget,
-      this.tagsTarget
+      this.tagsTarget,
     ]
 
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       if (input.value != "") {
         this.count = this.count + 1
       }
-    });
+    })
 
     this.counterTarget.innerHTML = this.count
   }

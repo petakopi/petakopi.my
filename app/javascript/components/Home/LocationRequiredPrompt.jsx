@@ -8,7 +8,8 @@ const LocationRequiredPrompt = ({ onRequestLocation }) => {
           Location Required
         </h3>
         <p className="text-gray-600 mb-4">
-          To filter coffee shops by distance, we need your location. Your location will only be used to find coffee shops near you.
+          To filter coffee shops by distance, we need your location. Your
+          location will only be used to find coffee shops near you.
         </p>
         <div className="flex justify-end space-x-3">
           <button

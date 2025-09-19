@@ -1,23 +1,23 @@
-const MAPS_API_URL = "/api/v1/maps";
+const MAPS_API_URL = "/api/v1/maps"
 
 export const setupMapLayers = (map) => {
   // Ensure map is loaded before proceeding
   if (!map.loaded()) {
-    map.once('load', () => setupMapLayers(map));
-    return;
+    map.once("load", () => setupMapLayers(map))
+    return
   }
 
   return fetch(MAPS_API_URL)
     .then((res) => res.json())
     .then((response) => {
-      const { data } = response;
+      const { data } = response
 
       // Remove existing source and layers if they exist
-      if (map.getSource('coffee_shops')) {
-        map.removeLayer('unclustered-point');
-        map.removeLayer('cluster-count');
-        map.removeLayer('clusters');
-        map.removeSource('coffee_shops');
+      if (map.getSource("coffee_shops")) {
+        map.removeLayer("unclustered-point")
+        map.removeLayer("cluster-count")
+        map.removeLayer("clusters")
+        map.removeSource("coffee_shops")
       }
 
       map.addSource("coffee_shops", {
@@ -26,7 +26,7 @@ export const setupMapLayers = (map) => {
         cluster: true,
         clusterMaxZoom: 14,
         clusterRadius: 50,
-      });
+      })
 
       map.addLayer({
         id: "clusters",
@@ -43,17 +43,9 @@ export const setupMapLayers = (map) => {
             25,
             "#4E342E",
           ],
-          "circle-radius": [
-            "step",
-            ["get", "point_count"],
-            20,
-            10,
-            30,
-            25,
-            40,
-          ],
+          "circle-radius": ["step", ["get", "point_count"], 20, 10, 30, 25, 40],
         },
-      });
+      })
 
       map.addLayer({
         id: "cluster-count",
@@ -68,7 +60,7 @@ export const setupMapLayers = (map) => {
         paint: {
           "text-color": "#ffffff",
         },
-      });
+      })
 
       map.addLayer({
         id: "unclustered-point",
@@ -81,7 +73,7 @@ export const setupMapLayers = (map) => {
           "circle-stroke-width": 2,
           "circle-stroke-color": "#fff",
         },
-      });
+      })
 
       // Add coffee shop names layer
       map.addLayer({
@@ -97,13 +89,13 @@ export const setupMapLayers = (map) => {
           "text-anchor": "top",
           "text-allow-overlap": false,
           "text-ignore-placement": false,
-          "text-optional": true
+          "text-optional": true,
         },
         paint: {
           "text-color": "#4A3528",
           "text-halo-color": "#ffffff",
-          "text-halo-width": 1
-        }
-      });
-    });
-};
+          "text-halo-width": 1,
+        },
+      })
+    })
+}

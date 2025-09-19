@@ -1,6 +1,10 @@
-import mapboxgl from "mapbox-gl";
+import mapboxgl from "mapbox-gl"
 
-export const createCoffeeShopPopup = (map, coordinates, { name, url, logo, rating, rating_count }) => {
+export const createCoffeeShopPopup = (
+  map,
+  coordinates,
+  { name, url, logo, rating, rating_count }
+) => {
   const popup = new mapboxgl.Popup({
     closeButton: true,
     closeOnClick: false,
@@ -15,18 +19,18 @@ export const createCoffeeShopPopup = (map, coordinates, { name, url, logo, ratin
         <div style="font-weight:700;font-size:1rem;color:#3d2c2c;text-align:center;margin-bottom:8px;">${name}</div>
         <div style="font-size:0.875rem;color:#6B4F4F;text-align:center;margin-bottom:18px;">
           <span style="color:#F59E0B;margin-right:4px;">★</span>
-          <span style="font-weight:600;">${rating?.toFixed(1) || 'N/A'}</span>
+          <span style="font-weight:600;">${rating?.toFixed(1) || "N/A"}</span>
           <span style="color:#9CA3AF;margin:0 4px;">•</span>
           <span>${rating_count || 0} rating count</span>
         </div>
         <a href="${url}" style="display:inline-block;padding:8px 16px;background:white;color:#6B4F4F;border:1px solid #6B4F4F;border-radius:6px;text-decoration:none;font-weight:600;font-size:0.875rem;transition:all 0.2s;box-shadow:0 1px 2px rgba(0,0,0,0.04);">View →</a>
       </div>
-    `,
+    `
     )
-    .addTo(map);
+    .addTo(map)
 
   // Add custom styles to the document
-  const style = document.createElement("style");
+  const style = document.createElement("style")
   style.textContent = `
     .mapboxgl-popup {
       background: none !important;
@@ -64,30 +68,28 @@ export const createCoffeeShopPopup = (map, coordinates, { name, url, logo, ratin
     .mapboxgl-popup-close-button:hover {
       color: #8B6B6B !important;
     }
-  `;
-  document.head.appendChild(style);
+  `
+  document.head.appendChild(style)
 
   // Style the popup content
   popup.on("open", () => {
-    const popupElement = document.querySelector(".mapboxgl-popup");
+    const popupElement = document.querySelector(".mapboxgl-popup")
     if (popupElement) {
       const closeButton = popupElement.querySelector(
-        ".mapboxgl-popup-close-button",
-      );
+        ".mapboxgl-popup-close-button"
+      )
       if (closeButton) {
-        closeButton.innerHTML = "×";
+        closeButton.innerHTML = "×"
       }
 
-      const popupContent = popupElement.querySelector(
-        ".mapboxgl-popup-content",
-      );
+      const popupContent = popupElement.querySelector(".mapboxgl-popup-content")
       if (popupContent) {
-        popupContent.style.padding = "0";
-        popupContent.style.borderRadius = "18px";
-        popupContent.style.overflow = "hidden";
+        popupContent.style.padding = "0"
+        popupContent.style.borderRadius = "18px"
+        popupContent.style.overflow = "hidden"
       }
     }
-  });
+  })
 
-  return popup;
-};
+  return popup
+}

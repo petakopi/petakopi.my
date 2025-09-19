@@ -44,6 +44,9 @@ bundle exec rspec spec/path/to/file_spec.rb    # Run specific test file
 ### Code Quality
 ```bash
 bundle exec standardrb     # Ruby linting (Standard Ruby style)
+pnpm run prettier:check    # Check JavaScript formatting
+pnpm run format:js         # Format JavaScript files with Prettier
+pnpm run check:format      # Check JavaScript formatting with helpful error message
 ```
 
 ### File Editing Standards
@@ -52,6 +55,7 @@ When editing files, always ensure:
 - **Consistent indentation**: Follow the existing indentation style (2 spaces for Ruby)
 - **Clean line endings**: Ensure proper line endings without extra blank lines
 - **Standard Ruby formatting**: Follow StandardRB conventions for Ruby files
+- **JavaScript formatting**: Use Prettier for consistent JavaScript/JSX formatting with automatic newline insertion
 
 ### URL Generation Standards
 When generating URLs for coffee shops:

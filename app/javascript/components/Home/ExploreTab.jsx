@@ -5,7 +5,7 @@ const ExploreTab = ({
   everywhereShops,
   everywhereLoading,
   viewType,
-  userLocation
+  userLocation,
 }) => {
   return (
     <div>

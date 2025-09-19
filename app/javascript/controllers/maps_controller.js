@@ -5,7 +5,7 @@ export default class extends Controller {
     coffeeShopName: String,
     lat: Number,
     lng: Number,
-    placeId: String
+    placeId: String,
   }
 
   static targets = [
@@ -19,13 +19,13 @@ export default class extends Controller {
     "placeContainer",
     "placeInput",
     "placeMapContainer",
-    "placeRadio"
+    "placeRadio",
   ]
 
   klccCoordinates = { lat: 3.1578, lng: 101.7119 }
 
   connect() {
-    if (typeof (google) != "undefined") {
+    if (typeof google != "undefined") {
       this.initializeMap()
     }
   }
@@ -67,7 +67,9 @@ export default class extends Controller {
   }
 
   placeMarker() {
-    if (this._placeMarker != undefined) { return this._placeMarker }
+    if (this._placeMarker != undefined) {
+      return this._placeMarker
+    }
 
     this._placeMarker = new google.maps.Marker({ map: this.placeMap() })
 
@@ -81,7 +83,7 @@ export default class extends Controller {
 
     const latLng = {
       lat: parseFloat(this.latitudeTarget.value),
-      lng: parseFloat(this.longitudeTarget.value)
+      lng: parseFloat(this.longitudeTarget.value),
     }
 
     this._initialPlaceMarker = new google.maps.Marker({
@@ -100,11 +102,13 @@ export default class extends Controller {
       this.placeInputTarget.value = this.coffeeShopNameValue
     }
 
-    this._placeAutoComplete =
-      new google.maps.places.Autocomplete(this.placeInputTarget, {
+    this._placeAutoComplete = new google.maps.places.Autocomplete(
+      this.placeInputTarget,
+      {
         componentRestrictions: { country: "my" },
         fields: ["place_id", "geometry"],
-      })
+      }
+    )
 
     this._placeAutoComplete.bindTo("bounds", this.placeMap())
 
@@ -168,14 +172,15 @@ export default class extends Controller {
   }
 
   locationMarker() {
-    if (this._locationMarker != undefined) { return this._locationMarker }
+    if (this._locationMarker != undefined) {
+      return this._locationMarker
+    }
 
-    this._locationMarker =
-      new google.maps.Marker({
-        position: this._initialLocation(),
-        map: this.locationMap(),
-        draggable: true
-      })
+    this._locationMarker = new google.maps.Marker({
+      position: this._initialLocation(),
+      map: this.locationMap(),
+      draggable: true,
+    })
 
     this._locationMarker.addListener("dragend", (e) => {
       const lat = e.latLng.lat()
@@ -188,7 +193,10 @@ export default class extends Controller {
   }
 
   locationAutoComplete() {
-    if (this._locationAutoComplete != undefined || !this.hasLocationInputTarget) {
+    if (
+      this._locationAutoComplete != undefined ||
+      !this.hasLocationInputTarget
+    ) {
       return this._locationAutoComplete
     }
 
@@ -197,11 +205,13 @@ export default class extends Controller {
       this.locationInputTarget.value = this.coffeeShopNameValue
     }
 
-    this._locationAutoComplete =
-      new google.maps.places.Autocomplete(this.locationInputTarget, {
+    this._locationAutoComplete = new google.maps.places.Autocomplete(
+      this.locationInputTarget,
+      {
         componentRestrictions: { country: "my" },
         fields: ["geometry"],
-      })
+      }
+    )
 
     this._locationAutoComplete.bindTo("bounds", this.locationMap())
 
@@ -237,7 +247,9 @@ export default class extends Controller {
   }
 
   preventSubmit(e) {
-    if (e.key == "Enter") { e.preventDefault() }
+    if (e.key == "Enter") {
+      e.preventDefault()
+    }
   }
 
   _initialLocation() {
@@ -267,7 +279,9 @@ export default class extends Controller {
     } else {
       this.googlePlaceIdTarget.value = ""
 
-      if (this._locationMarker != undefined) { return }
+      if (this._locationMarker != undefined) {
+        return
+      }
 
       this.latitudeTarget.value = this._locationMarker.getPosition().lat()
       this.longitudeTarget.value = this._locationMarker.getPosition().lng()

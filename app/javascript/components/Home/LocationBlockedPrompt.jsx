@@ -14,12 +14,18 @@ const LocationBlockedPrompt = ({ onClose }) => {
               </h3>
               <div className="mt-2">
                 <p className="text-sm text-gray-500">
-                  Your browser has blocked location access. To use location-based features like finding nearby coffee shops, you'll need to enable location permissions.
+                  Your browser has blocked location access. To use
+                  location-based features like finding nearby coffee shops,
+                  you'll need to enable location permissions.
                 </p>
                 <div className="mt-4 bg-gray-50 p-4 rounded-lg">
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">How to enable location:</h4>
+                  <h4 className="text-sm font-medium text-gray-900 mb-2">
+                    How to enable location:
+                  </h4>
                   <ul className="list-disc pl-5 text-sm text-gray-500 space-y-1">
-                    <li>Click the lock/info icon in your browser's address bar</li>
+                    <li>
+                      Click the lock/info icon in your browser's address bar
+                    </li>
                     <li>Find "Location" or "Site settings"</li>
                     <li>Change the permission to "Allow"</li>
                     <li>Refresh the page</li>

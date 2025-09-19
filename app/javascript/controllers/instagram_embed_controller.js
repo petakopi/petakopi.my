@@ -10,7 +10,7 @@ export default class extends Controller {
     } else {
       // Create an intersection observer to load when visible
       const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             this.loadInstagramEmbed()
             observer.unobserve(this.element)
@@ -42,7 +42,8 @@ export default class extends Controller {
     return (
       rect.top >= 0 &&
       rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.bottom <=
+        (window.innerHeight || document.documentElement.clientHeight) &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     )
   }

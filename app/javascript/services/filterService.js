@@ -10,19 +10,19 @@
  */
 export const fetchStates = async () => {
   try {
-    const response = await fetch('/api/v1/filters?section=states');
+    const response = await fetch("/api/v1/filters?section=states")
 
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(`HTTP error! Status: ${response.status}`)
     }
 
-    const data = await response.json();
-    return data;
+    const data = await response.json()
+    return data
   } catch (error) {
-    console.error('Error fetching states:', error);
-    throw error;
+    console.error("Error fetching states:", error)
+    throw error
   }
-};
+}
 
 /**
  * Fetches the list of districts for a given state from the API
@@ -32,22 +32,24 @@ export const fetchStates = async () => {
  * @throws {Error} If the API request fails
  */
 export const fetchDistricts = async (state) => {
-  if (!state) return [];
+  if (!state) return []
 
   try {
-    const response = await fetch(`/api/v1/filters?section=districts&state=${encodeURIComponent(state)}`);
+    const response = await fetch(
+      `/api/v1/filters?section=districts&state=${encodeURIComponent(state)}`
+    )
 
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(`HTTP error! Status: ${response.status}`)
     }
 
-    const data = await response.json();
-    return data;
+    const data = await response.json()
+    return data
   } catch (error) {
-    console.error(`Error fetching districts for ${state}:`, error);
-    throw error;
+    console.error(`Error fetching districts for ${state}:`, error)
+    throw error
   }
-};
+}
 
 /**
  * Fetches the list of tags from the API
@@ -57,16 +59,16 @@ export const fetchDistricts = async (state) => {
  */
 export const fetchTags = async () => {
   try {
-    const response = await fetch('/api/v1/filters?section=tags');
+    const response = await fetch("/api/v1/filters?section=tags")
 
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(`HTTP error! Status: ${response.status}`)
     }
 
-    const data = await response.json();
-    return data;
+    const data = await response.json()
+    return data
   } catch (error) {
-    console.error('Error fetching tags:', error);
-    throw error;
+    console.error("Error fetching tags:", error)
+    throw error
   }
-};
+}

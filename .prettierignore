@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+/vendor/
+
+# Build outputs
+/app/assets/builds/
+/public/
+/tmp/
+/log/
+
+# Package files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Coverage
+/coverage/
+
+# Rails specific
+*.log
+.byebug_history
+.irb_history
+
+# Database
+db/*.sqlite3
+db/*.sqlite3-*
+
+# Ignore compiled assets
+/app/assets/builds/
+public/assets/
+public/packs/
+public/packs-test/
+
+# Ignore Rails cache
+tmp/
+storage/

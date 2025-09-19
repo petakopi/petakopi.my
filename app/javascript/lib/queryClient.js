@@ -1,4 +1,4 @@
-import { QueryClient } from '@tanstack/react-query'
+import { QueryClient } from "@tanstack/react-query"
 
 /**
  * Query client configuration following React Query best practices
@@ -26,7 +26,7 @@ export const queryClient = new QueryClient({
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
 
       // Don't refetch on window focus in development (annoying during dev)
-      refetchOnWindowFocus: process.env.NODE_ENV === 'production',
+      refetchOnWindowFocus: process.env.NODE_ENV === "production",
 
       // Refetch on reconnect
       refetchOnReconnect: true,

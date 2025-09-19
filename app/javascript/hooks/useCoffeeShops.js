@@ -1,17 +1,17 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { queryKeys } from '../lib/queryKeys'
-import { fetchCoffeeShops, fetchCoffeeShop, createCoffeeShop } from '../services/api'
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { queryKeys } from "../lib/queryKeys"
+import {
+  fetchCoffeeShops,
+  fetchCoffeeShop,
+  createCoffeeShop,
+} from "../services/api"
 
 /**
  * Hook for fetching paginated coffee shops with filters
  * Follows React Query best practices for pagination
  */
 export const useCoffeeShops = (filters = {}, options = {}) => {
-  const {
-    page = 1,
-    enabled = true,
-    ...queryOptions
-  } = options
+  const { page = 1, enabled = true, ...queryOptions } = options
 
   // Clean filters object (remove undefined/null values) - use filters parameter directly
   // Match the original filter field names from utils/filters.js
@@ -45,7 +45,10 @@ export const useCoffeeShops = (filters = {}, options = {}) => {
       delete prevFiltersWithoutPage.page
 
       // If filters are the same (only page changed), keep previous data
-      if (JSON.stringify(currentFiltersWithoutPage) === JSON.stringify(prevFiltersWithoutPage)) {
+      if (
+        JSON.stringify(currentFiltersWithoutPage) ===
+        JSON.stringify(prevFiltersWithoutPage)
+      ) {
         return previousData
       }
 
@@ -105,7 +108,7 @@ export const useCreateCoffeeShop = () => {
 
     onError: (error) => {
       // Error handling can be done at component level
-      console.error('Failed to create coffee shop:', error)
+      console.error("Failed to create coffee shop:", error)
     },
   })
 }

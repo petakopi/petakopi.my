@@ -6,7 +6,7 @@ export default class extends Controller {
   static values = {
     url: String,
     param: String,
-    includeBlank: Boolean
+    includeBlank: Boolean,
   }
 
   connect() {
@@ -26,7 +26,7 @@ export default class extends Controller {
     }
 
     get(`${this.urlValue}?${params}`, {
-      responseKind: "turbo-stream"
+      responseKind: "turbo-stream",
     })
   }
 }

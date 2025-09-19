@@ -1,16 +1,18 @@
 // Import all necessary dependencies
-import plugin, { TurboMount } from "turbo-mount/react";
-import { registerComponents } from "turbo-mount/registerComponents/vite";
-import { Application } from "@hotwired/stimulus";
-import { registerControllers } from "stimulus-vite-helpers";
+import plugin, { TurboMount } from "turbo-mount/react"
+import { registerComponents } from "turbo-mount/registerComponents/vite"
+import { Application } from "@hotwired/stimulus"
+import { registerControllers } from "stimulus-vite-helpers"
 
 // Initialize both frameworks
-const turboMount = new TurboMount();
-const application = Application.start();
+const turboMount = new TurboMount()
+const application = Application.start()
 
 // Get all controllers and components
-const controllers = import.meta.glob("./controllers/**/*_controller.js", { eager: true });
-const components = import.meta.glob("./components/**/*.jsx", { eager: true });
+const controllers = import.meta.glob("./controllers/**/*_controller.js", {
+  eager: true,
+})
+const components = import.meta.glob("./components/**/*.jsx", { eager: true })
 
 // Register everything in one place
 registerComponents({
@@ -18,12 +20,11 @@ registerComponents({
   turboMount,
   components,
   controllers,
-});
+})
 
 // Register the same controllers with Stimulus
 // Note: Can't combine them for unknown reasons
-registerControllers(application, controllers);
-
+registerControllers(application, controllers)
 
 // to register a component use:
 // registerComponent(turboMount, "Hello", Hello); // where Hello is the imported the component

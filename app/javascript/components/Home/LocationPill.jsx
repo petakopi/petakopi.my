@@ -42,7 +42,7 @@ const LocationPill = ({ locationPermission, onRequestLocation }) => {
       onClick={onRequestLocation}
       disabled={isLoading}
       className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getPillStyle()} ${
-        isLoading ? 'cursor-wait opacity-75' : 'hover:opacity-80'
+        isLoading ? "cursor-wait opacity-75" : "hover:opacity-80"
       }`}
     >
       {getLocationText()}

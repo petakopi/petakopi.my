@@ -7,7 +7,7 @@ const SelectFilterOption = ({
   onChange,
   options,
   label,
-  disabled = false
+  disabled = false,
 }) => {
   return (
     <div className="mb-2">

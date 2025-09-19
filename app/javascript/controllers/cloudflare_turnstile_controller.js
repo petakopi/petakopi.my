@@ -3,16 +3,19 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   connect() {
     // Use IntersectionObserver to detect when the widget is visible
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          this._initializeWidget()
-          observer.unobserve(this.element)
-        }
-      })
-    }, {
-      threshold: 0.1 // Trigger when at least 10% of the element is visible
-    })
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            this._initializeWidget()
+            observer.unobserve(this.element)
+          }
+        })
+      },
+      {
+        threshold: 0.1, // Trigger when at least 10% of the element is visible
+      }
+    )
 
     observer.observe(this.element)
   }
@@ -31,7 +34,9 @@ export default class extends Controller {
         callback: (token) => {
           console.log("Turnstile callback received token:", token) // Debug log
           // Store token in a hidden input if it doesn't exist
-          let input = document.querySelector("input[name='cf-turnstile-response']")
+          let input = document.querySelector(
+            "input[name='cf-turnstile-response']"
+          )
           if (!input) {
             input = document.createElement("input")
             input.type = "hidden"
@@ -39,7 +44,7 @@ export default class extends Controller {
             this.element.appendChild(input)
           }
           input.value = token
-        }
+        },
       })
     } else {
       console.log("Turnstile not ready, retrying...") // Debug log

@@ -10,9 +10,12 @@ import LocationRefreshPrompt from "./LocationRefreshPrompt"
 import ControlsBar from "./ControlsBar"
 import ReactQueryDevtools from "../ReactQueryDevtools"
 import { QueryErrorBoundary, QueryError } from "../ErrorBoundary"
-import 'mapbox-gl/dist/mapbox-gl.css';
+import "mapbox-gl/dist/mapbox-gl.css"
 import { queryClient } from "../../lib/queryClient"
-import { useCoffeeShops, usePrefetchCoffeeShops } from "../../hooks/useCoffeeShops"
+import {
+  useCoffeeShops,
+  usePrefetchCoffeeShops,
+} from "../../hooks/useCoffeeShops"
 import { useStates } from "../../hooks/useFilters"
 import { queryKeys } from "../../lib/queryKeys"
 
@@ -21,7 +24,7 @@ const GEOLOCATION_CONFIG = {
   TIMEOUT_DURATION: 30000, // Increase to 30 seconds for our custom timeout
   API_TIMEOUT: 20000, // Increase to 20 seconds for the geolocation API timeout
   CACHE_DURATION: 5 * 60 * 1000, // Reduce cache duration to 5 minutes to get fresher locations
-  HIGH_ACCURACY: false // Set to false to allow less accurate but faster results
+  HIGH_ACCURACY: false, // Set to false to allow less accurate but faster results
 }
 
 const initialTabs = [
@@ -35,11 +38,16 @@ function classNames(...classes) {
 
 // Helper function to check if distance value is valid for API requests
 function isValidDistance(distance) {
-  const isValid = distance !== null && distance !== undefined && distance !== 0 && !isNaN(distance) && distance > 0
+  const isValid =
+    distance !== null &&
+    distance !== undefined &&
+    distance !== 0 &&
+    !isNaN(distance) &&
+    distance > 0
 
   // Debug logging to catch any invalid distance values
   if (!isValid && distance !== null && distance !== undefined) {
-    console.warn('Invalid distance value detected:', distance, typeof distance)
+    console.warn("Invalid distance value detected:", distance, typeof distance)
   }
 
   return isValid
@@ -49,24 +57,24 @@ function HomeContent({
   initialFilters = {},
   initialViewType = "card",
   initialActiveTab = 0,
-  collections = []
+  collections = [],
 }) {
   const [tabs, setTabs] = useState(() => {
     // Try to get the saved tab index from localStorage
-    const savedTabIndex = localStorage.getItem('petakopi_active_tab');
-    const activeIndex = savedTabIndex !== null ? parseInt(savedTabIndex, 10) : 0;
+    const savedTabIndex = localStorage.getItem("petakopi_active_tab")
+    const activeIndex = savedTabIndex !== null ? parseInt(savedTabIndex, 10) : 0
 
     return initialTabs.map((tab, index) => ({
       ...tab,
-      current: index === activeIndex
-    }));
-  });
+      current: index === activeIndex,
+    }))
+  })
 
   const [activeTab, setActiveTab] = useState(() => {
     // Try to get the saved tab index from localStorage
-    const savedTabIndex = localStorage.getItem('petakopi_active_tab');
-    return savedTabIndex !== null ? parseInt(savedTabIndex, 10) : 0;
-  });
+    const savedTabIndex = localStorage.getItem("petakopi_active_tab")
+    return savedTabIndex !== null ? parseInt(savedTabIndex, 10) : 0
+  })
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
@@ -82,78 +90,83 @@ function HomeContent({
   const [mapFilters, setMapFilters] = useState({})
 
   // Helper function to get current filters based on active tab
-  const getCurrentFilters = () => activeTab === 0 ? listFilters : mapFilters
-  const setCurrentFilters = (filters) => activeTab === 0 ? setListFilters(filters) : setMapFilters(filters)
+  const getCurrentFilters = () => (activeTab === 0 ? listFilters : mapFilters)
+  const setCurrentFilters = (filters) =>
+    activeTab === 0 ? setListFilters(filters) : setMapFilters(filters)
 
   // View type state (card or list)
   const [viewType, setViewType] = useState(() => {
     // Try to get the saved view type from localStorage
-    const savedViewType = localStorage.getItem('petakopi_view_type');
-    return savedViewType || "card"; // Default to card view if not found
-  });
+    const savedViewType = localStorage.getItem("petakopi_view_type")
+    return savedViewType || "card" // Default to card view if not found
+  })
 
   const [showLocationPrompt, setShowLocationPrompt] = useState(false)
-  const [showLocationBlockedPrompt, setShowLocationBlockedPrompt] = useState(false)
-  const [showLocationRefreshPrompt, setShowLocationRefreshPrompt] = useState(false)
+  const [showLocationBlockedPrompt, setShowLocationBlockedPrompt] =
+    useState(false)
+  const [showLocationRefreshPrompt, setShowLocationRefreshPrompt] =
+    useState(false)
 
   // Helper function to add filters to URL
   const applyFiltersToUrl = (url, filters) => {
     // Add keyword filter if it exists (only for list view)
     if (activeTab === 0 && filters.keyword) {
-      url.searchParams.append('keyword', filters.keyword);
+      url.searchParams.append("keyword", filters.keyword)
     }
 
     // Add tags filter if it exists (multiple tags)
     if (filters.tags && filters.tags.length > 0) {
-      filters.tags.forEach(tag => {
-        url.searchParams.append('tags[]', tag);
-      });
+      filters.tags.forEach((tag) => {
+        url.searchParams.append("tags[]", tag)
+      })
     }
 
     // Add state filter if it exists (only for list view)
     if (activeTab === 0 && filters.state) {
-      url.searchParams.append('state', filters.state);
+      url.searchParams.append("state", filters.state)
     }
 
     // Add district filter if it exists (only for list view)
     if (activeTab === 0 && filters.district) {
-      url.searchParams.append('district', filters.district);
+      url.searchParams.append("district", filters.district)
     }
 
     // Add collection filter if it exists
     if (filters.collection_id) {
-      url.searchParams.append('collection_id', filters.collection_id);
+      url.searchParams.append("collection_id", filters.collection_id)
     }
 
     // Add opened filter if it exists
     if (filters.opened) {
-      url.searchParams.append('opened', filters.opened);
+      url.searchParams.append("opened", filters.opened)
     }
 
     // Add rating filter if it exists
     if (filters.rating) {
-      url.searchParams.append('rating', filters.rating);
+      url.searchParams.append("rating", filters.rating)
     }
 
     // Add rating count filter if it exists
     if (filters.rating_count) {
-      url.searchParams.append('rating_count', filters.rating_count);
+      url.searchParams.append("rating_count", filters.rating_count)
     }
 
-    return url;
-  };
+    return url
+  }
 
   // Add initial location permission check
   useEffect(() => {
     if (navigator.permissions && navigator.permissions.query) {
-      navigator.permissions.query({ name: 'geolocation' }).then((permissionStatus) => {
-        if (permissionStatus.state === 'granted') {
-          setLocationPermission('granted')
-          requestLocationPermission()
-        } else if (permissionStatus.state === 'denied') {
-          setLocationPermission('denied')
-        }
-      })
+      navigator.permissions
+        .query({ name: "geolocation" })
+        .then((permissionStatus) => {
+          if (permissionStatus.state === "granted") {
+            setLocationPermission("granted")
+            requestLocationPermission()
+          } else if (permissionStatus.state === "denied") {
+            setLocationPermission("denied")
+          }
+        })
     }
   }, [])
 
@@ -176,7 +189,7 @@ function HomeContent({
           clearTimeout(locationTimeout) // Clear the timeout on success
           const newLocation = {
             latitude: position.coords.latitude,
-            longitude: position.coords.longitude
+            longitude: position.coords.longitude,
           }
           console.log("New location received:", newLocation)
           setUserLocation(newLocation)
@@ -193,14 +206,19 @@ function HomeContent({
               break
             case 2:
               // For POSITION_UNAVAILABLE, try again with lower accuracy
-              console.log("Position unavailable, retrying with lower accuracy...")
+              console.log(
+                "Position unavailable, retrying with lower accuracy..."
+              )
               navigator.geolocation.getCurrentPosition(
                 (position) => {
                   const newLocation = {
                     latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
+                    longitude: position.coords.longitude,
                   }
-                  console.log("New location received with lower accuracy:", newLocation)
+                  console.log(
+                    "New location received with lower accuracy:",
+                    newLocation
+                  )
                   setUserLocation(newLocation)
                   setLocationPermission("granted")
                 },
@@ -211,7 +229,7 @@ function HomeContent({
                 {
                   enableHighAccuracy: false,
                   timeout: GEOLOCATION_CONFIG.API_TIMEOUT,
-                  maximumAge: GEOLOCATION_CONFIG.CACHE_DURATION
+                  maximumAge: GEOLOCATION_CONFIG.CACHE_DURATION,
                 }
               )
               break
@@ -225,7 +243,7 @@ function HomeContent({
         {
           enableHighAccuracy: GEOLOCATION_CONFIG.HIGH_ACCURACY,
           timeout: GEOLOCATION_CONFIG.API_TIMEOUT,
-          maximumAge: GEOLOCATION_CONFIG.CACHE_DURATION
+          maximumAge: GEOLOCATION_CONFIG.CACHE_DURATION,
         }
       )
     } else {
@@ -243,7 +261,11 @@ function HomeContent({
     const { _timestamp, ...actualFilters } = newFilters
 
     // Check if distance filter is selected but location is not available
-    if (actualFilters.distance && !userLocation && locationPermission !== "granted") {
+    if (
+      actualFilters.distance &&
+      !userLocation &&
+      locationPermission !== "granted"
+    ) {
       setShowLocationPrompt(true)
       return
     }
@@ -261,14 +283,18 @@ function HomeContent({
   }
 
   const handleNextPage = () => {
-    if (activeTab === 0 && !everywhereLoading && everywhereCurrentPage < everywhereTotalPages) {
-      setCurrentPage(prev => prev + 1)
+    if (
+      activeTab === 0 &&
+      !everywhereLoading &&
+      everywhereCurrentPage < everywhereTotalPages
+    ) {
+      setCurrentPage((prev) => prev + 1)
     }
   }
 
   const handlePrevPage = () => {
     if (activeTab === 0 && !everywhereLoading && everywhereCurrentPage > 1) {
-      setCurrentPage(prev => prev - 1)
+      setCurrentPage((prev) => prev - 1)
     }
   }
 
@@ -277,12 +303,12 @@ function HomeContent({
     setTabs(
       tabs.map((tab, i) => ({
         ...tab,
-        current: i === index
+        current: i === index,
       }))
     )
 
     // Save the active tab index to localStorage
-    localStorage.setItem('petakopi_active_tab', index.toString());
+    localStorage.setItem("petakopi_active_tab", index.toString())
   }
 
   const handleDistanceChange = (distance) => {
@@ -299,50 +325,50 @@ function HomeContent({
     if (locationPermission === "granted") {
       if (userLocation) {
         // If we already have location, just show the refresh prompt
-        setShowLocationRefreshPrompt(true);
+        setShowLocationRefreshPrompt(true)
       } else {
         // If we have permission but no location, request it
-        requestLocationPermission();
+        requestLocationPermission()
       }
     } else {
       // If we don't have permission, request it
-      requestLocationPermission();
+      requestLocationPermission()
     }
-  };
+  }
 
   const handleLocationRefresh = () => {
-    setShowLocationRefreshPrompt(false);
+    setShowLocationRefreshPrompt(false)
     // Set loading state immediately
-    setLocationPermission("prompt");
+    setLocationPermission("prompt")
     // Clear current location
-    setUserLocation(null);
+    setUserLocation(null)
     // Request new location
-    requestLocationPermission();
-  };
+    requestLocationPermission()
+  }
 
   // Pagination component
   const Pagination = ({ currentPage, totalPages, onNext, onPrev, loading }) => {
     const handleNext = (e) => {
-      e.preventDefault();
+      e.preventDefault()
       if (currentPage < totalPages && !loading) {
-        onNext();
+        onNext()
         // Scroll to top after data loads
         setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 100);
+          window.scrollTo({ top: 0, behavior: "smooth" })
+        }, 100)
       }
-    };
+    }
 
     const handlePrev = (e) => {
-      e.preventDefault();
+      e.preventDefault()
       if (currentPage > 1 && !loading) {
-        onPrev();
+        onPrev()
         // Scroll to top after data loads
         setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 100);
+          window.scrollTo({ top: 0, behavior: "smooth" })
+        }, 100)
       }
-    };
+    }
 
     return (
       <div className="py-3 px-4 mb-20 md:mb-0 flex justify-between items-center">
@@ -350,56 +376,76 @@ function HomeContent({
           {loading ? (
             <span>Loading...</span>
           ) : (
-            <span>Page {currentPage} of {totalPages}</span>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
           )}
         </div>
         <nav className="pagy-nav pagination" role="navigation">
-          <span className={`page prev ${currentPage <= 1 || loading ? 'disabled' : ''}`}>
+          <span
+            className={`page prev ${currentPage <= 1 || loading ? "disabled" : ""}`}
+          >
             <a
               href="#"
               onClick={handlePrev}
-              className={currentPage <= 1 || loading ? 'cursor-not-allowed opacity-50' : 'hover:text-brown-600'}
+              className={
+                currentPage <= 1 || loading
+                  ? "cursor-not-allowed opacity-50"
+                  : "hover:text-brown-600"
+              }
             >
               Prev
             </a>
           </span>
 
-          <span className={`page next ${currentPage >= totalPages || loading ? 'disabled' : ''}`}>
+          <span
+            className={`page next ${currentPage >= totalPages || loading ? "disabled" : ""}`}
+          >
             <a
               href="#"
               onClick={handleNext}
-              className={currentPage >= totalPages || loading ? 'cursor-not-allowed opacity-50' : 'hover:text-brown-600'}
+              className={
+                currentPage >= totalPages || loading
+                  ? "cursor-not-allowed opacity-50"
+                  : "hover:text-brown-600"
+              }
             >
               Next
             </a>
           </span>
         </nav>
       </div>
-    );
-  };
+    )
+  }
 
   // Add effect to save view type when it changes
   useEffect(() => {
-    localStorage.setItem('petakopi_view_type', viewType);
-  }, [viewType]);
+    localStorage.setItem("petakopi_view_type", viewType)
+  }, [viewType])
 
   // Add effect to control body scrolling when sidebar is open
   useEffect(() => {
     if (isFilterSidebarOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden"
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto"
     }
 
     // Cleanup function to restore scrolling when component unmounts
     return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isFilterSidebarOpen]);
+      document.body.style.overflow = "auto"
+    }
+  }, [isFilterSidebarOpen])
 
   // Filter data with React Query
-  const { data: states = [], isLoading: isLoadingStates, error: statesError } = useStates()
-  const stateError = statesError ? "Failed to load states. Please try again later." : null
+  const {
+    data: states = [],
+    isLoading: isLoadingStates,
+    error: statesError,
+  } = useStates()
+  const stateError = statesError
+    ? "Failed to load states. Please try again later."
+    : null
 
   // Get current filters and prepare query parameters
   const currentFilters = getCurrentFilters()
@@ -430,7 +476,8 @@ function HomeContent({
 
   // Extract data from React Query response
   const everywhereShops = coffeeShopsData?.coffee_shops || []
-  const everywhereCurrentPage = coffeeShopsData?.pages?.current_page || currentPage
+  const everywhereCurrentPage =
+    coffeeShopsData?.pages?.current_page || currentPage
   const everywhereTotalPages = coffeeShopsData?.pages?.total_pages || 1
   const everywhereTotalCount = coffeeShopsData?.pages?.total_count || 0
   const everywhereLoading = isLoadingCoffeeShops
@@ -458,9 +505,11 @@ function HomeContent({
       )}
 
       {/* Main content area */}
-      <div className={`${activeTab === 1 ? 'h-[calc(100vh-4rem)]' : ''} bg-gray-50 rounded-lg relative`}>
+      <div
+        className={`${activeTab === 1 ? "h-[calc(100vh-4rem)]" : ""} bg-gray-50 rounded-lg relative`}
+      >
         {/* ExploreTab */}
-        <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
+        <div style={{ display: activeTab === 0 ? "block" : "none" }}>
           {showErrorState ? (
             <QueryError
               error={coffeeShopsError}
@@ -488,15 +537,17 @@ function HomeContent({
           )}
         </div>
         {/* MapTab */}
-        <div style={{
-          display: activeTab === 1 ? 'block' : 'none',
-          position: 'relative',
-          height: 'calc(100vh - 4.5rem)',
-          width: '100%',
-          margin: 0,
-          padding: 0,
-          zIndex: 0
-        }}>
+        <div
+          style={{
+            display: activeTab === 1 ? "block" : "none",
+            position: "relative",
+            height: "calc(100vh - 4.5rem)",
+            width: "100%",
+            margin: 0,
+            padding: 0,
+            zIndex: 0,
+          }}
+        >
           <MapTab
             userLocation={userLocation}
             activeTab={activeTab}
@@ -512,8 +563,19 @@ function HomeContent({
           onClick={() => handleTabChange(1)}
           className="fixed bottom-6 right-6 bg-brown-600 text-white px-6 py-4 rounded-full shadow-lg hover:bg-brown-700 transition-colors flex items-center space-x-3 z-50 text-lg"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+            />
           </svg>
           <span>Map</span>
         </button>
@@ -525,8 +587,19 @@ function HomeContent({
           onClick={() => handleTabChange(0)}
           className="fixed bottom-6 right-6 bg-brown-600 text-white px-6 py-4 rounded-full shadow-lg hover:bg-brown-700 transition-colors flex items-center space-x-3 z-50 text-lg"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
           <span>List</span>
         </button>

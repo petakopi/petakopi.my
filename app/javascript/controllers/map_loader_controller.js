@@ -1,10 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = [
-    "buttonGroup",
-    "iframe",
-  ]
+  static targets = ["buttonGroup", "iframe"]
   static values = {
     gmap: String,
     src: String,

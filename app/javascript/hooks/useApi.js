@@ -53,7 +53,7 @@ export const useCoffeeShops = ({
   ratingCount,
   isOpenNow,
   collection,
-  enabled = true
+  enabled = true,
 }) => {
   const filters = {
     page,
@@ -72,8 +72,12 @@ export const useCoffeeShops = ({
   }
 
   // Remove empty values
-  Object.keys(filters).forEach(key => {
-    if (filters[key] === undefined || filters[key] === null || filters[key] === "") {
+  Object.keys(filters).forEach((key) => {
+    if (
+      filters[key] === undefined ||
+      filters[key] === null ||
+      filters[key] === ""
+    ) {
       delete filters[key]
     }
   })
@@ -102,7 +106,7 @@ export const useMapCoffeeShops = ({
   lat,
   lng,
   filters = {},
-  enabled = true
+  enabled = true,
 }) => {
   const mapFilters = {
     ...filters,
@@ -154,7 +158,9 @@ export const useDistricts = (state) => {
     queryKey: queryKeys.filters.districts(state),
     queryFn: async () => {
       if (!state) return []
-      const response = await fetch(buildUrl("/filters", { section: "districts", state }))
+      const response = await fetch(
+        buildUrl("/filters", { section: "districts", state })
+      )
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`)
       }
@@ -204,7 +210,9 @@ export const useCreateCoffeeShop = () => {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.message || `HTTP error! Status: ${response.status}`)
+        throw new Error(
+          error.message || `HTTP error! Status: ${response.status}`
+        )
       }
 
       return response.json()
@@ -232,7 +240,9 @@ export const useSubmitReport = () => {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.message || `HTTP error! Status: ${response.status}`)
+        throw new Error(
+          error.message || `HTTP error! Status: ${response.status}`
+        )
       }
 
       return response.json()
@@ -270,7 +280,9 @@ export const useInvalidateQueries = () => {
 
   return {
     invalidateAll: () => queryClient.invalidateQueries(queryKeys.all),
-    invalidateCoffeeShops: () => queryClient.invalidateQueries(queryKeys.coffeeShops.all),
-    invalidateFilters: () => queryClient.invalidateQueries(queryKeys.filters.all),
+    invalidateCoffeeShops: () =>
+      queryClient.invalidateQueries(queryKeys.coffeeShops.all),
+    invalidateFilters: () =>
+      queryClient.invalidateQueries(queryKeys.filters.all),
   }
 }
