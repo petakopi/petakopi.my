@@ -434,5 +434,112 @@ RSpec.describe CoffeeShopsListQuery do
         expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)
       end
     end
+
+    describe "filter_by_collection" do
+      let!(:user) { create(:user) }
+      let!(:collection) { create(:collection, user: user) }
+      let!(:other_collection) { create(:collection) }
+
+      before do
+        # Create bookmarks for user's collection
+        bookmark1 = create(:bookmark, user: user, coffee_shop: coffee_shop1)
+        bookmark2 = create(:bookmark, user: user, coffee_shop: coffee_shop2)
+
+        # Add bookmarks to user's collection
+        create(:bookmark_collection, bookmark: bookmark1, collection: collection)
+        create(:bookmark_collection, bookmark: bookmark2, collection: collection)
+
+        # Create a bookmark for different collection (should not appear in results)
+        bookmark3 = create(:bookmark, user: user, coffee_shop: coffee_shop3)
+        create(:bookmark_collection, bookmark: bookmark3, collection: other_collection)
+      end
+
+      it "returns all coffee shops when no collection filter is applied" do
+        result = described_class.call(
+          params: {},
+          current_user: user
+        ).status_published
+
+        expect(result).to include(coffee_shop1, coffee_shop2, coffee_shop3)
+        expect(result).not_to include(unpublished_shop)
+      end
+
+      it "returns only coffee shops in the specified collection for the current user" do
+        result = described_class.call(
+          params: { collection_id: collection.id },
+          current_user: user
+        ).status_published
+
+        expect(result).to include(coffee_shop1, coffee_shop2)
+        expect(result).not_to include(coffee_shop3, unpublished_shop)
+      end
+
+      it "returns empty when collection doesn't belong to current user" do
+        other_user = create(:user)
+        result = described_class.call(
+          params: { collection_id: collection.id },
+          current_user: other_user
+        ).status_published
+
+        expect(result).to be_empty
+      end
+
+      it "returns empty when collection_id doesn't exist" do
+        result = described_class.call(
+          params: { collection_id: 99999 },
+          current_user: user
+        ).status_published
+
+        expect(result).to be_empty
+      end
+
+      it "returns all coffee shops when no current_user is provided" do
+        result = described_class.call(
+          params: { collection_id: collection.id },
+          current_user: nil
+        ).status_published
+
+        expect(result).to include(coffee_shop1, coffee_shop2, coffee_shop3)
+        expect(result).not_to include(unpublished_shop)
+      end
+
+      it "combines collection filter with other filters" do
+        # Add a tag to one of the bookmarked coffee shops
+        tag = create(:tag, slug: "wifi")
+        coffee_shop1.tags << tag
+
+        result = described_class.call(
+          params: {
+            collection_id: collection.id,
+            tags: "wifi"
+          },
+          current_user: user
+        ).status_published
+
+        expect(result).to include(coffee_shop1)
+        expect(result).not_to include(coffee_shop2, coffee_shop3, unpublished_shop)
+      end
+
+      context "when testing the specific bug we fixed" do
+        it "correctly joins through bookmarks table to access user_id" do
+          # This test ensures we fixed the "column bookmark_collections.user_id does not exist" error
+          expect {
+            described_class.call(
+              params: { collection_id: collection.id },
+              current_user: user
+            ).status_published.to_a
+          }.not_to raise_error
+
+          # And verify the correct data is returned
+          result = described_class.call(
+            params: { collection_id: collection.id },
+            current_user: user
+          ).status_published
+
+          expect(result).to include(coffee_shop1, coffee_shop2)
+          expect(result).not_to include(coffee_shop3)
+        end
+      end
+    end
   end
 end

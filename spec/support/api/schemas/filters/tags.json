@@ -1,0 +1,19 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "type": "string",
+        "description": "The tag slug/value"
+      },
+      "label": {
+        "type": "string",
+        "description": "The tag display name"
+      }
+    },
+    "required": ["value", "label"],
+    "additionalProperties": false
+  },
+  "description": "Array of tag objects with value and label properties"
+}

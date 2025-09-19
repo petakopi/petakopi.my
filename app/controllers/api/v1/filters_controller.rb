@@ -8,6 +8,8 @@ class Api::V1::FiltersController < ApiController
     when "districts"
       state = params[:state]
       render json: fetch_districts(state)
+    when "tags"
+      render json: fetch_tags
     else
       render json: [], status: :bad_request
     end
@@ -25,5 +27,13 @@ class Api::V1::FiltersController < ApiController
 
     # Return distinct districts for the selected state from published coffee shops
     CoffeeShop.status_published.where(state: state).distinct.pluck(:district).compact.sort
+  end
+
+  def fetch_tags
+    # Return tags with group=null, is_public=true, sorted by position
+    Tag.where(group: nil, is_public: true)
+      .order(:position)
+      .pluck(:slug, :name)
+      .map { |slug, name| {value: slug, label: name} }
   end
 end

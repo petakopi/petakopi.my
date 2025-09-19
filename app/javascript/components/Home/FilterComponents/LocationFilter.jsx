@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-import { fetchDistricts } from "../../../services/filterService"
+import React, { useState } from "react"
+import { useDistricts } from "../../../hooks/useFilters"
 
 const LocationFilter = ({
   selectedState,
@@ -12,33 +12,15 @@ const LocationFilter = ({
 }) => {
   const [isStateOpen, setIsStateOpen] = useState(false)
   const [isDistrictOpen, setIsDistrictOpen] = useState(false)
-  const [districts, setDistricts] = useState([])
-  const [isLoadingDistricts, setIsLoadingDistricts] = useState(false)
-  const [districtError, setDistrictError] = useState(null)
 
-  // Fetch districts when state changes
-  useEffect(() => {
-    const loadDistricts = async () => {
-      if (!selectedState) {
-        setDistricts([])
-        return
-      }
+  // Use React Query for districts
+  const {
+    data: districts = [],
+    isLoading: isLoadingDistricts,
+    error: districtError,
+  } = useDistricts(selectedState)
 
-      setIsLoadingDistricts(true)
-      setDistrictError(null)
-      try {
-        const districtsData = await fetchDistricts(selectedState)
-        setDistricts(districtsData)
-      } catch (error) {
-        console.error(`Failed to load districts for ${selectedState}:`, error)
-        setDistrictError("Failed to load districts. Please try again later.")
-      } finally {
-        setIsLoadingDistricts(false)
-      }
-    }
-
-    loadDistricts()
-  }, [selectedState])
+  const districtErrorMessage = districtError ? "Failed to load districts. Please try again later." : null
 
   return (
     <div className="space-y-4">
@@ -125,8 +107,8 @@ const LocationFilter = ({
 
             {isDistrictOpen && (
               <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-xs ring-1 ring-black ring-opacity-5 overflow-auto">
-                {districtError ? (
-                  <div className="text-red-500 p-2 text-center">{districtError}</div>
+                {districtErrorMessage ? (
+                  <div className="text-red-500 p-2 text-center">{districtErrorMessage}</div>
                 ) : districts.length === 0 ? (
                   <div className="p-2 text-center text-gray-500">No districts available</div>
                 ) : (

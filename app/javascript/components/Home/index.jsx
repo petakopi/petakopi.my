@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { QueryClientProvider } from "@tanstack/react-query"
 import ExploreTab from "./ExploreTab"
 import MapTab from "./MapTab"
 import FilterSidebar from "./FilterSidebar"
@@ -7,8 +8,13 @@ import LocationRequiredPrompt from "./LocationRequiredPrompt"
 import LocationBlockedPrompt from "./LocationBlockedPrompt"
 import LocationRefreshPrompt from "./LocationRefreshPrompt"
 import ControlsBar from "./ControlsBar"
+import ReactQueryDevtools from "../ReactQueryDevtools"
+import { QueryErrorBoundary, QueryError } from "../ErrorBoundary"
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { fetchStates } from "../../services/filterService"
+import { queryClient } from "../../lib/queryClient"
+import { useCoffeeShops, usePrefetchCoffeeShops } from "../../hooks/useCoffeeShops"
+import { useStates } from "../../hooks/useFilters"
+import { queryKeys } from "../../lib/queryKeys"
 
 // Geolocation configuration
 const GEOLOCATION_CONFIG = {
@@ -39,7 +45,7 @@ function isValidDistance(distance) {
   return isValid
 }
 
-export default function Home({
+function HomeContent({
   initialFilters = {},
   initialViewType = "card",
   initialActiveTab = 0,
@@ -62,13 +68,8 @@ export default function Home({
     return savedTabIndex !== null ? parseInt(savedTabIndex, 10) : 0;
   });
 
-  // Explore tab state
-  const [everywhereShops, setEverywhereShops] = useState([])
-  const [everywhereLoading, setEverywhereLoading] = useState(false)
-  const [everywhereCurrentPage, setEverywhereCurrentPage] = useState(1)
-  const [everywhereTotalPages, setEverywhereTotalPages] = useState(1)
-  const [everywhereTotalCount, setEverywhereTotalCount] = useState(0)
-  const [everywhereDistance, setEverywhereDistance] = useState(null)
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
 
   // Location state
   const [userLocation, setUserLocation] = useState(null)
@@ -141,15 +142,6 @@ export default function Home({
 
     return url;
   };
-
-  // Initial data loading for all tabs
-  useEffect(() => {
-    // Load explore data only when component mounts and data is empty
-    if (everywhereShops.length === 0) {
-      setEverywhereLoading(true)
-      fetchEverywhereShops()
-    }
-  }, []) // Empty dependency array - only run once on mount
 
   // Add initial location permission check
   useEffect(() => {
@@ -243,51 +235,8 @@ export default function Home({
     }
   }
 
-  const fetchEverywhereShops = async (page = 1) => {
-    setEverywhereLoading(true)
-    try {
-      const url = new URL('/api/v1/coffee_shops', window.location.origin);
-
-      // Get current filters
-      const currentFilters = getCurrentFilters();
-
-      // Apply all filters
-      applyFiltersToUrl(url, currentFilters);
-
-      // Add distance filter if set and location is available
-      if (isValidDistance(everywhereDistance) && userLocation) {
-        url.searchParams.append('distance', String(everywhereDistance));
-        url.searchParams.append('lat', String(userLocation.latitude));
-        url.searchParams.append('lng', String(userLocation.longitude));
-      }
-
-      // Add page parameter
-      url.searchParams.append('page', page);
-
-      const response = await fetch(url);
-      const data = await response.json();
-      if (data.status === "success" && data.data && data.data.coffee_shops) {
-        setEverywhereShops(data.data.coffee_shops)
-        setEverywhereCurrentPage(data.data.pages.current_page)
-        setEverywhereTotalPages(data.data.pages.total_pages)
-        setEverywhereTotalCount(data.data.pages.total_count)
-      } else {
-        console.error('Unexpected response format:', data)
-        setEverywhereShops([])
-        setEverywhereCurrentPage(1)
-        setEverywhereTotalPages(1)
-        setEverywhereTotalCount(0)
-      }
-    } catch (error) {
-      console.error('Error fetching explore coffee shops:', error)
-      setEverywhereShops([])
-      setEverywhereCurrentPage(1)
-      setEverywhereTotalPages(1)
-      setEverywhereTotalCount(0)
-    } finally {
-      setEverywhereLoading(false)
-    }
-  }
+  // Prefetch hook for better UX
+  const prefetchCoffeeShops = usePrefetchCoffeeShops()
 
   const handleApplyFilters = (newFilters) => {
     // Remove the timestamp if it exists (used just to force updates)
@@ -299,79 +248,27 @@ export default function Home({
       return
     }
 
+    // Invalidate all coffee shop queries to force fresh data
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.coffeeShopsList(),
+    })
+
     // Set filters state with a new object to ensure React detects the change
     setCurrentFilters({ ...actualFilters })
 
-    // Update distance filter if present and valid
-    if (actualFilters.distance !== undefined) {
-      setEverywhereDistance(actualFilters.distance);
-    }
-
-    // Force immediate re-render by setting loading state
-    if (activeTab === 0) {
-      // Reset pagination and fetch with new filters
-      setEverywhereShops([])
-      setEverywhereCurrentPage(1)
-      setEverywhereTotalPages(1)
-      setEverywhereTotalCount(0)
-      setEverywhereLoading(true)
-
-      // Directly fetch data here instead of relying on fetchEverywhereShops
-      const url = new URL('/api/v1/coffee_shops', window.location.origin);
-
-      // Only apply filters if they exist and have values
-      if (Object.keys(actualFilters).length > 0) {
-        // Apply all filters
-        applyFiltersToUrl(url, actualFilters);
-
-        // Add distance filter if set and location is available
-        if (isValidDistance(actualFilters.distance) && userLocation) {
-          url.searchParams.append('distance', String(actualFilters.distance));
-          url.searchParams.append('lat', String(userLocation.latitude));
-          url.searchParams.append('lng', String(userLocation.longitude));
-        }
-      }
-
-      // Add page parameter
-      url.searchParams.append('page', 1);
-
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === "success" && data.data && data.data.coffee_shops) {
-            setEverywhereShops(data.data.coffee_shops)
-            setEverywhereCurrentPage(data.data.pages.current_page)
-            setEverywhereTotalPages(data.data.pages.total_pages)
-            setEverywhereTotalCount(data.data.pages.total_count)
-          } else {
-            console.error('Unexpected response format:', data)
-            setEverywhereShops([])
-            setEverywhereCurrentPage(1)
-            setEverywhereTotalPages(1)
-            setEverywhereTotalCount(0)
-          }
-          setEverywhereLoading(false)
-        })
-        .catch(error => {
-          console.error('Error fetching explore coffee shops:', error)
-          setEverywhereShops([])
-          setEverywhereCurrentPage(1)
-          setEverywhereTotalPages(1)
-          setEverywhereTotalCount(0)
-          setEverywhereLoading(false)
-        });
-    }
+    // Reset to first page when filters change
+    setCurrentPage(1)
   }
 
   const handleNextPage = () => {
     if (activeTab === 0 && !everywhereLoading && everywhereCurrentPage < everywhereTotalPages) {
-      fetchEverywhereShops(everywhereCurrentPage + 1)
+      setCurrentPage(prev => prev + 1)
     }
   }
 
   const handlePrevPage = () => {
     if (activeTab === 0 && !everywhereLoading && everywhereCurrentPage > 1) {
-      fetchEverywhereShops(everywhereCurrentPage - 1)
+      setCurrentPage(prev => prev - 1)
     }
   }
 
@@ -390,15 +287,7 @@ export default function Home({
 
   const handleDistanceChange = (distance) => {
     setSelectedDistance(distance)
-    if (userLocation && locationPermission === "granted") {
-      // Refetch shops with new distance
-      setEverywhereShops([])
-      setEverywhereCurrentPage(1)
-      setEverywhereTotalPages(1)
-      setEverywhereTotalCount(0)
-      setEverywhereLoading(true)
-      fetchEverywhereShops()
-    }
+    // React Query will automatically refetch when distance filter changes
   }
 
   const handleLocationRequest = () => {
@@ -508,28 +397,46 @@ export default function Home({
     };
   }, [isFilterSidebarOpen]);
 
-  const [states, setStates] = useState([])
-  const [isLoadingStates, setIsLoadingStates] = useState(false)
-  const [stateError, setStateError] = useState(null)
+  // Filter data with React Query
+  const { data: states = [], isLoading: isLoadingStates, error: statesError } = useStates()
+  const stateError = statesError ? "Failed to load states. Please try again later." : null
 
-  // Fetch states on component mount
+  // Get current filters and prepare query parameters
+  const currentFilters = getCurrentFilters()
+
+  // Reset page when filters change
   useEffect(() => {
-    const loadStates = async () => {
-      setIsLoadingStates(true)
-      setStateError(null)
-      try {
-        const statesData = await fetchStates()
-        setStates(statesData)
-      } catch (error) {
-        console.error("Failed to load states:", error)
-        setStateError("Failed to load states. Please try again later.")
-      } finally {
-        setIsLoadingStates(false)
-      }
-    }
+    setCurrentPage(1)
+  }, [currentFilters, activeTab])
 
-    loadStates()
-  }, [])
+  // Prepare filters with location data
+  const filtersWithLocation = {
+    ...currentFilters,
+    lat: userLocation?.latitude,
+    lng: userLocation?.longitude,
+  }
+
+  // Coffee shops query with improved React Query implementation
+  const {
+    data: coffeeShopsData,
+    isLoading: isLoadingCoffeeShops,
+    error: coffeeShopsError,
+    isPlaceholderData,
+    refetch: refetchCoffeeShops,
+  } = useCoffeeShops(filtersWithLocation, {
+    page: currentPage,
+    enabled: activeTab === 0, // Only fetch for explore tab
+  })
+
+  // Extract data from React Query response
+  const everywhereShops = coffeeShopsData?.coffee_shops || []
+  const everywhereCurrentPage = coffeeShopsData?.pages?.current_page || currentPage
+  const everywhereTotalPages = coffeeShopsData?.pages?.total_pages || 1
+  const everywhereTotalCount = coffeeShopsData?.pages?.total_count || 0
+  const everywhereLoading = isLoadingCoffeeShops
+
+  // Show error state if there's an error fetching coffee shops
+  const showErrorState = coffeeShopsError && !isLoadingCoffeeShops
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -554,20 +461,30 @@ export default function Home({
       <div className={`${activeTab === 1 ? 'h-[calc(100vh-4rem)]' : ''} bg-gray-50 rounded-lg relative`}>
         {/* ExploreTab */}
         <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
-          <ExploreTab
-            everywhereShops={everywhereShops}
-            everywhereLoading={everywhereLoading}
-            viewType={viewType}
-            userLocation={userLocation}
-          />
-          {everywhereTotalPages > 1 && (
-            <Pagination
-              currentPage={everywhereCurrentPage}
-              totalPages={everywhereTotalPages}
-              onNext={handleNextPage}
-              onPrev={handlePrevPage}
-              loading={everywhereLoading}
+          {showErrorState ? (
+            <QueryError
+              error={coffeeShopsError}
+              retry={refetchCoffeeShops}
+              className="m-8"
             />
+          ) : (
+            <>
+              <ExploreTab
+                everywhereShops={everywhereShops}
+                everywhereLoading={everywhereLoading}
+                viewType={viewType}
+                userLocation={userLocation}
+              />
+              {everywhereTotalPages > 1 && (
+                <Pagination
+                  currentPage={everywhereCurrentPage}
+                  totalPages={everywhereTotalPages}
+                  onNext={handleNextPage}
+                  onPrev={handlePrevPage}
+                  loading={everywhereLoading}
+                />
+              )}
+            </>
           )}
         </div>
         {/* MapTab */}
@@ -656,5 +573,16 @@ export default function Home({
         />
       )}
     </div>
+  )
+}
+
+export default function Home(props) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <QueryErrorBoundary>
+        <HomeContent {...props} />
+      </QueryErrorBoundary>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   )
 }

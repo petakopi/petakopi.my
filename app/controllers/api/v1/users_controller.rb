@@ -6,5 +6,4 @@ class Api::V1::UsersController < ApiController
       user: Api::UserPresenter.new(current_user).profile
     }, status: :ok
   end
-
 end

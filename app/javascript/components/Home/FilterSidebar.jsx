@@ -9,6 +9,7 @@ import {
   LocationFilter,
   SelectFilterOption
 } from "./FilterComponents"
+import { useTags } from "../../hooks/useFilters"
 
 const distanceOptions = [
   { value: 5, label: "5km" },
@@ -75,16 +76,12 @@ const FilterSidebar = ({
     { value: "non-halal", label: "Non Halal" }
   ]
 
-  const otherTags = [
-    { value: "roastery", label: "🔥 Roastery" },
-    { value: "work-friendly", label: "🧑‍💻 Work Friendly" },
-    { value: "early-bird", label: "☀️ Early Bird" },
-    { value: "night-owl", label: "🌖 Night Owl" },
-    { value: "pour-over", label: "💧 Pour-over" },
-    { value: "mobile", label: "🚗 Mobile" },
-    { value: "stall", label: "⛱ Stall" },
-    { value: "home", label: "🏡 Home" },
-  ]
+  // Use React Query for dynamic tag loading with 6-hour cache
+  const {
+    data: otherTags = [],
+    isLoading: isLoadingTags,
+    error: tagsError,
+  } = useTags()
 
   // Configuration for filter visibility and behavior
   const FILTER_CONFIG = {
@@ -309,16 +306,24 @@ const FilterSidebar = ({
         count: state.selectedTags.length,
         children: (
           <>
-            {state.otherTags.map((tag) => (
-              <CheckboxFilterOption
-                key={tag.value}
-                id={`tag-${tag.value}`}
-                name={`tag-${tag.value}`}
-                checked={state.selectedTags.includes(tag.value)}
-                onChange={() => handlers.handleTagToggle(tag.value)}
-                label={tag.label}
-              />
-            ))}
+            {isLoadingTags ? (
+              <div className="p-2 text-center text-gray-500 text-xs">Loading tags...</div>
+            ) : tagsError ? (
+              <div className="p-2 text-center text-red-500 text-xs">Failed to load tags</div>
+            ) : state.otherTags.length === 0 ? (
+              <div className="p-2 text-center text-gray-500 text-xs">No tags available</div>
+            ) : (
+              state.otherTags.map((tag) => (
+                <CheckboxFilterOption
+                  key={tag.value}
+                  id={`tag-${tag.value}`}
+                  name={`tag-${tag.value}`}
+                  checked={state.selectedTags.includes(tag.value)}
+                  onChange={() => handlers.handleTagToggle(tag.value)}
+                  label={tag.label}
+                />
+              ))
+            )}
           </>
         )
       })
@@ -535,7 +540,7 @@ const FilterSidebar = ({
         </button>
       </div>
 
-      <div className="overflow-y-auto h-full pb-20">
+      <div className="overflow-y-auto h-full pb-32">
         <form onSubmit={handleSubmit}>
           {Object.entries(FILTER_CONFIG).map(([key, config]) => {
             // Skip filters that shouldn't be shown in the current view

@@ -48,3 +48,25 @@ export const fetchDistricts = async (state) => {
     throw error;
   }
 };
+
+/**
+ * Fetches the list of tags from the API
+ *
+ * @returns {Promise<Array<{value: string, label: string}>>} A promise that resolves to an array of tag objects
+ * @throws {Error} If the API request fails
+ */
+export const fetchTags = async () => {
+  try {
+    const response = await fetch('/api/v1/filters?section=tags');
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching tags:', error);
+    throw error;
+  }
+};
