@@ -5,14 +5,14 @@ image: amree/petakopi.my
 servers:
   web:
     hosts:
-      - petakopi-my
+      - petakopi-my-v3
     labels:
       traefik.http.routers.petakopi.entrypoints: websecure
       traefik.http.routers.petakopi.rule: Host(`petakopi.my`)
       traefik.http.routers.petakopi.tls.certresolver: letsencrypt
   job:
     hosts:
-    - petakopi-my
+      - petakopi-my-v3
     cmd: bundle exec sidekiq -q default -q mailers
 
 proxy:
@@ -72,7 +72,7 @@ ssh:
 accessories:
   db:
     image: postgis/postgis:17-3.5
-    host: petakopi-my
+    host: petakopi-my-v3
     port: "127.0.0.1:5432:5432"
     env:
       clear:
@@ -85,6 +85,6 @@ accessories:
 
   redis:
     image: redis:7.4.2
-    host: petakopi-my
+    host: petakopi-my-v3
     directories:
       - data:/data
