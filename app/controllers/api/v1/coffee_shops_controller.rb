@@ -51,7 +51,7 @@ class Api::V1::CoffeeShopsController < ApiController
 
   def premium_coffee_shops
     return CoffeeShop.none if params.except(:controller, :action, :format, :page).present?
-    return CoffeeShop.none if params[:page] != "1"
+    return CoffeeShop.none if params[:page].present? && params[:page] != "1"
 
     premium_slugs = Rails.cache.read("ads/gold")&.split(",") || []
 
