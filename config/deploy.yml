@@ -2,6 +2,8 @@ service: petakopi
 
 image: amree/petakopi.my
 
+deploy_timeout: 60
+
 servers:
   web:
     hosts:
@@ -19,6 +21,8 @@ proxy:
   ssl: true
   host: petakopi.my
   forward_headers: true
+  healthcheck:
+    timeout: 60
 
 registry:
   username: amree
