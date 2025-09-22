@@ -75,8 +75,8 @@ RSpec.describe "Api::V1::Filters", type: :request do
 
         json_response = JSON.parse(response.body)
         expect(json_response).to eq([
-          {"value" => "work-friendly", "label" => "Work Friendly"},
-          {"value" => "roastery", "label" => "Roastery"}
+          {"id" => tag1.id, "value" => "work-friendly", "label" => "Work Friendly"},
+          {"id" => tag2.id, "value" => "roastery", "label" => "Roastery"}
         ])
       end
 

@@ -3,6 +3,10 @@
   "items": {
     "type": "object",
     "properties": {
+      "id": {
+        "type": "integer",
+        "description": "The tag ID"
+      },
       "value": {
         "type": "string",
         "description": "The tag slug/value"
@@ -12,8 +16,8 @@
         "description": "The tag display name"
       }
     },
-    "required": ["value", "label"],
+    "required": ["id", "value", "label"],
     "additionalProperties": false
   },
-  "description": "Array of tag objects with value and label properties"
+  "description": "Array of tag objects with id, value and label properties"
 }
