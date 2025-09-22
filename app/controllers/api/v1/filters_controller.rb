@@ -33,7 +33,7 @@ class Api::V1::FiltersController < ApiController
     # Return tags with group=null, is_public=true, sorted by position
     Tag.where(group: nil, is_public: true)
       .order(:position)
-      .pluck(:slug, :name)
-      .map { |slug, name| {value: slug, label: name} }
+      .pluck(:id, :slug, :name)
+      .map { |id, slug, name| {id: id, value: slug, label: name} }
   end
 end
