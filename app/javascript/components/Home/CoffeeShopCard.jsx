@@ -71,6 +71,42 @@ const CoffeeShopCard = ({
     return null
   }
 
+  // Format opening status from the new API field
+  const formatOpeningStatus = () => {
+    const openingHours = coffee_shop.opening_hours
+    if (!openingHours || !openingHours.current_status) {
+      return null
+    }
+
+    const { is_open, current_status } = openingHours
+
+    // Update the status text for display
+    const displayStatus =
+      current_status === "Hours not listed"
+        ? "No opening hours"
+        : current_status
+
+    // Choose colors based on status
+    let textClass, dotClass
+    if (current_status === "Hours not listed") {
+      textClass = "text-gray-500"
+      dotClass = "bg-gray-400"
+    } else if (is_open) {
+      textClass = "text-green-600"
+      dotClass = "bg-green-500"
+    } else {
+      textClass = "text-red-600"
+      dotClass = "bg-red-500"
+    }
+
+    return (
+      <div className="inline-flex items-center text-sm">
+        <div className={`w-2 h-2 rounded-full mr-1.5 ${dotClass}`}></div>
+        <span className={textClass}>{displayStatus}</span>
+      </div>
+    )
+  }
+
   return (
     <div
       key={`${coffee_shop.slug}`}
@@ -209,6 +245,10 @@ const CoffeeShopCard = ({
                     <span>&nbsp;</span>
                   )}
                 </p>
+                {/* Opening status */}
+                {formatOpeningStatus() && (
+                  <div className="mt-2">{formatOpeningStatus()}</div>
+                )}
               </div>
             </div>
           </div>

@@ -258,6 +258,127 @@ RSpec.describe CoffeeShopsListQuery do
         expect(result.first.distance_in_km).to be_present
         expect(result.first.distance_in_km).to be_a(Float)
       end
+
+      context "with midnight closing time bug reproduction" do
+        context "with real-world data from Caffeine Chapters Cafe" do
+          let!(:midnight_coffee_shop) do
+            create(
+              :coffee_shop,
+              name: "Caffeine Chapters Cafe"
+            )
+          end
+
+          before do
+            # Create the same midnight closing hours as in the presenter test
+            create(:opening_hour,
+              coffee_shop: midnight_coffee_shop,
+              start_day: 1, # Monday
+              start_time: 1000,
+              close_day: 1, # Monday
+              close_time: 2200)
+            create(:opening_hour,
+              coffee_shop: midnight_coffee_shop,
+              start_day: 2, # Tuesday
+              start_time: 1000,
+              close_day: 2, # Tuesday
+              close_time: 2200)
+            create(:opening_hour,
+              coffee_shop: midnight_coffee_shop,
+              start_day: 3, # Wednesday
+              start_time: 1000,
+              close_day: 3, # Wednesday
+              close_time: 2200)
+            create(:opening_hour,
+              coffee_shop: midnight_coffee_shop,
+              start_day: 4, # Thursday
+              start_time: 1000,
+              close_day: 4, # Thursday
+              close_time: 2200)
+            # Friday: 2:30 PM - Midnight (00:00) - stored as overnight
+            create(:opening_hour,
+              coffee_shop: midnight_coffee_shop,
+              start_day: 5, # Friday
+              start_time: 1430,
+              close_day: 6, # Saturday
+              close_time: 0) # 00:00 (midnight)
+            # Saturday: 10:00 AM - Midnight (00:00) - stored as overnight
+            create(:opening_hour,
+              coffee_shop: midnight_coffee_shop,
+              start_day: 6, # Saturday
+              start_time: 1000,
+              close_day: 0, # Sunday
+              close_time: 0) # 00:00 (midnight)
+          end
+
+          context "on Saturday at 8:00 PM (should be open until midnight)" do
+            before do
+              # Saturday, September 28, 2024 at 8:00 PM (20:00)
+              travel_to Time.zone.local(2024, 9, 28, 20, 0, 0)
+            end
+
+            after do
+              travel_back
+            end
+
+            it "should include the coffee shop in open filter results" do
+              result = described_class.call(params: {opened: "true"}).status_published
+
+              expect(result).to include(midnight_coffee_shop)
+            end
+          end
+
+          context "on Friday at 8:00 PM (should be open until midnight)" do
+            before do
+              # Friday, September 27, 2024 at 8:00 PM (20:00)
+              travel_to Time.zone.local(2024, 9, 27, 20, 0, 0)
+            end
+
+            after do
+              travel_back
+            end
+
+            it "should include the coffee shop in open filter results" do
+              result = described_class.call(params: {opened: "true"}).status_published
+
+              expect(result).to include(midnight_coffee_shop)
+            end
+          end
+
+          context "on Saturday at 11:59 PM (should still be open)" do
+            before do
+              # Saturday, September 28, 2024 at 11:59 PM (23:59)
+              travel_to Time.zone.local(2024, 9, 28, 23, 59, 0)
+            end
+
+            after do
+              travel_back
+            end
+
+            it "should include the coffee shop in open filter results" do
+              result = described_class.call(params: {opened: "true"}).status_published
+
+              expect(result).to include(midnight_coffee_shop)
+            end
+          end
+
+          context "on Sunday at 12:01 AM (should be closed)" do
+            before do
+              # Sunday, September 29, 2024 at 12:01 AM (00:01)
+              travel_to Time.zone.local(2024, 9, 29, 0, 1, 0)
+            end
+
+            after do
+              travel_back
+            end
+
+            it "should not include the coffee shop in open filter results" do
+              result = described_class.call(params: {opened: "true"}).status_published
+
+              expect(result).not_to include(midnight_coffee_shop)
+            end
+          end
+        end
+      end
     end
 
     describe "combining filters" do

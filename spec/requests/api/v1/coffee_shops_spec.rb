@@ -115,7 +115,7 @@ RSpec.describe "API::V1::CoffeeShops", type: :request do
         create(:opening_hour, :weekend, coffee_shop: coffee_shop3) # Saturday-Sunday 10 AM - 10 PM
       end
 
-      it "includes business_hours in the response" do
+      it "includes opening_hours with status in the response" do
         get "/api/v1/coffee_shops"
 
         expect(response).to have_http_status(:ok)
@@ -124,14 +124,20 @@ RSpec.describe "API::V1::CoffeeShops", type: :request do
         expect(json_response["data"]["coffee_shops"]).to be_present
 
         json_response["data"]["coffee_shops"].each do |coffee_shop|
-          expect(coffee_shop).to have_key("business_hours")
-          expect(coffee_shop["business_hours"]).to be_present
-          expect(coffee_shop["business_hours"]).to be_a(Hash)
-          expect(coffee_shop["business_hours"]).to have_key("periods")
-          expect(coffee_shop["business_hours"]["periods"]).to be_an(Array)
+          # New opening_hours field with status
+          expect(coffee_shop).to have_key("opening_hours")
+          expect(coffee_shop["opening_hours"]).to be_present
+          expect(coffee_shop["opening_hours"]).to be_a(Hash)
+          expect(coffee_shop["opening_hours"]).to have_key("periods")
+          expect(coffee_shop["opening_hours"]).to have_key("is_open")
+          expect(coffee_shop["opening_hours"]).to have_key("current_status")
+          expect(coffee_shop["opening_hours"]).to have_key("next_change")
+          expect(coffee_shop["opening_hours"]).to have_key("today_hours")
+          expect(coffee_shop["opening_hours"]).to have_key("current_time_slot")
+          expect(coffee_shop["opening_hours"]["periods"]).to be_an(Array)
 
           # Each period entry should have the expected structure
-          coffee_shop["business_hours"]["periods"].each do |period|
+          coffee_shop["opening_hours"]["periods"].each do |period|
             expect(period).to have_key("open")
             expect(period).to have_key("close")
             expect(period["open"]).to have_key("day")
@@ -139,6 +145,13 @@ RSpec.describe "API::V1::CoffeeShops", type: :request do
             expect(period["close"]).to have_key("day")
             expect(period["close"]).to have_key("time")
           end
+
+          # Legacy business_hours field (backward compatibility)
+          expect(coffee_shop).to have_key("business_hours")
+          expect(coffee_shop["business_hours"]).to be_present
+          expect(coffee_shop["business_hours"]).to be_a(Hash)
+          expect(coffee_shop["business_hours"]).to have_key("periods")
+          expect(coffee_shop["business_hours"]["periods"]).to be_an(Array)
         end
       end
 
@@ -152,14 +165,20 @@ RSpec.describe "API::V1::CoffeeShops", type: :request do
 
         coffee_shop = json_response["data"]["coffee_shops"].first
         expect(coffee_shop["name"]).to eq("KLCC Coffee")
-        expect(coffee_shop["business_hours"]).to be_present
-        expect(coffee_shop["business_hours"]["periods"]).to be_present
+
+        # Check new opening_hours field
+        expect(coffee_shop["opening_hours"]).to be_present
+        expect(coffee_shop["opening_hours"]["periods"]).to be_present
 
         # Should have Monday entry
-        monday_period = coffee_shop["business_hours"]["periods"].find { |period| period["open"]["day"] == "MONDAY" }
+        monday_period = coffee_shop["opening_hours"]["periods"].find { |period| period["open"]["day"] == "MONDAY" }
         expect(monday_period).to be_present
         expect(monday_period["open"]["time"]).to eq("09:00")
         expect(monday_period["close"]["time"]).to eq("17:00")
+
+        # Also check legacy business_hours field
+        expect(coffee_shop["business_hours"]).to be_present
+        expect(coffee_shop["business_hours"]["periods"]).to be_present
       end
 
       it "returns properly formatted opening hours for overnight schedule" do
@@ -172,12 +191,18 @@ RSpec.describe "API::V1::CoffeeShops", type: :request do
 
         coffee_shop = json_response["data"]["coffee_shops"].first
         expect(coffee_shop["name"]).to eq("Bukit Bintang Coffee")
-        expect(coffee_shop["business_hours"]).to be_present
-        expect(coffee_shop["business_hours"]["periods"]).to be_present
+
+        # Check new opening_hours field
+        expect(coffee_shop["opening_hours"]).to be_present
+        expect(coffee_shop["opening_hours"]["periods"]).to be_present
 
         # Should have entries for overnight hours
-        periods = coffee_shop["business_hours"]["periods"]
+        periods = coffee_shop["opening_hours"]["periods"]
         expect(periods.length).to be >= 1
+
+        # Also check legacy business_hours field
+        expect(coffee_shop["business_hours"]).to be_present
+        expect(coffee_shop["business_hours"]["periods"]).to be_present
       end
     end
 
@@ -212,7 +237,8 @@ RSpec.describe "API::V1::CoffeeShops", type: :request do
             expect(coffee_shop).to have_key("uuid")
             expect(coffee_shop).to have_key("name")
             expect(coffee_shop).to have_key("distance_in_km")
-            expect(coffee_shop).to have_key("business_hours")
+            expect(coffee_shop).to have_key("opening_hours")
+            expect(coffee_shop).to have_key("business_hours") # legacy field
             expect(coffee_shop).to have_key("tags")
 
             # Verify distance is calculated
@@ -220,9 +246,11 @@ RSpec.describe "API::V1::CoffeeShops", type: :request do
             expect(coffee_shop["distance_in_km"]).to be_a(Float)
 
             # Verify business hours are present
-            expect(coffee_shop["business_hours"]).to be_present
-            expect(coffee_shop["business_hours"]).to be_a(Hash)
-            expect(coffee_shop["business_hours"]["periods"]).to be_an(Array)
+            expect(coffee_shop["opening_hours"]).to be_present
+            expect(coffee_shop["opening_hours"]).to be_a(Hash)
+            expect(coffee_shop["opening_hours"]["periods"]).to be_an(Array)
+            expect(coffee_shop["opening_hours"]["is_open"]).to be_in([true, false])
+            expect(coffee_shop["opening_hours"]["current_status"]).to be_a(String)
 
             # Verify tags are present
             expect(coffee_shop["tags"]).to be_present

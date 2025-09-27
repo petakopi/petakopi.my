@@ -25,10 +25,14 @@ end
 json.has_owner coffee_shop.owners.size.positive?
 json.is_premium @premium_coffee_shops.pluck(:slug).include?(coffee_shop.slug)
 
-# Business hours using presenter - Google My Business API compatible format
+# Opening hours with status - Google My Business API compatible format with status
 presenter = OpeningHoursPresenter.new(coffee_shop.opening_hours)
-api_data = presenter.api_format
-json.business_hours api_data[:business_hours]
+api_data = presenter.api_format_with_status
+json.opening_hours api_data[:opening_hours]
+
+# Legacy business_hours for backward compatibility (will be deprecated)
+legacy_data = presenter.api_format
+json.business_hours legacy_data[:business_hours]
 
 # Include distance - null if not calculated, rounded value if available
 json.distance_in_km coffee_shop.respond_to?(:distance_in_km) ? coffee_shop.distance_in_km&.round(1) : nil

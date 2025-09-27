@@ -4,13 +4,37 @@
   <div class="flex items-center justify-between px-3.5 py-4">
     <div class="flex items-center space-x-3">
       <div class="flex-shrink-0">
-        <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium <%= @coffee_shop.open_status[:classes] %>">
-          <%= @coffee_shop.open_status[:text] %>
+        <%
+          status = @opening_hours_status[:current_status]
+          is_open = @opening_hours_status[:is_open]
+
+          # Use centralized status logic with consistent styling
+          status_classes = case status
+            when "Hours not listed"
+              "bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/20"
+            when "Closed today"
+              "bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/20"
+            else
+              is_open ? "bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20" : "bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20"
+            end
+
+          # Update display text to match frontend
+          display_status = status == "Hours not listed" ? "No opening hours" : status
+        %>
+        <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium <%= status_classes %>">
+          <%= display_status %>
         </span>
       </div>
-      <div class="text-sm font-medium text-gray-900">
-        <%= @coffee_shop.today_hours_display %>
-      </div>
+      <% if @opening_hours_status[:today_hours] && !@opening_hours_status[:today_hours][:is_closed] %>
+        <div class="text-sm font-medium text-gray-900">
+          <%= @opening_hours_status[:today_hours][:open_time] %> - <%= @opening_hours_status[:today_hours][:close_time] %>
+        </div>
+      <% end %>
+      <% if @opening_hours_status[:next_change].present? %>
+        <div class="text-sm text-gray-500">
+          <%= @opening_hours_status[:next_change] %>
+        </div>
+      <% end %>
     </div>
     <button type="button"
             class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900"

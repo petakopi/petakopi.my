@@ -8,7 +8,9 @@ class CoffeeShopsController < ApplicationController
 
   def show
     @coffee_shop = @coffee_shop.extend(OpeningHourStatus)
-    @opening_hours = OpeningHoursPresenter.new(@coffee_shop.opening_hours).list
+    presenter = OpeningHoursPresenter.new(@coffee_shop.opening_hours)
+    @opening_hours = presenter.list
+    @opening_hours_status = presenter.api_format_with_status[:opening_hours]
     @bookmark = Bookmark.find_by(coffee_shop: @coffee_shop, user: current_user)
     @bookmark_count = Bookmark.where(coffee_shop: @coffee_shop).count
     @premium_slugs = Rails.cache.read("ads/gold")&.split(",") || []
