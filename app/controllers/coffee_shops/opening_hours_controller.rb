@@ -7,7 +7,9 @@ class CoffeeShops::OpeningHoursController < ApplicationController
       current_user.coffee_shops.find(params[:coffee_shop_id].to_i)
 
     @coffee_shop = @coffee_shop.extend(OpeningHourStatus)
-    @opening_hours = OpeningHoursPresenter.new(@coffee_shop.opening_hours).list
+    presenter = OpeningHoursPresenter.new(@coffee_shop.opening_hours)
+    @opening_hours = presenter.list
+    @opening_hours_status = presenter.api_format_with_status[:opening_hours]
     @last_synced = OpeningHoursSyncThrottler.new(coffee_shop: @coffee_shop).last_synced
   end
 

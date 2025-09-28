@@ -41,7 +41,9 @@ class Admin::CoffeeShopsController < AdminController
   end
 
   def show
-    @opening_hours = OpeningHoursPresenter.new(@coffee_shop.opening_hours).list
+    presenter = OpeningHoursPresenter.new(@coffee_shop.opening_hours)
+    @opening_hours = presenter.list
+    @opening_hours_status = presenter.api_format_with_status[:opening_hours]
   end
 
   def duplicate
