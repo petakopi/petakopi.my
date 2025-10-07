@@ -16,10 +16,18 @@ class DistanceFilterQuery
 
     # Always use CTE approach for consistency and simplicity
     # This handles both simple and complex queries uniformly
-    CoffeeShop
+    # Preserve includes from the relation by applying them after the CTE join
+    result = CoffeeShop
       .with(filtered_shops: distance_subquery)
       .select("coffee_shops.*, filtered_shops.distance_in_km")
       .joins("INNER JOIN filtered_shops ON filtered_shops.id = coffee_shops.id")
+
+    # Re-apply includes since CTE creates a new query
+    if relation.includes_values.any?
+      result.includes(*relation.includes_values)
+    else
+      result
+    end
   end
 
   private

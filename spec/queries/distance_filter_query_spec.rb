@@ -198,5 +198,78 @@ RSpec.describe DistanceFilterQuery do
         expect(result).not_to include(coffee_shop3)
       end
     end
+
+    context "N+1 query prevention" do
+      before do
+        # Attach logos and cover photos to all coffee shops
+        coffee_shop1.logo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "logo1.jpg")
+        coffee_shop1.cover_photo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "cover1.jpg")
+
+        coffee_shop2.logo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "logo2.jpg")
+        coffee_shop2.cover_photo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "cover2.jpg")
+
+        coffee_shop3.logo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "logo3.jpg")
+        coffee_shop3.cover_photo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "cover3.jpg")
+      end
+
+      it "does not cause N+1 queries when accessing attachments with includes" do
+        relation = CoffeeShop.includes(logo_attachment: :blob, cover_photo_attachment: :blob)
+
+        # Test with 3 coffee shops
+        result = described_class.call(
+          relation: relation,
+          lat: 3.1578,
+          lng: 101.7117,
+          distance_in_km: 50
+        )
+
+        queries_with_3 = count_queries do
+          result.each do |coffee_shop|
+            coffee_shop.logo.attached?
+            coffee_shop.cover_photo.attached?
+          end
+        end
+
+        # Add 2 more coffee shops for N+1 test
+        2.times do
+          shop = create(:coffee_shop, location: "POINT(101.7117 3.1578)")
+          shop.logo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "logo_extra.jpg")
+          shop.cover_photo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "cover_extra.jpg")
+        end
+
+        # Test with 5 coffee shops - should have same number of queries
+        result = described_class.call(
+          relation: relation,
+          lat: 3.1578,
+          lng: 101.7117,
+          distance_in_km: 50
+        )
+
+        queries_with_5 = count_queries do
+          result.each do |coffee_shop|
+            coffee_shop.logo.attached?
+            coffee_shop.cover_photo.attached?
+          end
+        end
+
+        # If there's no N+1, query count should be the same regardless of result size
+        expect(queries_with_3).to eq(queries_with_5)
+      end
+
+      it "preserves includes from the original relation" do
+        relation = CoffeeShop.includes(logo_attachment: :blob, cover_photo_attachment: :blob)
+
+        result = described_class.call(
+          relation: relation,
+          lat: 3.1578,
+          lng: 101.7117,
+          distance_in_km: 50
+        )
+
+        # Verify includes are preserved by checking associations are loaded
+        expect(result.first.association(:logo_attachment).loaded?).to be true
+        expect(result.first.logo_attachment&.association(:blob)&.loaded?).to be true
+      end
+    end
   end
 end

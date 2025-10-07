@@ -662,5 +662,157 @@ RSpec.describe CoffeeShopsListQuery do
         end
       end
     end
+
+    describe "N+1 query prevention" do
+      before do
+        # Attach logos and cover photos to all coffee shops
+        coffee_shop1.logo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "logo1.jpg")
+        coffee_shop1.cover_photo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "cover1.jpg")
+
+        coffee_shop2.logo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "logo2.jpg")
+        coffee_shop2.cover_photo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "cover2.jpg")
+
+        coffee_shop3.logo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "logo3.jpg")
+        coffee_shop3.cover_photo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "cover3.jpg")
+      end
+
+      context "without distance filter" do
+        it "does not cause N+1 queries when accessing attachments" do
+          # Test with initial 3 coffee shops
+          result = described_class.call(params: {}).status_published
+
+          queries_with_3 = count_queries do
+            result.each do |coffee_shop|
+              coffee_shop.logo.attached?
+              coffee_shop.cover_photo.attached?
+            end
+          end
+
+          # Add 2 more coffee shops
+          2.times do |i|
+            shop = create(:coffee_shop, name: "Extra Coffee #{i}")
+            shop.logo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "extra_logo#{i}.jpg")
+            shop.cover_photo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "extra_cover#{i}.jpg")
+          end
+
+          # Test with 5 coffee shops
+          result = described_class.call(params: {}).status_published
+
+          queries_with_5 = count_queries do
+            result.each do |coffee_shop|
+              coffee_shop.logo.attached?
+              coffee_shop.cover_photo.attached?
+            end
+          end
+
+          # Should have same number of queries
+          expect(queries_with_3).to eq(queries_with_5)
+        end
+      end
+
+      context "with distance filter" do
+        before do
+          coffee_shop1.update(location: "POINT(101.7117 3.1578)")
+          coffee_shop2.update(location: "POINT(101.7117 3.1478)")
+          coffee_shop3.update(location: "POINT(101.4500 3.0333)")
+        end
+
+        it "does not cause N+1 queries when accessing attachments" do
+          # Test with initial 3 coffee shops
+          result = described_class.call(params: {
+            lat: 3.1578,
+            lng: 101.7117,
+            distance: 50
+          }).status_published
+
+          queries_with_3 = count_queries do
+            result.each do |coffee_shop|
+              coffee_shop.logo.attached?
+              coffee_shop.cover_photo.attached?
+            end
+          end
+
+          # Add 2 more coffee shops
+          2.times do |i|
+            shop = create(:coffee_shop, name: "Extra Coffee #{i}", location: "POINT(101.7117 3.1578)")
+            shop.logo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "extra_logo#{i}.jpg")
+            shop.cover_photo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "extra_cover#{i}.jpg")
+          end
+
+          # Test with 5 coffee shops
+          result = described_class.call(params: {
+            lat: 3.1578,
+            lng: 101.7117,
+            distance: 50
+          }).status_published
+
+          queries_with_5 = count_queries do
+            result.each do |coffee_shop|
+              coffee_shop.logo.attached?
+              coffee_shop.cover_photo.attached?
+            end
+          end
+
+          # Should have same number of queries
+          expect(queries_with_3).to eq(queries_with_5)
+        end
+      end
+
+      context "with combined filters" do
+        let!(:tag) { create(:tag, slug: "wifi") }
+
+        before do
+          coffee_shop1.tags << tag
+          coffee_shop2.tags << tag
+
+          coffee_shop1.update(location: "POINT(101.7117 3.1578)")
+          coffee_shop2.update(location: "POINT(101.7117 3.1478)")
+          coffee_shop3.update(location: "POINT(101.4500 3.0333)")
+        end
+
+        it "does not cause N+1 queries with tags and distance filters" do
+          # Test with initial coffee shops
+          result = described_class.call(params: {
+            tags: "wifi",
+            lat: 3.1578,
+            lng: 101.7117,
+            distance: 50
+          }).status_published
+
+          queries_with_initial = count_queries do
+            result.each do |coffee_shop|
+              coffee_shop.logo.attached?
+              coffee_shop.cover_photo.attached?
+            end
+          end
+
+          # Add 2 more coffee shops with the tag
+          2.times do |i|
+            shop = create(:coffee_shop, name: "Extra Coffee #{i}", location: "POINT(101.7117 3.1578)")
+            shop.tags << tag
+            shop.logo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "extra_logo#{i}.jpg")
+            shop.cover_photo.attach(io: File.open(Rails.root.join("spec", "fixtures", "files", "avatar.jpg")), filename: "extra_cover#{i}.jpg")
+          end
+
+          # Test with more coffee shops
+          result = described_class.call(params: {
+            tags: "wifi",
+            lat: 3.1578,
+            lng: 101.7117,
+            distance: 50
+          }).status_published
+
+          queries_with_more = count_queries do
+            result.each do |coffee_shop|
+              coffee_shop.logo.attached?
+              coffee_shop.cover_photo.attached?
+            end
+          end
+
+          # Should have same number of queries
+          expect(queries_with_initial).to eq(queries_with_more)
+        end
+      end
+    end
   end
 end

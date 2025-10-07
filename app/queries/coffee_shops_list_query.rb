@@ -8,6 +8,7 @@ class CoffeeShopsListQuery
   end
 
   def call
+    @relation = apply_eager_loading
     @relation = filter_by_locations
     @relation = filter_by_keyword
     @relation = filter_by_tags
@@ -161,6 +162,12 @@ class CoffeeShopsListQuery
     else
       relation
     end
+  end
+
+  def apply_eager_loading
+    # Eager load attachments to prevent N+1 queries
+    # This is applied early so DistanceFilterQuery can access it via the relation
+    relation.includes(logo_attachment: :blob, cover_photo_attachment: :blob)
   end
 
   def has_location_params?
