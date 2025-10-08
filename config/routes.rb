@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   get "about" => "pages#about"
   get "privacy" => "pages#privacy"
   get "terms" => "pages#terms"
+  get "download" => redirect("https://apps.apple.com/us/app/cremaapp-by-petakopi-my/id6751153671", status: 302)
   get "map" => "map#index"
   get "mapbox" => "mapbox#index", :defaults => {format: :json}
 

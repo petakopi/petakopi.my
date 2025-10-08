@@ -8,6 +8,7 @@ import LocationRequiredPrompt from "./LocationRequiredPrompt"
 import LocationBlockedPrompt from "./LocationBlockedPrompt"
 import LocationRefreshPrompt from "./LocationRefreshPrompt"
 import ControlsBar from "./ControlsBar"
+import AppBanner from "./AppBanner"
 import ReactQueryDevtools from "../ReactQueryDevtools"
 import { QueryErrorBoundary, QueryError } from "../ErrorBoundary"
 import "mapbox-gl/dist/mapbox-gl.css"
@@ -503,6 +504,9 @@ function HomeContent({
           collections={collections}
         />
       )}
+
+      {/* App Banner - show only in explore view */}
+      {activeTab === 0 && <AppBanner />}
 
       {/* Main content area */}
       <div
