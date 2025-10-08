@@ -146,3 +146,10 @@ Active Storage with image optimization via TinyPNG and image_optim gems. Multipl
 
 ### Testing Framework
 RSpec is used for testing with FactoryBot for fixtures. Test files follow standard Rails conventions in the `spec/` directory.
+
+## Git Workflow
+
+### Committing Changes
+- **ALWAYS ask before committing**: Never commit changes without explicit user approval
+- **Present changes for review**: Show what will be committed using `git status` or `git diff`
+- **Wait for confirmation**: User must explicitly say "commit" or give approval before running `git commit`

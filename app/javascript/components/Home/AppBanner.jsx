@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from "react"
+import {
+  trackAppDownloadClick,
+  trackAppBannerDismiss,
+  trackAppBannerImpression,
+} from "../../utils/analytics"
 
 export default function AppBanner() {
   const [isVisible, setIsVisible] = useState(false)
@@ -38,12 +43,24 @@ export default function AppBanner() {
   }, [])
 
   const handleDismiss = () => {
+    trackAppBannerDismiss()
     setIsVisible(false)
     localStorage.setItem(
       "petakopi_app_banner_dismissed_at",
       new Date().toISOString()
     )
   }
+
+  const handleDownloadClick = () => {
+    trackAppDownloadClick()
+  }
+
+  // Track banner impression when it becomes visible
+  useEffect(() => {
+    if (isVisible) {
+      trackAppBannerImpression()
+    }
+  }, [isVisible])
 
   if (!isVisible) return null
 
@@ -75,6 +92,7 @@ export default function AppBanner() {
                 href="/download"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={handleDownloadClick}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-brown-600 hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500 transition-colors"
               >
                 Download
