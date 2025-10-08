@@ -9,6 +9,7 @@ import LocationBlockedPrompt from "./LocationBlockedPrompt"
 import LocationRefreshPrompt from "./LocationRefreshPrompt"
 import ControlsBar from "./ControlsBar"
 import AppBanner from "./AppBanner"
+import PwaInstallBanner from "./PwaInstallBanner"
 import ReactQueryDevtools from "../ReactQueryDevtools"
 import { QueryErrorBoundary, QueryError } from "../ErrorBoundary"
 import "mapbox-gl/dist/mapbox-gl.css"
@@ -505,8 +506,13 @@ function HomeContent({
         />
       )}
 
-      {/* App Banner - show only in explore view */}
-      {activeTab === 0 && <AppBanner />}
+      {/* App Banners - show only in explore view */}
+      {activeTab === 0 && (
+        <>
+          <AppBanner />
+          <PwaInstallBanner />
+        </>
+      )}
 
       {/* Main content area */}
       <div

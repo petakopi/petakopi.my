@@ -89,3 +89,37 @@ export function trackAppBannerImpression() {
     event_label: "App Banner Shown",
   })
 }
+
+/**
+ * Track PWA install banner click
+ */
+export function trackPwaInstallClick() {
+  trackEvent("pwa_install_click", {
+    event_category: "pwa_banner",
+    event_label: "PWA Install Button Clicked",
+    platform: "android",
+    source: "banner",
+  })
+}
+
+/**
+ * Track PWA banner dismiss
+ */
+export function trackPwaBannerDismiss() {
+  trackEvent("pwa_banner_dismiss", {
+    event_category: "pwa_banner",
+    event_label: "PWA Banner Dismissed",
+    platform: "android",
+  })
+}
+
+/**
+ * Track PWA banner impression (when banner is shown)
+ */
+export function trackPwaBannerImpression() {
+  trackEvent("pwa_banner_impression", {
+    event_category: "pwa_banner",
+    event_label: "PWA Banner Shown",
+    platform: "android",
+  })
+}
