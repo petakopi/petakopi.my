@@ -52,6 +52,11 @@ Rails.application.routes.draw do
       resources :reports, only: [:create]
       get "filters", to: "filters#index"
 
+      # Google Places API proxy
+      namespace :proxy do
+        get "places/search", to: "places#search"
+      end
+
       # Mobile authentication endpoints
       post "auth/login", to: "authentication#login"
       delete "auth/logout", to: "authentication#logout"
