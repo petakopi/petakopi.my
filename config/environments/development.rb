@@ -81,5 +81,5 @@ Rails.application.configure do
 
   config.action_mailer.preview_paths << "#{Rails.root}/lib/mailer_previews"
 
-  config.hosts << ".ngrok-free.app"
+  config.hosts << ".a.pinggy.link"
 end
