@@ -73,7 +73,7 @@ group :development, :test do
   gem "factory_bot_rails" # Fixtures replacement
   gem "json-schema" # JSON schema validation for API testing
   gem "pry" # Debugging tool
-  gem "rspec-rails", "~> 6.1" # Test framework
+  gem "rspec-rails", "~> 8.0" # Test framework
   gem "standard" # ruby code linting
 end
 
