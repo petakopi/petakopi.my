@@ -51,6 +51,9 @@
 # dotenv
 /.env.*.local
 
+# Ignore for kamal
+/.env
+
 # Vite Ruby
 /public/vite*
 node_modules
